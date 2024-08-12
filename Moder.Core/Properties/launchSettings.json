@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Moder.Core (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Moder.Core (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
