@@ -1,22 +1,10 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Moder.Core.Config;
-using Moder.Core.Views.Menus;
-using Windows.Media;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
+using Moder.Core.Config;
+using Moder.Core.Messages;
+using Moder.Core.Views.Menus;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace Moder.Core;
 
@@ -25,16 +13,25 @@ namespace Moder.Core;
 /// </summary>
 public sealed partial class MainWindow : Window
 {
-	public MainWindowViewModel ViewModel { get; }
-	public MainWindow(MainWindowViewModel model, GlobalSettings settings, IServiceProvider serviceProvider)
-	{
-		this.InitializeComponent();
+    public MainWindowViewModel ViewModel { get; }
 
-		ExtendsContentIntoTitleBar = true;
-		ViewModel = model;
-		if (string.IsNullOrEmpty(settings.WorkRootFolderPath))
-		{
-			SideContentControl.Content = serviceProvider.GetRequiredService<OpenFolderControlView>();
-		}
-	}
+    public MainWindow(MainWindowViewModel model, GlobalSettings settings, IServiceProvider serviceProvider)
+    {
+        InitializeComponent();
+
+        ExtendsContentIntoTitleBar = true;
+        ViewModel = model;
+
+        if (string.IsNullOrEmpty(settings.WorkRootFolderPath))
+        {
+            SideContentControl.Content = serviceProvider.GetRequiredService<OpenFolderControlView>();
+        }
+        WeakReferenceMessenger.Default.Register<CompleteWorkFolderSelectMessage>(
+            this,
+            (_, _) =>
+            {
+                SideContentControl.Content = serviceProvider.GetRequiredService<SideWorkSpaceControlView>();
+            }
+        );
+    }
 }

@@ -21,6 +21,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Views\Menus\OpenFolderControlView.xaml" />
+    <None Remove="Views\Menus\SideWorkSpaceControlView.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,6 +62,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Views\Menus\SideWorkSpaceControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\Menus\OpenFolderControlView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

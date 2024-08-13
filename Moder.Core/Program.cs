@@ -28,11 +28,15 @@ public static partial class Program
 
         var builder = Host.CreateApplicationBuilder(args);
 
+        // View, ViewModel
         builder.Services.AddSingleton<MainWindow>();
         builder.Services.AddSingleton<MainWindowViewModel>();
-        builder.Services.AddSingleton<GlobalSettings>();
         builder.Services.AddTransient<OpenFolderControlView>();
         builder.Services.AddTransient<OpenFolderControlViewModel>();
+        builder.Services.AddSingleton<SideWorkSpaceControlView>();
+        builder.Services.AddSingleton<SideWorkSpaceControlViewModel>();
+
+        builder.Services.AddSingleton<GlobalSettings>();
 
         // Setup and provision the hosting context for the User Interface
         // service.

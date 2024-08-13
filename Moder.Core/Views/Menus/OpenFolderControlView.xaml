@@ -10,8 +10,18 @@
     d:DataContext="{d:DesignInstance vms:OpenFolderControlViewModel}"
     mc:Ignorable="d">
 
-    <StackPanel>
-        <TextBlock Text="未选择工作区" />
-        <Button Command="{Binding OpenFolderCommand}" Content="打开文件夹" />
-    </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="未选择工作区" />
+        <Button
+            Grid.Row="1"
+            Width="Auto"
+            Margin="10"
+            Command="{Binding OpenFolderCommand}"
+            Content="打开文件夹" />
+    </Grid>
 </UserControl>

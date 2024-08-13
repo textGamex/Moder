@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Text;
+﻿using System.Text;
 using CWTools.CSharp;
 using CWTools.Process;
 

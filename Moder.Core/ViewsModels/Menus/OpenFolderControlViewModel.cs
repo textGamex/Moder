@@ -2,6 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using Moder.Core.Config;
 using Windows.Storage.Pickers;
+using CommunityToolkit.Mvvm.Messaging;
+using Moder.Core.Messages;
 using WinUIEx;
 
 namespace Moder.Core.ViewsModels.Menus;
@@ -20,6 +22,7 @@ public sealed partial class OpenFolderControlViewModel : ObservableObject
 	{
 		var folderPicker = new FolderPicker();
 		WinRT.Interop.InitializeWithWindow.Initialize(folderPicker, App.Current.MainWindow.GetWindowHandle());
+
 		var result = await folderPicker.PickSingleFolderAsync();
 		if (result is null)
 		{
@@ -28,7 +31,7 @@ public sealed partial class OpenFolderControlViewModel : ObservableObject
 		else
 		{
 			_globalSettings.WorkRootFolderPath = result.Path;
-
+			WeakReferenceMessenger.Default.Send(new CompleteWorkFolderSelectMessage());
 		}
 	}
 }

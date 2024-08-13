@@ -47,7 +47,11 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <ui:HeaderedContentControl x:Name="SideContentControl" Header="资源管理器" />
+            <ui:HeaderedContentControl
+                x:Name="SideContentControl"
+                MinWidth="70"
+                MaxWidth="500"
+                Header="资源管理器" />
             <controls:ContentSizer
                 Grid.Column="1"
                 Cursor="Hand"
