@@ -11,9 +11,11 @@
     mc:Ignorable="d">
 
     <TreeView
+        x:Name="FileTreeView"
         MinWidth="70"
         VerticalContentAlignment="Stretch"
-        ItemsSource="{Binding Items}">
+        ItemsSource="{Binding Items}"
+        SelectionChanged="FileTreeView_OnSelectionChanged">
         <TreeView.ItemTemplate>
             <DataTemplate x:DataType="vms:SystemFileItem">
                 <TreeViewItem Content="{Binding Name}" ItemsSource="{Binding Children}" />

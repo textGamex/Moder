@@ -20,6 +20,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Views\Game\StateFileControlView.xaml" />
     <None Remove="Views\Menus\OpenFolderControlView.xaml" />
     <None Remove="Views\Menus\SideWorkSpaceControlView.xaml" />
   </ItemGroup>
@@ -42,7 +43,7 @@
     <PackageReference Include="FSharp.Core" Version="8.0.301" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240627000" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240802000" />
     <PackageReference Include="WinUIEx" Version="2.3.4" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
@@ -62,6 +63,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Views\Game\StateFileControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\Menus\SideWorkSpaceControlView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

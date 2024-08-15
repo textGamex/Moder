@@ -13,7 +13,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <Grid x:Name="AppTitleBar" Height="32">
@@ -22,6 +22,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition x:Name="RightPaddingColumn" Width="0" />
             </Grid.ColumnDefinitions>
+
             <Image
                 x:Name="TitleBarIcon"
                 Grid.Column="1"
@@ -47,16 +48,18 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <ui:HeaderedContentControl
+
+            <ContentControl
                 x:Name="SideContentControl"
+                Grid.Column="0"
                 MinWidth="70"
-                MaxWidth="500"
-                Header="资源管理器" />
+                MaxWidth="350"
+                Margin="8,0,0,0" />
             <controls:ContentSizer
                 Grid.Column="1"
-                Cursor="Hand"
+                Cursor="SizeWestEast"
                 TargetControl="{x:Bind SideContentControl}" />
-
+            <Frame x:Name="MainFrame" Grid.Column="2" />
         </Grid>
     </Grid>
 

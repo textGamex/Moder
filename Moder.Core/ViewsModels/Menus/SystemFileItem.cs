@@ -2,9 +2,23 @@
 
 namespace Moder.Core.ViewsModels.Menus;
 
-public class SystemFileItem
+public sealed class SystemFileItem
 {
-	public required string Name { get; set; }
-	public required bool IsFile { get; set; }
-	public ObservableCollection<SystemFileItem> Children { get; set; } = new();
+	public string Name { get; }
+	public string FullPath { get; }
+	public bool IsFile { get; }
+	public ObservableCollection<SystemFileItem> Children { get; } = [];
+
+	public SystemFileItem(string fullPath, bool isFile)
+	{
+		Name = Path.GetFileName(fullPath);
+		FullPath = fullPath;
+		IsFile = isFile;
+	}
+
+	public override string ToString()
+	{
+		return
+			$"{nameof(Name)}: {Name}, {nameof(FullPath)}: {FullPath}, {nameof(IsFile)}: {IsFile}, {nameof(Children)}: {Children}";
+	}
 }

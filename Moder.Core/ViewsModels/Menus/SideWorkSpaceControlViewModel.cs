@@ -12,7 +12,7 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
 
 	public SideWorkSpaceControlViewModel(GlobalSettings globalSettings)
 	{
-		var items = new SystemFileItem() { Name = Path.GetFileName(globalSettings.WorkRootFolderPath), IsFile = false };
+		var items = new SystemFileItem(globalSettings.WorkRootFolderPath, false);
 		LoadFileSystem(globalSettings.WorkRootFolderPath, items);
 		Items = [items];
 	}
@@ -22,16 +22,16 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
 		var directories = Directory.GetDirectories(path);
 		var files = Directory.GetFiles(path);
 
-		foreach (var directory in directories)
+		foreach (var directoryPath in directories)
 		{
-			var item = new SystemFileItem { Name = Path.GetFileName(directory), IsFile = false };
+			var item = new SystemFileItem(directoryPath, false);
 			parent.Children.Add(item);
-			LoadFileSystem(directory, item);
+			LoadFileSystem(directoryPath, item);
 		}
 
-		foreach (var file in files)
+		foreach (var filePath in files)
 		{
-			parent.Children.Add(new SystemFileItem { Name = Path.GetFileName(file), IsFile = true });
+			parent.Children.Add(new SystemFileItem(filePath, true));
 		}
 	}
 }

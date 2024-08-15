@@ -2,7 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Moder.Core.Config;
+using Moder.Core.Services;
+using Moder.Core.Views.Game;
 using Moder.Core.Views.Menus;
+using Moder.Core.ViewsModels.Game;
 using Moder.Core.ViewsModels.Menus;
 using Moder.Hosting.WinUI;
 
@@ -35,8 +38,11 @@ public static partial class Program
         builder.Services.AddTransient<OpenFolderControlViewModel>();
         builder.Services.AddSingleton<SideWorkSpaceControlView>();
         builder.Services.AddSingleton<SideWorkSpaceControlViewModel>();
+        builder.Services.AddTransient<StateFileControlView>();
+        builder.Services.AddTransient<StateFileControlViewModel>();
 
         builder.Services.AddSingleton<GlobalSettings>();
+        builder.Services.AddSingleton<GlobalResourceService>();
 
         // Setup and provision the hosting context for the User Interface
         // service.
