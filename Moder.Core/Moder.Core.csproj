@@ -38,7 +38,6 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.0.240109" />
-    <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageReference Include="CWTools_Plus" Version="1.1.1" />
     <PackageReference Include="FSharp.Core" Version="8.0.301" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
@@ -74,6 +73,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Models\Vo\" />
     <Folder Include="Parser\" />
   </ItemGroup>
 
