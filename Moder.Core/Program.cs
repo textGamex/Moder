@@ -17,48 +17,48 @@ namespace Moder.Core;
 
 public static partial class Program
 {
-    /// <summary>
-    /// Ensures that the process can run XAML, and provides a deterministic error if a
-    /// check fails. Otherwise, it quietly does nothing.
-    /// </summary>
-    [LibraryImport("Microsoft.ui.xaml.dll")]
-    private static partial void XamlCheckProcessRequirements();
+	/// <summary>
+	/// Ensures that the process can run XAML, and provides a deterministic error if a
+	/// check fails. Otherwise, it quietly does nothing.
+	/// </summary>
+	[LibraryImport("Microsoft.ui.xaml.dll")]
+	private static partial void XamlCheckProcessRequirements();
 
-    [STAThread]
-    private static void Main(string[] args)
-    {
-        XamlCheckProcessRequirements();
+	[STAThread]
+	private static void Main(string[] args)
+	{
+		XamlCheckProcessRequirements();
 
-        var builder = Host.CreateApplicationBuilder(args);
+		var builder = Host.CreateApplicationBuilder(args);
 
-        // View, ViewModel
-        builder.Services.AddSingleton<MainWindow>();
-        builder.Services.AddSingleton<MainWindowViewModel>();
-        builder.Services.AddTransient<OpenFolderControlView>();
-        builder.Services.AddTransient<OpenFolderControlViewModel>();
-        builder.Services.AddSingleton<SideWorkSpaceControlView>();
-        builder.Services.AddSingleton<SideWorkSpaceControlViewModel>();
-        builder.Services.AddTransient<StateFileControlView>();
-        builder.Services.AddTransient<StateFileControlViewModel>();
+		// View, ViewModel
+		builder.Services.AddSingleton<MainWindow>();
+		builder.Services.AddSingleton<MainWindowViewModel>();
+		builder.Services.AddTransient<OpenFolderControlView>();
+		builder.Services.AddTransient<OpenFolderControlViewModel>();
+		builder.Services.AddSingleton<SideWorkSpaceControlView>();
+		builder.Services.AddSingleton<SideWorkSpaceControlViewModel>();
+		builder.Services.AddTransient<StateFileControlView>();
+		builder.Services.AddTransient<StateFileControlViewModel>();
 
-        builder.Services.AddSingleton<GlobalSettings>();
-        builder.Services.AddSingleton<GlobalResourceService>();
+		builder.Services.AddSingleton<GlobalSettings>();
+		builder.Services.AddSingleton<GlobalResourceService>();
 
-        // Setup and provision the hosting context for the User Interface
-        // service.
-        ((IHostApplicationBuilder)builder).Properties.Add(
-            HostingExtensions.HostingContextKey,
-            new HostingContext() { IsLifetimeLinked = true });
+		// Setup and provision the hosting context for the User Interface
+		// service.
+		((IHostApplicationBuilder)builder).Properties.Add(
+			HostingExtensions.HostingContextKey,
+			new HostingContext() { IsLifetimeLinked = true });
 
-        // Add the WinUI User Interface hosted service as early as possible to
-        // allow the UI to start showing up while you continue setting up other
-        // services not required for the UI.
-        var host = builder.ConfigureWinUI<App>()
-            .Build();
+		// Add the WinUI User Interface hosted service as early as possible to
+		// allow the UI to start showing up while you continue setting up other
+		// services not required for the UI.
+		var host = builder.ConfigureWinUI<App>()
+			.Build();
 
-        // Finally start the host. This will block until the application
-        // lifetime is terminated through CTRL+C, closing the UI windows or
-        // programmatically.
-        host.Run();
-    }
+		// Finally start the host. This will block until the application
+		// lifetime is terminated through CTRL+C, closing the UI windows or
+		// programmatically.
+		host.Run();
+	}
 }

@@ -10,37 +10,37 @@ namespace Moder.Core.Views.Menus;
 
 public sealed partial class SideWorkSpaceControlView : UserControl
 {
-    private readonly ILogger<SideWorkSpaceControlView> _logger;
-    private readonly GlobalResourceService _resourceService;
+	private readonly ILogger<SideWorkSpaceControlView> _logger;
+	private readonly GlobalResourceService _resourceService;
 
-    public SideWorkSpaceControlView(
-        SideWorkSpaceControlViewModel model,
-        ILogger<SideWorkSpaceControlView> logger,
-        GlobalResourceService resourceService
-    )
-    {
-        _logger = logger;
-        _resourceService = resourceService;
-        InitializeComponent();
+	public SideWorkSpaceControlView(
+		SideWorkSpaceControlViewModel model,
+		ILogger<SideWorkSpaceControlView> logger,
+		GlobalResourceService resourceService
+	)
+	{
+		_logger = logger;
+		_resourceService = resourceService;
+		InitializeComponent();
 
-        DataContext = model;
-    }
+		DataContext = model;
+	}
 
-    private void FileTreeView_OnSelectionChanged(TreeView sender, TreeViewSelectionChangedEventArgs args)
-    {
-        if (args.AddedItems.Count != 1)
-        {
-            _logger.LogDebug("Œ¥—°÷–Œƒº˛");
-            return;
-        }
+	private void FileTreeView_OnSelectionChanged(TreeView sender, TreeViewSelectionChangedEventArgs args)
+	{
+		if (args.AddedItems.Count != 1)
+		{
+			_logger.LogDebug("");
+			return;
+		}
 
-        if (args.AddedItems[0] is SystemFileItem { IsFile: true } file)
-        {
-            _logger.LogInformation("—°÷–Œƒº˛: {File}", file.Name);
-            // TODO: ’‚÷÷…Ëº∆œ¬,≤ª÷ß≥÷“ª¥Œ–‘¥Úø™∂‡∏ˆŒƒº˛
-            _resourceService.SetCurrentSelectFileItem(file);
+		if (args.AddedItems[0] is SystemFileItem { IsFile: true } file)
+		{
+			_logger.LogInformation("Êñá‰ª∂: {File}", file.Name);
+			// TODO: ËøôÊ†∑ÂÅöÂè™ËÉΩÊâìÂºÄ‰∏Ä‰∏™Êñá‰ª∂
+			_resourceService.SetCurrentSelectFileItem(file);
 
-            WeakReferenceMessenger.Default.Send(new OpenFileMessage(file));
-        }
-    }
+			WeakReferenceMessenger.Default.Send(new OpenFileMessage(file));
+		}
+	}
 }

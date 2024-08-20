@@ -14,46 +14,46 @@ namespace Moder.Core;
 /// </summary>
 public sealed partial class MainWindow : Window
 {
-    private readonly GlobalSettings _settings;
-    private readonly IServiceProvider _serviceProvider;
-    public MainWindowViewModel ViewModel { get; }
+	private readonly GlobalSettings _settings;
+	private readonly IServiceProvider _serviceProvider;
+	public MainWindowViewModel ViewModel { get; }
 
-    public MainWindow(MainWindowViewModel model, GlobalSettings settings, IServiceProvider serviceProvider)
-    {
-        _settings = settings;
-        _serviceProvider = serviceProvider;
-        InitializeComponent();
+	public MainWindow(MainWindowViewModel model, GlobalSettings settings, IServiceProvider serviceProvider)
+	{
+		_settings = settings;
+		_serviceProvider = serviceProvider;
+		InitializeComponent();
 
-        ExtendsContentIntoTitleBar = true;
-        ViewModel = model;
+		ExtendsContentIntoTitleBar = true;
+		ViewModel = model;
 
-        if (string.IsNullOrEmpty(settings.WorkRootFolderPath))
-        {
-            SideContentControl.Content = serviceProvider.GetRequiredService<OpenFolderControlView>();
-        }
-        WeakReferenceMessenger.Default.Register<CompleteWorkFolderSelectMessage>(
-            this,
-            (_, _) =>
-            {
-                SideContentControl.Content = serviceProvider.GetRequiredService<SideWorkSpaceControlView>();
-            }
-        );
-        WeakReferenceMessenger.Default.Register<OpenFileMessage>(
-            this,
-            (_, message) =>
-            {
-                MainFrame.Content = GetContent(message.FileItem);
-            }
-        );
-    }
+		if (string.IsNullOrEmpty(settings.WorkRootFolderPath))
+		{
+			SideContentControl.Content = serviceProvider.GetRequiredService<OpenFolderControlView>();
+		}
+		else
+		{
+			SideContentControl.Content = serviceProvider.GetRequiredService<SideWorkSpaceControlView>();
+		}
 
-    private object GetContent(SystemFileItem fileItem)
-    {
-        var relativePath = Path.GetRelativePath(_settings.WorkRootFolderPath, fileItem.FullPath);
-        if (relativePath.Contains("states"))
-        {
-            return _serviceProvider.GetRequiredService<StateFileControlView>();
-        }
-        return "‘›≤ª÷ß≥÷¥À¿‡–ÕŒƒº˛";
-    }
+		WeakReferenceMessenger.Default.Register<CompleteWorkFolderSelectMessage>(
+			this,
+			(_, _) => { SideContentControl.Content = serviceProvider.GetRequiredService<SideWorkSpaceControlView>(); }
+		);
+		WeakReferenceMessenger.Default.Register<OpenFileMessage>(
+			this,
+			(_, message) => { MainFrame.Content = GetContent(message.FileItem); }
+		);
+	}
+
+	private object GetContent(SystemFileItem fileItem)
+	{
+		var relativePath = Path.GetRelativePath(_settings.WorkRootFolderPath, fileItem.FullPath);
+		if (relativePath.Contains("states"))
+		{
+			return _serviceProvider.GetRequiredService<StateFileControlView>();
+		}
+
+		return "ÊöÇ‰∏çÊîØÊåÅÊ≠§Á±ªÂûãÊñá‰ª∂";
+	}
 }
