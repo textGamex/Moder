@@ -1,6 +1,6 @@
 ﻿using System.Text;
-using CWTools.CSharp;
-using CWTools.Process;
+using ParadoxPower.CSharp;
+using ParadoxPower.Process;
 
 namespace Moder.Core.Parser;
 

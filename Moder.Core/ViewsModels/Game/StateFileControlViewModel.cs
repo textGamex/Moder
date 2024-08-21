@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using CWTools.Process;
 using Moder.Core.Extensions;
 using Moder.Core.Models.Vo;
 using Moder.Core.Parser;
@@ -34,7 +33,7 @@ public sealed class StateFileControlViewModel
 
 		foreach (var leaf in rootNode.Leaves)
 		{
-			leaves.Add(new LeafVo(leaf.Key, leaf.Value.ToRawString()));
+			leaves.Add(new LeafVo(leaf.Key, leaf.Value));
 		}
 
 		Leaves = leaves;
@@ -50,9 +49,16 @@ public sealed class StateFileControlViewModel
 		}
 
 		var rootNode = parser.GetResult().GetChild("state");
-		foreach (var leaf in Leaves)
+		foreach (var leaf in Leaves.Where(item => item.IsChanged))
 		{
-			// rootNode.SetTag(leaf.Key, new Leaf());
+			foreach (var child in rootNode.Leaves)
+			{
+				if (child.Key == leaf.Key)
+				{
+					child.Value = leaf.ToRawValue();
+					break;
+				}
+			}
 		}
 	}
 }

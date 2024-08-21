@@ -1,4 +1,4 @@
-﻿using CWTools.Process;
+﻿using ParadoxPower.Process;
 
 namespace Moder.Core.Extensions;
 

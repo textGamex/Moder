@@ -30,7 +30,7 @@ public sealed partial class SideWorkSpaceControlView : UserControl
 	{
 		if (args.AddedItems.Count != 1)
 		{
-			_logger.LogDebug("");
+			_logger.LogDebug("未选中文件");
 			return;
 		}
 

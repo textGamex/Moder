@@ -20,32 +20,32 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Remove="Views\Game\StateFileControlView.xaml"/>
-		<None Remove="Views\Menus\OpenFolderControlView.xaml"/>
-		<None Remove="Views\Menus\SideWorkSpaceControlView.xaml"/>
+		<None Remove="Views\Game\StateFileControlView.xaml" />
+		<None Remove="Views\Menus\OpenFolderControlView.xaml" />
+		<None Remove="Views\Menus\SideWorkSpaceControlView.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="Assets\SplashScreen.scale-200.png"/>
-		<Content Include="Assets\LockScreenLogo.scale-200.png"/>
-		<Content Include="Assets\Square150x150Logo.scale-200.png"/>
-		<Content Include="Assets\Square44x44Logo.scale-200.png"/>
-		<Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png"/>
-		<Content Include="Assets\StoreLogo.png"/>
-		<Content Include="Assets\Wide310x150Logo.scale-200.png"/>
+		<Content Include="Assets\SplashScreen.scale-200.png" />
+		<Content Include="Assets\LockScreenLogo.scale-200.png" />
+		<Content Include="Assets\Square150x150Logo.scale-200.png" />
+		<Content Include="Assets\Square44x44Logo.scale-200.png" />
+		<Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+		<Content Include="Assets\StoreLogo.png" />
+		<Content Include="Assets\Wide310x150Logo.scale-200.png" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2"/>
-		<PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.0.240109"/>
-		<PackageReference Include="CWTools_Plus" Version="1.1.1"/>
-		<PackageReference Include="FSharp.Core" Version="8.0.301"/>
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0"/>
-		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1"/>
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240802000"/>
-		<PackageReference Include="WinUICommunity.Components" Version="6.9.0"/>
-		<PackageReference Include="WinUIEx" Version="2.3.4"/>
-		<Manifest Include="$(ApplicationManifest)"/>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.0.240109" />
+		<PackageReference Include="FSharp.Core" Version="8.0.301" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1" />
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240802000" />
+		<PackageReference Include="ParadoxPower" Version="0.1.0-beta" />
+		<PackageReference Include="WinUICommunity.Components" Version="6.9.0" />
+		<PackageReference Include="WinUIEx" Version="2.3.4" />
+		<Manifest Include="$(ApplicationManifest)" />
 	</ItemGroup>
 
 	<!--
@@ -54,10 +54,10 @@
 	  package has not yet been restored.
 	-->
 	<ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
-		<ProjectCapability Include="Msix"/>
+		<ProjectCapability Include="Msix" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Moder.Hosting\Moder.Hosting.csproj"/>
+		<ProjectReference Include="..\Moder.Hosting\Moder.Hosting.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="appsettings.json">
@@ -74,8 +74,8 @@
 		</Page>
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Models\Vo\"/>
-		<Folder Include="Parser\"/>
+		<Folder Include="Models\Vo\" />
+		<Folder Include="Parser\" />
 	</ItemGroup>
 
 	<!--
@@ -87,9 +87,6 @@
 		<HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
 	</PropertyGroup>
 	<ItemGroup>
-		<EditorConfigFiles Remove="C:\Me\Code\Project\C#\Moder\Moder.Core\.editorconfig"/>
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="C:\Me\Code\Project\C#\Moder\Moder.Core\.editorconfig"/>
+		<EditorConfigFiles Remove="C:\Me\Code\Project\C#\Moder\Moder.Core\.editorconfig" />
 	</ItemGroup>
 </Project>
