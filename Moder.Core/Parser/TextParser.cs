@@ -4,7 +4,7 @@ using ParadoxPower.Process;
 
 namespace Moder.Core.Parser;
 
-public class CwToolsParser
+public class TextParser
 {
 	public string FilePath { get; }
 
@@ -22,7 +22,7 @@ public class CwToolsParser
 	/// <param name="filePath"></param>
 	/// <exception cref="FileNotFoundException">如果文件不存在</exception>
 	/// <exception cref="IOException"></exception>
-	public CwToolsParser(string filePath)
+	public TextParser(string filePath)
 	{
 		FilePath = File.Exists(filePath) ? filePath : throw new FileNotFoundException($"找不到文件: {filePath}", filePath);
 		var fileName = Path.GetFileName(filePath);
@@ -37,7 +37,7 @@ public class CwToolsParser
 		_node = Parsers.ProcessStatements(fileName, filePath, result.GetResult());
 	}
 
-	public CwToolsParser(string fileName, string fileContent)
+	public TextParser(string fileName, string fileContent)
 	{
 		FilePath = fileName;
 		var result = Parsers.ParseScriptFile(fileName, fileContent);
@@ -51,7 +51,7 @@ public class CwToolsParser
 		_node = Parsers.ProcessStatements(fileName, string.Empty, result.GetResult());
 	}
 
-	public static async Task<CwToolsParser> Parser(string filePath)
+	public static async Task<TextParser> Parser(string filePath)
 	{
 		if (!File.Exists(filePath))
 		{
@@ -72,10 +72,10 @@ public class CwToolsParser
 			node = Parsers.ProcessStatements(fileName, filePath, result.GetResult());
 		}
 
-		return new CwToolsParser(filePath, isSuccess, error, node);
+		return new TextParser(filePath, isSuccess, error, node);
 	}
 
-	private CwToolsParser(string filePath, bool isSuccess, ParserError? error, Node? node)
+	private TextParser(string filePath, bool isSuccess, ParserError? error, Node? node)
 	{
 		FilePath = filePath;
 		IsSuccess = isSuccess;
@@ -83,7 +83,7 @@ public class CwToolsParser
 		_node = node;
 	}
 
-	static CwToolsParser()
+	static TextParser()
 	{
 		Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 	}

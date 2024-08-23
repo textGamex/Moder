@@ -12,23 +12,9 @@
     d:DataContext="{d:DesignInstance vms:StateFileControlViewModel}"
     mc:Ignorable="d">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-
-        <TextBlock
-            Grid.Row="0"
-            HorizontalAlignment="Center"
-            Style="{StaticResource TitleTextBlockStyle}"
-            Text="{x:Bind ViewModel.Title}" />
-
-        <ListView
-            Grid.Row="1"
-            ItemsSource="{x:Bind ViewModel.Leaves}"
-            SelectionMode="None">
-            <ListView.ItemTemplate>
+    <UserControl.Resources>
+        <local:StateFileDataTemplateSelector x:Key="StateFileDataTemplateSelector">
+            <local:StateFileDataTemplateSelector.Leaf>
                 <DataTemplate x:DataType="vo:LeafVo">
                     <StackPanel
                         Margin="2"
@@ -52,11 +38,66 @@
                             Height="40"
                             Margin="4"
                             Style="{ThemeResource InfoBorderPanelStyle}">
-                            <TextBlock Text="{x:Bind Type}" />
+                            <TextBlock
+                                Margin="2"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource BodyTextBlockStyle}"
+                                Text="{x:Bind Type}" />
                         </Border>
                     </StackPanel>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </local:StateFileDataTemplateSelector.Leaf>
+
+            <local:StateFileDataTemplateSelector.LeafValues>
+                <DataTemplate x:DataType="vo:LeafValuesVo">
+                    <StackPanel
+                        Margin="2"
+                        Background="{ThemeResource SettingsCardBackground}"
+                        BorderBrush="{ThemeResource SettingsCardBorderBrush}"
+                        BorderThickness="{ThemeResource SettingsCardBorderThickness}"
+                        CornerRadius="{ThemeResource ControlCornerRadius}"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Margin="8,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            Text="{x:Bind Key}" />
+                        <Expander ExpandDirection="Down" Header="Items">
+                            <GridView ItemsSource="{x:Bind Values}" />
+                        </Expander>
+                        <Border
+                            Height="40"
+                            Margin="4"
+                            Style="{ThemeResource InfoBorderPanelStyle}">
+                            <TextBlock
+                                Margin="2"
+                                Style="{StaticResource BodyTextBlockStyle}"
+                                Text="{x:Bind Type}" />
+                        </Border>
+                    </StackPanel>
+                </DataTemplate>
+            </local:StateFileDataTemplateSelector.LeafValues>
+        </local:StateFileDataTemplateSelector>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            HorizontalAlignment="Center"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="{x:Bind ViewModel.Title}" />
+
+        <ListView
+            Grid.Row="1"
+            ItemTemplateSelector="{StaticResource StateFileDataTemplateSelector}"
+            ItemsSource="{x:Bind ViewModel.Items}"
+            SelectionMode="None" />
     </Grid>
 </UserControl>
