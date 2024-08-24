@@ -6,14 +6,11 @@ namespace Moder.Core.Models.Vo;
 
 public partial class LeafVo : ObservableGameValue
 {
-    public string Key { get; private set; }
-
     [ObservableProperty]
     private string _value;
 
-    public LeafVo(string key, Types.Value value)
+    public LeafVo(string key, Types.Value value) : base(key)
     {
-        Key = key;
         _value = value.ToRawString();
 		Type = value.ToLocalValueType();
 	}

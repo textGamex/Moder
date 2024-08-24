@@ -65,4 +65,28 @@ public static class ParserExtend
 		// }
 		throw new InvalidEnumArgumentException(nameof(value));
 	}
+
+	public static string GetKey(this Child child)
+	{
+		if (child.IsLeafChild)
+		{
+			return child.leaf.Key;
+		}
+
+		if (child.IsNodeChild)
+		{
+			return child.node.Key;
+		}
+
+		if (child.IsLeafValueChild)
+		{
+			return child.leafvalue.Key;
+		}
+
+		if (child.IsCommentChild || child.IsValueClauseChild)
+		{
+			throw new InvalidOperationException("这个 child 不存在 key");
+		}
+		throw new InvalidEnumArgumentException(nameof(child));
+	}
 }

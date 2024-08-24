@@ -79,6 +79,16 @@
                     </StackPanel>
                 </DataTemplate>
             </local:StateFileDataTemplateSelector.LeafValues>
+
+            <local:StateFileDataTemplateSelector.Node>
+                <DataTemplate x:DataType="vo:NodeVo">
+                    <TreeViewItem IsExpanded="True" ItemsSource="{x:Bind Children}">
+                        <TreeViewItem.Content>
+                            <TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="{x:Bind Key}" />
+                        </TreeViewItem.Content>
+                    </TreeViewItem>
+                </DataTemplate>
+            </local:StateFileDataTemplateSelector.Node>
         </local:StateFileDataTemplateSelector>
     </UserControl.Resources>
 
@@ -94,7 +104,7 @@
             Style="{StaticResource TitleTextBlockStyle}"
             Text="{x:Bind ViewModel.Title}" />
 
-        <ListView
+        <TreeView
             Grid.Row="1"
             ItemTemplateSelector="{StaticResource StateFileDataTemplateSelector}"
             ItemsSource="{x:Bind ViewModel.Items}"

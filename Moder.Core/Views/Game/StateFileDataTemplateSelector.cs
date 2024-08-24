@@ -6,6 +6,7 @@ namespace Moder.Core.Views.Game;
 
 public class StateFileDataTemplateSelector : DataTemplateSelector
 {
+    public DataTemplate? Node { get; set; }
     public DataTemplate? Leaf { get; set; }
     public DataTemplate? LeafValues { get; set; }
 
@@ -13,6 +14,7 @@ public class StateFileDataTemplateSelector : DataTemplateSelector
     {
         return item switch
         {
+            NodeVo => Node!,
             LeafVo => Leaf!,
             LeafValuesVo => LeafValues!,
             _ => throw new ArgumentException("未知对象", nameof(item))
