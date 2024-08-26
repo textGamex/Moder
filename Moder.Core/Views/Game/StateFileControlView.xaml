@@ -7,29 +7,39 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Moder.Core.Views.Game"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="using:Moder.Core.Models"
     xmlns:vms="using:Moder.Core.ViewsModels.Game"
     xmlns:vo="using:Moder.Core.Models.Vo"
     d:DataContext="{d:DesignInstance vms:StateFileControlViewModel}"
     mc:Ignorable="d">
 
     <UserControl.Resources>
+        <Style x:Key="CardStackPanel" TargetType="StackPanel">
+            <Style.Setters>
+                <Setter Property="Margin" Value="2" />
+                <Setter Property="Background" Value="{ThemeResource SettingsCardBackground}" />
+                <Setter Property="BorderBrush" Value="{ThemeResource SettingsCardBorderBrush}" />
+                <Setter Property="BorderThickness" Value="{ThemeResource SettingsCardBorderThickness}" />
+                <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}" />
+                <Setter Property="Orientation" Value="Horizontal" />
+            </Style.Setters>
+        </Style>
+        <Style
+            x:Key="KeyTextBlockStyle"
+            BasedOn="{StaticResource BodyTextBlockStyle}"
+            TargetType="TextBlock">
+            <Style.Setters>
+                <Setter Property="Margin" Value="8,0" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="16" />
+            </Style.Setters>
+        </Style>
         <local:StateFileDataTemplateSelector x:Key="StateFileDataTemplateSelector">
             <local:StateFileDataTemplateSelector.Leaf>
                 <DataTemplate x:DataType="vo:LeafVo">
-                    <StackPanel
-                        Margin="2"
-                        Background="{ThemeResource SettingsCardBackground}"
-                        BorderBrush="{ThemeResource SettingsCardBorderBrush}"
-                        BorderThickness="{ThemeResource SettingsCardBorderThickness}"
-                        CornerRadius="{ThemeResource ControlCornerRadius}"
-                        Orientation="Horizontal">
-                        <TextBlock
-                            Margin="8,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontSize="16"
-                            Style="{StaticResource BodyTextBlockStyle}"
-                            Text="{x:Bind Key}" />
+                    <StackPanel Style="{StaticResource CardStackPanel}">
+                        <TextBlock Style="{StaticResource KeyTextBlockStyle}" Text="{x:Bind Key}" />
                         <TextBox
                             Width="Auto"
                             Margin="0,4"
@@ -50,20 +60,8 @@
 
             <local:StateFileDataTemplateSelector.LeafValues>
                 <DataTemplate x:DataType="vo:LeafValuesVo">
-                    <StackPanel
-                        Margin="2"
-                        Background="{ThemeResource SettingsCardBackground}"
-                        BorderBrush="{ThemeResource SettingsCardBorderBrush}"
-                        BorderThickness="{ThemeResource SettingsCardBorderThickness}"
-                        CornerRadius="{ThemeResource ControlCornerRadius}"
-                        Orientation="Horizontal">
-                        <TextBlock
-                            Margin="8,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontSize="16"
-                            Style="{StaticResource BodyTextBlockStyle}"
-                            Text="{x:Bind Key}" />
+                    <StackPanel Style="{StaticResource CardStackPanel}">
+                        <TextBlock Style="{StaticResource KeyTextBlockStyle}" Text="{x:Bind Key}" />
                         <Expander ExpandDirection="Down" Header="Items">
                             <GridView ItemsSource="{x:Bind Values}" />
                         </Expander>
