@@ -6,6 +6,7 @@ namespace Moder.Core.Models.Vo;
 
 public partial class LeafVo : ObservableGameValue
 {
+	public string[] StateCategory { get; } = ["town", "city", "village"];
     [ObservableProperty]
     private string _value;
 

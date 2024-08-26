@@ -121,7 +121,7 @@ public sealed class StateFileControlViewModel
         }
 
         var rootNode = parser.GetResult().GetChild("state");
-
+		
         // TODO: 保存到文件
 
     }
