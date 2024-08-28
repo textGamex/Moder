@@ -1,8 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Markup;
-using Microsoft.UI.Xaml.Media;
 using Moder.Core.Models.Vo;
 
 namespace Moder.Core.Views.Game;

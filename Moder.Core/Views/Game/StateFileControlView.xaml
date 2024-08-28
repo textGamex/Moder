@@ -4,6 +4,7 @@
     x:Class="Moder.Core.Views.Game.StateFileControlView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Moder.Core.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Moder.Core.Views.Game"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -15,101 +16,40 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <Style x:Key="CardStackPanel" TargetType="StackPanel">
-            <Style.Setters>
-                <Setter Property="Margin" Value="2" />
-                <Setter Property="Background" Value="{ThemeResource SettingsCardBackground}" />
-                <Setter Property="BorderBrush" Value="{ThemeResource SettingsCardBorderBrush}" />
-                <Setter Property="BorderThickness" Value="{ThemeResource SettingsCardBorderThickness}" />
-                <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}" />
-                <Setter Property="Orientation" Value="Horizontal" />
-            </Style.Setters>
-        </Style>
-        <Style x:Key="CardGrid" TargetType="Grid">
-            <Style.Setters>
-                <Setter Property="Margin" Value="2" />
-                <Setter Property="Background" Value="{ThemeResource SettingsCardBackground}" />
-                <Setter Property="BorderBrush" Value="{ThemeResource SettingsCardBorderBrush}" />
-                <Setter Property="BorderThickness" Value="{ThemeResource SettingsCardBorderThickness}" />
-                <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}" />
-            </Style.Setters>
-        </Style>
-        <Style
-            x:Key="KeyTextBlockStyle"
-            BasedOn="{StaticResource BodyTextBlockStyle}"
-            TargetType="TextBlock">
-            <Style.Setters>
-                <Setter Property="Margin" Value="8,0" />
-                <Setter Property="HorizontalAlignment" Value="Center" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="FontSize" Value="16" />
-            </Style.Setters>
-        </Style>
-
         <local:StateFileDataTemplateSelector x:Key="StateFileDataTemplateSelector">
             <local:StateFileDataTemplateSelector.Leaf>
                 <DataTemplate x:DataType="vo:LeafVo">
-                    <StackPanel Style="{StaticResource CardStackPanel}">
-                        <TextBlock Style="{StaticResource KeyTextBlockStyle}" Text="{x:Bind Key}" />
-                        <Border
-                            Height="40"
-                            Margin="4"
-                            Style="{ThemeResource InfoBorderPanelStyle}">
-                            <TextBlock
-                                Margin="2"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource BodyTextBlockStyle}"
-                                Text="{x:Bind Type}" />
-                        </Border>
-                        <TextBox
-                            Width="Auto"
-                            Margin="0,4"
-                            Text="{x:Bind Value, Mode=TwoWay}" />
-                    </StackPanel>
+                    <controls:BaseLeaf Key="{x:Bind Key}" Type="{x:Bind TypeString}">
+                        <controls:BaseLeaf.SlotContent>
+
+                            <TextBox HorizontalAlignment="Left" Text="{x:Bind Value, Mode=TwoWay}" />
+
+                        </controls:BaseLeaf.SlotContent>
+                    </controls:BaseLeaf>
                 </DataTemplate>
             </local:StateFileDataTemplateSelector.Leaf>
 
             <local:StateFileDataTemplateSelector.LeafValues>
                 <DataTemplate x:DataType="vo:LeafValuesVo">
-                    <Grid Style="{StaticResource CardGrid}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
+                    <controls:BaseLeaf Key="{x:Bind Key}" Type="{x:Bind TypeString}">
+                        <controls:BaseLeaf.SlotContent>
 
-                        <TextBlock
-                            Grid.Column="0"
-                            Style="{StaticResource KeyTextBlockStyle}"
-                            Text="{x:Bind Key}" />
-                        <Border
-                            Grid.Column="1"
-                            Height="40"
-                            Margin="4"
-                            Style="{ThemeResource InfoBorderPanelStyle}">
-                            <TextBlock
-                                Margin="2"
-                                Style="{StaticResource BodyTextBlockStyle}"
-                                Text="{x:Bind Type}" />
-                        </Border>
+                            <Expander ExpandDirection="Down" Header="Items">
+                                <ListView
+                                    ItemsSource="{x:Bind Values}"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                                    ScrollViewer.HorizontalScrollMode="Enabled"
+                                    SelectionChanged="Selector_OnSelectionChanged">
+                                    <ListView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ListView.ItemsPanel>
+                                </ListView>
+                            </Expander>
 
-                        <Expander
-                            Grid.Column="2"
-                            ExpandDirection="Down"
-                            Header="Items">
-                            <ListView
-                                ItemsSource="{x:Bind Values}"
-                                ScrollViewer.HorizontalScrollBarVisibility="Visible"
-                                ScrollViewer.HorizontalScrollMode="Enabled"
-                                SelectionChanged="Selector_OnSelectionChanged">
-                                <ListView.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal" />
-                                    </ItemsPanelTemplate>
-                                </ListView.ItemsPanel>
-                            </ListView>
-                        </Expander>
-                    </Grid>
+                        </controls:BaseLeaf.SlotContent>
+                    </controls:BaseLeaf>
                 </DataTemplate>
             </local:StateFileDataTemplateSelector.LeafValues>
 
@@ -125,20 +65,17 @@
 
             <local:StateFileDataTemplateSelector.StateCategoryLeaf>
                 <DataTemplate x:DataType="vo:LeafVo">
-                    <StackPanel Style="{StaticResource CardStackPanel}">
-                        <TextBlock Style="{StaticResource KeyTextBlockStyle}" Text="{x:Bind Key}" />
-                        <Border
-                            Height="40"
-                            Margin="4"
-                            Style="{ThemeResource InfoBorderPanelStyle}">
-                            <TextBlock
-                                Margin="2"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource BodyTextBlockStyle}"
-                                Text="{x:Bind Type}" />
-                        </Border>
-                        <AutoSuggestBox ItemsSource="{x:Bind StateCategory}" Text="{x:Bind Value, Mode=TwoWay}" />
-                    </StackPanel>
+
+                    <controls:BaseLeaf Key="{x:Bind Key}" Type="{x:Bind TypeString}">
+                        <controls:BaseLeaf.SlotContent>
+
+                            <AutoSuggestBox
+                                HorizontalAlignment="Left"
+                                ItemsSource="{x:Bind StateCategory}"
+                                Text="{x:Bind Value, Mode=TwoWay}" />
+
+                        </controls:BaseLeaf.SlotContent>
+                    </controls:BaseLeaf>
                 </DataTemplate>
             </local:StateFileDataTemplateSelector.StateCategoryLeaf>
         </local:StateFileDataTemplateSelector>

@@ -8,6 +8,7 @@ public abstract class ObservableGameValue(string key) : ObservableObject
     public string Key { get; } = key;
     public bool IsChanged { get; private set; }
     public GameValueType Type { get; protected init; }
+    public string TypeString => Type.ToString();
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {

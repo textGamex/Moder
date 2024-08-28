@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
@@ -20,6 +20,7 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
+		<None Remove="Views\Game\BaseLeafControl.xaml" />
 		<None Remove="Views\Game\StateFileControlView.xaml" />
 		<None Remove="Views\Menus\OpenFolderControlView.xaml" />
 		<None Remove="Views\Menus\SideWorkSpaceControlView.xaml" />
@@ -63,6 +64,9 @@
 		<None Update="appsettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<Page Update="Views\Game\BaseLeafControl.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</Page>
 		<Page Update="Views\Game\StateFileControlView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</Page>
@@ -82,7 +86,4 @@
 	<PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
 		<HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
 	</PropertyGroup>
-	<ItemGroup>
-		<EditorConfigFiles Remove="C:\Me\Code\Project\C#\Moder\Moder.Core\.editorconfig" />
-	</ItemGroup>
 </Project>
