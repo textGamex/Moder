@@ -2,5 +2,5 @@
 
 public sealed class GlobalSettings
 {
-	public string WorkRootFolderPath { get; set; } = @"D:\SteamLibrary\steamapps\common\Hearts of Iron IV\history";
+	public string WorkRootFolderPath { get; set; } = @"C:\Users\QWQ\Documents\Paradox Interactive\Hearts of Iron IV\mod\ASB-MIN\history";
 }

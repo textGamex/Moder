@@ -85,6 +85,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <TextBlock
@@ -98,5 +99,11 @@
             ItemTemplateSelector="{StaticResource StateFileDataTemplateSelector}"
             ItemsSource="{x:Bind ViewModel.Items}"
             SelectionMode="None" />
+
+        <Button
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            Command="{x:Bind ViewModel.SaveDataCommand}"
+            Content="Save" />
     </Grid>
 </UserControl>

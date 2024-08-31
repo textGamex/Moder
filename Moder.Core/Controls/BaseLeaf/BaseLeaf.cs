@@ -1,7 +1,5 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Moder.Core.Models;
-using Moder.Core.Models.Vo;
 
 // ReSharper disable once CheckNamespace
 namespace Moder.Core.Controls;
