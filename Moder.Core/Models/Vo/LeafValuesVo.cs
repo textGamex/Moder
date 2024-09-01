@@ -1,8 +1,6 @@
-﻿using Microsoft.FSharp.Core;
-using Moder.Core.Extensions;
+﻿using Moder.Core.Extensions;
 using Moder.Core.Helper;
 using ParadoxPower.Process;
-using ParadoxPower.Utilities;
 
 namespace Moder.Core.Models.Vo;
 

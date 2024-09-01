@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using Microsoft.FSharp.Collections;
 using Moder.Core.Extensions;
 using Moder.Core.Models;
 using Moder.Core.Models.Vo;
@@ -11,7 +10,6 @@ using Moder.Core.Services;
 using Moder.Core.ViewsModels.Menus;
 using ParadoxPower.Parser;
 using ParadoxPower.Process;
-using ParadoxPower.Utilities;
 
 namespace Moder.Core.ViewsModels.Game;
 
@@ -104,11 +102,6 @@ public sealed partial class StateFileControlViewModel : ObservableObject
                 }
                 else
                 {
-                    if (childNode.Key == _fileItem.Name)
-                    {
-                        _logger.LogInformation("忽略根节点");
-                        continue;
-                    }
                     // 是普通节点
                     var childNodeVo = new NodeVo(childNode.Key);
                     nodeVo.AddChild(childNodeVo);
@@ -129,9 +122,12 @@ public sealed partial class StateFileControlViewModel : ObservableObject
 
         // 与 Items 相同的层级结构
         var rootNode = parser.GetResult();
+        var timestamp = Stopwatch.GetTimestamp();
+        // TODO: 数值有效性检查, int, float, bool
         Save(rootNode, Items);
-        _logger.LogInformation("保存成功");
-        _logger.LogInformation(
+        var elapsedTime = Stopwatch.GetElapsedTime(timestamp);
+        _logger.LogInformation("保存成功, 耗时: {time} ms", elapsedTime.TotalMilliseconds);
+        _logger.LogDebug(
             "Content: {content}",
             CKPrinter.PrettyPrintStatements(rootNode.AllArray.Select(child => child.GetRawStatement(rootNode.Key)))
         );
