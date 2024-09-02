@@ -1,18 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Moder.Core.Config;
 using Windows.Storage.Pickers;
 using CommunityToolkit.Mvvm.Messaging;
 using Moder.Core.Messages;
 using WinUIEx;
+using Moder.Core.Services.Config;
 
 namespace Moder.Core.ViewsModels.Menus;
 
 public sealed partial class OpenFolderControlViewModel : ObservableObject
 {
-	private readonly GlobalSettings _globalSettings;
+	private readonly GlobalSettingService _globalSettings;
 
-	public OpenFolderControlViewModel(GlobalSettings globalSettings)
+	public OpenFolderControlViewModel(GlobalSettingService globalSettings)
 	{
 		_globalSettings = globalSettings;
 	}
@@ -30,7 +30,7 @@ public sealed partial class OpenFolderControlViewModel : ObservableObject
 		}
 		else
 		{
-			_globalSettings.WorkRootFolderPath = result.Path;
+			_globalSettings.ModRootFolderPath = result.Path;
 			WeakReferenceMessenger.Default.Send(new CompleteWorkFolderSelectMessage());
 		}
 	}

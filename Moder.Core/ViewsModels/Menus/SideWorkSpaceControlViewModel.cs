@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Xaml.Controls;
-using Moder.Core.Config;
+using Moder.Core.Services.Config;
 
 namespace Moder.Core.ViewsModels.Menus;
 
@@ -9,10 +9,10 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
 {
 	[ObservableProperty] private IEnumerable<SystemFileItem>? _items;
 
-	public SideWorkSpaceControlViewModel(GlobalSettings globalSettings)
+	public SideWorkSpaceControlViewModel(GlobalSettingService globalSettings)
 	{
-		var items = new SystemFileItem(globalSettings.WorkRootFolderPath, false);
-		LoadFileSystem(globalSettings.WorkRootFolderPath, items);
+		var items = new SystemFileItem(globalSettings.ModRootFolderPath, false);
+		LoadFileSystem(globalSettings.ModRootFolderPath, items);
 		Items = [items];
 	}
 

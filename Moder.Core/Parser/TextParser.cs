@@ -37,50 +37,19 @@ public class TextParser
 		_node = Parsers.ProcessStatements(fileName, filePath, result.GetResult());
 	}
 
-	public TextParser(string fileName, string fileContent)
+	public static bool TryParse(string filePath, out Node node, out ParserError error)
 	{
-		FilePath = fileName;
-		var result = Parsers.ParseScriptFile(fileName, fileContent);
-		IsSuccess = result.IsSuccess;
-		if (IsFailure)
+		var parser = new TextParser(filePath);
+		if (parser.IsFailure)
 		{
-			_error = result.GetError();
-			return;
+			node = null!;
+			error = parser._error!;
+			return false;
 		}
 
-		_node = Parsers.ProcessStatements(fileName, string.Empty, result.GetResult());
-	}
-
-	public static async Task<TextParser> Parser(string filePath)
-	{
-		if (!File.Exists(filePath))
-		{
-			throw new FileNotFoundException($"找不到文件: {filePath}", filePath);
-		}
-
-		var fileName = Path.GetFileName(filePath);
-		var result = Parsers.ParseScriptFile(fileName, await File.ReadAllTextAsync(filePath));
-		var isSuccess = result.IsSuccess;
-		ParserError? error = null;
-		Node? node = null;
-		if (!isSuccess)
-		{
-			error = result.GetError();
-		}
-		else
-		{
-			node = Parsers.ProcessStatements(fileName, filePath, result.GetResult());
-		}
-
-		return new TextParser(filePath, isSuccess, error, node);
-	}
-
-	private TextParser(string filePath, bool isSuccess, ParserError? error, Node? node)
-	{
-		FilePath = filePath;
-		IsSuccess = isSuccess;
-		_error = error;
-		_node = node;
+		node = parser._node!;
+		error = null!;
+		return true;
 	}
 
 	static TextParser()

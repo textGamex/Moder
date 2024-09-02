@@ -70,8 +70,9 @@
                         <controls:BaseLeaf.SlotContent>
 
                             <AutoSuggestBox
+                                MinWidth="120"
                                 HorizontalAlignment="Left"
-                                ItemsSource="{x:Bind StateCategory}"
+                                ItemsSource="{Binding StateCategory}"
                                 Text="{x:Bind Value, Mode=TwoWay}" />
 
                         </controls:BaseLeaf.SlotContent>

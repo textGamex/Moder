@@ -1,8 +1,8 @@
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
-using Moder.Core.Config;
 using Moder.Core.Messages;
+using Moder.Core.Services.Config;
 using Moder.Core.Views.Game;
 using Moder.Core.Views.Menus;
 using Moder.Core.ViewsModels.Menus;
@@ -14,11 +14,11 @@ namespace Moder.Core;
 /// </summary>
 public sealed partial class MainWindow : Window
 {
-    private readonly GlobalSettings _settings;
+    private readonly GlobalSettingService _settings;
     private readonly IServiceProvider _serviceProvider;
     public MainWindowViewModel ViewModel { get; }
 
-    public MainWindow(MainWindowViewModel model, GlobalSettings settings, IServiceProvider serviceProvider)
+    public MainWindow(MainWindowViewModel model, GlobalSettingService settings, IServiceProvider serviceProvider)
     {
         _settings = settings;
         _serviceProvider = serviceProvider;
@@ -27,7 +27,7 @@ public sealed partial class MainWindow : Window
         ExtendsContentIntoTitleBar = true;
         ViewModel = model;
 
-        if (string.IsNullOrEmpty(settings.WorkRootFolderPath))
+        if (string.IsNullOrEmpty(settings.ModRootFolderPath))
         {
             SideContentControl.Content = serviceProvider.GetRequiredService<OpenFolderControlView>();
         }
@@ -48,7 +48,7 @@ public sealed partial class MainWindow : Window
 
     private object GetContent(SystemFileItem fileItem)
     {
-        var relativePath = Path.GetRelativePath(_settings.WorkRootFolderPath, fileItem.FullPath);
+        var relativePath = Path.GetRelativePath(_settings.ModRootFolderPath, fileItem.FullPath);
         if (relativePath.Contains("states"))
         {
             return _serviceProvider.GetRequiredService<StateFileControlView>();

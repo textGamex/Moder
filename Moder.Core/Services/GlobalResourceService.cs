@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.Design;
-using Moder.Core.ViewsModels.Menus;
+﻿using Moder.Core.ViewsModels.Menus;
 
 namespace Moder.Core.Services;
 

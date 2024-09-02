@@ -10,6 +10,8 @@ namespace Moder.Core;
 public partial class App : Application
 {
 	public new static App Current => (App)Application.Current;
+
+	public IServiceProvider Services => Current._serviceProvider;
 	public MainWindow MainWindow { get; private set; } = null!;
 
 	private readonly IServiceProvider _serviceProvider;

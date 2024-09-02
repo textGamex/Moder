@@ -1,8 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Moder.Core.Config;
 using Moder.Core.Services;
+using Moder.Core.Services.Config;
 using Moder.Core.Views.Game;
 using Moder.Core.Views.Menus;
 using Moder.Core.ViewsModels.Game;
@@ -41,8 +41,10 @@ public static partial class Program
 		builder.Services.AddTransient<StateFileControlView>();
 		builder.Services.AddTransient<StateFileControlViewModel>();
 
-		builder.Services.AddSingleton<GlobalSettings>();
+		builder.Services.AddSingleton<GlobalSettingService>();
 		builder.Services.AddSingleton<GlobalResourceService>();
+		builder.Services.AddSingleton<GameResourcesService>();
+		builder.Services.AddSingleton<GameModDescriptorService>();
 
 		// Setup and provision the hosting context for the User Interface
 		// service.
