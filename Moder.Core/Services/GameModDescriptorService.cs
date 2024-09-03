@@ -31,7 +31,7 @@ public sealed class GameModDescriptorService
         if (!File.Exists(descriptorFilePath))
         {
             _replacePaths = FrozenSet<string>.Empty;
-            logger.LogWarning("mod 描述文件不存在");
+            logger.LogWarning("Mod 描述文件不存在");
             return;
         }
 

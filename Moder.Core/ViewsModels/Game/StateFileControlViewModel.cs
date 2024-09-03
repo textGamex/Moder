@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MethodTimer;
 using Microsoft.Extensions.Logging;
 using Moder.Core.Extensions;
 using Moder.Core.Models;
@@ -28,6 +29,7 @@ public sealed partial class StateFileControlViewModel : ObservableObject
         _fileItem = resourceService.PopCurrentSelectFileItem();
         Debug.Assert(_fileItem.IsFile);
 
+        var timestamp = Stopwatch.GetTimestamp();
         var parser = new TextParser(_fileItem.FullPath);
         if (parser.IsFailure)
         {
@@ -36,7 +38,7 @@ public sealed partial class StateFileControlViewModel : ObservableObject
         }
 
         IsSuccess = true;
-        var timestamp = Stopwatch.GetTimestamp();
+        
         var rootNode = parser.GetResult();
         var elapsedTime = Stopwatch.GetElapsedTime(timestamp);
         logger.LogInformation("解析时间: {time} ms", elapsedTime.TotalMilliseconds);
@@ -45,11 +47,10 @@ public sealed partial class StateFileControlViewModel : ObservableObject
         ConvertData(rootNode);
     }
 
+    [Time("AST -> Vo")]
     private void ConvertData(Node rootNode)
     {
         Debug.Assert(rootNode.Key == _fileItem.Name);
-
-        var timestamp = Stopwatch.GetTimestamp();
 
         // 根节点的key为文件名称, 忽略
         foreach (var child in rootNode.AllArray)
@@ -77,9 +78,6 @@ public sealed partial class StateFileControlViewModel : ObservableObject
                 }
             }
         }
-
-        var elapsedTime = Stopwatch.GetElapsedTime(timestamp);
-        _logger.LogInformation("转换时间: {time} ms", elapsedTime.TotalMilliseconds);
     }
 
     private void Convert(Node node, NodeVo nodeVo)

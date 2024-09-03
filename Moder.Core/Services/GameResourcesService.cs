@@ -1,9 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using MethodTimer;
+using Microsoft.Extensions.Logging;
 using Moder.Core.Extensions;
 using Moder.Core.Parser;
 using Moder.Core.Services.Config;
-using ParadoxPower.CSharp;
-using ParadoxPower.Process;
 
 namespace Moder.Core.Services;
 
@@ -34,6 +33,7 @@ public sealed class GameResourcesService
         StateCategory = LoadStateCategory();
     }
 
+    [Time("加载 StateCategory")]
     private string[] LoadStateCategory()
     {
         var filePaths = GetAllFilePriorModByRelativePathForFolder(Keywords.Common, "state_category");
