@@ -56,7 +56,7 @@ public sealed class GameResourcesService
             stateCategories.AddRange(stateCategoryNode.Nodes.Select(childNode => childNode.Key));
         }
 
-        return stateCategories.ToArray();
+        return [.. stateCategories];
     }
 
     /// <summary>

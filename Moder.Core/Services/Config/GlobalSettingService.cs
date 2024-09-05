@@ -1,5 +1,6 @@
 ﻿using MemoryPack;
 using Windows.Storage;
+using Microsoft.Extensions.Logging;
 
 namespace Moder.Core.Services.Config;
 

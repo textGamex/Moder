@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using Moder.Core.Messages;
 using Moder.Core.Services.Config;
@@ -16,12 +17,19 @@ public sealed partial class MainWindow : Window
 {
     private readonly GlobalSettingService _settings;
     private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<MainWindow> _logger;
     public MainWindowViewModel ViewModel { get; }
 
-    public MainWindow(MainWindowViewModel model, GlobalSettingService settings, IServiceProvider serviceProvider)
+    public MainWindow(
+        MainWindowViewModel model,
+        GlobalSettingService settings,
+        IServiceProvider serviceProvider,
+        ILogger<MainWindow> logger
+    )
     {
         _settings = settings;
         _serviceProvider = serviceProvider;
+        _logger = logger;
         InitializeComponent();
 
         ExtendsContentIntoTitleBar = true;
@@ -57,8 +65,10 @@ public sealed partial class MainWindow : Window
         return "暂不支持此类型文件";
     }
 
-    private void MainWindow_OnClosed(object sender, WindowEventArgs args)
+    private async void MainWindow_OnClosed(object sender, WindowEventArgs args)
     {
-        _settings.SaveAsync();
+        _logger.LogInformation("配置文件保存中...");
+        await _settings.SaveAsync().ConfigureAwait(false);
+        _logger.LogInformation("配置文件保存完成");
     }
 }
