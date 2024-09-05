@@ -1,6 +1,5 @@
 ﻿using MemoryPack;
 using Windows.Storage;
-using Windows.Storage.Search;
 
 namespace Moder.Core.Services.Config;
 

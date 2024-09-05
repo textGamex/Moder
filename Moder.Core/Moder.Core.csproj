@@ -10,7 +10,8 @@
 		<RuntimeIdentifiers Condition="$([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)')) &lt; 8">win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
 		<PublishProfile>win-$(Platform).pubxml</PublishProfile>
 		<UseWinUI>true</UseWinUI>
-		<!-- <WindowsSdkPackageVersion>10.0.19041.38</WindowsSdkPackageVersion> -->
+		<!-- 下一个 .NET SDK 服务更新发布后，将不再需要这些. -->
+		<WindowsSdkPackageVersion>10.0.22621.42</WindowsSdkPackageVersion>
 		<EnableMsixTooling>true</EnableMsixTooling>
 
 		<!-- Use our own Main entry point so we can control the HostBuilder -->
@@ -67,7 +68,7 @@
 		<PackageReference Include="MethodTimer.Fody" Version="3.2.2" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1" />
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240802000" />
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.240829007" />
 		<PackageReference Include="ParadoxPower" Version="0.3.0-beta" />
 		<PackageReference Include="WinUICommunity.Components" Version="6.9.0" />
 		<PackageReference Include="WinUIEx" Version="2.3.4" />
