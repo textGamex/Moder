@@ -41,7 +41,7 @@ public static partial class Program
 		builder.Services.AddTransient<StateFileControlView>();
 		builder.Services.AddTransient<StateFileControlViewModel>();
 
-		builder.Services.AddSingleton<GlobalSettingService>();
+		builder.Services.AddSingleton<GlobalSettingService>(_ => GlobalSettingService.Load());
 		builder.Services.AddSingleton<GlobalResourceService>();
 		builder.Services.AddSingleton<GameResourcesService>();
 		builder.Services.AddSingleton<GameModDescriptorService>();

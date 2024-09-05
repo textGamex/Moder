@@ -56,4 +56,9 @@ public sealed partial class MainWindow : Window
 
         return "暂不支持此类型文件";
     }
+
+    private void MainWindow_OnClosed(object sender, WindowEventArgs args)
+    {
+        _settings.SaveAsync();
+    }
 }

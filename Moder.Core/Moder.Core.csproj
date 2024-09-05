@@ -18,6 +18,15 @@
 		<StartupObject>Moder.Core.Program</StartupObject>
 		<WarningsAsErrors>nullable</WarningsAsErrors>
 		<Nullable>enable</Nullable>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<!-- <WindowsPackageType>None</WindowsPackageType> -->
+		<!-- 防止用户电脑上未安装 WindowsAppSDK -->
+		<!-- <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained> -->
+		<!-- <PublishTrimmed>true</PublishTrimmed> -->
+		<!-- <PublishSingleFile>true</PublishSingleFile> -->
+		<!-- <SelfContained>true</SelfContained> -->
+		<!-- <TrimMode>full</TrimMode> -->
+		<!-- <PublishReadyToRun>false</PublishReadyToRun> -->
 	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="Views\Game\BaseLeafControl.xaml" />
@@ -25,6 +34,15 @@
 		<None Remove="Views\Menus\OpenFolderControlView.xaml" />
 		<None Remove="Views\Menus\SideWorkSpaceControlView.xaml" />
 	</ItemGroup>
+
+	<!-- 移除多余文件 -->
+	<!-- <Target Name="RemoveFoldersWithMuiFiles" AfterTargets="Build"> -->
+	<!-- 	<ItemGroup> -->
+	<!-- 		<RemovingFiles Include="$(OutDir)*\*.mui" Exclude="$(OutDir)zh-CN\*.mui" /> -->
+	<!-- 		<RemovingFolders Include="@(RemovingFiles->'%(RootDir)%(Directory)')" /> -->
+	<!-- 	</ItemGroup> -->
+	<!-- 	<RemoveDir Directories="@(RemovingFolders)" /> -->
+	<!-- </Target> -->
 
 	<ItemGroup>
 		<Content Include="Assets\SplashScreen.scale-200.png" />
@@ -44,6 +62,7 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="FSharp.Core" Version="8.0.400" />
+		<PackageReference Include="MemoryPack" Version="1.21.1" />
 		<PackageReference Include="MethodTimer.Fody" Version="3.2.2" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1" />
