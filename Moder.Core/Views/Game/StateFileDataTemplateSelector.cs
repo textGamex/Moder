@@ -7,18 +7,19 @@ namespace Moder.Core.Views.Game;
 
 public class StateFileDataTemplateSelector : DataTemplateSelector
 {
-    public DataTemplate? Node { get; set; }
-    public DataTemplate? Leaf { get; set; }
-    public DataTemplate? LeafValues { get; set; }
-    public DataTemplate? StateCategoryLeaf { get; set; }
+    // 每个 DataTemplate 都需要在 XAML 中声明
+    public DataTemplate Node { get; set; } = null!;
+    public DataTemplate Leaf { get; set; } = null!;
+    public DataTemplate LeafValues { get; set; } = null!;
+    public DataTemplate StateCategoryLeaf { get; set; } = null!;
 
     protected override DataTemplate SelectTemplateCore(object item)
     {
         return item switch
         {
-            NodeVo => Node!,
+            NodeVo => Node,
             LeafVo leafVo => GetConcreteLeafTemplate(leafVo),
-            LeafValuesVo => LeafValues!,
+            LeafValuesVo => LeafValues,
             _ => throw new ArgumentException("未知对象", nameof(item))
         };
     }
@@ -30,8 +31,8 @@ public class StateFileDataTemplateSelector : DataTemplateSelector
 
         if (leaf.Key.Equals("state_category", StringComparison.OrdinalIgnoreCase))
         {
-            return StateCategoryLeaf!;
+            return StateCategoryLeaf;
         }
-        return Leaf!;
+        return Leaf;
     }
 }
