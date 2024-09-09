@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Moder.Core.Models.Vo;
 
-public class NodeVo(string key) : ObservableGameValue(key)
+public class NodeVo(string key, NodeVo? parent) : ObservableGameValue(key, parent)
 {
 	public ObservableCollection<ObservableGameValue> Children { get; } = [];
 

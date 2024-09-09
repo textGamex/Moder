@@ -20,7 +20,7 @@ public sealed partial class StateFileControlViewModel : ObservableObject
     public string Title => _fileItem.Name;
     public bool IsSuccess { get; }
 
-    private readonly NodeVo _rootNodeVo = new("Root");
+    private readonly NodeVo _rootNodeVo = new("Root", null);
     private readonly SystemFileItem _fileItem;
     private readonly ILogger<StateFileControlViewModel> _logger;
 
@@ -71,21 +71,21 @@ public sealed partial class StateFileControlViewModel : ObservableObject
                 // 当 LeafValues 不为空时，表示该节点是 LeafValues 节点
                 if (childNode.LeafValues.Any())
                 {
-                    nodeVo.Add(new LeafValuesVo(childNode.Key, childNode.LeafValues));
+                    nodeVo.Add(new LeafValuesVo(childNode.Key, childNode.LeafValues, nodeVo));
                 }
                 else
                 {
                     // 是普通节点
-                    var childNodeVo = new NodeVo(childNode.Key);
+                    var childNodeVo = new NodeVo(childNode.Key, nodeVo);
                     nodeVo.Add(childNodeVo);
                     Convert(childNode, childNodeVo);
                 }
             }
 
-            if (child.IsCommentChild)
-            {
-                var comment = child.comment;
-            }
+            // if (child.IsCommentChild)
+            // {
+            //     var comment = child.comment;
+            // }
         }
     }
 

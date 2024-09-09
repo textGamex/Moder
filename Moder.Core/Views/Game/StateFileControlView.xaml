@@ -38,19 +38,23 @@
                     <controls:BaseLeaf Key="{x:Bind Key}" Type="{x:Bind TypeString}">
                         <controls:BaseLeaf.SlotContent>
 
-                            <Expander ExpandDirection="Down" Header="Items">
-                                <ListView
-                                    ItemsSource="{x:Bind Values}"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Visible"
-                                    ScrollViewer.HorizontalScrollMode="Enabled"
-                                    SelectionChanged="Selector_OnSelectionChanged">
-                                    <ListView.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <StackPanel Orientation="Horizontal" />
-                                        </ItemsPanelTemplate>
-                                    </ListView.ItemsPanel>
-                                </ListView>
-                            </Expander>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Expander ExpandDirection="Down" Header="Items">
+                                    <ListView
+                                        ItemsSource="{x:Bind Values}"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                                        ScrollViewer.HorizontalScrollMode="Enabled"
+                                        SelectionChanged="Selector_OnSelectionChanged">
+                                        <ListView.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ListView.ItemsPanel>
+                                    </ListView>
+                                </Expander>
+                                <Button Content="+" />
+                                <Button Command="{x:Bind RemoveSelfInParentCommand}" Content="-" />
+                            </StackPanel>
 
                         </controls:BaseLeaf.SlotContent>
                     </controls:BaseLeaf>
@@ -61,7 +65,11 @@
                 <DataTemplate x:DataType="vo:NodeVo">
                     <TreeViewItem IsExpanded="True" ItemsSource="{x:Bind Children}">
                         <TreeViewItem.Content>
-                            <TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="{x:Bind Key}" />
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="{x:Bind Key}" />
+                                <Button Content="+" />
+                                <Button Command="{x:Bind RemoveSelfInParentCommand}" Content="-" />
+                            </StackPanel>
                         </TreeViewItem.Content>
                     </TreeViewItem>
                 </DataTemplate>
