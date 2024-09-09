@@ -16,12 +16,13 @@ namespace Moder.Core.ViewsModels.Game;
 
 public sealed partial class StateFileControlViewModel : ObservableObject
 {
-    public List<ObservableGameValue> Items { get; } = new(2);
+    public IReadOnlyList<ObservableGameValue> Items => _rootNodeVo.Children;
     public string Title => _fileItem.Name;
     public bool IsSuccess { get; }
 
-    private readonly ILogger<StateFileControlViewModel> _logger;
+    private readonly NodeVo _rootNodeVo = new("Root");
     private readonly SystemFileItem _fileItem;
+    private readonly ILogger<StateFileControlViewModel> _logger;
 
     public StateFileControlViewModel(GlobalResourceService resourceService, ILogger<StateFileControlViewModel> logger)
     {
@@ -38,7 +39,7 @@ public sealed partial class StateFileControlViewModel : ObservableObject
         }
 
         IsSuccess = true;
-        
+
         var rootNode = parser.GetResult();
         var elapsedTime = Stopwatch.GetElapsedTime(timestamp);
         logger.LogInformation("解析时间: {time} ms", elapsedTime.TotalMilliseconds);
@@ -51,60 +52,39 @@ public sealed partial class StateFileControlViewModel : ObservableObject
     private void ConvertData(Node rootNode)
     {
         Debug.Assert(rootNode.Key == _fileItem.Name);
-
-        // 根节点的key为文件名称, 忽略
-        foreach (var child in rootNode.AllArray)
-        {
-            if (child.IsLeafChild)
-            {
-                var leaf = child.leaf;
-                Items.Add(new LeafVo(leaf.Key, leaf.Value));
-            }
-
-            if (child.IsNodeChild)
-            {
-                var childNode = child.node;
-                // 当LeafValues不为空时，表示该节点是LeafValues节点
-                if (childNode.LeafValues.Any())
-                {
-                    Items.Add(new LeafValuesVo(childNode.Key, childNode.LeafValues));
-                }
-                else
-                {
-                    // 是普通节点
-                    var childNodeVo = new NodeVo(childNode.Key);
-                    Convert(childNode, childNodeVo);
-                    Items.Add(childNodeVo);
-                }
-            }
-        }
+        Convert(rootNode, _rootNodeVo);
     }
 
-    private void Convert(Node node, NodeVo nodeVo)
+    private static void Convert(Node node, NodeVo nodeVo)
     {
         foreach (var child in node.AllArray)
         {
             if (child.IsLeafChild)
             {
                 var leaf = child.leaf;
-                nodeVo.AddChild(new LeafVo(leaf.Key, leaf.Value));
+                nodeVo.Add(new LeafVo(leaf.Key, leaf.Value, nodeVo));
             }
 
             if (child.IsNodeChild)
             {
                 var childNode = child.node;
-                // 当LeafValues不为空时，表示该节点是LeafValues节点
+                // 当 LeafValues 不为空时，表示该节点是 LeafValues 节点
                 if (childNode.LeafValues.Any())
                 {
-                    nodeVo.AddChild(new LeafValuesVo(childNode.Key, childNode.LeafValues));
+                    nodeVo.Add(new LeafValuesVo(childNode.Key, childNode.LeafValues));
                 }
                 else
                 {
                     // 是普通节点
                     var childNodeVo = new NodeVo(childNode.Key);
-                    nodeVo.AddChild(childNodeVo);
+                    nodeVo.Add(childNodeVo);
                     Convert(childNode, childNodeVo);
                 }
+            }
+
+            if (child.IsCommentChild)
+            {
+                var comment = child.comment;
             }
         }
     }
@@ -122,7 +102,8 @@ public sealed partial class StateFileControlViewModel : ObservableObject
         var rootNode = parser.GetResult();
         var timestamp = Stopwatch.GetTimestamp();
         // TODO: 数值有效性检查, int, float, bool
-        Save(rootNode, Items);
+        Save(rootNode, _rootNodeVo.Children.ToArray());
+        // var rootNode = SaveToNode(Items);
         var elapsedTime = Stopwatch.GetElapsedTime(timestamp);
         _logger.LogInformation("保存成功, 耗时: {time} ms", elapsedTime.TotalMilliseconds);
         _logger.LogDebug(
@@ -131,36 +112,64 @@ public sealed partial class StateFileControlViewModel : ObservableObject
         );
     }
 
-    private void Save(Node node, IEnumerable<ObservableGameValue> items)
+    private void Save(Node node, ObservableGameValue[] items)
     {
-        foreach (var item in items)
+        var list = node.AllChildren;
+        for (var index = 0; index < list.Count; index++)
         {
-            if (item is LeafVo { IsChanged: true } leafVo)
+            var child = list[index];
+            if (child.IsLeafChild || child.IsNodeChild || child.IsLeafValueChild)
             {
-                if (!node.TryGetLeaf(leafVo.Key, out var rawLeaf))
+                var item = Array.Find(items, i => i.Key == child.GetKey());
+                if (item is not null)
                 {
-                    _logger.LogWarning("找不到Leaf: {key}", leafVo.Key);
-                    continue;
+                    if (item is LeafVo { IsChanged: true } leafVo)
+                    {
+                        if (!node.TryGetLeaf(leafVo.Key, out var rawLeaf))
+                        {
+                            _logger.LogWarning("找不到Leaf: {key}", leafVo.Key);
+                            continue;
+                        }
+
+                        rawLeaf.Value = leafVo.ToRawValue();
+                    }
+
+                    if (item is LeafValuesVo { IsChanged: true } leafValuesVo)
+                    {
+                        if (!node.TryGetChild(leafValuesVo.Key, out var rawLeafVales))
+                        {
+                            _logger.LogWarning("找不到LeafValues: {key}", leafValuesVo.Key);
+                            continue;
+                        }
+
+                        rawLeafVales.AllArray = leafValuesVo.ToLeafValues();
+                    }
+
+                    if (item is NodeVo nodeVo)
+                    {
+                        Save(
+                            // Array.Find(node.AllArray, child => child.IsNodeChild && child.node.Key == nodeVo.Key).node,
+                            list.Find(c => c.IsNodeChild && c.node.Key == nodeVo.Key).node,
+                            nodeVo.Children.ToArray()
+                        );
+                    }
                 }
-
-                rawLeaf.Value = leafVo.ToRawValue();
-            }
-
-            if (item is LeafValuesVo { IsChanged: true } leafValuesVo)
-            {
-                if (!node.TryGetChild(leafValuesVo.Key, out var rawLeafVales))
+                else
                 {
-                    _logger.LogWarning("找不到LeafValues: {key}", leafValuesVo.Key);
-                    continue;
+                    list.RemoveAt(index--);
                 }
-
-                rawLeafVales.AllArray = leafValuesVo.ToLeafValues();
-            }
-
-            if (item is NodeVo nodeVo)
-            {
-                Save(Array.Find(node.AllArray, i => i.IsNodeChild && i.node.Key == nodeVo.Key).node, nodeVo.Children);
             }
         }
+
+        node.AllArray = list.ToArray();
     }
+
+    // private Node SaveToNode(IEnumerable<ObservableGameValue> items)
+    // {
+    //     var rootNode = new Node(_fileItem.Name);
+    //     foreach (var item in items)
+    //     {
+    //
+    //     }
+    // }
 }

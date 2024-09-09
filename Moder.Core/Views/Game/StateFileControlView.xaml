@@ -22,7 +22,11 @@
                     <controls:BaseLeaf Key="{x:Bind Key}" Type="{x:Bind TypeString}">
                         <controls:BaseLeaf.SlotContent>
 
-                            <TextBox HorizontalAlignment="Left" Text="{x:Bind Value, Mode=TwoWay}" />
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBox HorizontalAlignment="Left" Text="{x:Bind Value, Mode=TwoWay}" />
+                                <Button Content="+" />
+                                <Button Command="{x:Bind RemoveSelfInParentCommand}" Content="-" />
+                            </StackPanel>
 
                         </controls:BaseLeaf.SlotContent>
                     </controls:BaseLeaf>
@@ -69,11 +73,15 @@
                     <controls:BaseLeaf Key="{x:Bind Key}" Type="{x:Bind TypeString}">
                         <controls:BaseLeaf.SlotContent>
 
-                            <AutoSuggestBox
-                                MinWidth="120"
-                                HorizontalAlignment="Left"
-                                ItemsSource="{Binding StateCategory}"
-                                Text="{x:Bind Value, Mode=TwoWay}" />
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <AutoSuggestBox
+                                    MinWidth="120"
+                                    HorizontalAlignment="Left"
+                                    ItemsSource="{Binding StateCategory}"
+                                    Text="{x:Bind Value, Mode=TwoWay}" />
+                                <Button Content="+" />
+                                <Button Command="{x:Bind RemoveSelfInParentCommand}" Content="-" />
+                            </StackPanel>
 
                         </controls:BaseLeaf.SlotContent>
                     </controls:BaseLeaf>

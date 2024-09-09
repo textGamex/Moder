@@ -26,7 +26,7 @@ public sealed partial class GlobalSettingService
 
     public static GlobalSettingService Load()
     {
-	    var storageFolder = ApplicationData.Current.LocalFolder;
+        var storageFolder = ApplicationData.Current.LocalFolder;
         var filePath = Path.Combine(storageFolder.Path, ConfigFileName);
         if (!File.Exists(filePath))
         {

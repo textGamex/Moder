@@ -1,12 +1,20 @@
-﻿namespace Moder.Core.Models.Vo;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+
+namespace Moder.Core.Models.Vo;
 
 public class NodeVo(string key) : ObservableGameValue(key)
 {
-	public IReadOnlyList<ObservableGameValue> Children => _children;
-	private readonly List<ObservableGameValue> _children = new(8);
+	public ObservableCollection<ObservableGameValue> Children { get; } = [];
 
-	public void AddChild(ObservableGameValue child)
+	public void Add(ObservableGameValue child)
 	{
-		_children.Add(child);
+		Children.Add(child);
+	}
+
+	public void Remove(ObservableGameValue child)
+	{
+		var isRemoved = Children.Remove(child);
+		Debug.Assert(isRemoved, "Failed to remove child from NodeVo.");
 	}
 }
