@@ -17,7 +17,7 @@ public class TextParser
 	private readonly Node? _node;
 
 	/// <summary>
-	/// 
+	/// 构造解析器
 	/// </summary>
 	/// <param name="filePath"></param>
 	/// <exception cref="FileNotFoundException">如果文件不存在</exception>

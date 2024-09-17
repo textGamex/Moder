@@ -8,14 +8,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Moder.Core.Views.Game"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:model="using:Moder.Core.Models"
-    xmlns:ui="using:CommunityToolkit.WinUI"
     xmlns:vms="using:Moder.Core.ViewsModels.Game"
     xmlns:vo="using:Moder.Core.Models.Vo"
     d:DataContext="{d:DesignInstance vms:StateFileControlViewModel}"
     mc:Ignorable="d">
 
+
+
     <UserControl.Resources>
+
         <local:StateFileDataTemplateSelector x:Key="StateFileDataTemplateSelector">
             <local:StateFileDataTemplateSelector.Leaf>
                 <DataTemplate x:DataType="vo:LeafVo">
@@ -34,13 +35,43 @@
             </local:StateFileDataTemplateSelector.Leaf>
 
             <local:StateFileDataTemplateSelector.LeafValues>
+
                 <DataTemplate x:DataType="vo:LeafValuesVo">
                     <controls:BaseLeaf Key="{x:Bind Key}" Type="{x:Bind TypeString}">
                         <controls:BaseLeaf.SlotContent>
 
                             <StackPanel Orientation="Horizontal" Spacing="4">
-                                <Expander ExpandDirection="Down" Header="Items">
+                                <Expander ExpandDirection="Down">
+                                    <Expander.Header>
+                                        <StackPanel Orientation="Horizontal" Spacing="4">
+                                            <TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="Items" />
+                                            <Button Content="+">
+                                                <Button.Flyout>
+                                                    <Flyout>
+                                                        <StackPanel Spacing="4">
+                                                            <TextBox
+                                                                x:Name="NewItem"
+                                                                MinWidth="90"
+                                                                Header="New Value" />
+                                                            <Button
+                                                                Command="{x:Bind AddValueCommand}"
+                                                                CommandParameter="{Binding ElementName=NewItem}"
+                                                                Content="添加" />
+                                                        </StackPanel>
+                                                    </Flyout>
+                                                </Button.Flyout>
+                                            </Button>
+
+                                            <Button
+                                                Command="{x:Bind RemoveValueCommand}"
+                                                CommandParameter="{Binding ElementName=Selector, Path=SelectedItem}"
+                                                Content="-" />
+
+                                        </StackPanel>
+
+                                    </Expander.Header>
                                     <ListView
+                                        x:Name="Selector"
                                         ItemsSource="{x:Bind Values}"
                                         ScrollViewer.HorizontalScrollBarVisibility="Visible"
                                         ScrollViewer.HorizontalScrollMode="Enabled"
@@ -52,6 +83,7 @@
                                         </ListView.ItemsPanel>
                                     </ListView>
                                 </Expander>
+
                                 <Button Content="+" />
                                 <Button Command="{x:Bind RemoveSelfInParentCommand}" Content="-" />
                             </StackPanel>

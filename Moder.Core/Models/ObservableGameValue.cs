@@ -13,6 +13,7 @@ public abstract class ObservableGameValue(string key, NodeVo? parent) : Observab
     public GameValueType Type { get; protected init; }
     public string TypeString => Type.ToString();
     public NodeVo? Parent { get; } = parent;
+
     public IRelayCommand RemoveSelfInParentCommand => _removeSelfInParentCommand ??= new RelayCommand(RemoveSelfInParent);
     private RelayCommand? _removeSelfInParentCommand;
 
