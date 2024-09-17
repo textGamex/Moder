@@ -13,8 +13,6 @@
     d:DataContext="{d:DesignInstance vms:StateFileControlViewModel}"
     mc:Ignorable="d">
 
-
-
     <UserControl.Resources>
 
         <local:StateFileDataTemplateSelector x:Key="StateFileDataTemplateSelector">

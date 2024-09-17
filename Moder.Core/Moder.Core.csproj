@@ -57,9 +57,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-		<PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.1.240821" />
-		<PackageReference Include="Fody" Version="6.8.1">
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.1" />
+		<PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.1.240916" />
+		<PackageReference Include="Fody" Version="6.8.2">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -71,7 +71,7 @@
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.240829007" />
 		<PackageReference Include="ParadoxPower" Version="0.3.0-beta" />
 		<PackageReference Include="WinUICommunity.Components" Version="6.9.0" />
-		<PackageReference Include="WinUIEx" Version="2.3.4" />
+		<PackageReference Include="WinUIEx" Version="2.4.0" />
 		<Manifest Include="$(ApplicationManifest)" />
 	</ItemGroup>
 
