@@ -5,7 +5,7 @@ using Moder.Core.Models.Vo;
 
 namespace Moder.Core.Views.Game;
 
-public class StateFileDataTemplateSelector : DataTemplateSelector
+public partial class StateFileDataTemplateSelector : DataTemplateSelector
 {
     // 每个 DataTemplate 都需要在 XAML 中声明
     public DataTemplate Node { get; set; } = null!;

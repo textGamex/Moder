@@ -16,18 +16,16 @@ public sealed partial class GlobalSettingService
 
     private const string ConfigFileName = "globalSettings.bin";
 
-    public async Task SaveAsync()
+    public void Save()
     {
-        var storageFolder = ApplicationData.Current.LocalFolder;
-        var file = await storageFolder.CreateFileAsync(ConfigFileName, CreationCollisionOption.ReplaceExisting);
+        var filePath = Path.Combine(App.ConfigFolder, ConfigFileName);
         // TODO: System.IO.Pipelines
-        await FileIO.WriteBytesAsync(file, MemoryPackSerializer.Serialize(this));
+        File.WriteAllBytes(filePath, MemoryPackSerializer.Serialize(this));
     }
 
     public static GlobalSettingService Load()
     {
-        var storageFolder = ApplicationData.Current.LocalFolder;
-        var filePath = Path.Combine(storageFolder.Path, ConfigFileName);
+        var filePath = Path.Combine(App.ConfigFolder, ConfigFileName);
         if (!File.Exists(filePath))
         {
             return new GlobalSettingService();

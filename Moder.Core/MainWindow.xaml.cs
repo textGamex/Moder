@@ -65,10 +65,10 @@ public sealed partial class MainWindow : Window
         return "暂不支持此类型文件";
     }
 
-    private async void MainWindow_OnClosed(object sender, WindowEventArgs args)
+    private void MainWindow_OnClosed(object sender, WindowEventArgs args)
     {
         _logger.LogInformation("配置文件保存中...");
-        await _settings.SaveAsync().ConfigureAwait(false);
+        _settings.Save();
         _logger.LogInformation("配置文件保存完成");
     }
 }

@@ -21,13 +21,13 @@
 		<WarningsAsErrors>nullable</WarningsAsErrors>
 		<Nullable>enable</Nullable>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<!-- <WindowsPackageType>None</WindowsPackageType> -->
+		<PublishTrimmed>True</PublishTrimmed>
+		<WindowsPackageType>None</WindowsPackageType>
 		<!-- 防止用户电脑上未安装 WindowsAppSDK -->
-		<!-- <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained> -->
-		<!-- <PublishTrimmed>true</PublishTrimmed> -->
-		<!-- <PublishSingleFile>true</PublishSingleFile> -->
-		<!-- <SelfContained>true</SelfContained> -->
-		<!-- <TrimMode>full</TrimMode> -->
+		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+		<PublishSingleFile>true</PublishSingleFile>
+		<SelfContained>true</SelfContained>
+		<TrimMode>full</TrimMode>
 		<!-- <PublishReadyToRun>false</PublishReadyToRun> -->
 	</PropertyGroup>
 	<ItemGroup>
@@ -38,13 +38,13 @@
 	</ItemGroup>
 
 	<!-- 移除多余文件 -->
-	<!-- <Target Name="RemoveFoldersWithMuiFiles" AfterTargets="Build"> -->
-	<!-- 	<ItemGroup> -->
-	<!-- 		<RemovingFiles Include="$(OutDir)*\*.mui" Exclude="$(OutDir)zh-CN\*.mui" /> -->
-	<!-- 		<RemovingFolders Include="@(RemovingFiles->'%(RootDir)%(Directory)')" /> -->
-	<!-- 	</ItemGroup> -->
-	<!-- 	<RemoveDir Directories="@(RemovingFolders)" /> -->
-	<!-- </Target> -->
+	<Target Name="RemoveFoldersWithMuiFiles" AfterTargets="Build">
+		<ItemGroup>
+			<RemovingFiles Include="$(OutDir)*\*.mui" Exclude="$(OutDir)zh-CN\*.mui" />
+			<RemovingFolders Include="@(RemovingFiles->'%(RootDir)%(Directory)')" />
+		</ItemGroup>
+		<RemoveDir Directories="@(RemovingFolders)" />
+	</Target>
 
 	<ItemGroup>
 		<Content Include="Assets\SplashScreen.scale-200.png" />

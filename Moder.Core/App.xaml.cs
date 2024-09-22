@@ -13,6 +13,7 @@ public partial class App : Application
 
 	public IServiceProvider Services => Current._serviceProvider;
 	public MainWindow MainWindow { get; private set; } = null!;
+	public static string ConfigFolder { get; } = Path.Combine(Environment.CurrentDirectory, "Configs");
 
 	private readonly IServiceProvider _serviceProvider;
 
@@ -24,7 +25,17 @@ public partial class App : Application
 	{
 		_serviceProvider = serviceProvider;
 		UnhandledException += (sender, args) => logger.LogError(args.Exception, "Unhandled exception");
-		this.InitializeComponent();
+		InitializeComponent();
+
+		Initialize();
+	}
+
+	private void Initialize()
+	{
+		if (!Directory.Exists(ConfigFolder))
+		{
+			Directory.CreateDirectory(ConfigFolder);
+		}
 	}
 
 	/// <summary>

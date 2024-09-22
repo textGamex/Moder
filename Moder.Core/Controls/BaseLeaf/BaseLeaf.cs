@@ -4,7 +4,7 @@ using Microsoft.UI.Xaml.Controls;
 // ReSharper disable once CheckNamespace
 namespace Moder.Core.Controls;
 
-public sealed class BaseLeaf : Control
+public sealed partial class BaseLeaf : Control
 {
     public static readonly DependencyProperty KeyProperty = DependencyProperty.Register(
         nameof(Key),
