@@ -1,7 +1,9 @@
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Media;
 using Moder.Core.Messages;
 using Moder.Core.Services.Config;
 using Moder.Core.Views.Game;
@@ -33,6 +35,7 @@ public sealed partial class MainWindow : Window
         InitializeComponent();
 
         ExtendsContentIntoTitleBar = true;
+        SystemBackdrop = new MicaBackdrop { Kind = MicaKind.BaseAlt };
         ViewModel = model;
 
         if (string.IsNullOrEmpty(settings.ModRootFolderPath))
