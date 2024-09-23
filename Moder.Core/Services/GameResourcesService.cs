@@ -102,21 +102,20 @@ public sealed class GameResourcesService
     /// </summary>
     /// <param name="gameFilePaths"></param>
     /// <param name="modFilePaths"></param>
-    /// <returns></returns>
+    /// <returns>不重名的文件</returns>
     /// <exception cref="ArgumentException"></exception>
-    private static IEnumerable<string> RemoveFileOfEqualName(string[] gameFilePaths, string[] modFilePaths)
+    private static HashSet<string> RemoveFileOfEqualName(string[] gameFilePaths, string[] modFilePaths)
     {
-        var set = new HashSet<string>(gameFilePaths.Length);
+        var set = new HashSet<string>(Math.Max(gameFilePaths.Length, modFilePaths.Length));
 
         // 优先读取Mod文件
         foreach (var filePath in modFilePaths.Concat(gameFilePaths))
         {
             var fileName = Path.GetFileName(filePath) ?? throw new ArgumentException($"无法得到文件名: {filePath}");
-            if (set.Add(fileName))
-            {
-                yield return filePath;
-            }
+            set.Add(fileName);
         }
+
+        return set;
     }
 
     /// <summary>
