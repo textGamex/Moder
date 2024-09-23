@@ -15,6 +15,8 @@ public partial class StateFileDataTemplateSelector : DataTemplateSelector
 
     protected override DataTemplate SelectTemplateCore(object item)
     {
+        AssertTemplatesIsNotNull();
+
         return item switch
         {
             NodeVo => Node,
@@ -26,13 +28,24 @@ public partial class StateFileDataTemplateSelector : DataTemplateSelector
 
     private DataTemplate GetConcreteLeafTemplate(LeafVo leaf)
     {
-        Debug.Assert(StateCategoryLeaf is not null);
-        Debug.Assert(Leaf is not null);
-
         if (leaf.Key.Equals("state_category", StringComparison.OrdinalIgnoreCase))
         {
             return StateCategoryLeaf;
         }
         return Leaf;
+    }
+
+    [Conditional("DEBUG")]
+    private void AssertTemplatesIsNotNull()
+    {
+        foreach (
+            var propertyInfo in typeof(StateFileDataTemplateSelector)
+                .GetProperties()
+                .Where(info => info.PropertyType == typeof(DataTemplate))
+        )
+        {
+            var template = propertyInfo.GetValue(this) as DataTemplate;
+            Debug.Assert(template is not null, propertyInfo.Name + " is null");
+        }
     }
 }
