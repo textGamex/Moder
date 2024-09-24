@@ -8,6 +8,8 @@ namespace Moder.Core.Views.Menus;
 
 public sealed partial class OpenFolderControlView : UserControl
 {
+	public OpenFolderControlViewModel ViewModel => (OpenFolderControlViewModel)DataContext;
+
 	public OpenFolderControlView(OpenFolderControlViewModel model)
 	{
 		this.InitializeComponent();

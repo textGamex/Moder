@@ -27,10 +27,10 @@ public partial class App : Application
 		UnhandledException += (sender, args) => logger.LogError(args.Exception, "Unhandled exception");
 		InitializeComponent();
 
-		Initialize();
+		InitializeApp();
 	}
 
-	private void Initialize()
+	private void InitializeApp()
 	{
 		if (!Directory.Exists(ConfigFolder))
 		{
