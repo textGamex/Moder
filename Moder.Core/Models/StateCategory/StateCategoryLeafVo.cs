@@ -20,7 +20,7 @@ public sealed partial class StateCategoryLeafVo(string key, Types.Value value, N
 
     public string StateCategoryUiDescription => GetStateCategoryUiDescription();
 
-    public static IEnumerable<StateCategory> StateCategory => StateCategoryService.StateCategories;
+    public static IEnumerable<StateCategory> StateCategories => StateCategoryService.StateCategories;
     private static readonly StateCategoryService StateCategoryService = App
         .Current.Services.GetRequiredService<GameResourcesService>()
         .StateCategory;
