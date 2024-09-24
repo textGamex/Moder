@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Moder.Core.Models.Game;
+using Moder.Core.Models;
 using Moder.Core.Parser;
 
 namespace Moder.Core.Services;

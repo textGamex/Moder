@@ -6,9 +6,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:Moder.Core.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:gameModels="using:Moder.Core.Models.Game"
     xmlns:local="using:Moder.Core.Views.Game"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:Moder.Core.Models"
     xmlns:vms="using:Moder.Core.ViewsModels.Game"
     xmlns:vo="using:Moder.Core.Models.Vo"
     d:DataContext="{d:DesignInstance vms:StateFileControlViewModel}"
@@ -107,7 +107,7 @@
             </local:StateFileDataTemplateSelector.Node>
 
             <local:StateFileDataTemplateSelector.StateCategoryLeaf>
-                <DataTemplate x:DataType="vo:LeafVo">
+                <DataTemplate x:DataType="vo:StateCategoryLeafVo">
 
                     <controls:BaseLeaf Key="{x:Bind Key}" Type="{x:Bind TypeString}">
                         <controls:BaseLeaf.SlotContent>
@@ -120,13 +120,13 @@
                                     SuggestionChosen="AutoSuggestBox_OnSuggestionChosen"
                                     Text="{x:Bind Value, Mode=TwoWay}">
                                     <AutoSuggestBox.ItemTemplate>
-                                        <DataTemplate x:DataType="gameModels:StateCategory">
+                                        <DataTemplate x:DataType="models:StateCategory">
                                             <TextBlock Text="{x:Bind Description}" />
                                         </DataTemplate>
                                     </AutoSuggestBox.ItemTemplate>
                                 </AutoSuggestBox>
 
-                                <TextBlock VerticalAlignment="Center" Text="{x:Bind StateCategoryUiDescription}" />
+                                <TextBlock VerticalAlignment="Center" Text="{x:Bind StateCategoryUiDescription, Mode=OneWay}" />
 
                                 <Button Content="+" />
                                 <Button Command="{x:Bind RemoveSelfInParentCommand}" Content="-" />

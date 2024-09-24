@@ -1,7 +1,12 @@
 ﻿using System.Diagnostics;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Moder.Core.Models;
 using Moder.Core.Models.Vo;
+using LeafValuesVo = Moder.Core.Models.Vo.LeafValuesVo;
+using LeafVo = Moder.Core.Models.Vo.LeafVo;
+
+// using Moder.Core.Models.Vo;
 
 namespace Moder.Core.Views.Game;
 
@@ -19,20 +24,12 @@ public partial class StateFileDataTemplateSelector : DataTemplateSelector
 
         return item switch
         {
+            StateCategoryLeafVo => StateCategoryLeaf,
             NodeVo => Node,
-            LeafVo leafVo => GetConcreteLeafTemplate(leafVo),
+            LeafVo => Leaf,
             LeafValuesVo => LeafValues,
             _ => throw new ArgumentException("未知对象", nameof(item))
         };
-    }
-
-    private DataTemplate GetConcreteLeafTemplate(LeafVo leaf)
-    {
-        if (leaf.Key.Equals("state_category", StringComparison.OrdinalIgnoreCase))
-        {
-            return StateCategoryLeaf;
-        }
-        return Leaf;
     }
 
     [Conditional("DEBUG")]

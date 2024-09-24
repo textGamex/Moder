@@ -2,7 +2,7 @@ using System.Collections;
 using System.Diagnostics;
 using CommunityToolkit.WinUI;
 using Microsoft.UI.Xaml.Controls;
-using Moder.Core.Models.Game;
+using Moder.Core.Models;
 using Moder.Core.ViewsModels.Game;
 
 namespace Moder.Core.Views.Game;

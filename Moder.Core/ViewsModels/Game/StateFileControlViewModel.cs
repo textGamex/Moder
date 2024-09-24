@@ -11,6 +11,8 @@ using Moder.Core.Services;
 using Moder.Core.ViewsModels.Menus;
 using ParadoxPower.Parser;
 using ParadoxPower.Process;
+using LeafValuesVo = Moder.Core.Models.Vo.LeafValuesVo;
+using LeafVo = Moder.Core.Models.Vo.LeafVo;
 
 namespace Moder.Core.ViewsModels.Game;
 
@@ -62,7 +64,17 @@ public sealed partial class StateFileControlViewModel : ObservableObject
             if (child.IsLeafChild)
             {
                 var leaf = child.leaf;
-                nodeVo.Add(new LeafVo(leaf.Key, leaf.Value, nodeVo));
+                LeafVo leafVo;
+                if (child.leaf.Key.Equals("state_category", StringComparison.OrdinalIgnoreCase))
+                {
+                    leafVo = new StateCategoryLeafVo(leaf.Key, leaf.Value, nodeVo);
+                }
+                else
+                {
+                    leafVo = new LeafVo(leaf.Key, leaf.Value, nodeVo);
+                }
+
+                nodeVo.Add(leafVo);
             }
 
             if (child.IsNodeChild)

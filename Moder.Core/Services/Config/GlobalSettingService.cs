@@ -10,7 +10,6 @@ public sealed partial class GlobalSettingService
     [MemoryPackOrder(0)]
     public string ModRootFolderPath { get; set; } = string.Empty;
 
-    // TODO: 添加选择按钮
     [MemoryPackOrder(1)]
     public string GameRootFolderPath { get; set; } = string.Empty;
 
