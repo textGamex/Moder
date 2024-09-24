@@ -6,6 +6,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:Moder.Core.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:gameModels="using:Moder.Core.Models.Game"
     xmlns:local="using:Moder.Core.Views.Game"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vms="using:Moder.Core.ViewsModels.Game"
@@ -113,10 +114,20 @@
 
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <AutoSuggestBox
-                                    MinWidth="120"
+                                    MinWidth="155"
                                     HorizontalAlignment="Left"
                                     ItemsSource="{Binding StateCategory}"
-                                    Text="{x:Bind Value, Mode=TwoWay}" />
+                                    SuggestionChosen="AutoSuggestBox_OnSuggestionChosen"
+                                    Text="{x:Bind Value, Mode=TwoWay}">
+                                    <AutoSuggestBox.ItemTemplate>
+                                        <DataTemplate x:DataType="gameModels:StateCategory">
+                                            <TextBlock Text="{x:Bind Description}" />
+                                        </DataTemplate>
+                                    </AutoSuggestBox.ItemTemplate>
+                                </AutoSuggestBox>
+
+                                <TextBlock VerticalAlignment="Center" Text="{x:Bind StateCategoryUiDescription}" />
+
                                 <Button Content="+" />
                                 <Button Command="{x:Bind RemoveSelfInParentCommand}" Content="-" />
                             </StackPanel>

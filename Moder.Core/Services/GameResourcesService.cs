@@ -1,14 +1,14 @@
 ﻿using MethodTimer;
 using Microsoft.Extensions.Logging;
 using Moder.Core.Extensions;
-using Moder.Core.Parser;
 using Moder.Core.Services.Config;
 
 namespace Moder.Core.Services;
 
 public sealed class GameResourcesService
 {
-    public string[] StateCategory { get; }
+    // TODO: Lazy
+    public StateCategoryService StateCategory { get; }
 
     private readonly GlobalSettingService _settingService;
     private readonly ILogger<GameResourcesService> _logger;
@@ -34,29 +34,10 @@ public sealed class GameResourcesService
     }
 
     [Time("加载 StateCategory")]
-    private string[] LoadStateCategory()
+    private StateCategoryService LoadStateCategory()
     {
         var filePaths = GetAllFilePriorModByRelativePathForFolder(Keywords.Common, "state_category");
-        var stateCategories = new List<string>(8);
-
-        foreach (var filePath in filePaths)
-        {
-            if (!TextParser.TryParse(filePath, out var node, out var error))
-            {
-                _logger.LogError("文件: {path} 解析失败, 错误信息: {message}", error.Filename, error.ErrorMessage);
-                continue;
-            }
-
-            if (!node.TryGetChild("state_categories", out var stateCategoryNode))
-            {
-                _logger.LogWarning("文件: {path} 中未找到 state_categories 节点", filePath);
-                continue;
-            }
-
-            stateCategories.AddRange(stateCategoryNode.Nodes.Select(childNode => childNode.Key));
-        }
-
-        return [.. stateCategories];
+        return new StateCategoryService(filePaths);
     }
 
     /// <summary>
