@@ -23,7 +23,11 @@
                         <controls:BaseLeaf.SlotContent>
 
                             <StackPanel Orientation="Horizontal" Spacing="4">
-                                <TextBox HorizontalAlignment="Left" Text="{x:Bind Value, Mode=TwoWay}" />
+                                <TextBox
+                                    Margin="0,4"
+                                    HorizontalAlignment="Left"
+                                    VerticalContentAlignment="Center"
+                                    Text="{x:Bind Value, Mode=TwoWay}" />
                                 <Button Content="+" />
                                 <Button Command="{x:Bind RemoveSelfInParentCommand}" Content="-" />
                             </StackPanel>
@@ -115,7 +119,9 @@
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <AutoSuggestBox
                                     MinWidth="155"
+                                    Margin="0,4"
                                     HorizontalAlignment="Left"
+                                    VerticalContentAlignment="Center"
                                     ItemsSource="{Binding StateCategory}"
                                     SuggestionChosen="AutoSuggestBox_OnSuggestionChosen"
                                     Text="{x:Bind Value, Mode=TwoWay}">
