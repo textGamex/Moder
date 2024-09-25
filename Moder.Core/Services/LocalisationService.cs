@@ -1,4 +1,5 @@
 ﻿using System.Collections.Frozen;
+using System.Diagnostics;
 using ParadoxPower.CSharp;
 using ParadoxPower.Localisation;
 
@@ -24,11 +25,22 @@ public sealed class LocalisationService
 
 			foreach (var item in result.entries)
 			{
-				localisations[item.key] = item.desc.Trim('"');
+				localisations[item.key] = GetCleanDesc(item.desc);
 			}
 		}
 
 		_localisations = localisations.ToFrozenDictionary();
+	}
+
+	// 去除开头和结尾的 "
+	private static string GetCleanDesc(string rawDesc)
+	{
+		return rawDesc.Length switch
+		{
+			> 2 => rawDesc[1..^2],
+			2 => string.Empty,
+			_ => rawDesc
+		};
 	}
 
 	/// <summary>
