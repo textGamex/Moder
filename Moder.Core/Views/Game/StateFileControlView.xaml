@@ -127,7 +127,18 @@
                                     Text="{x:Bind Value, Mode=TwoWay}">
                                     <AutoSuggestBox.ItemTemplate>
                                         <DataTemplate x:DataType="models:StateCategory">
-                                            <TextBlock Text="{x:Bind Description}" />
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Grid.Column="0" Text="{x:Bind TypeName}" />
+                                                <TextBlock
+                                                    Grid.Column="1"
+                                                    HorizontalAlignment="Right"
+                                                    Text="{x:Bind LocalBuildingSlotsDescription}" />
+                                            </Grid>
                                         </DataTemplate>
                                     </AutoSuggestBox.ItemTemplate>
                                 </AutoSuggestBox>
