@@ -1,4 +1,5 @@
-﻿using MethodTimer;
+﻿using System.Globalization;
+using MethodTimer;
 using Microsoft.Extensions.Logging;
 using Moder.Core.Extensions;
 using Moder.Core.Services.Config;
@@ -9,6 +10,7 @@ public sealed class GameResourcesService
 {
     // TODO: Lazy
     public StateCategoryService StateCategory { get; }
+    public LocalisationService Localisation { get; }
 
     private readonly GlobalSettingService _settingService;
     private readonly ILogger<GameResourcesService> _logger;
@@ -31,13 +33,63 @@ public sealed class GameResourcesService
 
         _logger.LogInformation("开始加载游戏资源...");
         StateCategory = LoadStateCategory();
+        Localisation = LoadLocalisation();
     }
 
-    [Time("加载 StateCategory")]
+    [Time("加载 StateCategoryService")]
     private StateCategoryService LoadStateCategory()
     {
         var filePaths = GetAllFilePriorModByRelativePathForFolder(Keywords.Common, "state_category");
         return new StateCategoryService(filePaths);
+    }
+
+    [Time("加载本地化字符串")]
+    private LocalisationService LoadLocalisation()
+    {
+        // TODO: 本地化暂时先不考虑 replace 文件夹
+        var filePaths = GetAllFilePriorModByRelativePathForFolder("localisation", GetLanguageCode());
+        return new LocalisationService(filePaths);
+    }
+
+    private string GetLanguageCode()
+    {
+        var cultureInfo = CultureInfo.CurrentUICulture;
+        var name = cultureInfo.Name;
+
+        if (name.StartsWith("zh"))
+        {
+            return "simp_chinese";
+        }
+        if (name.StartsWith("es"))
+        {
+            return "spanish";
+        }
+        if (name.StartsWith("de"))
+        {
+            return "german";
+        }
+        if (name.StartsWith("ja"))
+        {
+            return "japanese";
+        }
+        if (name.StartsWith("fr"))
+        {
+            return "french";
+        }
+        if (name.StartsWith("ru"))
+        {
+            return "russian";
+        }
+        if (name.Contains("pt-BR"))
+        {
+            return "braz_por";
+        }
+        if (name.StartsWith("pl"))
+        {
+            return "polish";
+        }
+
+        return "english";
     }
 
     /// <summary>
@@ -49,7 +101,7 @@ public sealed class GameResourcesService
     private IEnumerable<string> GetAllFilePriorModByRelativePathForFolder(params string[] folderRelativePaths)
     {
         var relativePath = Path.Combine(folderRelativePaths);
-        _logger.LogDebug("正在加载文件夹: {Path}", relativePath);
+        _logger.LogInformation("正在加载文件夹: {Path}", relativePath);
         var modFolder = Path.Combine(_settingService.ModRootFolderPath, relativePath);
         var gameFolder = Path.Combine(_settingService.GameRootFolderPath, relativePath);
 

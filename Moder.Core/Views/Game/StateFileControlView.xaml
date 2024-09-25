@@ -133,7 +133,7 @@
                                                     <ColumnDefinition Width="Auto" />
                                                 </Grid.ColumnDefinitions>
 
-                                                <TextBlock Grid.Column="0" Text="{x:Bind TypeName}" />
+                                                <TextBlock Grid.Column="0" Text="{x:Bind TypeNameDescription}" />
                                                 <TextBlock
                                                     Grid.Column="1"
                                                     HorizontalAlignment="Right"
