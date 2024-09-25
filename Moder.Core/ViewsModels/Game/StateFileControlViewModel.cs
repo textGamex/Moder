@@ -25,10 +25,16 @@ public sealed partial class StateFileControlViewModel : ObservableObject
     private readonly NodeVo _rootNodeVo = new("Root", null);
     private readonly SystemFileItem _fileItem;
     private readonly ILogger<StateFileControlViewModel> _logger;
+    private readonly GameResourcesService _gameResourcesService;
 
-    public StateFileControlViewModel(GlobalResourceService resourceService, ILogger<StateFileControlViewModel> logger)
+    public StateFileControlViewModel(
+        GlobalResourceService resourceService,
+        ILogger<StateFileControlViewModel> logger,
+        GameResourcesService gameResourcesService
+    )
     {
         _logger = logger;
+        _gameResourcesService = gameResourcesService;
         _fileItem = resourceService.PopCurrentSelectFileItem();
         Debug.Assert(_fileItem.IsFile);
 
@@ -57,7 +63,7 @@ public sealed partial class StateFileControlViewModel : ObservableObject
         Convert(rootNode, _rootNodeVo);
     }
 
-    private static void Convert(Node node, NodeVo nodeVo)
+    private void Convert(Node node, NodeVo nodeVo)
     {
         foreach (var child in node.AllArray)
         {
@@ -65,9 +71,17 @@ public sealed partial class StateFileControlViewModel : ObservableObject
             {
                 var leaf = child.leaf;
                 LeafVo leafVo;
-                if (child.leaf.Key.Equals("state_category", StringComparison.OrdinalIgnoreCase))
+                if (leaf.Key.Equals("state_category", StringComparison.OrdinalIgnoreCase))
                 {
                     leafVo = new StateCategoryLeafVo(leaf.Key, leaf.Value, nodeVo);
+                }
+                // 当父节点是 buildings 时, 子节点就可以为建筑物, 在这里, node 即为 leaf 的父节点
+                else if (
+                    node.Key.Equals("buildings", StringComparison.OrdinalIgnoreCase)
+                    && _gameResourcesService.Buildings.Contains(leaf.Key)
+                )
+                {
+                    leafVo = new BuildingLeafVo(leaf.Key, leaf.Value, nodeVo);
                 }
                 else
                 {

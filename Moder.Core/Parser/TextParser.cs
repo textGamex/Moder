@@ -40,19 +40,19 @@ public class TextParser
 
     public static bool TryParse(
         string filePath,
-        [NotNullWhen(true)] out Node? node,
+        [NotNullWhen(true)] out Node? rootNode,
         [NotNullWhen(false)] out ParserError? error
     )
     {
         var parser = new TextParser(filePath);
         if (parser.IsFailure)
         {
-            node = null;
+            rootNode = null;
             error = parser.GetError();
             return false;
         }
 
-        node = parser.GetResult();
+        rootNode = parser.GetResult();
         error = null;
         return true;
     }

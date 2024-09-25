@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <UserControl
     x:Class="Moder.Core.Views.Game.StateFileControlView"
@@ -143,7 +143,8 @@
                                     </AutoSuggestBox.ItemTemplate>
                                 </AutoSuggestBox>
 
-                                <TextBlock VerticalAlignment="Center" Text="{x:Bind StateCategoryUiDescription, Mode=OneWay}" />
+                                <TextBlock VerticalAlignment="Center"
+                                           Text="{x:Bind StateCategoryUiDescription, Mode=OneWay}" />
 
                                 <Button Content="+" />
                                 <Button Command="{x:Bind RemoveSelfInParentCommand}" Content="-" />
@@ -153,6 +154,22 @@
                     </controls:BaseLeaf>
                 </DataTemplate>
             </local:StateFileDataTemplateSelector.StateCategoryLeaf>
+
+            <local:StateFileDataTemplateSelector.BuildingLeaf>
+                <DataTemplate x:DataType="vo:BuildingLeafVo">
+                    <controls:BaseLeaf Key="{x:Bind Key}" Type="{x:Bind TypeString}">
+                        <controls:BaseLeaf.SlotContent>
+                            <NumberBox
+                                Margin="0,4"
+                                HorizontalAlignment="Left"
+                                Maximum="{x:Bind MaxBuildingLevel}"
+                                PlaceholderText="建筑等级"
+                                SpinButtonPlacementMode="Inline"
+                                Value="{x:Bind BuildingLevel, Mode=TwoWay}" />
+                        </controls:BaseLeaf.SlotContent>
+                    </controls:BaseLeaf>
+                </DataTemplate>
+            </local:StateFileDataTemplateSelector.BuildingLeaf>
         </local:StateFileDataTemplateSelector>
     </UserControl.Resources>
 

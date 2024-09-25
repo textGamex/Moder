@@ -11,6 +11,8 @@ public sealed class GameResourcesService
     // TODO: Lazy
     public StateCategoryService StateCategory { get; }
     public LocalisationService Localisation { get; }
+    public OreService OreService { get; }
+    public BuildingsService Buildings { get; }
 
     private readonly GlobalSettingService _settingService;
     private readonly ILogger<GameResourcesService> _logger;
@@ -34,6 +36,23 @@ public sealed class GameResourcesService
         _logger.LogInformation("开始加载游戏资源...");
         StateCategory = LoadStateCategory();
         Localisation = LoadLocalisation();
+        OreService = LoadOre();
+        Buildings = LoadBuildings();
+        _logger.LogInformation("游戏资源加载完成.");
+    }
+
+    [Time("加载建筑物")]
+    private BuildingsService LoadBuildings()
+    {
+        var filePaths = GetAllFilePriorModByRelativePathForFolder(Keywords.Common, "buildings");
+        return new BuildingsService(filePaths);
+    }
+
+    [Time("加载游戏内资源定义文件")]
+    private OreService LoadOre()
+    {
+        var filePaths = GetAllFilePriorModByRelativePathForFolder(Keywords.Common, "resources");
+        return new OreService(filePaths);
     }
 
     [Time("加载 StateCategoryService")]
