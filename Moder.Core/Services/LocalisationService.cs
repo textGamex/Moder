@@ -1,5 +1,4 @@
 ﻿using System.Collections.Frozen;
-using System.Diagnostics;
 using ParadoxPower.CSharp;
 using ParadoxPower.Localisation;
 
@@ -37,7 +36,7 @@ public sealed class LocalisationService
 	{
 		return rawDesc.Length switch
 		{
-			> 2 => rawDesc[1..^2],
+			> 2 => rawDesc[1..^1],
 			2 => string.Empty,
 			_ => rawDesc
 		};
