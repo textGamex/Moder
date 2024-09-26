@@ -8,16 +8,15 @@ public partial class LeafVo : ObservableGameValue
 {
     public virtual string Value
     {
-        get => _value;
-        set => SetProperty(ref this._value, value);
+        get => LeafValue;
+        set => SetProperty(ref this.LeafValue, value);
     }
-    // ReSharper disable once InconsistentNaming
-    protected string _value;
+    protected string LeafValue;
 
     public LeafVo(string key, Types.Value value, NodeVo? parent)
         : base(key, parent)
     {
-        _value = value.ToRawString();
+        LeafValue = value.ToRawString();
         Type = value.ToLocalValueType();
     }
 

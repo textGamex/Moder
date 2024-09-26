@@ -104,6 +104,9 @@
 			<Generator>MSBuild:Compile</Generator>
 		</Page>
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Models\StateName\" />
+	</ItemGroup>
 
 	<!--
 	  Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution

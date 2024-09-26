@@ -10,10 +10,10 @@ public sealed partial class StateCategoryLeafVo(string key, Types.Value value, N
 {
     public override string Value
     {
-        get => _value;
+        get => LeafValue;
         set
         {
-            SetProperty(ref _value, value);
+            SetProperty(ref LeafValue, value);
             OnPropertyChanged(nameof(StateCategoryUiDescription));
         }
     }

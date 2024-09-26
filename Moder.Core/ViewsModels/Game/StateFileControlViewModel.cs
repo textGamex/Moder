@@ -83,6 +83,10 @@ public sealed partial class StateFileControlViewModel : ObservableObject
                 {
                     leafVo = new BuildingLeafVo(leaf.Key, leaf.Value, nodeVo);
                 }
+                else if (leaf.Key.Equals("name", StringComparison.OrdinalIgnoreCase))
+                {
+                    leafVo = new StateNameLeafVo(leaf.Key, leaf.Value, nodeVo);
+                }
                 else
                 {
                     leafVo = new LeafVo(leaf.Key, leaf.Value, nodeVo);
