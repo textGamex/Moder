@@ -19,18 +19,14 @@
         <local:StateFileDataTemplateSelector x:Key="StateFileDataTemplateSelector">
             <local:StateFileDataTemplateSelector.Leaf>
                 <DataTemplate x:DataType="vo:LeafVo">
-                    <controls:BaseLeaf Key="{x:Bind Key}" Type="{x:Bind TypeString}">
+                    <controls:BaseLeaf LeafContext="{x:Bind}">
                         <controls:BaseLeaf.SlotContent>
 
-                            <StackPanel Orientation="Horizontal" Spacing="4">
-                                <TextBox
-                                    Margin="0,4"
-                                    HorizontalAlignment="Left"
-                                    VerticalContentAlignment="Center"
-                                    Text="{x:Bind Value, Mode=TwoWay}" />
-                                <Button Content="+" />
-                                <Button Command="{x:Bind RemoveSelfInParentCommand}" Content="-" />
-                            </StackPanel>
+                            <TextBox
+                                Margin="0,4"
+                                HorizontalAlignment="Left"
+                                VerticalContentAlignment="Center"
+                                Text="{x:Bind Value, Mode=TwoWay}" />
 
                         </controls:BaseLeaf.SlotContent>
                     </controls:BaseLeaf>
@@ -40,7 +36,7 @@
             <local:StateFileDataTemplateSelector.LeafValues>
 
                 <DataTemplate x:DataType="vo:LeafValuesVo">
-                    <controls:BaseLeaf Key="{x:Bind Key}" Type="{x:Bind TypeString}">
+                    <controls:BaseLeaf LeafContext="{x:Bind}">
                         <controls:BaseLeaf.SlotContent>
 
                             <StackPanel Orientation="Horizontal" Spacing="4">
@@ -86,9 +82,6 @@
                                         </ListView.ItemsPanel>
                                     </ListView>
                                 </Expander>
-
-                                <Button Content="+" />
-                                <Button Command="{x:Bind RemoveSelfInParentCommand}" Content="-" />
                             </StackPanel>
 
                         </controls:BaseLeaf.SlotContent>
@@ -113,7 +106,7 @@
             <local:StateFileDataTemplateSelector.StateCategoryLeaf>
                 <DataTemplate x:DataType="vo:StateCategoryLeafVo">
 
-                    <controls:BaseLeaf Key="{x:Bind Key}" Type="{x:Bind TypeString}">
+                    <controls:BaseLeaf LeafContext="{x:Bind}">
                         <controls:BaseLeaf.SlotContent>
 
                             <StackPanel Orientation="Horizontal" Spacing="4">
@@ -144,9 +137,6 @@
                                 </AutoSuggestBox>
 
                                 <TextBlock VerticalAlignment="Center" Text="{x:Bind StateCategoryUiDescription, Mode=OneWay}" />
-
-                                <Button Content="+" />
-                                <Button Command="{x:Bind RemoveSelfInParentCommand}" Content="-" />
                             </StackPanel>
 
                         </controls:BaseLeaf.SlotContent>
@@ -156,7 +146,7 @@
 
             <local:StateFileDataTemplateSelector.BuildingLeaf>
                 <DataTemplate x:DataType="vo:BuildingLeafVo">
-                    <controls:BaseLeaf Key="{x:Bind Key}" Type="{x:Bind TypeString}">
+                    <controls:BaseLeaf LeafContext="{x:Bind}">
                         <controls:BaseLeaf.SlotContent>
                             <NumberBox
                                 Margin="0,4"
@@ -172,7 +162,7 @@
 
             <local:StateFileDataTemplateSelector.NameLeaf>
                 <DataTemplate x:DataType="vo:StateNameLeafVo">
-                    <controls:BaseLeaf Key="{x:Bind Key}" Type="{x:Bind TypeString}">
+                    <controls:BaseLeaf LeafContext="{x:Bind}">
                         <controls:BaseLeaf.SlotContent>
 
                             <StackPanel Orientation="Horizontal" Spacing="4">

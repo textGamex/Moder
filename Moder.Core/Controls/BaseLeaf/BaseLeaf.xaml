@@ -47,6 +47,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
                         <TextBlock
@@ -64,6 +65,16 @@
                                 Text="{TemplateBinding Type}" />
                         </Border>
                         <ContentPresenter Grid.Column="2" Content="{TemplateBinding SlotContent}" />
+                        <StackPanel
+                            Grid.Column="3"
+                            Orientation="Horizontal"
+                            Spacing="4">
+                            <Button Command="{TemplateBinding AddCommand}" Content="+" />
+                            <Button
+                                Margin="0,0,8,0"
+                                Command="{TemplateBinding RemoveCommand}"
+                                Content="-" />
+                        </StackPanel>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
