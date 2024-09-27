@@ -12,6 +12,7 @@
     xmlns:vms="using:Moder.Core.ViewsModels.Game"
     xmlns:vo="using:Moder.Core.Models.Vo"
     d:DataContext="{d:DesignInstance vms:StateFileControlViewModel}"
+    Unloaded="StateFileControlView_OnUnloaded"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -191,9 +192,10 @@
             Text="{x:Bind ViewModel.Title}" />
 
         <TreeView
+            x:Name="TreeView"
             Grid.Row="1"
             ItemTemplateSelector="{StaticResource StateFileDataTemplateSelector}"
-            ItemsSource="{x:Bind ViewModel.Items}"
+            ItemsSource="{Binding Items}"
             SelectionMode="None" />
 
         <Button

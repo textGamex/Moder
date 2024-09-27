@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Diagnostics;
 using CommunityToolkit.WinUI;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Moder.Core.Models;
 using Moder.Core.ViewsModels.Game;
@@ -37,5 +38,11 @@ public sealed partial class StateFileControlView
 
         var stateCategory = (StateCategory)args.SelectedItem;
         sender.Text = stateCategory.TypeName;
+    }
+
+    private void StateFileControlView_OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        TreeView.ItemsSource = null;
+        Bindings.StopTracking();
     }
 }
