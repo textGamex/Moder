@@ -61,6 +61,7 @@
                             Style="{ThemeResource InfoBorderPanelStyle}">
                             <TextBlock
                                 Margin="2"
+                                VerticalAlignment="Center"
                                 Style="{StaticResource BodyTextBlockStyle}"
                                 Text="{TemplateBinding Type}" />
                         </Border>
