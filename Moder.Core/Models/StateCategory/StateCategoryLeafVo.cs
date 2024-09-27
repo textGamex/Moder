@@ -28,7 +28,7 @@ public sealed partial class StateCategoryLeafVo(string key, Types.Value value, N
     private string GetStateCategoryUiDescription()
     {
         return StateCategoryService.TryGetValue(Value, out var stateCategory)
-            ? $"建筑槽位 [{stateCategory.LocalBuildingSlots}]"
+            ? $"{stateCategory.TypeNameDescription} 建筑槽位 [{stateCategory.LocalBuildingSlots}]"
             : $"未知的 {Key}";
     }
 }
