@@ -21,6 +21,7 @@ public sealed class StateCategoryService
     {
         var stateCategories = new Dictionary<string, StateCategory>();
 
+        // TODO: 抽成基类?
         foreach (var filePath in filePaths)
         {
             if (!TextParser.TryParse(filePath, out var node, out var error))

@@ -175,6 +175,19 @@
                     </controls:BaseLeaf>
                 </DataTemplate>
             </local:StateFileDataTemplateSelector.NameLeaf>
+
+            <local:StateFileDataTemplateSelector.CountryTagLeaf>
+                <DataTemplate x:DataType="vo:CountryTagLeafVo">
+                    <controls:BaseLeaf LeafContext="{x:Bind}">
+                        <controls:BaseLeaf.SlotContent>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBox Margin="0,4" Text="{x:Bind Value, Mode=TwoWay}" />
+                                <TextBlock VerticalAlignment="Center" Text="{x:Bind CountryName, Mode=OneWay}" />
+                            </StackPanel>
+                        </controls:BaseLeaf.SlotContent>
+                    </controls:BaseLeaf>
+                </DataTemplate>
+            </local:StateFileDataTemplateSelector.CountryTagLeaf>
         </local:StateFileDataTemplateSelector>
     </UserControl.Resources>
 

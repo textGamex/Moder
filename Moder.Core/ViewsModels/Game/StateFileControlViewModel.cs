@@ -98,10 +98,27 @@ public sealed partial class StateFileControlViewModel : ObservableObject
         }
     }
 
+    // TODO: 写成配置文件
+    private static readonly string[] CountryTagKeywords = ["add_core_of", "owner", "add_claim_by"];
+
     private LeafVo GetSpecificLeafVo(NodeVo nodeVo, Leaf leaf)
     {
         LeafVo leafVo;
-        if (leaf.Key.Equals("state_category", StringComparison.OrdinalIgnoreCase))
+
+        if (
+            Array.Exists(
+                CountryTagKeywords,
+                countryTag => countryTag.Equals(leaf.Key, StringComparison.OrdinalIgnoreCase)
+            )
+        )
+        {
+            leafVo = new CountryTagLeafVo(leaf.Key, leaf.Value, nodeVo);
+        }
+        else if (leaf.Key.Equals("name", StringComparison.OrdinalIgnoreCase))
+        {
+            leafVo = new StateNameLeafVo(leaf.Key, leaf.Value, nodeVo);
+        }
+        else if (leaf.Key.Equals("state_category", StringComparison.OrdinalIgnoreCase))
         {
             leafVo = new StateCategoryLeafVo(leaf.Key, leaf.Value, nodeVo);
         }
@@ -115,10 +132,6 @@ public sealed partial class StateFileControlViewModel : ObservableObject
         )
         {
             leafVo = new BuildingLeafVo(leaf.Key, leaf.Value, nodeVo);
-        }
-        else if (leaf.Key.Equals("name", StringComparison.OrdinalIgnoreCase))
-        {
-            leafVo = new StateNameLeafVo(leaf.Key, leaf.Value, nodeVo);
         }
         else
         {
