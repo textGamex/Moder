@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Services;
+using Moder.Core.Services.GameResources;
 
 // ReSharper disable once CheckNamespace
 namespace Moder.Core.Models;

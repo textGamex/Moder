@@ -4,16 +4,20 @@ using CommunityToolkit.WinUI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Moder.Core.Models;
+using Moder.Core.Services.GameResources;
 using Moder.Core.ViewsModels.Game;
 
 namespace Moder.Core.Views.Game;
 
 public sealed partial class StateFileControlView
 {
+    private readonly GameResourcesService _gameResourcesService;
     public StateFileControlViewModel ViewModel => (StateFileControlViewModel)DataContext;
 
-    public StateFileControlView(StateFileControlViewModel model)
+    public StateFileControlView(StateFileControlViewModel model, GameResourcesService gameResourcesService)
     {
+        _gameResourcesService = gameResourcesService;
+
         InitializeComponent();
         DataContext = model;
     }
@@ -44,5 +48,38 @@ public sealed partial class StateFileControlView
     {
         TreeView.ItemsSource = null;
         Bindings.StopTracking();
+    }
+
+    private void CountryTagAutoSuggestBox_OnTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    {
+        if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+        {
+            var suggestions = SearchCountryTag(sender.Text);
+
+            sender.ItemsSource = suggestions.Length > 0 ? suggestions : ["Œ¥’“µΩ"];
+        }
+    }
+
+    private string[] SearchCountryTag(string query)
+    {
+        var countryTags = _gameResourcesService.CountryTagsService.CountryTags;
+        if (query.Length == 0)
+        {
+            return countryTags.ToArray();
+        }
+
+        var suggestions = new List<string>(16);
+
+        foreach (var countryTag in countryTags)
+        {
+            if (countryTag.Contains(query, StringComparison.OrdinalIgnoreCase))
+            {
+                suggestions.Add(countryTag);
+            }
+        }
+
+        return suggestions
+            .OrderByDescending(countryTag => countryTag.StartsWith(query, StringComparison.CurrentCultureIgnoreCase))
+            .ToArray();
     }
 }

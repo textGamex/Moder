@@ -8,6 +8,7 @@ using Moder.Core.Models;
 using Moder.Core.Models.Vo;
 using Moder.Core.Parser;
 using Moder.Core.Services;
+using Moder.Core.Services.GameResources;
 using Moder.Core.ViewsModels.Menus;
 using ParadoxPower.Parser;
 using ParadoxPower.Process;

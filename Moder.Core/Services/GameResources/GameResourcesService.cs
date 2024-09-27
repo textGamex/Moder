@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Moder.Core.Extensions;
 using Moder.Core.Services.Config;
 
-namespace Moder.Core.Services;
+namespace Moder.Core.Services.GameResources;
 
 public sealed class GameResourcesService
 {
@@ -13,6 +13,7 @@ public sealed class GameResourcesService
     public LocalisationService Localisation { get; }
     public OreService OreService { get; }
     public BuildingsService Buildings { get; }
+    public CountryTagService CountryTagsService { get; }
 
     private readonly GlobalSettingService _settingService;
     private readonly ILogger<GameResourcesService> _logger;
@@ -34,11 +35,21 @@ public sealed class GameResourcesService
         _settingService = settingService;
 
         _logger.LogInformation("开始加载游戏资源...");
+
         StateCategory = LoadStateCategory();
         Localisation = LoadLocalisation();
         OreService = LoadOre();
         Buildings = LoadBuildings();
+        CountryTagsService = LoadCountriesTag();
+
         _logger.LogInformation("游戏资源加载完成.");
+    }
+
+    [Time("加载 Country Tags")]
+    private CountryTagService LoadCountriesTag()
+    {
+        var filePaths = GetAllFilePriorModByRelativePathForFolder(Keywords.Common, "country_tags");
+        return new CountryTagService(filePaths);
     }
 
     [Time("加载建筑物")]

@@ -2,7 +2,7 @@
 using ParadoxPower.CSharp;
 using ParadoxPower.Localisation;
 
-namespace Moder.Core.Services;
+namespace Moder.Core.Services.GameResources;
 
 public sealed class LocalisationService
 {

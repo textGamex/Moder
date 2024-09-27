@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Extensions;
 using Moder.Core.Helper;
 using Moder.Core.Services;
+using Moder.Core.Services.GameResources;
 using ParadoxPower.Parser;
 
 namespace Moder.Core.Models.Vo;

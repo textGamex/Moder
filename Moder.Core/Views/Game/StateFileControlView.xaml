@@ -187,7 +187,11 @@
                     <controls:BaseLeaf LeafContext="{x:Bind}">
                         <controls:BaseLeaf.SlotContent>
                             <StackPanel Orientation="Horizontal" Spacing="4">
-                                <TextBox Margin="0,4" Text="{x:Bind Value, Mode=TwoWay}" />
+                                <AutoSuggestBox
+                                    Margin="0,4"
+                                    ItemsSource="{Binding CountryTags, Mode=OneTime}"
+                                    Text="{x:Bind Value, Mode=TwoWay}"
+                                    TextChanged="CountryTagAutoSuggestBox_OnTextChanged" />
                                 <TextBlock Style="{StaticResource TextBlockGameDescriptionStyle}" Text="{x:Bind CountryName, Mode=OneWay}" />
                             </StackPanel>
                         </controls:BaseLeaf.SlotContent>

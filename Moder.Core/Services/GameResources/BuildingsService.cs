@@ -7,7 +7,7 @@ using Moder.Core.Models;
 using Moder.Core.Parser;
 using ParadoxPower.Process;
 
-namespace Moder.Core.Services;
+namespace Moder.Core.Services.GameResources;
 
 public sealed class BuildingsService
 {

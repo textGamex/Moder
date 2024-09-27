@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Frozen;
+﻿using System.Collections.Frozen;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moder.Core.Extensions;
 using Moder.Core.Parser;
-using ParadoxPower.CSharp;
-using ParadoxPower.Process;
 
-namespace Moder.Core.Services;
+namespace Moder.Core.Services.GameResources;
 
 /// <summary>
 /// 游戏内定义的资源

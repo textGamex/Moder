@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Moder.Core.Models;
 using Moder.Core.Parser;
 
-namespace Moder.Core.Services;
+namespace Moder.Core.Services.GameResources;
 
 public sealed class StateCategoryService
 {
