@@ -47,7 +47,7 @@
                         <controls:BaseLeaf.SlotContent>
 
                             <StackPanel Orientation="Horizontal" Spacing="4">
-                                <Expander ExpandDirection="Down">
+                                <Expander Margin="0,4" ExpandDirection="Down">
                                     <Expander.Header>
                                         <StackPanel Orientation="Horizontal" Spacing="4">
                                             <TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="Items" />
