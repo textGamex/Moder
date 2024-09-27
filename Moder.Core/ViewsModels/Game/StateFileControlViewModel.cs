@@ -193,13 +193,4 @@ public sealed partial class StateFileControlViewModel : ObservableObject
 
         node.AllArray = list.ToArray();
     }
-
-    // private Node SaveToNode(IEnumerable<ObservableGameValue> items)
-    // {
-    //     var rootNode = new Node(_fileItem.Name);
-    //     foreach (var item in items)
-    //     {
-    //
-    //     }
-    // }
 }
