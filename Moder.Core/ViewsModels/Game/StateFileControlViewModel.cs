@@ -70,28 +70,7 @@ public sealed partial class StateFileControlViewModel : ObservableObject
             if (child.IsLeafChild)
             {
                 var leaf = child.leaf;
-                LeafVo leafVo;
-                if (leaf.Key.Equals("state_category", StringComparison.OrdinalIgnoreCase))
-                {
-                    leafVo = new StateCategoryLeafVo(leaf.Key, leaf.Value, nodeVo);
-                }
-                // 当父节点是 buildings 时, 子节点就可以为建筑物, 在这里, node 即为 leaf 的父节点
-                else if (
-                    node.Key.Equals("buildings", StringComparison.OrdinalIgnoreCase)
-                    && _gameResourcesService.Buildings.Contains(leaf.Key)
-                )
-                {
-                    leafVo = new BuildingLeafVo(leaf.Key, leaf.Value, nodeVo);
-                }
-                else if (leaf.Key.Equals("name", StringComparison.OrdinalIgnoreCase))
-                {
-                    leafVo = new StateNameLeafVo(leaf.Key, leaf.Value, nodeVo);
-                }
-                else
-                {
-                    leafVo = new LeafVo(leaf.Key, leaf.Value, nodeVo);
-                }
-
+                var leafVo = GetSpecificLeafVo(nodeVo, leaf);
                 nodeVo.Add(leafVo);
             }
 
@@ -117,6 +96,36 @@ public sealed partial class StateFileControlViewModel : ObservableObject
             //     var comment = child.comment;
             // }
         }
+    }
+
+    private LeafVo GetSpecificLeafVo(NodeVo nodeVo, Leaf leaf)
+    {
+        LeafVo leafVo;
+        if (leaf.Key.Equals("state_category", StringComparison.OrdinalIgnoreCase))
+        {
+            leafVo = new StateCategoryLeafVo(leaf.Key, leaf.Value, nodeVo);
+        }
+        // 当父节点是 buildings 时, 子节点就可以为建筑物, 在这里, nodeVo 即为 leaf 的父节点
+        else if (
+            (
+                nodeVo.Key.Equals("buildings", StringComparison.OrdinalIgnoreCase)
+                // province 中的建筑物
+                || nodeVo.Parent?.Key.Equals("buildings", StringComparison.OrdinalIgnoreCase) == true
+            ) && _gameResourcesService.Buildings.Contains(leaf.Key)
+        )
+        {
+            leafVo = new BuildingLeafVo(leaf.Key, leaf.Value, nodeVo);
+        }
+        else if (leaf.Key.Equals("name", StringComparison.OrdinalIgnoreCase))
+        {
+            leafVo = new StateNameLeafVo(leaf.Key, leaf.Value, nodeVo);
+        }
+        else
+        {
+            leafVo = new LeafVo(leaf.Key, leaf.Value, nodeVo);
+        }
+
+        return leafVo;
     }
 
     [RelayCommand]
