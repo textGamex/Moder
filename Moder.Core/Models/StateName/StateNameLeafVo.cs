@@ -17,9 +17,5 @@ public sealed partial class StateNameLeafVo(string key, Types.Value value, NodeV
         }
     }
 
-    public string LocalisedName => Localisation.GetValue(Value);
-
-    private static readonly LocalisationService Localisation = App
-        .Current.Services.GetRequiredService<GameResourcesService>()
-        .Localisation;
+    public string LocalisedName => LocalisationService.GetValue(Value);
 }
