@@ -17,6 +17,12 @@
 
     <UserControl.Resources>
 
+        <Style x:Key="TextBlockGameDescriptionStyle" TargetType="TextBlock">
+            <Style.Setters>
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style.Setters>
+        </Style>
+
         <local:StateFileDataTemplateSelector x:Key="StateFileDataTemplateSelector">
             <local:StateFileDataTemplateSelector.Leaf>
                 <DataTemplate x:DataType="vo:LeafVo">
@@ -137,7 +143,7 @@
                                     </AutoSuggestBox.ItemTemplate>
                                 </AutoSuggestBox>
 
-                                <TextBlock VerticalAlignment="Center" Text="{x:Bind StateCategoryUiDescription, Mode=OneWay}" />
+                                <TextBlock Style="{StaticResource TextBlockGameDescriptionStyle}" Text="{x:Bind StateCategoryUiDescription, Mode=OneWay}" />
                             </StackPanel>
 
                         </controls:BaseLeaf.SlotContent>
@@ -167,8 +173,8 @@
                         <controls:BaseLeaf.SlotContent>
 
                             <StackPanel Orientation="Horizontal" Spacing="4">
-                                <TextBox VerticalAlignment="Center" Text="{x:Bind Value, Mode=TwoWay}" />
-                                <TextBlock VerticalAlignment="Center" Text="{x:Bind LocalisedName, Mode=OneWay}" />
+                                <TextBox Margin="0,4" Text="{x:Bind Value, Mode=TwoWay}" />
+                                <TextBlock Style="{StaticResource TextBlockGameDescriptionStyle}" Text="{x:Bind LocalisedName, Mode=OneWay}" />
                             </StackPanel>
 
                         </controls:BaseLeaf.SlotContent>
@@ -182,7 +188,7 @@
                         <controls:BaseLeaf.SlotContent>
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <TextBox Margin="0,4" Text="{x:Bind Value, Mode=TwoWay}" />
-                                <TextBlock VerticalAlignment="Center" Text="{x:Bind CountryName, Mode=OneWay}" />
+                                <TextBlock Style="{StaticResource TextBlockGameDescriptionStyle}" Text="{x:Bind CountryName, Mode=OneWay}" />
                             </StackPanel>
                         </controls:BaseLeaf.SlotContent>
                     </controls:BaseLeaf>
