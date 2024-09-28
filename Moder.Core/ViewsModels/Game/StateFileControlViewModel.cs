@@ -102,7 +102,7 @@ public sealed partial class StateFileControlViewModel : ObservableObject
     // TODO: 写成配置文件
     private static readonly string[] CountryTagKeywords = ["add_core_of", "owner", "add_claim_by"];
 
-    private LeafVo GetSpecificLeafVo(NodeVo nodeVo, Leaf leaf)
+    private LeafVo GetSpecificLeafVo(NodeVo parentNodeVo, Leaf leaf)
     {
         LeafVo leafVo;
 
@@ -113,30 +113,34 @@ public sealed partial class StateFileControlViewModel : ObservableObject
             )
         )
         {
-            leafVo = new CountryTagLeafVo(leaf.Key, leaf.Value, nodeVo);
+            leafVo = new CountryTagLeafVo(leaf.Key, leaf.Value, parentNodeVo);
         }
         else if (leaf.Key.Equals("name", StringComparison.OrdinalIgnoreCase))
         {
-            leafVo = new StateNameLeafVo(leaf.Key, leaf.Value, nodeVo);
+            leafVo = new StateNameLeafVo(leaf.Key, leaf.Value, parentNodeVo);
+        }
+        else if (parentNodeVo.Key.Equals("resources", StringComparison.OrdinalIgnoreCase))
+        {
+            leafVo = new ResourcesLeafVo(leaf.Key, leaf.Value, parentNodeVo);
         }
         else if (leaf.Key.Equals("state_category", StringComparison.OrdinalIgnoreCase))
         {
-            leafVo = new StateCategoryLeafVo(leaf.Key, leaf.Value, nodeVo);
+            leafVo = new StateCategoryLeafVo(leaf.Key, leaf.Value, parentNodeVo);
         }
         // 当父节点是 buildings 时, 子节点就可以为建筑物, 在这里, nodeVo 即为 leaf 的父节点
         else if (
             (
-                nodeVo.Key.Equals("buildings", StringComparison.OrdinalIgnoreCase)
+                parentNodeVo.Key.Equals("buildings", StringComparison.OrdinalIgnoreCase)
                 // province 中的建筑物
-                || nodeVo.Parent?.Key.Equals("buildings", StringComparison.OrdinalIgnoreCase) == true
+                || parentNodeVo.Parent?.Key.Equals("buildings", StringComparison.OrdinalIgnoreCase) == true
             ) && _gameResourcesService.Buildings.Contains(leaf.Key)
         )
         {
-            leafVo = new BuildingLeafVo(leaf.Key, leaf.Value, nodeVo);
+            leafVo = new BuildingLeafVo(leaf.Key, leaf.Value, parentNodeVo);
         }
         else
         {
-            leafVo = new LeafVo(leaf.Key, leaf.Value, nodeVo);
+            leafVo = new LeafVo(leaf.Key, leaf.Value, parentNodeVo);
         }
 
         return leafVo;

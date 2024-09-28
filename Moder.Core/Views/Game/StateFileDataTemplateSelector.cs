@@ -20,6 +20,7 @@ public partial class StateFileDataTemplateSelector : DataTemplateSelector
     public DataTemplate BuildingLeaf { get; set; } = null!;
     public DataTemplate NameLeaf { get; set; } = null!;
     public DataTemplate CountryTagLeaf { get; set; } = null!;
+    public DataTemplate ResourcesLeaf { get; set; } = null!;
 
     protected override DataTemplate SelectTemplateCore(object item)
     {
@@ -31,6 +32,7 @@ public partial class StateFileDataTemplateSelector : DataTemplateSelector
             StateNameLeafVo => NameLeaf,
             BuildingLeafVo => BuildingLeaf,
             CountryTagLeafVo => CountryTagLeaf,
+            ResourcesLeafVo => ResourcesLeaf,
 
             NodeVo => Node,
             LeafVo => Leaf,

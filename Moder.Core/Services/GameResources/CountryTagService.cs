@@ -19,8 +19,8 @@ public sealed class CountryTagService
     public CountryTagService(IEnumerable<string> filePaths)
     {
         _logger = App.Current.Services.GetRequiredService<ILogger<CountryTagService>>();
-        var countryTags = new HashSet<string>();
 
+        var countryTags = new HashSet<string>(256);
         foreach (var filePath in filePaths)
         {
             if (!TextParser.TryParse(filePath, out var rootNode, out var error))

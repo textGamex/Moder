@@ -155,13 +155,16 @@
                 <DataTemplate x:DataType="vo:BuildingLeafVo">
                     <controls:BaseLeaf LeafContext="{x:Bind}">
                         <controls:BaseLeaf.SlotContent>
-                            <NumberBox
-                                Margin="0,4"
-                                HorizontalAlignment="Left"
-                                Maximum="{x:Bind MaxBuildingLevel}"
-                                PlaceholderText="建筑等级"
-                                SpinButtonPlacementMode="Inline"
-                                Value="{x:Bind BuildingLevel, Mode=TwoWay}" />
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <NumberBox
+                                    Margin="0,4"
+                                    HorizontalAlignment="Left"
+                                    Maximum="{x:Bind MaxBuildingLevel}"
+                                    PlaceholderText="建筑等级"
+                                    SpinButtonPlacementMode="Inline"
+                                    Value="{x:Bind BuildingLevel, Mode=TwoWay}" />
+                                <TextBlock Style="{StaticResource TextBlockGameDescriptionStyle}" Text="{x:Bind BuildingName, Mode=OneWay}" />
+                            </StackPanel>
                         </controls:BaseLeaf.SlotContent>
                     </controls:BaseLeaf>
                 </DataTemplate>
@@ -198,6 +201,21 @@
                     </controls:BaseLeaf>
                 </DataTemplate>
             </local:StateFileDataTemplateSelector.CountryTagLeaf>
+
+            <local:StateFileDataTemplateSelector.ResourcesLeaf>
+                <DataTemplate x:DataType="vo:ResourcesLeafVo">
+                    <controls:BaseLeaf LeafContext="{x:Bind}">
+                        <controls:BaseLeaf.SlotContent>
+
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <NumberBox Margin="0,4" Value="{x:Bind Amount, Mode=TwoWay}" />
+                                <TextBlock Style="{StaticResource TextBlockGameDescriptionStyle}" Text="{x:Bind Name}" />
+                            </StackPanel>
+
+                        </controls:BaseLeaf.SlotContent>
+                    </controls:BaseLeaf>
+                </DataTemplate>
+            </local:StateFileDataTemplateSelector.ResourcesLeaf>
         </local:StateFileDataTemplateSelector>
     </UserControl.Resources>
 
