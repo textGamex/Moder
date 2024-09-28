@@ -1,6 +1,4 @@
-﻿using System.IO;
-using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.UI.Xaml.Controls;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Moder.Core.Services.Config;
 
 namespace Moder.Core.ViewsModels.Menus;

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Moder.Core.Services;
 using Moder.Core.Services.GameResources;
 using ParadoxPower.Parser;
 
