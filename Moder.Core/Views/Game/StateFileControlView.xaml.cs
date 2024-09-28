@@ -63,7 +63,7 @@ public sealed partial class StateFileControlView
     private string[] SearchCountryTag(string query)
     {
         var countryTags = _gameResourcesService.CountryTagsService.CountryTags;
-        if (query.Length == 0)
+        if (string.IsNullOrWhiteSpace(query))
         {
             return countryTags.ToArray();
         }
