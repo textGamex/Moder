@@ -1,23 +1,30 @@
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Moder.Core.Messages;
 using Moder.Core.Services.Config;
+using Moder.Core.Views;
 using Moder.Core.Views.Game;
 using Moder.Core.Views.Menus;
 using Moder.Core.ViewsModels.Menus;
+using Windows.Foundation.Collections;
 
 namespace Moder.Core;
 
 public sealed partial class MainWindow : Window
 {
+    public MainWindowViewModel ViewModel { get; }
+
     private readonly GlobalSettingService _settings;
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<MainWindow> _logger;
-    public MainWindowViewModel ViewModel { get; }
+    private readonly List<SystemFileItem> _openedTabFileItems = new(16);
+    private SystemFileItem? _latestFileItem;
 
     public MainWindow(
         MainWindowViewModel model,
@@ -37,24 +44,55 @@ public sealed partial class MainWindow : Window
 
         if (string.IsNullOrEmpty(settings.ModRootFolderPath))
         {
-            SideContentControl.Content = serviceProvider.GetRequiredService<OpenFolderControlView>();
+            SideContentControl.Content = _serviceProvider.GetRequiredService<OpenFolderControlView>();
         }
         else
         {
-            SideContentControl.Content = serviceProvider.GetRequiredService<SideWorkSpaceControlView>();
+            SideContentControl.Content = _serviceProvider.GetRequiredService<SideWorkSpaceControlView>();
         }
 
         WeakReferenceMessenger.Default.Register<CompleteWorkFolderSelectMessage>(
             this,
-            (_, _) => SideContentControl.Content = serviceProvider.GetRequiredService<SideWorkSpaceControlView>()
+            (_, _) => SideContentControl.Content = _serviceProvider.GetRequiredService<SideWorkSpaceControlView>()
         );
         WeakReferenceMessenger.Default.Register<OpenFileMessage>(
             this,
-            (_, message) => MainFrame.Content = GetContent(message.FileItem)
+            (_, message) =>
+            {
+                _latestFileItem = message.FileItem;
+
+                var content = GetContent(message.FileItem);
+                var openTab = MainTabView.TabItems.FirstOrDefault(item =>
+                {
+                    if (item is not TabViewItem tabViewItem)
+                    {
+                        return false;
+                    }
+
+                    var view = tabViewItem.Content as IFileView;
+                    return view?.FullPath == message.FileItem.FullPath;
+                });
+
+                if (openTab is null)
+                {
+                    // 打开新的标签页
+                    var newTab = new TabViewItem { Content = content, Header = message.FileItem.Name };
+                    ToolTipService.SetToolTip(newTab, message.FileItem.FullPath);
+                    MainTabView.TabItems.Add(newTab);
+                    MainTabView.SelectedItem = newTab;
+
+                    _openedTabFileItems.Add(message.FileItem);
+                }
+                else
+                {
+                    // 切换到已打开的标签页
+                    MainTabView.SelectedItem = openTab;
+                }
+            }
         );
     }
 
-    private object GetContent(SystemFileItem fileItem)
+    private IFileView GetContent(SystemFileItem fileItem)
     {
         var relativePath = Path.GetRelativePath(_settings.ModRootFolderPath, fileItem.FullPath);
         if (relativePath.Contains("states"))
@@ -62,7 +100,7 @@ public sealed partial class MainWindow : Window
             return _serviceProvider.GetRequiredService<StateFileControlView>();
         }
 
-        return "暂不支持此类型文件";
+        return _serviceProvider.GetRequiredService<NotSupportInfoControlView>();
     }
 
     private void MainWindow_OnClosed(object sender, WindowEventArgs args)
@@ -70,5 +108,31 @@ public sealed partial class MainWindow : Window
         _logger.LogInformation("配置文件保存中...");
         _settings.Save();
         _logger.LogInformation("配置文件保存完成");
+    }
+
+    private void MainTabView_OnTabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
+    {
+        sender.TabItems.Remove(args.Tab);
+
+        var fileView = (IFileView)args.Tab.Content;
+        _openedTabFileItems.RemoveAt(_openedTabFileItems.FindIndex(item => item.FullPath == fileView.FullPath));
+    }
+
+    private void MainTabView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var currentTab = MainTabView.SelectedItem as TabViewItem;
+        if (currentTab?.Content is not IFileView currentFileView)
+        {
+            _logger.LogWarning("Tab内容为空");
+            return;
+        }
+
+        Debug.Assert(_latestFileItem is not null, "当前文件为空");
+        if (_latestFileItem?.FullPath != currentFileView.FullPath)
+        {
+            var target = _openedTabFileItems.Find(item => item.FullPath == currentFileView.FullPath);
+            Debug.Assert(target is not null, "在标签文件缓存列表中未找到目标文件");
+            WeakReferenceMessenger.Default.Send(new SyncSideWorkSelectedItemMessage(target));
+        }
     }
 }

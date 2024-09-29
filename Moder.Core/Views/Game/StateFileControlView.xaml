@@ -12,7 +12,6 @@
     xmlns:vms="using:Moder.Core.ViewsModels.Game"
     xmlns:vo="using:Moder.Core.Models.Vo"
     d:DataContext="{d:DesignInstance vms:StateFileControlViewModel}"
-    Unloaded="StateFileControlView_OnUnloaded"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -221,26 +220,20 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock
-            Grid.Row="0"
-            HorizontalAlignment="Center"
-            Style="{StaticResource TitleTextBlockStyle}"
-            Text="{x:Bind ViewModel.Title}" />
 
         <TreeView
             x:Name="TreeView"
-            Grid.Row="1"
+            Grid.Row="0"
             ItemTemplateSelector="{StaticResource StateFileDataTemplateSelector}"
             ItemsSource="{Binding Items}"
             SelectionMode="None" />
 
         <Button
-            Grid.Row="2"
+            Grid.Row="1"
             HorizontalAlignment="Center"
             Command="{x:Bind ViewModel.SaveDataCommand}"
             Content="Save" />

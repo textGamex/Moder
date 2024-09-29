@@ -8,6 +8,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Moder.Core"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="using:Moder.Core.Views"
     Closed="MainWindow_OnClosed"
     mc:Ignorable="d">
 
@@ -60,7 +61,12 @@
                 Grid.Column="1"
                 Cursor="SizeWestEast"
                 TargetControl="{x:Bind SideContentControl}" />
-            <Frame x:Name="MainFrame" Grid.Column="2" />
+            <TabView
+                x:Name="MainTabView"
+                Grid.Column="2"
+                IsAddTabButtonVisible="False"
+                SelectionChanged="MainTabView_OnSelectionChanged"
+                TabCloseRequested="MainTabView_OnTabCloseRequested" />
         </Grid>
     </Grid>
 

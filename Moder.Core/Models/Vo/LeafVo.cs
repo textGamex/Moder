@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Extensions;
 using Moder.Core.Helper;
 using Moder.Core.Services.GameResources;
@@ -35,4 +36,9 @@ public partial class LeafVo : ObservableGameValue
     {
         return ValueConverterHelper.ToValueType(Type, Value);
     }
+
+    // ~LeafVo()
+    // {
+    //     Debug.WriteLine($"LeafVo Finalized");
+    // }
 }

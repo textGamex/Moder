@@ -9,10 +9,13 @@ using Moder.Core.ViewsModels.Game;
 
 namespace Moder.Core.Views.Game;
 
-public sealed partial class StateFileControlView
+public sealed partial class StateFileControlView : IFileView
 {
-    private readonly GameResourcesService _gameResourcesService;
+    public string Title => ViewModel.Title;
+    public string FullPath => ViewModel.FullPath;
     public StateFileControlViewModel ViewModel => (StateFileControlViewModel)DataContext;
+
+    private readonly GameResourcesService _gameResourcesService;
 
     public StateFileControlView(StateFileControlViewModel model, GameResourcesService gameResourcesService)
     {
@@ -42,12 +45,6 @@ public sealed partial class StateFileControlView
 
         var stateCategory = (StateCategory)args.SelectedItem;
         sender.Text = stateCategory.TypeName;
-    }
-
-    private void StateFileControlView_OnUnloaded(object sender, RoutedEventArgs e)
-    {
-        TreeView.ItemsSource = null;
-        Bindings.StopTracking();
     }
 
     private void CountryTagAutoSuggestBox_OnTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)

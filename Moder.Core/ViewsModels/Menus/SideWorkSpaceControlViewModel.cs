@@ -5,7 +5,8 @@ namespace Moder.Core.ViewsModels.Menus;
 
 public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
 {
-	[ObservableProperty] private IEnumerable<SystemFileItem>? _items;
+	[ObservableProperty]
+	private IEnumerable<SystemFileItem>? _items;
 
 	public SideWorkSpaceControlViewModel(GlobalSettingService globalSettings)
 	{

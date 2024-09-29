@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Core.Services.GameResources;
+using Moder.Core.Views;
 using Moder.Core.Views.Game;
 using Moder.Core.Views.Menus;
 using Moder.Core.ViewsModels.Game;
@@ -41,6 +42,7 @@ public static partial class Program
 		builder.Services.AddSingleton<SideWorkSpaceControlViewModel>();
 		builder.Services.AddTransient<StateFileControlView>();
 		builder.Services.AddTransient<StateFileControlViewModel>();
+		builder.Services.AddTransient<NotSupportInfoControlView>();
 
 		builder.Services.AddSingleton<GlobalSettingService>(_ => GlobalSettingService.Load());
 		builder.Services.AddSingleton<GlobalResourceService>();

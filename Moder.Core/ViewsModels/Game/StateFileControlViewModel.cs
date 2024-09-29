@@ -21,6 +21,7 @@ public sealed partial class StateFileControlViewModel : ObservableObject
 {
     public IReadOnlyList<ObservableGameValue> Items => _rootNodeVo.Children;
     public string Title => _fileItem.Name;
+    public string FullPath => _fileItem.FullPath;
     public bool IsSuccess { get; }
 
     private readonly NodeVo _rootNodeVo = new("Root", null);
