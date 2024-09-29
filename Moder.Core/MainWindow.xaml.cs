@@ -62,7 +62,7 @@ public sealed partial class MainWindow : Window
                 _latestFileItem = message.FileItem;
 
                 var content = GetContent(message.FileItem);
-                var openTab = MainTabView.TabItems.FirstOrDefault(item =>
+                var openedTab = MainTabView.TabItems.FirstOrDefault(item =>
                 {
                     if (item is not TabViewItem tabViewItem)
                     {
@@ -73,7 +73,7 @@ public sealed partial class MainWindow : Window
                     return view?.FullPath == message.FileItem.FullPath;
                 });
 
-                if (openTab is null)
+                if (openedTab is null)
                 {
                     // 打开新的标签页
                     var newTab = new TabViewItem { Content = content, Header = message.FileItem.Name };
@@ -86,7 +86,7 @@ public sealed partial class MainWindow : Window
                 else
                 {
                     // 切换到已打开的标签页
-                    MainTabView.SelectedItem = openTab;
+                    MainTabView.SelectedItem = openedTab;
                 }
             }
         );
