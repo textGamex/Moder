@@ -12,6 +12,8 @@ public partial class StateFileDataTemplateSelector : DataTemplateSelector
     // 每个 DataTemplate 都需要在 XAML 中声明
     public DataTemplate Node { get; set; } = null!;
     public DataTemplate Leaf { get; set; } = null!;
+    public DataTemplate IntLeaf { get; set; } = null!;
+    public DataTemplate FloatLeaf { get; set; } = null!;
     public DataTemplate LeafValues { get; set; } = null!;
     public DataTemplate StateCategoryLeaf { get; set; } = null!;
     public DataTemplate BuildingLeaf { get; set; } = null!;
@@ -30,6 +32,8 @@ public partial class StateFileDataTemplateSelector : DataTemplateSelector
             BuildingLeafVo => BuildingLeaf,
             CountryTagLeafVo => CountryTagLeaf,
             ResourcesLeafVo => ResourcesLeaf,
+            IntLeafVo => IntLeaf,
+            FloatLeafVo => FloatLeaf,
 
             NodeVo => Node,
             LeafVo => Leaf,

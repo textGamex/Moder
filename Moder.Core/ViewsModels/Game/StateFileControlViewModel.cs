@@ -141,7 +141,18 @@ public sealed partial class StateFileControlViewModel : ObservableObject
         }
         else
         {
-            leafVo = new LeafVo(leaf.Key, leaf.Value, parentNodeVo);
+            if (leaf.Value.IsInt)
+            {
+                leafVo = new IntLeafVo(leaf.Key, leaf.Value, parentNodeVo);
+            }
+            else if (leaf.Value.IsFloat)
+            {
+                leafVo = new FloatLeafVo(leaf.Key, leaf.Value, parentNodeVo);
+            }
+            else
+            {
+                leafVo = new LeafVo(leaf.Key, leaf.Value, parentNodeVo);
+            }
         }
 
         return leafVo;

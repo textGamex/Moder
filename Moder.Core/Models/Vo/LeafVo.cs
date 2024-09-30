@@ -12,7 +12,7 @@ public partial class LeafVo : ObservableGameValue
     public virtual string Value
     {
         get => LeafValue;
-        set => SetProperty(ref this.LeafValue, value);
+        set => SetProperty(ref LeafValue, value);
     }
     protected string LeafValue;
 

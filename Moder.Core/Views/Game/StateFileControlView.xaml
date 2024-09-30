@@ -39,6 +39,34 @@
                 </DataTemplate>
             </local:StateFileDataTemplateSelector.Leaf>
 
+            <local:StateFileDataTemplateSelector.IntLeaf>
+                <DataTemplate x:DataType="vo:IntLeafVo">
+                    <controls:BaseLeaf LeafContext="{x:Bind}">
+                        <controls:BaseLeaf.SlotContent>
+                            <NumberBox
+                                Margin="0,4"
+                                HorizontalAlignment="Left"
+                                Value="{x:Bind NumberValue, Mode=TwoWay}" />
+                        </controls:BaseLeaf.SlotContent>
+                    </controls:BaseLeaf>
+                </DataTemplate>
+            </local:StateFileDataTemplateSelector.IntLeaf>
+
+            <local:StateFileDataTemplateSelector.FloatLeaf>
+                <DataTemplate x:DataType="vo:FloatLeafVo">
+
+                    <controls:BaseLeaf LeafContext="{x:Bind}">
+                        <controls:BaseLeaf.SlotContent>
+                            <NumberBox
+                                Margin="0,4"
+                                HorizontalAlignment="Left"
+                                Value="{x:Bind NumberValue, Mode=TwoWay}" />
+                        </controls:BaseLeaf.SlotContent>
+                    </controls:BaseLeaf>
+
+                </DataTemplate>
+            </local:StateFileDataTemplateSelector.FloatLeaf>
+
             <local:StateFileDataTemplateSelector.LeafValues>
 
                 <DataTemplate x:DataType="vo:LeafValuesVo">
@@ -207,7 +235,10 @@
                         <controls:BaseLeaf.SlotContent>
 
                             <StackPanel Orientation="Horizontal" Spacing="4">
-                                <NumberBox Margin="0,4" Value="{x:Bind Amount, Mode=TwoWay}" />
+                                <NumberBox
+                                    Margin="0,4"
+                                    ValidationMode="InvalidInputOverwritten"
+                                    Value="{x:Bind Amount, Mode=TwoWay}" />
                                 <TextBlock Style="{StaticResource TextBlockGameDescriptionStyle}" Text="{x:Bind Name}" />
                             </StackPanel>
 
