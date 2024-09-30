@@ -5,19 +5,8 @@ using ParadoxPower.Parser;
 // ReSharper disable once CheckNamespace
 namespace Moder.Core.Models.Vo;
 
-public partial class BuildingLeafVo(string key, Types.Value value, NodeVo? parent) : LeafVo(key, value, parent)
+public partial class BuildingLeafVo(string key, Types.Value value, NodeVo? parent) : IntLeafVo(key, value, parent)
 {
-    public byte BuildingLevel
-    {
-        get => _buildingLevel;
-        set
-        {
-            SetProperty(ref _buildingLevel, value);
-            Value = value.ToString();
-        }
-    }
-    private byte _buildingLevel = byte.TryParse(value.ToRawString(), out var level) ? level : (byte)0;
-
     public string BuildingName => $"{LocalisationService.GetValue(Key)} 最大等级: {MaxBuildingLevel}";
     public byte MaxBuildingLevel => GetMaxBuildingLevel();
 
