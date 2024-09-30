@@ -101,7 +101,7 @@ public sealed partial class StateFileControlViewModel : ObservableObject
     }
 
     // TODO: 写成配置文件
-    private static readonly string[] CountryTagKeywords = ["add_core_of", "owner", "add_claim_by"];
+    private static readonly string[] CountryTagKeywords = ["add_core_of", "owner", "add_claim_by", "controller"];
 
     private LeafVo GetSpecificLeafVo(NodeVo parentNodeVo, Leaf leaf)
     {
