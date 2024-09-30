@@ -25,7 +25,7 @@
 		<WindowsPackageType>None</WindowsPackageType>
 		<!-- 防止用户电脑上未安装 WindowsAppSDK -->
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
-		<PublishSingleFile>true</PublishSingleFile>
+		<!-- <PublishSingleFile>true</PublishSingleFile> -->
 		<SelfContained>true</SelfContained>
 		<TrimMode>full</TrimMode>
 		<!-- <PublishReadyToRun>false</PublishReadyToRun> -->
