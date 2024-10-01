@@ -115,6 +115,11 @@ public sealed partial class MainWindow : Window
 
         var fileView = (IFileView)args.Tab.Content;
         _openedTabFileItems.RemoveAt(_openedTabFileItems.FindIndex(item => item.FullPath == fileView.FullPath));
+
+        if (sender.TabItems.Count == 0)
+        {
+            WeakReferenceMessenger.Default.Send(new SyncSideWorkSelectedItemMessage(null));
+        }
     }
 
     private void MainTabView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

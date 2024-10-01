@@ -2,4 +2,4 @@
 
 namespace Moder.Core.Messages;
 
-public record SyncSideWorkSelectedItemMessage(SystemFileItem TargetItem);
+public record SyncSideWorkSelectedItemMessage(SystemFileItem? TargetItem);
