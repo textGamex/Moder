@@ -127,11 +127,29 @@
                 <DataTemplate x:DataType="vo:NodeVo">
                     <TreeViewItem IsExpanded="True" ItemsSource="{x:Bind Children}">
                         <TreeViewItem.Content>
-                            <StackPanel Orientation="Horizontal" Spacing="4">
-                                <TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="{x:Bind Key}" />
-                                <Button Content="+" />
-                                <Button Command="{x:Bind RemoveSelfInParentCommand}" Content="-" />
-                            </StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource BodyTextBlockStyle}"
+                                    Text="{x:Bind Key}" />
+                                <StackPanel
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal"
+                                    Spacing="4">
+                                    <Button Content="+" />
+                                    <Button
+                                        Margin="0,0,11,0"
+                                        Command="{x:Bind RemoveSelfInParentCommand}"
+                                        Content="-" />
+                                </StackPanel>
+                            </Grid>
                         </TreeViewItem.Content>
                     </TreeViewItem>
                 </DataTemplate>
