@@ -18,10 +18,22 @@ public sealed partial class LeafValuesVo : ObservableGameValue
         Type = values.First().Value.ToLocalValueType();
     }
 
-    public LeafValuesVo(string key, IEnumerable<string> values, GameValueType type, NodeVo parent) : base(key, parent)
+    /// <summary>
+    /// values 必须至少有一个值
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="values"></param>
+    /// <param name="parent"></param>
+    public LeafValuesVo(string key, IReadOnlyCollection<string> values, NodeVo parent)
+        : base(key, parent)
     {
+        if (values.Count < 1)
+        {
+            throw new ArgumentException("values 必须至少有一个值");
+        }
+
         Values = new ObservableCollection<string>(values);
-        Type = type;
+        Type = GameValueTypeConverterHelper.GetTypeForString(Values[0]);
     }
 
     public Child[] ToLeafValues()

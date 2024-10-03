@@ -2,6 +2,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Moder.Core.Models;
+using Moder.Core.Models.Vo;
 
 // ReSharper disable once CheckNamespace
 namespace Moder.Core.Controls;
@@ -50,6 +51,19 @@ public sealed partial class BaseLeaf : Control
         new PropertyMetadata(null)
     );
 
+    public static readonly DependencyProperty GameVoTypeProperty = DependencyProperty.Register(
+        nameof(GameVoType),
+        typeof(GameVoType[]),
+        typeof(BaseLeaf),
+        new PropertyMetadata(null)
+    );
+
+    public GameVoType[] GameVoType
+    {
+        get => (GameVoType[])GetValue(GameVoTypeProperty);
+        private set => SetValue(GameVoTypeProperty, value);
+    }
+
     public ObservableGameValue? LeafContext
     {
         get => (ObservableGameValue?)GetValue(LeafContextProperty);
@@ -59,7 +73,6 @@ public sealed partial class BaseLeaf : Control
             if (value is not null)
             {
                 // 应该用 SetCurrentValue 吗?
-                // AddCommand = value.AddCommand;
                 RemoveCommand = value.RemoveSelfInParentCommand;
                 AddCommand = value.AddAdjacentValueCommand;
                 Type = value.TypeString;
@@ -101,5 +114,6 @@ public sealed partial class BaseLeaf : Control
     public BaseLeaf()
     {
         DefaultStyleKey = typeof(BaseLeaf);
+        GameVoType = Enum.GetValues<GameVoType>();
     }
 }

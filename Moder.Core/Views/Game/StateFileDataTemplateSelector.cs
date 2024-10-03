@@ -10,7 +10,6 @@ namespace Moder.Core.Views.Game;
 public partial class StateFileDataTemplateSelector : DataTemplateSelector
 {
     // 每个 DataTemplate 都需要在 XAML 中声明
-    public DataTemplate EditableGameValue { get; set; } = null!;
     public DataTemplate Node { get; set; } = null!;
     public DataTemplate Leaf { get; set; } = null!;
     public DataTemplate IntLeaf { get; set; } = null!;
@@ -36,7 +35,6 @@ public partial class StateFileDataTemplateSelector : DataTemplateSelector
             IntLeafVo => IntLeaf,
             FloatLeafVo => FloatLeaf,
 
-            EditableGameValueVo => EditableGameValue,
             NodeVo => Node,
             LeafVo => Leaf,
             LeafValuesVo => LeafValues,

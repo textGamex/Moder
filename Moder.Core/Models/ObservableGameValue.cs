@@ -6,7 +6,6 @@ using CommunityToolkit.WinUI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml.Controls;
-using Moder.Core.Helper;
 using Moder.Core.Models.Vo;
 using Moder.Core.Services;
 
@@ -19,6 +18,7 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
     public NodeVo? Parent { get; } = parent;
     protected GameValueType Type { get; init; }
     public string TypeString => Type.ToString();
+    public GameVoType[] VoTypes => Enum.GetValues<GameVoType>();
 
     public IRelayCommand RemoveSelfInParentCommand =>
         _removeSelfInParentCommand ??= new RelayCommand(RemoveSelfInParent);
@@ -27,7 +27,7 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
     private static readonly ILogger<ObservableGameValue> Logger = App.Current.Services.GetRequiredService<
         ILogger<ObservableGameValue>
     >();
-    private static readonly LeafConverterService ConverterService =
+    protected static readonly LeafConverterService ConverterService =
         App.Current.Services.GetRequiredService<LeafConverterService>();
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -46,10 +46,10 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
 
         Parent.Remove(this);
         // 如果父节点下没有其他子节点，则删除父节点
-        if (Parent.Children.Count == 0 && Parent.Parent is not null)
-        {
-            Parent.Parent.Remove(Parent);
-        }
+        // if (Parent.Children.Count == 0 && Parent.Parent is not null)
+        // {
+        //     Parent.Parent.Remove(Parent);
+        // }
     }
 
     [RelayCommand]
@@ -75,9 +75,9 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
 
         var newKeyword = addedKeywordTextBox.Text;
         var newValue = addedValueTextBox.Text;
-        var voType = (string)((ComboBoxItem)typeComboBox.SelectedItem).Content;
+        var voType = (GameVoType)typeComboBox.SelectedItem;
 
-        if (string.IsNullOrWhiteSpace(newKeyword) || (voType == "Leaf" && string.IsNullOrWhiteSpace(newValue)))
+        if (string.IsNullOrWhiteSpace(newKeyword) || (voType == GameVoType.Leaf && string.IsNullOrWhiteSpace(newValue)))
         {
             Logger.LogWarning("添加相邻节点失败, 输入值为空");
             return;
@@ -86,13 +86,12 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
         var index = Parent.Children.IndexOf(this) + 1;
         ObservableGameValue newObservableGameValue = voType switch
         {
-            "Node" => new NodeVo(newKeyword, Parent),
-            "Leaf" => ConverterService.GetSpecificLeafVo(newKeyword, newValue, Parent),
-            "LeafValues"
+            GameVoType.Node => new NodeVo(newKeyword, Parent),
+            GameVoType.Leaf => ConverterService.GetSpecificLeafVo(newKeyword, newValue, Parent),
+            GameVoType.LeafValues
                 => new LeafValuesVo(
                     newKeyword,
                     [newValue],
-                    GameValueTypeConverterHelper.GetTypeForString(newValue),
                     Parent
                 ),
             _ => throw new ArgumentOutOfRangeException()
