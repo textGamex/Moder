@@ -15,6 +15,7 @@
         x:Name="FileTreeView"
         MinWidth="70"
         VerticalContentAlignment="Stretch"
+        CanReorderItems="False"
         ItemsSource="{x:Bind ViewModel.Items}"
         SelectionChanged="FileTreeView_OnSelectionChanged">
         <TreeView.ItemTemplate>
