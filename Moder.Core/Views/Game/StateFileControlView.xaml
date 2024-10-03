@@ -23,6 +23,39 @@
         </Style>
 
         <local:StateFileDataTemplateSelector x:Key="StateFileDataTemplateSelector">
+            <local:StateFileDataTemplateSelector.EditableGameValue>
+                <DataTemplate x:DataType="vo:EditableGameValueVo">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox
+                            Grid.Column="0"
+                            Loaded="FrameworkElement_OnLoaded"
+                            PlaceholderText="关键字"
+                            Text="{x:Bind Keyword, Mode=TwoWay}" />
+                        <TextBox
+                            Grid.Column="1"
+                            PlaceholderText="值"
+                            Text="{x:Bind Value, Mode=TwoWay}" />
+
+                        <ComboBox Grid.Column="2" ItemsSource="{x:Bind Types}" />
+
+                        <StackPanel
+                            Grid.Column="3"
+                            Orientation="Horizontal"
+                            Spacing="4">
+                            <Button Command="{x:Bind AddValueCommand}" Content="添加" />
+                            <Button Command="{x:Bind CancelCommand}" Content="取消" />
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </local:StateFileDataTemplateSelector.EditableGameValue>
+
             <local:StateFileDataTemplateSelector.Leaf>
                 <DataTemplate x:DataType="vo:LeafVo">
                     <controls:BaseLeaf LeafContext="{x:Bind}">
@@ -143,7 +176,16 @@
                                     HorizontalAlignment="Right"
                                     Orientation="Horizontal"
                                     Spacing="4">
-                                    <Button Content="+" />
+
+                                    <DropDownButton Content="+">
+                                        <DropDownButton.Flyout>
+                                            <MenuFlyout Placement="Bottom">
+                                                <MenuFlyoutItem Command="{x:Bind AddChildNodeCommand}" Text="添加子节点" />
+                                                <MenuFlyoutItem Text="添加相邻节点" />
+                                            </MenuFlyout>
+                                        </DropDownButton.Flyout>
+                                    </DropDownButton>
+
                                     <Button
                                         Margin="0,0,11,0"
                                         Command="{x:Bind RemoveSelfInParentCommand}"

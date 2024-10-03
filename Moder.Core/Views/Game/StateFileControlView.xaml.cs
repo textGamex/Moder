@@ -79,4 +79,10 @@ public sealed partial class StateFileControlView : IFileView
             .OrderByDescending(countryTag => countryTag.StartsWith(query, StringComparison.CurrentCultureIgnoreCase))
             .ToArray();
     }
+
+    private void FrameworkElement_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        var box = sender as TextBox;
+        box!.Focus(FocusState.Pointer);
+    }
 }

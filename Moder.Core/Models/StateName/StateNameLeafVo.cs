@@ -3,7 +3,8 @@
 // ReSharper disable once CheckNamespace
 namespace Moder.Core.Models.Vo;
 
-public sealed partial class StateNameLeafVo(string key, Types.Value value, NodeVo? parent) : LeafVo(key, value, parent)
+public sealed partial class StateNameLeafVo(string key, string value, GameValueType type, NodeVo parent)
+    : LeafVo(key, value, type, parent)
 {
     public override string Value
     {

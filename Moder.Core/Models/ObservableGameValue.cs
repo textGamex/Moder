@@ -2,20 +2,33 @@
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.WinUI;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.UI.Xaml.Controls;
+using Moder.Core.Helper;
 using Moder.Core.Models.Vo;
+using Moder.Core.Services;
 
 namespace Moder.Core.Models;
 
-public abstract class ObservableGameValue(string key, NodeVo? parent) : ObservableObject
+public abstract partial class ObservableGameValue(string key, NodeVo? parent) : ObservableObject
 {
     public string Key { get; } = key;
     public bool IsChanged { get; private set; }
-    public GameValueType Type { get; protected init; }
-    public string TypeString => Type.ToString();
     public NodeVo? Parent { get; } = parent;
+    protected GameValueType Type { get; init; }
+    public string TypeString => Type.ToString();
 
-    public IRelayCommand RemoveSelfInParentCommand => _removeSelfInParentCommand ??= new RelayCommand(RemoveSelfInParent);
+    public IRelayCommand RemoveSelfInParentCommand =>
+        _removeSelfInParentCommand ??= new RelayCommand(RemoveSelfInParent);
     private RelayCommand? _removeSelfInParentCommand;
+
+    private static readonly ILogger<ObservableGameValue> Logger = App.Current.Services.GetRequiredService<
+        ILogger<ObservableGameValue>
+    >();
+    private static readonly LeafConverterService ConverterService =
+        App.Current.Services.GetRequiredService<LeafConverterService>();
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
@@ -37,5 +50,58 @@ public abstract class ObservableGameValue(string key, NodeVo? parent) : Observab
         {
             Parent.Parent.Remove(Parent);
         }
+    }
+
+    [RelayCommand]
+    private void AddAdjacentValue(StackPanel value)
+    {
+        if (Parent is null)
+        {
+            Logger.LogWarning("添加相邻节点失败, 父节点为空");
+            return;
+        }
+
+        var addedKeywordTextBox = value.FindChild<TextBox>(box => box.Name == "NewKeywordTextBox");
+        var addedValueTextBox = value.FindChild<TextBox>(box => box.Name == "NewValueTextBox");
+        var typeComboBox = value.FindChild<ComboBox>(box => box.Name == "TypeComboBox");
+        Debug.Assert(addedKeywordTextBox is not null && addedValueTextBox is not null, "添加相邻节点失败, 未找到TextBox");
+        Debug.Assert(typeComboBox is not null, "添加相邻节点失败, 未找到ComboBox");
+
+        if (typeComboBox.SelectedItem is null)
+        {
+            Logger.LogWarning("添加相邻节点失败, 未选择类型");
+            return;
+        }
+
+        var newKeyword = addedKeywordTextBox.Text;
+        var newValue = addedValueTextBox.Text;
+        var voType = (string)((ComboBoxItem)typeComboBox.SelectedItem).Content;
+
+        if (string.IsNullOrWhiteSpace(newKeyword) || (voType == "Leaf" && string.IsNullOrWhiteSpace(newValue)))
+        {
+            Logger.LogWarning("添加相邻节点失败, 输入值为空");
+            return;
+        }
+
+        var index = Parent.Children.IndexOf(this) + 1;
+        ObservableGameValue newObservableGameValue = voType switch
+        {
+            "Node" => new NodeVo(newKeyword, Parent),
+            "Leaf" => ConverterService.GetSpecificLeafVo(newKeyword, newValue, Parent),
+            "LeafValues"
+                => new LeafValuesVo(
+                    newKeyword,
+                    [newValue],
+                    GameValueTypeConverterHelper.GetTypeForString(newValue),
+                    Parent
+                ),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+        Parent.Children.Insert(index, newObservableGameValue);
+
+        addedKeywordTextBox.Text = string.Empty;
+        addedValueTextBox.Text = string.Empty;
+
+        Logger.LogInformation("添加相邻节点成功, 关键字: {Keyword}, 值: {Value}, 父节点: {Parent}", newKeyword, newValue, Parent.Key);
     }
 }

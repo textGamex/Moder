@@ -5,8 +5,8 @@ using ParadoxPower.Parser;
 // ReSharper disable once CheckNamespace
 namespace Moder.Core.Models.Vo;
 
-public sealed partial class StateCategoryLeafVo(string key, Types.Value value, NodeVo? parent)
-    : LeafVo(key, value, parent)
+public sealed partial class StateCategoryLeafVo(string key, string value, GameValueType type, NodeVo? parent)
+    : LeafVo(key, value, type, parent)
 {
     public override string Value
     {

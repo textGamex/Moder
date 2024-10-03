@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Services.GameResources;
-using ParadoxPower.Parser;
 
 // ReSharper disable once CheckNamespace
 namespace Moder.Core.Models.Vo;
 
-public partial class BuildingLeafVo(string key, Types.Value value, NodeVo? parent) : IntLeafVo(key, value, parent)
+public partial class BuildingLeafVo(string key, string value, GameValueType type, NodeVo parent)
+    : IntLeafVo(key, value, type, parent)
 {
     public string BuildingName => $"{LocalisationService.GetValue(Key)} 最大等级: {MaxBuildingLevel}";
     public byte MaxBuildingLevel => GetMaxBuildingLevel();

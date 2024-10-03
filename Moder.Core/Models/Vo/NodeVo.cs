@@ -1,9 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Moder.Core.Models.Vo;
 
-public class NodeVo(string key, NodeVo? parent) : ObservableGameValue(key, parent)
+public partial class NodeVo(string key, NodeVo? parent) : ObservableGameValue(key, parent)
 {
 	public ObservableCollection<ObservableGameValue> Children { get; } = [];
 
@@ -16,5 +17,11 @@ public class NodeVo(string key, NodeVo? parent) : ObservableGameValue(key, paren
 	{
 		var isRemoved = Children.Remove(child);
 		Debug.Assert(isRemoved, "Failed to remove child from NodeVo.");
+	}
+
+	[RelayCommand]
+	private void AddChildNode()
+	{
+
 	}
 }

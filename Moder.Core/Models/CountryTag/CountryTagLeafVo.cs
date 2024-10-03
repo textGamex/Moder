@@ -5,7 +5,8 @@ using ParadoxPower.Parser;
 // ReSharper disable once CheckNamespace
 namespace Moder.Core.Models.Vo;
 
-public sealed partial class CountryTagLeafVo(string key, Types.Value value, NodeVo? parent) : LeafVo(key, value, parent)
+public sealed partial class CountryTagLeafVo(string key, string value, GameValueType type, NodeVo parent)
+    : LeafVo(key, value, type, parent)
 {
     public static IReadOnlyCollection<string> CountryTags => CountryTagService.CountryTags;
 

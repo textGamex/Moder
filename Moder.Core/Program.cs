@@ -48,6 +48,7 @@ public static partial class Program
 		builder.Services.AddSingleton<GlobalResourceService>();
 		builder.Services.AddSingleton<GameResourcesService>();
 		builder.Services.AddSingleton<GameModDescriptorService>();
+		builder.Services.AddSingleton<LeafConverterService>();
 
 		// Setup and provision the hosting context for the User Interface
 		// service.

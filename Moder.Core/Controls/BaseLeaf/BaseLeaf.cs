@@ -1,4 +1,4 @@
-using System.Windows.Input;
+Ôªøusing System.Windows.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Moder.Core.Models;
@@ -58,9 +58,10 @@ public sealed partial class BaseLeaf : Control
             SetValue(LeafContextProperty, value);
             if (value is not null)
             {
-                // ”¶∏√”√ SetCurrentValue ¬?
+                // Â∫îËØ•Áî® SetCurrentValue Âêó?
                 // AddCommand = value.AddCommand;
                 RemoveCommand = value.RemoveSelfInParentCommand;
+                AddCommand = value.AddAdjacentValueCommand;
                 Type = value.TypeString;
                 Key = value.Key;
             }

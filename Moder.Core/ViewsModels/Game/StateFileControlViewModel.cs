@@ -28,15 +28,18 @@ public sealed partial class StateFileControlViewModel : ObservableObject
     private readonly SystemFileItem _fileItem;
     private readonly ILogger<StateFileControlViewModel> _logger;
     private readonly GameResourcesService _gameResourcesService;
+    private readonly LeafConverterService _leafConverterService;
 
     public StateFileControlViewModel(
         GlobalResourceService resourceService,
         ILogger<StateFileControlViewModel> logger,
-        GameResourcesService gameResourcesService
+        GameResourcesService gameResourcesService,
+        LeafConverterService leafConverterService
     )
     {
         _logger = logger;
         _gameResourcesService = gameResourcesService;
+        _leafConverterService = leafConverterService;
         _fileItem = resourceService.PopCurrentSelectFileItem();
         Debug.Assert(_fileItem.IsFile);
 
@@ -72,7 +75,12 @@ public sealed partial class StateFileControlViewModel : ObservableObject
             if (child.IsLeafChild)
             {
                 var leaf = child.leaf;
-                var leafVo = GetSpecificLeafVo(nodeVo, leaf);
+                var leafVo = _leafConverterService.GetSpecificLeafVo(
+                    leaf.Key,
+                    leaf.Value.ToRawString(),
+                    leaf.Value.ToLocalValueType(),
+                    nodeVo
+                );
                 nodeVo.Add(leafVo);
             }
 
@@ -98,64 +106,6 @@ public sealed partial class StateFileControlViewModel : ObservableObject
             //     var comment = child.comment;
             // }
         }
-    }
-
-    // TODO: 写成配置文件
-    private static readonly string[] CountryTagKeywords = ["add_core_of", "owner", "add_claim_by", "controller"];
-
-    private LeafVo GetSpecificLeafVo(NodeVo parentNodeVo, Leaf leaf)
-    {
-        LeafVo leafVo;
-
-        if (
-            Array.Exists(
-                CountryTagKeywords,
-                countryTag => countryTag.Equals(leaf.Key, StringComparison.OrdinalIgnoreCase)
-            )
-        )
-        {
-            leafVo = new CountryTagLeafVo(leaf.Key, leaf.Value, parentNodeVo);
-        }
-        else if (leaf.Key.Equals("name", StringComparison.OrdinalIgnoreCase))
-        {
-            leafVo = new StateNameLeafVo(leaf.Key, leaf.Value, parentNodeVo);
-        }
-        else if (parentNodeVo.Key.Equals("resources", StringComparison.OrdinalIgnoreCase))
-        {
-            leafVo = new ResourcesLeafVo(leaf.Key, leaf.Value, parentNodeVo);
-        }
-        else if (leaf.Key.Equals("state_category", StringComparison.OrdinalIgnoreCase))
-        {
-            leafVo = new StateCategoryLeafVo(leaf.Key, leaf.Value, parentNodeVo);
-        }
-        // 当父节点是 buildings 时, 子节点就可以为建筑物, 在这里, nodeVo 即为 leaf 的父节点
-        else if (
-            (
-                parentNodeVo.Key.Equals("buildings", StringComparison.OrdinalIgnoreCase)
-                // province 中的建筑物
-                || parentNodeVo.Parent?.Key.Equals("buildings", StringComparison.OrdinalIgnoreCase) == true
-            ) && _gameResourcesService.Buildings.Contains(leaf.Key)
-        )
-        {
-            leafVo = new BuildingLeafVo(leaf.Key, leaf.Value, parentNodeVo);
-        }
-        else
-        {
-            if (leaf.Value.IsInt)
-            {
-                leafVo = new IntLeafVo(leaf.Key, leaf.Value, parentNodeVo);
-            }
-            else if (leaf.Value.IsFloat)
-            {
-                leafVo = new FloatLeafVo(leaf.Key, leaf.Value, parentNodeVo);
-            }
-            else
-            {
-                leafVo = new LeafVo(leaf.Key, leaf.Value, parentNodeVo);
-            }
-        }
-
-        return leafVo;
     }
 
     [RelayCommand]

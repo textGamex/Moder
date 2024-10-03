@@ -18,6 +18,12 @@ public sealed partial class LeafValuesVo : ObservableGameValue
         Type = values.First().Value.ToLocalValueType();
     }
 
+    public LeafValuesVo(string key, IEnumerable<string> values, GameValueType type, NodeVo parent) : base(key, parent)
+    {
+        Values = new ObservableCollection<string>(values);
+        Type = type;
+    }
+
     public Child[] ToLeafValues()
     {
         var leafValues = new Child[Values.Count];

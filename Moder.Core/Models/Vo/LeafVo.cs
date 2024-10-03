@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.Extensions.DependencyInjection;
-using Moder.Core.Extensions;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Helper;
 using Moder.Core.Services.GameResources;
 using ParadoxPower.Parser;
@@ -25,11 +23,11 @@ public partial class LeafVo : ObservableGameValue
         LocalisationService = GameResourcesService.Localisation;
     }
 
-    public LeafVo(string key, Types.Value value, NodeVo? parent)
+    public LeafVo(string key, string value, GameValueType type, NodeVo? parent)
         : base(key, parent)
     {
-        LeafValue = value.ToRawString();
-        Type = value.ToLocalValueType();
+        LeafValue = value;
+        Type = type;
     }
 
     public Types.Value ToRawValue()

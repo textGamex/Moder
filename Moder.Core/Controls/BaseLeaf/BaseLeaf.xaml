@@ -70,11 +70,35 @@
                             Grid.Column="3"
                             Orientation="Horizontal"
                             Spacing="4">
-                            <Button Command="{TemplateBinding AddCommand}" Content="+" />
+                            <Button Content="+" ToolTipService.ToolTip="添加相邻节点">
+                                <Button.Flyout>
+                                    <Flyout>
+                                        <StackPanel
+                                            x:Name="ContentStackPanel"
+                                            Orientation="Horizontal"
+                                            Spacing="4">
+                                            <!--  Name 用来在代码中定位控件  -->
+                                            <ComboBox x:Name="TypeComboBox" PlaceholderText="类型">
+                                                <ComboBoxItem Content="Node" />
+                                                <ComboBoxItem Content="Leaf" />
+                                                <ComboBoxItem Content="LeafValues" />
+                                            </ComboBox>
+
+                                            <TextBox x:Name="NewKeywordTextBox" PlaceholderText="关键字" />
+                                            <TextBox x:Name="NewValueTextBox" PlaceholderText="值" />
+                                            <Button
+                                                Command="{TemplateBinding AddCommand}"
+                                                CommandParameter="{Binding ElementName=ContentStackPanel, RelativeSource={RelativeSource TemplatedParent}}"
+                                                Content="添加" />
+                                        </StackPanel>
+                                    </Flyout>
+                                </Button.Flyout>
+                            </Button>
                             <Button
                                 Margin="0,0,8,0"
                                 Command="{TemplateBinding RemoveCommand}"
-                                Content="-" />
+                                Content="-"
+                                ToolTipService.ToolTip="删除节点" />
                         </StackPanel>
                     </Grid>
                 </ControlTemplate>
