@@ -8,7 +8,6 @@ using Moder.Core.Models;
 using Moder.Core.Models.Vo;
 using Moder.Core.Parser;
 using Moder.Core.Services;
-using Moder.Core.Services.GameResources;
 using Moder.Core.ViewsModels.Menus;
 using ParadoxPower.Parser;
 using ParadoxPower.Process;
@@ -27,18 +26,15 @@ public sealed partial class StateFileControlViewModel : ObservableObject
     private readonly NodeVo _rootNodeVo = new("Root", null);
     private readonly SystemFileItem _fileItem;
     private readonly ILogger<StateFileControlViewModel> _logger;
-    private readonly GameResourcesService _gameResourcesService;
     private readonly LeafConverterService _leafConverterService;
 
     public StateFileControlViewModel(
         GlobalResourceService resourceService,
         ILogger<StateFileControlViewModel> logger,
-        GameResourcesService gameResourcesService,
         LeafConverterService leafConverterService
     )
     {
         _logger = logger;
-        _gameResourcesService = gameResourcesService;
         _leafConverterService = leafConverterService;
         _fileItem = resourceService.PopCurrentSelectFileItem();
         Debug.Assert(_fileItem.IsFile);

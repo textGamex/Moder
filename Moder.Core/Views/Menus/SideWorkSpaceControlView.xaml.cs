@@ -10,6 +10,7 @@ namespace Moder.Core.Views.Menus;
 
 public sealed partial class SideWorkSpaceControlView : UserControl
 {
+    public SideWorkSpaceControlViewModel ViewModel => (SideWorkSpaceControlViewModel)DataContext;
     private readonly ILogger<SideWorkSpaceControlView> _logger;
     private readonly GlobalResourceService _resourceService;
 

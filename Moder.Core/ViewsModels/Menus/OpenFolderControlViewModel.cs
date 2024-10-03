@@ -28,11 +28,9 @@ public sealed partial class OpenFolderControlViewModel : ObservableObject
         {
             return;
         }
-        else
-        {
-            _globalSettings.ModRootFolderPath = result.Path;
-            SendCompleteMessageIfReady();
-        }
+
+        _globalSettings.ModRootFolderPath = result.Path;
+        SendCompleteMessageIfReady();
     }
 
     [RelayCommand]
@@ -46,11 +44,9 @@ public sealed partial class OpenFolderControlViewModel : ObservableObject
         {
             return;
         }
-        else
-        {
-            _globalSettings.GameRootFolderPath = result.Path;
-            SendCompleteMessageIfReady();
-        }
+
+        _globalSettings.GameRootFolderPath = result.Path;
+        SendCompleteMessageIfReady();
     }
 
     private void SendCompleteMessageIfReady()
