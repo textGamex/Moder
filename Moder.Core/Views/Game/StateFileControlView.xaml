@@ -127,7 +127,7 @@
                 <DataTemplate x:DataType="vo:NodeVo">
                     <TreeViewItem IsExpanded="True" ItemsSource="{x:Bind Children}">
                         <TreeViewItem.Content>
-                            <Grid>
+                            <Grid x:Name="NodeGrid">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
@@ -143,15 +143,6 @@
                                     HorizontalAlignment="Right"
                                     Orientation="Horizontal"
                                     Spacing="4">
-
-                                    <!-- <DropDownButton Content="+"> -->
-                                    <!--     <DropDownButton.Flyout> -->
-                                    <!--         <MenuFlyout Placement="Bottom"> -->
-                                    <!--             <MenuFlyoutItem Command="{x:Bind AddChildNodeCommand}" Text="添加子节点" /> -->
-                                    <!--             <MenuFlyoutItem Text="添加相邻节点" /> -->
-                                    <!--         </MenuFlyout> -->
-                                    <!--     </DropDownButton.Flyout> -->
-                                    <!-- </DropDownButton> -->
 
                                     <Button Content="+">
                                         <Button.Flyout>
@@ -321,8 +312,11 @@
 
 
         <TreeView
-            x:Name="TreeView"
+            x:Name="MainTreeView"
             Grid.Row="0"
+            CanReorderItems="False"
+            DragItemsCompleted="TreeView_OnDragItemsCompleted"
+            DragItemsStarting="TreeView_OnDragItemsStarting"
             ItemTemplateSelector="{StaticResource StateFileDataTemplateSelector}"
             ItemsSource="{Binding Items}"
             SelectionMode="None" />

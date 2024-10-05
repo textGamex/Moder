@@ -41,7 +41,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:BaseLeaf">
-                    <Grid Style="{StaticResource CardGrid}">
+                    <Grid x:Name="BaseLeaf" Style="{StaticResource CardGrid}">
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
