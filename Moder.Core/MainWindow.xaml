@@ -9,6 +9,7 @@
     xmlns:local="using:Moder.Core"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="using:Moder.Core.Views"
+    Title="Moder"
     Closed="MainWindow_OnClosed"
     mc:Ignorable="d">
 
