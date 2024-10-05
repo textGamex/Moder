@@ -11,7 +11,7 @@
 		<PublishProfile>win-$(Platform).pubxml</PublishProfile>
 		<UseWinUI>true</UseWinUI>
 		<!-- 下一个 .NET SDK 服务更新发布后，将不再需要这些. -->
-		<WindowsSdkPackageVersion>10.0.22621.42</WindowsSdkPackageVersion>
+		<WindowsSdkPackageVersion>10.0.22621.48</WindowsSdkPackageVersion>
 		<EnableMsixTooling>true</EnableMsixTooling>
 
 		<!-- Use our own Main entry point so we can control the HostBuilder -->
