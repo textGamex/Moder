@@ -17,9 +17,8 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
     public string Key { get; } = key;
     public bool IsChanged { get; private set; }
     public NodeVo? Parent { get; } = parent;
-    protected GameValueType Type { get; init; }
     public string TypeString => Type.ToString();
-    public GameVoType[] VoTypes => Enum.GetValues<GameVoType>();
+    protected GameValueType Type { get; init; }
 
     public IRelayCommand RemoveSelfInParentCommand =>
         _removeSelfInParentCommand ??= new RelayCommand(RemoveSelfInParent);
@@ -89,12 +88,7 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
         {
             GameVoType.Node => new NodeVo(newKeyword, Parent),
             GameVoType.Leaf => ConverterService.GetSpecificLeafVo(newKeyword, newValue, Parent),
-            GameVoType.LeafValues
-                => new LeafValuesVo(
-                    newKeyword,
-                    [newValue],
-                    Parent
-                ),
+            GameVoType.LeafValues => new LeafValuesVo(newKeyword, [newValue], Parent),
             _ => throw new ArgumentOutOfRangeException()
         };
         Parent.Children.Insert(index, newObservableGameValue);

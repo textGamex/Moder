@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using EnumsNET;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Moder.Core.Models;
@@ -53,14 +54,14 @@ public sealed partial class BaseLeaf : Control
 
 	public static readonly DependencyProperty GameVoTypeProperty = DependencyProperty.Register(
 		nameof(GameVoType),
-		typeof(GameVoType[]),
+		typeof(IReadOnlyList<GameVoType>),
 		typeof(BaseLeaf),
 		new PropertyMetadata(null)
 	);
 
-	public GameVoType[] GameVoType
+	public IReadOnlyList<GameVoType> GameVoType
 	{
-		get => (GameVoType[])GetValue(GameVoTypeProperty);
+		get => (IReadOnlyList<GameVoType>)GetValue(GameVoTypeProperty);
 		private set => SetValue(GameVoTypeProperty, value);
 	}
 
@@ -113,7 +114,6 @@ public sealed partial class BaseLeaf : Control
 	public BaseLeaf()
 	{
 		DefaultStyleKey = typeof(BaseLeaf);
-		// TODO: Optimize this
-		GameVoType = Enum.GetValues<GameVoType>();
+		GameVoType = Enums.GetValues<GameVoType>();
 	}
 }
