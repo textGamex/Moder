@@ -2,7 +2,8 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:Moder.Core.Controls">
+    xmlns:controls="using:Moder.Core.Controls"
+    xmlns:triggers="using:CommunityToolkit.WinUI">
 
     <Style x:Key="CardStackPanel" TargetType="StackPanel">
         <Style.Setters>
@@ -42,7 +43,6 @@
             <Setter.Value>
                 <ControlTemplate TargetType="controls:BaseLeaf">
                     <Grid x:Name="BaseLeaf" Style="{StaticResource CardGrid}">
-
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
@@ -87,9 +87,10 @@
                                             <TextBox x:Name="NewValueTextBox" PlaceholderText="值" />
                                             <Button
                                                 Command="{TemplateBinding AddCommand}"
-                                                CommandParameter="{Binding ElementName=ContentStackPanel, RelativeSource={RelativeSource TemplatedParent}}"
+                                                CommandParameter="{Binding ElementName=ContentStackPanel, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                                 Content="添加" />
                                         </StackPanel>
+
                                     </Flyout>
                                 </Button.Flyout>
                             </Button>
@@ -99,6 +100,20 @@
                                 Content="-"
                                 ToolTipService.ToolTip="删除节点" />
                         </StackPanel>
+
+                        <!--  当类型为 Node 时，隐藏 Value 输入框  -->
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="IsNodeVo">
+                                    <VisualState.StateTriggers>
+                                        <triggers:IsEqualStateTrigger Value="{Binding ElementName=TypeComboBox, Path=SelectedItem, Mode=OneWay}" To="Node" />
+                                    </VisualState.StateTriggers>
+                                    <VisualState.Setters>
+                                        <Setter Target="NewValueTextBox.Visibility" Value="Collapsed" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

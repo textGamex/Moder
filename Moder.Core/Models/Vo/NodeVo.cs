@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Xaml;
 using ParadoxPower.Process;
 
 namespace Moder.Core.Models.Vo;
@@ -9,6 +10,7 @@ namespace Moder.Core.Models.Vo;
 public partial class NodeVo(string key, NodeVo? parent) : ObservableGameValue(key, parent)
 {
 	public ObservableCollection<ObservableGameValue> Children { get; } = [];
+	public Visibility AddedValueTextBoxVisibility => SelectedVoType == GameVoType.Node ? Visibility.Collapsed : Visibility.Visible;
 
 	[ObservableProperty]
 	private string _addedKey = string.Empty;
@@ -17,6 +19,7 @@ public partial class NodeVo(string key, NodeVo? parent) : ObservableGameValue(ke
 	private string _addedValue = string.Empty;
 
 	[ObservableProperty]
+	[NotifyPropertyChangedFor(nameof(AddedValueTextBoxVisibility))]
 	private GameVoType? _selectedVoType;
 
 	public void Add(ObservableGameValue child)

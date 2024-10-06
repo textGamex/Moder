@@ -143,7 +143,6 @@
                                     HorizontalAlignment="Right"
                                     Orientation="Horizontal"
                                     Spacing="4">
-
                                     <Button Content="+">
                                         <Button.Flyout>
                                             <Flyout>
@@ -163,7 +162,10 @@
                                                             SelectedItem="{x:Bind SelectedVoType, Mode=TwoWay}" />
 
                                                         <TextBox PlaceholderText="关键字" Text="{x:Bind AddedKey, Mode=TwoWay}" />
-                                                        <TextBox PlaceholderText="值" Text="{x:Bind AddedValue, Mode=TwoWay}" />
+                                                        <TextBox
+                                                            PlaceholderText="值"
+                                                            Text="{x:Bind AddedValue, Mode=TwoWay}"
+                                                            Visibility="{x:Bind AddedValueTextBoxVisibility, Mode=OneWay}" />
                                                     </StackPanel>
 
                                                     <StackPanel

@@ -9,111 +9,111 @@ namespace Moder.Core.Controls;
 
 public sealed partial class BaseLeaf : Control
 {
-    public static readonly DependencyProperty KeyProperty = DependencyProperty.Register(
-        nameof(Key),
-        typeof(string),
-        typeof(BaseLeaf),
-        new PropertyMetadata(null)
-    );
+	public static readonly DependencyProperty KeyProperty = DependencyProperty.Register(
+		nameof(Key),
+		typeof(string),
+		typeof(BaseLeaf),
+		new PropertyMetadata(null)
+	);
 
-    public static readonly DependencyProperty SlotContentProperty = DependencyProperty.Register(
-        nameof(SlotContent),
-        typeof(object),
-        typeof(BaseLeaf),
-        new PropertyMetadata(null)
-    );
+	public static readonly DependencyProperty SlotContentProperty = DependencyProperty.Register(
+		nameof(SlotContent),
+		typeof(object),
+		typeof(BaseLeaf),
+		new PropertyMetadata(null)
+	);
 
-    public static readonly DependencyProperty TypeProperty = DependencyProperty.Register(
-        nameof(Type),
-        typeof(string),
-        typeof(BaseLeaf),
-        new PropertyMetadata(null)
-    );
+	public static readonly DependencyProperty TypeProperty = DependencyProperty.Register(
+		nameof(Type),
+		typeof(string),
+		typeof(BaseLeaf),
+		new PropertyMetadata(null)
+	);
 
-    public static readonly DependencyProperty LeafContextProperty = DependencyProperty.Register(
-        nameof(ObservableGameValue),
-        typeof(ObservableGameValue),
-        typeof(BaseLeaf),
-        new PropertyMetadata(null)
-    );
+	public static readonly DependencyProperty LeafContextProperty = DependencyProperty.Register(
+		nameof(ObservableGameValue),
+		typeof(ObservableGameValue),
+		typeof(BaseLeaf),
+		new PropertyMetadata(null)
+	);
 
-    public static readonly DependencyProperty AddCommandProperty = DependencyProperty.Register(
-        nameof(AddCommand),
-        typeof(ICommand),
-        typeof(BaseLeaf),
-        new PropertyMetadata(null)
-    );
+	public static readonly DependencyProperty AddCommandProperty = DependencyProperty.Register(
+		nameof(AddCommand),
+		typeof(ICommand),
+		typeof(BaseLeaf),
+		new PropertyMetadata(null)
+	);
 
-    public static readonly DependencyProperty RemoveCommandProperty = DependencyProperty.Register(
-        nameof(RemoveCommand),
-        typeof(ICommand),
-        typeof(BaseLeaf),
-        new PropertyMetadata(null)
-    );
+	public static readonly DependencyProperty RemoveCommandProperty = DependencyProperty.Register(
+		nameof(RemoveCommand),
+		typeof(ICommand),
+		typeof(BaseLeaf),
+		new PropertyMetadata(null)
+	);
 
-    public static readonly DependencyProperty GameVoTypeProperty = DependencyProperty.Register(
-        nameof(GameVoType),
-        typeof(GameVoType[]),
-        typeof(BaseLeaf),
-        new PropertyMetadata(null)
-    );
+	public static readonly DependencyProperty GameVoTypeProperty = DependencyProperty.Register(
+		nameof(GameVoType),
+		typeof(GameVoType[]),
+		typeof(BaseLeaf),
+		new PropertyMetadata(null)
+	);
 
-    public GameVoType[] GameVoType
-    {
-        get => (GameVoType[])GetValue(GameVoTypeProperty);
-        private set => SetValue(GameVoTypeProperty, value);
-    }
+	public GameVoType[] GameVoType
+	{
+		get => (GameVoType[])GetValue(GameVoTypeProperty);
+		private set => SetValue(GameVoTypeProperty, value);
+	}
 
-    public ObservableGameValue? LeafContext
-    {
-        get => (ObservableGameValue?)GetValue(LeafContextProperty);
-        set
-        {
-            SetValue(LeafContextProperty, value);
-            if (value is not null)
-            {
-                // 应该用 SetCurrentValue 吗?
-                RemoveCommand = value.RemoveSelfInParentCommand;
-                AddCommand = value.AddAdjacentValueCommand;
-                Type = value.TypeString;
-                Key = value.Key;
-            }
-        }
-    }
+	public ObservableGameValue? LeafContext
+	{
+		get => (ObservableGameValue?)GetValue(LeafContextProperty);
+		set
+		{
+			SetValue(LeafContextProperty, value);
+			if (value is not null)
+			{
+				RemoveCommand = value.RemoveSelfInParentCommand;
+				AddCommand = value.AddAdjacentValueCommand;
+				Type = value.TypeString;
+				Key = value.Key;
+			}
+		}
+	}
 
-    public ICommand? AddCommand
-    {
-        get => (ICommand?)GetValue(AddCommandProperty);
-        set => SetValue(AddCommandProperty, value);
-    }
+	public ICommand? AddCommand
+	{
+		get => (ICommand?)GetValue(AddCommandProperty);
+		set => SetValue(AddCommandProperty, value);
+	}
 
-    public ICommand? RemoveCommand
-    {
-        get => (ICommand?)GetValue(RemoveCommandProperty);
-        set => SetValue(RemoveCommandProperty, value);
-    }
+	public ICommand? RemoveCommand
+	{
+		get => (ICommand?)GetValue(RemoveCommandProperty);
+		set => SetValue(RemoveCommandProperty, value);
+	}
 
-    public string? Type
-    {
-        get => (string?)GetValue(TypeProperty);
-        set => SetValue(TypeProperty, value);
-    }
+	public string? Type
+	{
+		get => (string?)GetValue(TypeProperty);
+		set => SetValue(TypeProperty, value);
+	}
 
-    public object? SlotContent
-    {
-        get => GetValue(SlotContentProperty);
-        set => SetValue(SlotContentProperty, value);
-    }
+	public object? SlotContent
+	{
+		get => GetValue(SlotContentProperty);
+		set => SetValue(SlotContentProperty, value);
+	}
 
-    public string? Key
-    {
-        get => (string?)GetValue(KeyProperty);
-        set => SetValue(KeyProperty, value);
-    }
+	public string? Key
+	{
+		get => (string?)GetValue(KeyProperty);
+		set => SetValue(KeyProperty, value);
+	}
 
-    public BaseLeaf()
-    {
-        DefaultStyleKey = typeof(BaseLeaf);
-        GameVoType = Enum.GetValues<GameVoType>();
-    }
+	public BaseLeaf()
+	{
+		DefaultStyleKey = typeof(BaseLeaf);
+		// TODO: Optimize this
+		GameVoType = Enum.GetValues<GameVoType>();
+	}
 }
