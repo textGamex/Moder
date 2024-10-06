@@ -81,7 +81,7 @@ public sealed class GameResourcesService
         return new LocalisationService(filePaths);
     }
 
-    private string GetLanguageCode()
+    private static string GetLanguageCode()
     {
         var cultureInfo = CultureInfo.CurrentUICulture;
         var name = cultureInfo.Name;

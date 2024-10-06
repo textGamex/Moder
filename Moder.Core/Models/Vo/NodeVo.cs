@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ParadoxPower.Process;
 
 namespace Moder.Core.Models.Vo;
 
@@ -27,6 +28,15 @@ public partial class NodeVo(string key, NodeVo? parent) : ObservableGameValue(ke
 	{
 		var isRemoved = Children.Remove(child);
 		Debug.Assert(isRemoved, "Failed to remove child from NodeVo.");
+	}
+
+	public override Child ToRawChild()
+	{
+		var node = new Node(Key);
+		var children = new List<Child>(Children.Count);
+		children.AddRange(Children.Select(child => child.ToRawChild()));
+		node.AllArray = children.ToArray();
+		return Child.NewNodeChild(node);
 	}
 
 	[RelayCommand]

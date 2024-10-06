@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml.Controls;
 using Moder.Core.Models.Vo;
 using Moder.Core.Services;
+using ParadoxPower.Process;
 
 namespace Moder.Core.Models;
 
@@ -103,4 +104,6 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
 
         Logger.LogInformation("添加相邻节点成功, 关键字: {Keyword}, 值: {Value}, 父节点: {Parent}", newKeyword, newValue, Parent.Key);
     }
+
+    public abstract Child ToRawChild();
 }

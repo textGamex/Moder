@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Windows.Graphics.Display;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MethodTimer;
@@ -12,9 +11,6 @@ using Moder.Core.Services;
 using Moder.Core.ViewsModels.Menus;
 using ParadoxPower.Parser;
 using ParadoxPower.Process;
-using WinUIEx;
-using LeafValuesVo = Moder.Core.Models.Vo.LeafValuesVo;
-using LeafVo = Moder.Core.Models.Vo.LeafVo;
 
 namespace Moder.Core.ViewsModels.Game;
 
@@ -119,8 +115,7 @@ public sealed partial class StateFileControlViewModel : ObservableObject
 		var rootNode = parser.GetResult();
 		var timestamp = Stopwatch.GetTimestamp();
 		// TODO: 数值有效性检查, int, float, bool
-		Save(rootNode, _rootNodeVo.Children.ToArray());
-		// var rootNode = SaveToNode(Items);
+		Save(rootNode, _rootNodeVo.Children.ToList());
 		var elapsedTime = Stopwatch.GetElapsedTime(timestamp);
 		_logger.LogInformation("保存成功, 耗时: {time} ms", elapsedTime.TotalMilliseconds);
 		_logger.LogDebug(
@@ -129,55 +124,43 @@ public sealed partial class StateFileControlViewModel : ObservableObject
 		);
 	}
 
-	private void Save(Node node, ObservableGameValue[] items)
+	// TODO:
+	private static void Save(Node rawNode, List<ObservableGameValue> newItems)
 	{
-		var list = node.AllChildren;
-		for (var index = 0; index < list.Count; index++)
+		var rawList = rawNode.AllChildren;
+		for (var index = 0; index < rawList.Count; index++)
 		{
-			var child = list[index];
-			if (child.IsLeafChild || child.IsNodeChild || child.IsLeafValueChild)
+			var rawChild = rawList[index];
+			if (rawChild.IsLeafChild || rawChild.IsNodeChild)
 			{
-				var item = Array.Find(items, i => i.Key == child.GetKey());
-				if (item is not null)
+				var newItem = newItems.Find(item => item.Key == rawChild.GetKey());
+				if (newItem is null)
 				{
-					if (item is LeafVo { IsChanged: true } leafVo)
-					{
-						if (!node.TryGetLeaf(leafVo.Key, out var rawLeaf))
-						{
-							_logger.LogWarning("找不到Leaf: {key}", leafVo.Key);
-							continue;
-						}
-
-						rawLeaf.Value = leafVo.ToRawValue();
-					}
-
-					if (item is LeafValuesVo { IsChanged: true } leafValuesVo)
-					{
-						if (!node.TryGetChild(leafValuesVo.Key, out var rawLeafVales))
-						{
-							_logger.LogWarning("找不到LeafValues: {key}", leafValuesVo.Key);
-							continue;
-						}
-
-						rawLeafVales.AllArray = leafValuesVo.ToLeafValues();
-					}
-
-					if (item is NodeVo nodeVo)
-					{
-						Save(
-							// Array.Find(node.AllArray, child => child.IsNodeChild && child.node.Key == nodeVo.Key).node,
-							list.Find(c => c.IsNodeChild && c.node.Key == nodeVo.Key).node,
-							nodeVo.Children.ToArray()
-						);
-					}
+					rawList.RemoveAt(index--);
 				}
 				else
 				{
-					list.RemoveAt(index--);
+					if (newItem is LeafVo { IsChanged: true } leafVo)
+					{
+						rawChild.leaf.Value = leafVo.ToRawValue();
+					}
+					else if (newItem is LeafValuesVo { IsChanged: true } leafValuesVo)
+					{
+						rawChild.node.AllArray = leafValuesVo.ToLeafValues();
+					}
+					else if (newItem is NodeVo nodeVo)
+					{
+						Save(
+							rawChild.node,
+							nodeVo.Children.ToList()
+						);
+					}
+
+					newItems.Remove(newItem);
 				}
 			}
 		}
-
-		node.AllArray = list.ToArray();
+		rawList.AddRange(newItems.Select(item => item.ToRawChild()));
+		rawNode.AllArray = rawList.ToArray();
 	}
 }
