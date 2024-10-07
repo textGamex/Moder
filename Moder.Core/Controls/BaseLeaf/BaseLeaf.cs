@@ -1,5 +1,4 @@
 ﻿using System.Windows.Input;
-using EnumsNET;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Moder.Core.Models;
@@ -77,6 +76,7 @@ public sealed partial class BaseLeaf : Control
 				AddCommand = value.AddAdjacentValueCommand;
 				Type = value.TypeString;
 				Key = value.Key;
+				GameVoType = value.VoTypes;
 			}
 		}
 	}
@@ -114,6 +114,5 @@ public sealed partial class BaseLeaf : Control
 	public BaseLeaf()
 	{
 		DefaultStyleKey = typeof(BaseLeaf);
-		GameVoType = Enums.GetValues<GameVoType>();
 	}
 }

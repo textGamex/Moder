@@ -3,6 +3,7 @@ using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.WinUI;
+using EnumsNET;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml.Controls;
@@ -18,6 +19,7 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
     public bool IsChanged { get; private set; }
     public NodeVo? Parent { get; } = parent;
     public string TypeString => Type.ToString();
+    public IReadOnlyList<GameVoType> VoTypes => Enums.GetValues<GameVoType>();
     protected GameValueType Type { get; init; }
 
     public IRelayCommand RemoveSelfInParentCommand =>
@@ -30,6 +32,8 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
     protected static readonly LeafConverterService ConverterService =
         App.Current.Services.GetRequiredService<LeafConverterService>();
 
+    public abstract Child ToRawChild();
+
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         IsChanged = true;
@@ -41,6 +45,7 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
         Debug.Assert(Parent != null, "Parent cannot be null");
         if (Parent is null)
         {
+            Logger.LogWarning("删除节点失败, 父节点为空");
             return;
         }
 
@@ -98,6 +103,4 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
 
         Logger.LogInformation("添加相邻节点成功, 关键字: {Keyword}, 值: {Value}, 父节点: {Parent}", newKeyword, newValue, Parent.Key);
     }
-
-    public abstract Child ToRawChild();
 }

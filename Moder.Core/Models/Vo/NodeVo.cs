@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using EnumsNET;
 using Microsoft.UI.Xaml;
 using ParadoxPower.Process;
 
@@ -10,7 +9,7 @@ namespace Moder.Core.Models.Vo;
 
 public partial class NodeVo(string key, NodeVo? parent) : ObservableGameValue(key, parent)
 {
-    public IReadOnlyList<GameVoType> VoTypes => Enums.GetValues<GameVoType>();
+    
     public ObservableCollection<ObservableGameValue> Children { get; } = [];
     public Visibility AddedValueTextBoxVisibility =>
         SelectedVoType == GameVoType.Node ? Visibility.Collapsed : Visibility.Visible;
