@@ -12,7 +12,14 @@ public sealed class LeafConverterService(GameResourcesService gameResourcesServi
     private readonly GameResourcesService _gameResourcesService = gameResourcesService;
 
     // TODO: 写成配置文件
-    private static readonly string[] CountryTagKeywords = ["add_core_of", "owner", "add_claim_by", "controller"];
+    private static readonly string[] CountryTagKeywords =
+    [
+        "add_core_of",
+        "owner",
+        "add_claim_by",
+        "controller",
+        "transfer_state"
+    ];
 
     public LeafVo GetSpecificLeafVo(string key, string value, NodeVo parentNodeVo)
     {
