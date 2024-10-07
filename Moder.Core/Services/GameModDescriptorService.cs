@@ -35,7 +35,7 @@ public sealed class GameModDescriptorService
             return;
         }
 
-        var parser = new TextParser(settingService.ModRootFolderPath);
+        var parser = new TextParser(descriptorFilePath);
         if (parser.IsFailure)
         {
             _replacePaths = FrozenSet<string>.Empty;
