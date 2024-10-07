@@ -165,20 +165,21 @@ public sealed class GameResourcesService
     /// </summary>
     /// <param name="gameFilePaths"></param>
     /// <param name="modFilePaths"></param>
-    /// <returns>不重名的文件</returns>
+    /// <returns>不重名的文件路径</returns>
     /// <exception cref="ArgumentException"></exception>
-    private static HashSet<string> RemoveFileOfEqualName(string[] gameFilePaths, string[] modFilePaths)
+    private static IReadOnlyCollection<string> RemoveFileOfEqualName(string[] gameFilePaths, string[] modFilePaths)
     {
-        var set = new HashSet<string>(Math.Max(gameFilePaths.Length, modFilePaths.Length));
+        var set = new Dictionary<string, string>(Math.Max(gameFilePaths.Length, modFilePaths.Length));
 
         // 优先读取Mod文件
+        // TODO: 做一下性能测试, 看和原来的算法有什么区别
         foreach (var filePath in modFilePaths.Concat(gameFilePaths))
         {
             var fileName = Path.GetFileName(filePath) ?? throw new ArgumentException($"无法得到文件名: {filePath}");
-            set.Add(fileName);
+            set.TryAdd(fileName, filePath);
         }
 
-        return set;
+        return set.Values;
     }
 
     /// <summary>
