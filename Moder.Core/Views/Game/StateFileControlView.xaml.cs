@@ -42,8 +42,7 @@ public sealed partial class StateFileControlView : IFileView
 			GetCursorPos(out var point);
 			ScreenToClient(App.Current.MainWindow.GetWindowHandle(), ref point);
 
-			// TODO: 需要计算缩放比例
-			const double resolutionScale = 1.5;
+			var resolutionScale = MainTreeView.XamlRoot.RasterizationScale;
 			var elements = VisualTreeHelper.FindElementsInHostCoordinates(
 				new Point(point.X / resolutionScale, point.Y / resolutionScale),
 				MainTreeView
@@ -150,7 +149,4 @@ public sealed partial class StateFileControlView : IFileView
 
 	[DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Auto)]
 	private static extern bool ScreenToClient(IntPtr hWnd, ref PointInt32 lpPoint);
-
-	[DllImport("gdi32.dll", SetLastError = true)]
-	private static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
 }
