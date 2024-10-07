@@ -36,7 +36,7 @@ public partial class App : Application
 		{
 			Directory.CreateDirectory(ConfigFolder);
 		}
-	} 
+	}
 
 	/// <summary>
 	/// Invoked when the application is launched.

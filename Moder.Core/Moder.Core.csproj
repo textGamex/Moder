@@ -34,6 +34,7 @@
 		<None Remove="Views\Game\BaseLeafControl.xaml" />
 		<None Remove="Views\Game\StateFileControlView.xaml" />
 		<None Remove="Views\Menus\OpenFolderControlView.xaml" />
+		<None Remove="Views\Menus\SettingsControlView.xaml" />
 		<None Remove="Views\Menus\SideWorkSpaceControlView.xaml" />
 		<None Remove="Views\NotSupportInfoControlView.xaml" />
 	</ItemGroup>
@@ -94,6 +95,9 @@
 		<None Update="appsettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<Page Update="Views\Menus\SettingsControlView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</Page>
 		<Page Update="Views\NotSupportInfoControlView.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</Page>

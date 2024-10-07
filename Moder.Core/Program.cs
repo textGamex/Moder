@@ -43,6 +43,8 @@ public static partial class Program
 		builder.Services.AddTransient<StateFileControlView>();
 		builder.Services.AddTransient<StateFileControlViewModel>();
 		builder.Services.AddTransient<NotSupportInfoControlView>();
+		builder.Services.AddTransient<SettingsControlView>();
+		builder.Services.AddTransient<SettingsControlViewModel>();
 
 		builder.Services.AddSingleton<GlobalSettingService>(_ => GlobalSettingService.Load());
 		builder.Services.AddSingleton<GlobalResourceService>();

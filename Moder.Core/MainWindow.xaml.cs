@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Composition.SystemBackdrops;
+using Microsoft.UI.Input;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -12,10 +14,12 @@ using Moder.Core.Views;
 using Moder.Core.Views.Game;
 using Moder.Core.Views.Menus;
 using Moder.Core.ViewsModels.Menus;
+using Windows.Foundation;
+using WinUIEx;
 
 namespace Moder.Core;
 
-public sealed partial class MainWindow : Window
+public sealed partial class MainWindow
 {
     public MainWindowViewModel ViewModel { get; }
 
@@ -39,8 +43,11 @@ public sealed partial class MainWindow : Window
 
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
+        AppWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Standard;
         SystemBackdrop = new MicaBackdrop { Kind = MicaKind.BaseAlt };
         ViewModel = model;
+        AppTitleBar.Loaded += AppTitleBarOnLoaded;
+        AppTitleBar.SizeChanged += AppTitleBarOnSizeChanged;
 
         if (string.IsNullOrEmpty(settings.ModRootFolderPath))
         {
@@ -92,6 +99,41 @@ public sealed partial class MainWindow : Window
         );
     }
 
+    private void AppTitleBarOnSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        SetRegionsForCustomTitleBar();
+    }
+
+    private void AppTitleBarOnLoaded(object sender, RoutedEventArgs e)
+    {
+        SetRegionsForCustomTitleBar();
+    }
+
+    private void SetRegionsForCustomTitleBar()
+    {
+        var scaleAdjustment = AppTitleBar.XamlRoot.RasterizationScale;
+        RightPaddingColumn.Width = new GridLength(AppWindow.TitleBar.RightInset / scaleAdjustment);
+        LeftPaddingColumn.Width = new GridLength(AppWindow.TitleBar.LeftInset / scaleAdjustment);
+        var transform = SettingsButton.TransformToVisual(null);
+        var bounds = transform.TransformBounds(new Rect(0, 0, SettingsButton.ActualWidth, SettingsButton.ActualHeight));
+        var settingsButtonRect = GetRect(bounds, scaleAdjustment);
+
+        var rectArray = new[] { settingsButtonRect };
+
+        var nonClientInputSrc = InputNonClientPointerSource.GetForWindowId(AppWindow.Id);
+        nonClientInputSrc.SetRegionRects(NonClientRegionKind.Passthrough, rectArray);
+    }
+
+    private static Windows.Graphics.RectInt32 GetRect(Rect bounds, double scale)
+    {
+        return new Windows.Graphics.RectInt32(
+            _X: (int)Math.Round(bounds.X * scale),
+            _Y: (int)Math.Round(bounds.Y * scale),
+            _Width: (int)Math.Round(bounds.Width * scale),
+            _Height: (int)Math.Round(bounds.Height * scale)
+        );
+    }
+
     private IFileView GetContent(SystemFileItem fileItem)
     {
         var relativePath = Path.GetRelativePath(_settings.ModRootFolderPath, fileItem.FullPath);
@@ -114,21 +156,26 @@ public sealed partial class MainWindow : Window
     {
         sender.TabItems.Remove(args.Tab);
 
-        var fileView = (IFileView)args.Tab.Content;
-        _openedTabFileItems.RemoveAt(_openedTabFileItems.FindIndex(item => item.FullPath == fileView.FullPath));
-
-        if (sender.TabItems.Count == 0)
+        if (args.Tab.Content is IFileView fileView)
         {
-            WeakReferenceMessenger.Default.Send(new SyncSideWorkSelectedItemMessage(null));
+            _openedTabFileItems.RemoveAt(_openedTabFileItems.FindIndex(item => item.FullPath == fileView.FullPath));
+
+            if (sender.TabItems.Count == 0)
+            {
+                WeakReferenceMessenger.Default.Send(new SyncSideWorkSelectedItemMessage(null));
+            }
         }
     }
 
     private void MainTabView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var currentTab = MainTabView.SelectedItem as TabViewItem;
-        if (currentTab?.Content is not IFileView currentFileView)
+        if (MainTabView.SelectedItem is not TabViewItem currentTab)
         {
-            _logger.LogWarning("Tab内容为空");
+            return;
+        }
+
+        if (currentTab.Content is not IFileView currentFileView)
+        {
             return;
         }
 
@@ -139,5 +186,28 @@ public sealed partial class MainWindow : Window
             Debug.Assert(target is not null, "在标签文件缓存列表中未找到目标文件");
             WeakReferenceMessenger.Default.Send(new SyncSideWorkSelectedItemMessage(target));
         }
+    }
+
+    private void TitleBarSettingsButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (MainTabView.SelectedItem is TabViewItem { Content: SettingsControlView })
+        {
+            return;
+        }
+
+        var existingSettingsTab = MainTabView
+            .TabItems.Cast<TabViewItem>()
+            .FirstOrDefault(item => item.Content is SettingsControlView);
+
+        if (existingSettingsTab is not null)
+        {
+            MainTabView.SelectedItem = existingSettingsTab;
+            return;
+        }
+
+        var settingsView = _serviceProvider.GetRequiredService<SettingsControlView>();
+        var settingsTab = new TabViewItem { Content = settingsView, Header = "设置" };
+        MainTabView.TabItems.Add(settingsTab);
+        MainTabView.SelectedItem = settingsTab;
     }
 }
