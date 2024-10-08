@@ -65,7 +65,6 @@ public sealed partial class SettingsControlViewModel : ObservableObject
         {
             throw new ArgumentException("Invalid theme mode tag.");
         }
-
     }
 
     private void SetThemeMode(ElementTheme theme)

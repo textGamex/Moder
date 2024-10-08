@@ -29,6 +29,7 @@
 		<SelfContained>true</SelfContained>
 		<TrimMode>full</TrimMode>
 		<!-- <PublishReadyToRun>false</PublishReadyToRun> -->
+		<MvvmToolkitEnableINotifyPropertyChangingSupport>false</MvvmToolkitEnableINotifyPropertyChangingSupport>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="Views\Game\BaseLeafControl.xaml" />
