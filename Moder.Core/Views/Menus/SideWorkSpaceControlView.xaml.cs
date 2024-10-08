@@ -30,10 +30,14 @@ public sealed partial class SideWorkSpaceControlView : UserControl
             this,
             (_, message) =>
             {
+#if DEBUG
+                // 未选中文件且触发此事件时, 是打开了非文件视图, 比如设置标签页
+                // 此时 FileTreeView.SelectedItem 和 message.TargetItem 都为 null, 所以我们先做一个判断
                 if (FileTreeView.SelectedItem is not null)
                 {
                     Debug.Assert(FileTreeView.SelectedItem != message.TargetItem);
                 }
+#endif
                 FileTreeView.SelectedItem = message.TargetItem;
             }
         );
