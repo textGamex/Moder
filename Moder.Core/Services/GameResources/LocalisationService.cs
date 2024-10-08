@@ -17,7 +17,7 @@ public sealed class LocalisationService
 			var localisation = YAMLLocalisationParser.parseLocFile(filePath);
 			if (localisation.IsFailure)
 			{
-				break;
+				continue;
 			}
 
 			var result = localisation.GetResult();
