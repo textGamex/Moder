@@ -15,7 +15,6 @@ using Moder.Core.Views.Game;
 using Moder.Core.Views.Menus;
 using Moder.Core.ViewsModels.Menus;
 using Windows.Foundation;
-using WinUIEx;
 
 namespace Moder.Core;
 

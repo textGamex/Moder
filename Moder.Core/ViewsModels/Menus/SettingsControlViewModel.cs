@@ -10,12 +10,11 @@ namespace Moder.Core.ViewsModels.Menus;
 
 public sealed partial class SettingsControlViewModel : ObservableObject
 {
-    // TODO: Tag 改为 Enum
     public ComboBoxItem[] ThemeMode { get; } =
         [
-            new() { Content = "跟随系统设置", Tag = "Default" },
-            new() { Content = "明亮", Tag = "Light" },
-            new() { Content = "暗黑", Tag = "Dark" }
+            new() { Content = "跟随系统设置", Tag = ElementTheme.Default },
+            new() { Content = "明亮", Tag = ElementTheme.Light },
+            new() { Content = "暗黑", Tag = ElementTheme.Dark }
         ];
 
     public ComboBoxItem[] Languages { get; } =
@@ -33,7 +32,7 @@ public sealed partial class SettingsControlViewModel : ObservableObject
         ];
 
     [ObservableProperty]
-    private int _selectedThemeModeIndex;
+    private ComboBoxItem _selectedThemeMode;
 
     [ObservableProperty]
     private ComboBoxItem _selectedLanguage;
@@ -43,8 +42,8 @@ public sealed partial class SettingsControlViewModel : ObservableObject
     public SettingsControlViewModel(GlobalSettingService globalSettingService)
     {
         _globalSettingService = globalSettingService;
-        _selectedThemeModeIndex = GetSelectedThemeModeIndex();
         _selectedLanguage = GetSelectedLanguage();
+        _selectedThemeMode = GetSelectedThemeMode();
     }
 
     private ComboBoxItem GetSelectedLanguage()
@@ -60,46 +59,23 @@ public sealed partial class SettingsControlViewModel : ObservableObject
         return Languages[0];
     }
 
-    private int GetSelectedThemeModeIndex()
+    private ComboBoxItem GetSelectedThemeMode()
     {
         var themeMode = _globalSettingService.AppThemeMode;
-        if (themeMode == ElementTheme.Default)
+        foreach (var item in ThemeMode)
         {
-            return 0;
+            if ((ElementTheme)item.Tag == themeMode)
+            {
+                return item;
+            }
         }
-
-        if (themeMode == ElementTheme.Light)
-        {
-            return 1;
-        }
-
-        if (themeMode == ElementTheme.Dark)
-        {
-            return 2;
-        }
-
-        return 0;
+        return ThemeMode[0];
     }
 
-    partial void OnSelectedThemeModeIndexChanged(int value)
+    partial void OnSelectedThemeModeChanged(ComboBoxItem value)
     {
-        var tag = ThemeMode[value].Tag.ToString();
-        if (tag == "Default")
-        {
-            SetThemeMode(ElementTheme.Default);
-        }
-        else if (tag == "Light")
-        {
-            SetThemeMode(ElementTheme.Light);
-        }
-        else if (tag == "Dark")
-        {
-            SetThemeMode(ElementTheme.Dark);
-        }
-        else
-        {
-            throw new ArgumentException("Invalid theme mode tag.");
-        }
+        var theme = (ElementTheme)value.Tag;
+        SetThemeMode(theme);
     }
 
     private void SetThemeMode(ElementTheme theme)

@@ -27,7 +27,7 @@
             Margin="0,16,0,0"
             Spacing="4">
             <controls:SettingsCard Header="App 主题" HeaderIcon="{winUi:FontIcon Glyph=&#xE790;}">
-                <ComboBox ItemsSource="{x:Bind ViewModel.ThemeMode}" SelectedIndex="{x:Bind ViewModel.SelectedThemeModeIndex, Mode=TwoWay}" />
+                <ComboBox ItemsSource="{x:Bind ViewModel.ThemeMode}" SelectedItem="{x:Bind ViewModel.SelectedThemeMode, Mode=TwoWay}" />
             </controls:SettingsCard>
 
             <controls:SettingsCard Header="游戏本地化语言" HeaderIcon="{winUi:FontIcon Glyph=&#xF2B7;}">
