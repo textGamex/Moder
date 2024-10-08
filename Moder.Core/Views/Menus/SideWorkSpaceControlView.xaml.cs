@@ -30,7 +30,10 @@ public sealed partial class SideWorkSpaceControlView : UserControl
             this,
             (_, message) =>
             {
-                Debug.Assert(FileTreeView.SelectedItem != message.TargetItem);
+                if (FileTreeView.SelectedItem is not null)
+                {
+                    Debug.Assert(FileTreeView.SelectedItem != message.TargetItem);
+                }
                 FileTreeView.SelectedItem = message.TargetItem;
             }
         );

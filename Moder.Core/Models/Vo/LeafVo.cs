@@ -16,20 +16,16 @@ public partial class LeafVo : ObservableGameValue
 	}
 	protected string LeafValue;
 
-	protected static readonly LocalisationService LocalisationService;
-	protected static readonly GameResourcesService GameResourcesService;
-
-	static LeafVo()
-	{
-		GameResourcesService = App.Current.Services.GetRequiredService<GameResourcesService>();
-		LocalisationService = GameResourcesService.Localisation;
-	}
+	protected readonly LocalisationService LocalisationService;
+	protected static readonly GameResourcesService GameResourcesService =
+		App.Current.Services.GetRequiredService<GameResourcesService>();
 
 	public LeafVo(string key, string value, GameValueType type, NodeVo? parent)
 		: base(key, parent)
 	{
 		LeafValue = value;
 		Type = type;
+		LocalisationService = GameResourcesService.Localisation;
 	}
 
 	public Types.Value ToRawValue()

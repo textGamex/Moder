@@ -85,8 +85,7 @@ public sealed partial class MainWindow
                     // 打开新的标签页
                     var newTab = new TabViewItem { Content = content, Header = message.FileItem.Name };
                     ToolTipService.SetToolTip(newTab, message.FileItem.FullPath);
-                    MainTabView.TabItems.Add(newTab);
-                    MainTabView.SelectedItem = newTab;
+                    NavigateToNewTab(newTab);
 
                     _openedTabFileItems.Add(message.FileItem);
                 }
@@ -156,6 +155,7 @@ public sealed partial class MainWindow
     {
         sender.TabItems.Remove(args.Tab);
 
+        // 关闭文件标签页时，从缓存列表中移除对应的文件并同步侧边栏选中项
         if (args.Tab.Content is IFileView fileView)
         {
             _openedTabFileItems.RemoveAt(_openedTabFileItems.FindIndex(item => item.FullPath == fileView.FullPath));
@@ -174,12 +174,14 @@ public sealed partial class MainWindow
             return;
         }
 
+        // 如果切换到的标签页不是文件标签页 (比如设置标签页)，则清空侧边栏选中项
         if (currentTab.Content is not IFileView currentFileView)
         {
+            ClearSideWorkSelectState();
             return;
         }
 
-        Debug.Assert(_latestFileItem is not null, "当前文件为空");
+        // 切换标签页时，同步侧边栏选中项
         if (_latestFileItem?.FullPath != currentFileView.FullPath)
         {
             var target = _openedTabFileItems.Find(item => item.FullPath == currentFileView.FullPath);
@@ -188,9 +190,21 @@ public sealed partial class MainWindow
         }
     }
 
+    private void ClearSideWorkSelectState()
+    {
+        WeakReferenceMessenger.Default.Send(new SyncSideWorkSelectedItemMessage(null));
+        _latestFileItem = null;
+    }
+
+    /// <summary>
+    /// 打开设置标签页
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void TitleBarSettingsButton_OnClick(object sender, RoutedEventArgs e)
     {
-        if (MainTabView.SelectedItem is TabViewItem { Content: SettingsControlView })
+        var isSelected = MainTabView.SelectedItem is TabViewItem { Content: SettingsControlView };
+        if (isSelected)
         {
             return;
         }
@@ -206,8 +220,22 @@ public sealed partial class MainWindow
         }
 
         var settingsView = _serviceProvider.GetRequiredService<SettingsControlView>();
-        var settingsTab = new TabViewItem { Content = settingsView, Header = "设置" };
-        MainTabView.TabItems.Add(settingsTab);
-        MainTabView.SelectedItem = settingsTab;
+        var settingsTab = new TabViewItem
+        {
+            Content = settingsView,
+            Header = "设置",
+            IconSource = new FontIconSource { Glyph = "\uE713" }
+        };
+        NavigateToNewTab(settingsTab);
+    }
+
+    /// <summary>
+    /// 添加标签页并切换到新标签页, 在此方法运行之后，会触发 <see cref="MainTabView_OnSelectionChanged"/> 方法
+    /// </summary>
+    /// <param name="tab"></param>
+    private void NavigateToNewTab(TabViewItem tab)
+    {
+        MainTabView.TabItems.Add(tab);
+        MainTabView.SelectedItem = tab;
     }
 }

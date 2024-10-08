@@ -1,5 +1,6 @@
 ﻿using MemoryPack;
 using Microsoft.UI.Xaml;
+using Moder.Core.Models;
 
 namespace Moder.Core.Services.Config;
 
@@ -15,9 +16,11 @@ public sealed partial class GlobalSettingService
     [MemoryPackOrder(2)]
     public ElementTheme AppThemeMode { get; set; } = ElementTheme.Default;
 
+    [MemoryPackOrder(3)]
+    public GameLanguage GameLanguage { get; set; } = GameLanguage.Default;
+
     private const string ConfigFileName = "globalSettings.bin";
     private static string ConfigFilePath => Path.Combine(App.ConfigFolder, ConfigFileName);
-
 
     public void Save()
     {

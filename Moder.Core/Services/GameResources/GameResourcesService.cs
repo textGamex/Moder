@@ -1,19 +1,25 @@
-﻿using System.Globalization;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using MethodTimer;
 using Microsoft.Extensions.Logging;
 using Moder.Core.Extensions;
+using Moder.Core.Messages;
 using Moder.Core.Services.Config;
 
 namespace Moder.Core.Services.GameResources;
 
 public sealed class GameResourcesService
 {
-    // TODO: Lazy
-    public StateCategoryService StateCategory { get; }
-    public LocalisationService Localisation { get; }
-    public OreService OreService { get; }
-    public BuildingsService Buildings { get; }
-    public CountryTagService CountryTagsService { get; }
+    public StateCategoryService StateCategory => _stateCategoryLazy.Value;
+    public LocalisationService Localisation => _localisationLazy.Value;
+    public OreService OreService => _oreServiceLazy.Value;
+    public BuildingsService Buildings => _buildingsLazy.Value;
+    public CountryTagService CountryTagsService => _countryTagsLazy.Value;
+
+    private readonly Lazy<StateCategoryService> _stateCategoryLazy;
+    private Lazy<LocalisationService> _localisationLazy;
+    private readonly Lazy<OreService> _oreServiceLazy;
+    private readonly Lazy<BuildingsService> _buildingsLazy;
+    private readonly Lazy<CountryTagService> _countryTagsLazy;
 
     private readonly GlobalSettingService _settingService;
     private readonly ILogger<GameResourcesService> _logger;
@@ -34,15 +40,13 @@ public sealed class GameResourcesService
         _descriptor = descriptor;
         _settingService = settingService;
 
-        _logger.LogInformation("开始加载游戏资源...");
+        _stateCategoryLazy = new Lazy<StateCategoryService>(LoadStateCategory);
+        _localisationLazy = new Lazy<LocalisationService>(LoadLocalisation);
+        _oreServiceLazy = new Lazy<OreService>(LoadOre);
+        _buildingsLazy = new Lazy<BuildingsService>(LoadBuildings);
+        _countryTagsLazy = new Lazy<CountryTagService>(LoadCountriesTag);
 
-        StateCategory = LoadStateCategory();
-        Localisation = LoadLocalisation();
-        OreService = LoadOre();
-        Buildings = LoadBuildings();
-        CountryTagsService = LoadCountriesTag();
-
-        _logger.LogInformation("游戏资源加载完成.");
+        WeakReferenceMessenger.Default.Register<ReloadLocalizationFiles>(this, (_, _) => ReloadLocalisation());
     }
 
     [Time("加载 Country Tags")]
@@ -77,49 +81,16 @@ public sealed class GameResourcesService
     private LocalisationService LoadLocalisation()
     {
         // TODO: 本地化暂时先不考虑 replace 文件夹
-        var filePaths = GetAllFilePriorModByRelativePathForFolder("localisation", GetLanguageCode());
+        var filePaths = GetAllFilePriorModByRelativePathForFolder(
+            "localisation",
+            _settingService.GameLanguage.ToGameLocalizationLanguage()
+        );
         return new LocalisationService(filePaths);
     }
 
-    private static string GetLanguageCode()
+    private void ReloadLocalisation()
     {
-        var cultureInfo = CultureInfo.CurrentUICulture;
-        var name = cultureInfo.Name;
-
-        if (name.StartsWith("zh"))
-        {
-            return "simp_chinese";
-        }
-        if (name.StartsWith("es"))
-        {
-            return "spanish";
-        }
-        if (name.StartsWith("de"))
-        {
-            return "german";
-        }
-        if (name.StartsWith("ja"))
-        {
-            return "japanese";
-        }
-        if (name.StartsWith("fr"))
-        {
-            return "french";
-        }
-        if (name.StartsWith("ru"))
-        {
-            return "russian";
-        }
-        if (name.Contains("pt-BR"))
-        {
-            return "braz_por";
-        }
-        if (name.StartsWith("pl"))
-        {
-            return "polish";
-        }
-
-        return "english";
+        _localisationLazy = new Lazy<LocalisationService>(LoadLocalisation);
     }
 
     /// <summary>

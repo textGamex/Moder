@@ -124,7 +124,6 @@ public sealed partial class StateFileControlViewModel : ObservableObject
 		);
 	}
 
-	// TODO:
 	private static void Save(Node rawNode, List<ObservableGameValue> newItems)
 	{
 		var rawList = rawNode.AllChildren;
