@@ -1,6 +1,9 @@
-﻿using Microsoft.UI.Xaml;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.UI.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Moder.Core.Services.Config;
 
 namespace Moder.Core;
 
@@ -45,6 +48,18 @@ public partial class App : Application
 	protected override void OnLaunched(LaunchActivatedEventArgs args)
 	{
 		MainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+		SetAppTheme();
 		MainWindow.Activate();
+	}
+
+	private void SetAppTheme()
+	{
+		Debug.Assert(MainWindow is not null);
+
+		var settings = _serviceProvider.GetRequiredService<GlobalSettingService>();
+		if (MainWindow.Content is FrameworkElement root)
+		{
+			root.RequestedTheme = settings.AppThemeMode;
+		}
 	}
 }

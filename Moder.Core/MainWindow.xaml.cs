@@ -44,7 +44,7 @@ public sealed partial class MainWindow
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
         AppWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Standard;
-        SystemBackdrop = new MicaBackdrop { Kind = MicaKind.BaseAlt };
+        SystemBackdrop = new MicaBackdrop { Kind = MicaKind.Base };
         ViewModel = model;
         AppTitleBar.Loaded += AppTitleBarOnLoaded;
         AppTitleBar.SizeChanged += AppTitleBarOnSizeChanged;

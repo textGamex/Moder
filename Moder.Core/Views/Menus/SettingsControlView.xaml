@@ -3,12 +3,32 @@
     x:Class="Moder.Core.Views.Menus.SettingsControlView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Moder.Core.Views.Menus"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vms="using:Moder.Core.ViewsModels.Menus"
+    xmlns:winUi="using:CommunityToolkit.WinUI"
     mc:Ignorable="d">
 
-    <Grid>
-        <TextBlock Text="SettingsControlView" />
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="设置" />
+
+        <StackPanel
+            Grid.Row="1"
+            Margin="0,16,0,0"
+            Spacing="4">
+            <controls:SettingsCard Header="App 主题" HeaderIcon="{winUi:FontIcon Glyph=&#xE790;}">
+                <ComboBox ItemsSource="{x:Bind vms:SettingsControlViewModel.ThemeMode}" SelectedIndex="{x:Bind ViewModel.SelectedThemeModeIndex, Mode=TwoWay}" />
+            </controls:SettingsCard>
+        </StackPanel>
     </Grid>
 </UserControl>

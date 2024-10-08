@@ -1,4 +1,5 @@
 ﻿using MemoryPack;
+using Microsoft.UI.Xaml;
 
 namespace Moder.Core.Services.Config;
 
@@ -11,24 +12,27 @@ public sealed partial class GlobalSettingService
     [MemoryPackOrder(1)]
     public string GameRootFolderPath { get; set; } = string.Empty;
 
+    [MemoryPackOrder(2)]
+    public ElementTheme AppThemeMode { get; set; } = ElementTheme.Default;
+
     private const string ConfigFileName = "globalSettings.bin";
+    private static string ConfigFilePath => Path.Combine(App.ConfigFolder, ConfigFileName);
+
 
     public void Save()
     {
-        var filePath = Path.Combine(App.ConfigFolder, ConfigFileName);
         // TODO: System.IO.Pipelines
-        File.WriteAllBytes(filePath, MemoryPackSerializer.Serialize(this));
+        File.WriteAllBytes(ConfigFilePath, MemoryPackSerializer.Serialize(this));
     }
 
     public static GlobalSettingService Load()
     {
-        var filePath = Path.Combine(App.ConfigFolder, ConfigFileName);
-        if (!File.Exists(filePath))
+        if (!File.Exists(ConfigFilePath))
         {
             return new GlobalSettingService();
         }
 
-        using var reader = File.OpenRead(filePath);
+        using var reader = File.OpenRead(ConfigFilePath);
         var array = new Span<byte>(new byte[reader.Length]);
         _ = reader.Read(array);
         var result = MemoryPackSerializer.Deserialize<GlobalSettingService>(array);
