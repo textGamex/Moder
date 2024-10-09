@@ -20,4 +20,10 @@ public sealed partial class SettingsControlView
 		var card = (SettingsCard)sender;
 		await Launcher.LaunchFolderPathAsync(card.Description.ToString());
 	}
+
+	private async void OnGitHubUrlCardClicked(object sender, RoutedEventArgs e)
+	{
+		var card = (SettingsCard)sender;
+		await Launcher.LaunchUriAsync(new Uri(card.Description.ToString() ?? throw new InvalidOperationException()));
+	}
 }

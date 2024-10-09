@@ -12,6 +12,7 @@ namespace Moder.Core;
 /// </summary>
 public partial class App : Application
 {
+	public const string AppVersion = "0.1.0-alpha";
 	public new static App Current => (App)Application.Current;
 
 	public IServiceProvider Services => Current._serviceProvider;
