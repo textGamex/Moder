@@ -11,6 +11,6 @@ public sealed partial class NotSupportInfoControlView : IFileView
 		FullPath = resourceService.PopCurrentSelectFileItem().FullPath;
 	}
 
-	public string Title => "²»Ö§³Ö";
+	public string Title => "ä¸æ”¯æŒ";
 	public string FullPath { get; }
 }

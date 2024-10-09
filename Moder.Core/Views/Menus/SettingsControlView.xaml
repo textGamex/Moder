@@ -33,6 +33,28 @@
             <controls:SettingsCard Header="游戏本地化语言" HeaderIcon="{winUi:FontIcon Glyph=&#xF2B7;}">
                 <ComboBox ItemsSource="{x:Bind ViewModel.Languages}" SelectedItem="{x:Bind ViewModel.SelectedLanguage, Mode=TwoWay}" />
             </controls:SettingsCard>
+
+            <controls:SettingsCard
+                ActionIcon="{winUi:FontIcon Glyph=&#xE8A7;}"
+                ActionIconToolTip="在资源管理器中打开"
+                Click="OnRootPathCardClicked"
+                Description="{x:Bind ViewModel.GameRootPath, Mode=OneWay}"
+                Header="游戏根目录"
+                HeaderIcon="{winUi:FontIcon Glyph=&#xE756;}"
+                IsClickEnabled="True">
+                <Button Command="{x:Bind ViewModel.SelectGameRootPathCommand}" Content="重新选择" />
+            </controls:SettingsCard>
+
+            <controls:SettingsCard
+                ActionIcon="{winUi:FontIcon Glyph=&#xE8A7;}"
+                ActionIconToolTip="在资源管理器中打开"
+                Click="OnRootPathCardClicked"
+                Description="{x:Bind ViewModel.ModRootPath, Mode=OneWay}"
+                Header="Mod 根目录"
+                HeaderIcon="{winUi:FontIcon Glyph=&#xE756;}"
+                IsClickEnabled="True">
+                <Button Command="{x:Bind ViewModel.SelectModRootPathCommand}" Content="重新选择" />
+            </controls:SettingsCard>
         </StackPanel>
     </Grid>
 </UserControl>

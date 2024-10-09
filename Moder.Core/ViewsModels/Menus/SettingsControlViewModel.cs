@@ -1,15 +1,22 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Moder.Core.Messages;
 using Moder.Core.Models;
 using Moder.Core.Services.Config;
+using Windows.Storage.Pickers;
+using WinRT.Interop;
+using WinUIEx;
 
 namespace Moder.Core.ViewsModels.Menus;
 
 public sealed partial class SettingsControlViewModel : ObservableObject
 {
+    public string GameRootPath => _globalSettingService.GameRootFolderPath;
+    public string ModRootPath => _globalSettingService.ModRootFolderPath;
+
     public ComboBoxItem[] ThemeMode { get; } =
         [
             new() { Content = "跟随系统设置", Tag = ElementTheme.Default },
@@ -94,5 +101,40 @@ public sealed partial class SettingsControlViewModel : ObservableObject
         _globalSettingService.GameLanguage = language;
 
         WeakReferenceMessenger.Default.Send(new ReloadLocalizationFiles());
+    }
+
+    [RelayCommand]
+    private async Task SelectGameRootPathAsync()
+    {
+        var folder = await ShowOpenFolderDialogAsync();
+        if (string.IsNullOrEmpty(folder))
+        {
+            return;
+        }
+
+        _globalSettingService.GameRootFolderPath = folder;
+        OnPropertyChanged(nameof(GameRootPath));
+    }
+
+    [RelayCommand]
+    private async Task SelectModRootPathAsync()
+    {
+        var folder = await ShowOpenFolderDialogAsync();
+        if (string.IsNullOrEmpty(folder))
+        {
+            return;
+        }
+
+        _globalSettingService.ModRootFolderPath = folder;
+        OnPropertyChanged(nameof(ModRootPath));
+    }
+
+    private static async Task<string> ShowOpenFolderDialogAsync()
+    {
+        var dialog = new FolderPicker();
+        InitializeWithWindow.Initialize(dialog, App.Current.MainWindow.GetWindowHandle());
+        var folder = await dialog.PickSingleFolderAsync();
+
+        return folder is null ? string.Empty : folder.Path;
     }
 }
