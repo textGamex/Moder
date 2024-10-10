@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using Microsoft.FSharp.Collections;
 using Moder.Core.Models;
 using ParadoxPower.Parser;
@@ -7,7 +7,7 @@ using ParadoxPower.Utilities;
 
 namespace Moder.Core.Extensions;
 
-public static class ParserExtend
+public static class ParserExtensions
 {
     public static bool HasNot(this Node node, string key)
     {

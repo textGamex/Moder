@@ -2,7 +2,7 @@ using System.Text;
 
 namespace Moder.Core.Extensions;
 
-public static class StringExtend
+public static class StringExtensions
 {
 	public static string ToFilePath(this string filePath)
 	{

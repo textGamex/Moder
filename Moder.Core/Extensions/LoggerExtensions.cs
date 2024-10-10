@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using ParadoxPower.CSharp;
 
 namespace Moder.Core.Extensions;
 
-public static class LoggerExtends
+public static class LoggerExtensions
 {
 	public static void LogParseError(this ILogger logger, ParserError error)
 	{
