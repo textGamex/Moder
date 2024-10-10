@@ -67,6 +67,8 @@
                 <Button Command="{x:Bind ViewModel.SelectModRootPathCommand}" Content="重新选择" />
             </controls:SettingsCard>
 
+            <Button Content="确认修改" Command="{x:Bind ViewModel.SaveUpdateCommand}"/>
+
             <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="其他" />
             <controls:SettingsExpander
                 Content="{x:Bind app:App.AppVersion}"
