@@ -1,5 +1,3 @@
-﻿namespace Moder.Core.Messages;
+namespace Moder.Core.Messages;
 
-public class CompleteWorkFolderSelectMessage
-{
-}
+public sealed record CompleteWorkFolderSelectMessage;
