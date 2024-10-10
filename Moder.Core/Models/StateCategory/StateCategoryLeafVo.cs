@@ -1,6 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Services.GameResources;
-using ParadoxPower.Parser;
 
 // ReSharper disable once CheckNamespace
 namespace Moder.Core.Models.Vo;

@@ -1,6 +1,5 @@
-﻿using System.Globalization;
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ParadoxPower.Parser;
 
 namespace Moder.Core.Models.Vo;
 

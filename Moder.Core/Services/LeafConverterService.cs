@@ -3,8 +3,6 @@ using Moder.Core.Models;
 using Moder.Core.Models.Vo;
 using Moder.Core.Services.GameResources;
 using Moder.Core.Services.ParserRules;
-using ParadoxPower.Parser;
-using ParadoxPower.Process;
 
 namespace Moder.Core.Services;
 

@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using ParadoxPower.Parser;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Moder.Core.Models.Vo;
 

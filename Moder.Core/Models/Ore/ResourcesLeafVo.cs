@@ -1,5 +1,4 @@
-﻿using Moder.Core.Services.GameResources;
-using ParadoxPower.Parser;
+using Moder.Core.Services.GameResources;
 
 // ReSharper disable once CheckNamespace
 namespace Moder.Core.Models.Vo;
