@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DF155C23-5707-43C8-908A-E023CE02689D}"
 	ProjectSection(SolutionItems) = preProject
 		.csharpierrc = .csharpierrc
+		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		build.ps1 = build.ps1
 		LICENSE.txt = LICENSE.txt
