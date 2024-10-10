@@ -1,5 +1,5 @@
-﻿using Moder.Core.ViewsModels.Menus;
+using Moder.Core.ViewsModels.Menus;
 
 namespace Moder.Core.Messages;
 
-public record SyncSideWorkSelectedItemMessage(SystemFileItem? TargetItem);
+public sealed record SyncSideWorkSelectedItemMessage(SystemFileItem? TargetItem);

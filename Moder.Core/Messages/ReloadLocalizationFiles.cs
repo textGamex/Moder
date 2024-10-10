@@ -1,3 +1,3 @@
-﻿namespace Moder.Core.Messages;
+namespace Moder.Core.Messages;
 
-public record ReloadLocalizationFiles();
+public sealed record ReloadLocalizationFiles();
