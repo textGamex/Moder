@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using MethodTimer;
 using Microsoft.Extensions.Logging;
 using Moder.Core.Extensions;

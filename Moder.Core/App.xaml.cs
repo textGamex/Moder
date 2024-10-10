@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.UI.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.UI.Xaml;
 using Moder.Core.Services.Config;
 
 namespace Moder.Core;
@@ -12,55 +12,61 @@ namespace Moder.Core;
 /// </summary>
 public partial class App : Application
 {
-	public const string AppVersion = "0.1.0-alpha";
-	public new static App Current => (App)Application.Current;
+    public const string AppVersion = "0.1.0-alpha";
+    public static new App Current => (App)Application.Current;
 
-	public IServiceProvider Services => Current._serviceProvider;
-	public MainWindow MainWindow { get; private set; } = null!;
-	public static string ConfigFolder { get; } = Path.Combine(Environment.CurrentDirectory, "Configs");
+    public IServiceProvider Services => Current._serviceProvider;
+    public MainWindow MainWindow { get; private set; } = null!;
+    public static string ConfigFolder { get; } = Path.Combine(Environment.CurrentDirectory, "Configs");
+    public static string ParserRulesFolder { get; } = Path.Combine(ConfigFolder, "ParserRules");
 
-	private readonly IServiceProvider _serviceProvider;
+    private readonly IServiceProvider _serviceProvider;
 
-	/// <summary>
-	/// Initializes the singleton application object.  This is the first line of authored code
-	/// executed, and as such is the logical equivalent of main() or WinMain().
-	/// </summary>
-	public App(IServiceProvider serviceProvider, ILogger<App> logger)
-	{
-		_serviceProvider = serviceProvider;
-		UnhandledException += (sender, args) => logger.LogError(args.Exception, "Unhandled exception");
-		InitializeComponent();
+    /// <summary>
+    /// Initializes the singleton application object.  This is the first line of authored code
+    /// executed, and as such is the logical equivalent of main() or WinMain().
+    /// </summary>
+    public App(IServiceProvider serviceProvider, ILogger<App> logger)
+    {
+        _serviceProvider = serviceProvider;
+        UnhandledException += (sender, args) => logger.LogError(args.Exception, "Unhandled exception");
+        InitializeComponent();
 
-		InitializeApp();
-	}
+        InitializeApp();
+    }
 
-	private void InitializeApp()
-	{
-		if (!Directory.Exists(ConfigFolder))
-		{
-			Directory.CreateDirectory(ConfigFolder);
-		}
-	}
+    private static void InitializeApp()
+    {
+        if (!Directory.Exists(ConfigFolder))
+        {
+            Directory.CreateDirectory(ConfigFolder);
+        }
 
-	/// <summary>
-	/// Invoked when the application is launched.
-	/// </summary>
-	/// <param name="args">Details about the launch request and process.</param>
-	protected override void OnLaunched(LaunchActivatedEventArgs args)
-	{
-		MainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-		SetAppTheme();
-		MainWindow.Activate();
-	}
+        if (!Directory.Exists(ParserRulesFolder))
+        {
+            Directory.CreateDirectory(ParserRulesFolder);
+        }
+    }
 
-	private void SetAppTheme()
-	{
-		Debug.Assert(MainWindow is not null);
+    /// <summary>
+    /// Invoked when the application is launched.
+    /// </summary>
+    /// <param name="args">Details about the launch request and process.</param>
+    protected override void OnLaunched(LaunchActivatedEventArgs args)
+    {
+        MainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+        SetAppTheme();
+        MainWindow.Activate();
+    }
 
-		var settings = _serviceProvider.GetRequiredService<GlobalSettingService>();
-		if (MainWindow.Content is FrameworkElement root)
-		{
-			root.RequestedTheme = settings.AppThemeMode;
-		}
-	}
+    private void SetAppTheme()
+    {
+        Debug.Assert(MainWindow is not null);
+
+        var settings = _serviceProvider.GetRequiredService<GlobalSettingService>();
+        if (MainWindow.Content is FrameworkElement root)
+        {
+            root.RequestedTheme = settings.AppThemeMode;
+        }
+    }
 }

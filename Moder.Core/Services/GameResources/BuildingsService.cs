@@ -1,4 +1,4 @@
-﻿using System.Collections.Frozen;
+using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -48,11 +48,11 @@ public sealed class BuildingsService
         foreach (var buildingNode in buildingNodes)
         {
             byte? maxLevel = null;
-            foreach (var leaf in buildingNode.Leaves)
+            foreach (var buildingPropertyLeaf in buildingNode.Leaves)
             {
-                if (leaf.Key.Equals("max_level", StringComparison.OrdinalIgnoreCase))
+                if (buildingPropertyLeaf.Key.Equals("max_level", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (byte.TryParse(leaf.ValueText, out var value))
+                    if (byte.TryParse(buildingPropertyLeaf.ValueText, out var value))
                     {
                         maxLevel = value;
                     }

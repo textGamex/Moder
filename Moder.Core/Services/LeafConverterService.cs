@@ -1,25 +1,20 @@
-﻿using Moder.Core.Helper;
+using Moder.Core.Helper;
 using Moder.Core.Models;
 using Moder.Core.Models.Vo;
 using Moder.Core.Services.GameResources;
+using Moder.Core.Services.ParserRules;
 using ParadoxPower.Parser;
 using ParadoxPower.Process;
 
 namespace Moder.Core.Services;
 
-public sealed class LeafConverterService(GameResourcesService gameResourcesService)
+public sealed class LeafConverterService(
+    GameResourcesService gameResourcesService,
+    CountryTagConsumerService countryTagConsumer
+)
 {
     private readonly GameResourcesService _gameResourcesService = gameResourcesService;
-
-    // TODO: 写成配置文件
-    private static readonly string[] CountryTagKeywords =
-    [
-        "add_core_of",
-        "owner",
-        "add_claim_by",
-        "controller",
-        "transfer_state"
-    ];
+    private readonly CountryTagConsumerService _countryTagConsumer = countryTagConsumer;
 
     public LeafVo GetSpecificLeafVo(string key, string value, NodeVo parentNodeVo)
     {
@@ -30,12 +25,7 @@ public sealed class LeafConverterService(GameResourcesService gameResourcesServi
     {
         LeafVo leafVo;
 
-        if (
-            Array.Exists(
-                CountryTagKeywords,
-                countryTag => countryTag.Equals(leafKey, StringComparison.OrdinalIgnoreCase)
-            )
-        )
+        if (_countryTagConsumer.IsKeyword(leafKey))
         {
             leafVo = new CountryTagLeafVo(leafKey, leafValue, type, parentNodeVo);
         }

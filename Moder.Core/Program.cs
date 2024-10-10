@@ -1,9 +1,10 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Core.Services.GameResources;
+using Moder.Core.Services.ParserRules;
 using Moder.Core.Views;
 using Moder.Core.Views.Game;
 using Moder.Core.Views.Menus;
@@ -51,6 +52,7 @@ public static partial class Program
 		builder.Services.AddSingleton<GameResourcesService>();
 		builder.Services.AddSingleton<GameModDescriptorService>();
 		builder.Services.AddSingleton<LeafConverterService>();
+		builder.Services.AddSingleton<CountryTagConsumerService>();
 
 		// Setup and provision the hosting context for the User Interface
 		// service.
