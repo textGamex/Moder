@@ -1,4 +1,6 @@
-﻿using MemoryPack;
+using MemoryPack;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using Moder.Core.Models;
 
@@ -8,24 +10,75 @@ namespace Moder.Core.Services.Config;
 public sealed partial class GlobalSettingService
 {
     [MemoryPackOrder(0)]
-    public string ModRootFolderPath { get; set; } = string.Empty;
+    public string ModRootFolderPath
+    {
+        get => _modRootFolderPath;
+        set => SetProperty(ref _modRootFolderPath, value);
+    }
+    private string _modRootFolderPath = string.Empty;
 
     [MemoryPackOrder(1)]
-    public string GameRootFolderPath { get; set; } = string.Empty;
+    public string GameRootFolderPath
+    {
+        get => _gameRootFolderPath;
+        set => SetProperty(ref _gameRootFolderPath, value);
+    }
+    private string _gameRootFolderPath = string.Empty;
 
     [MemoryPackOrder(2)]
-    public ElementTheme AppThemeMode { get; set; } = ElementTheme.Default;
+    public ElementTheme AppThemeMode
+    {
+        get => _appThemeMode;
+        set => SetProperty(ref _appThemeMode, value);
+    }
+    private ElementTheme _appThemeMode = ElementTheme.Default;
 
     [MemoryPackOrder(3)]
-    public GameLanguage GameLanguage { get; set; } = GameLanguage.Default;
+    public GameLanguage GameLanguage
+    {
+        get => _gameLanguage;
+        set => SetProperty(ref _gameLanguage, value);
+    }
+    private GameLanguage _gameLanguage = GameLanguage.Default;
+
+    [MemoryPackIgnore]
+    public bool IsChanged { get; private set; }
+    [MemoryPackIgnore]
+    public bool IsUnchanged => !IsChanged;
 
     private const string ConfigFileName = "globalSettings.bin";
     private static string ConfigFilePath => Path.Combine(App.ConfigFolder, ConfigFileName);
 
-    public void Save()
+    private static readonly ILogger<GlobalSettingService> Logger =
+        App.Current.Services.GetRequiredService<ILogger<GlobalSettingService>>();
+
+    private GlobalSettingService() { }
+
+    private void SetProperty<T>(ref T field, T newValue)
     {
+        if (EqualityComparer<T>.Default.Equals(field, newValue))
+        {
+            return;
+        }
+        field = newValue;
+        IsChanged = true;
+    }
+
+    /// <summary>
+    /// 如果有更改，保存更改
+    /// </summary>
+    public void SaveChanged()
+    {
+        if (IsUnchanged)
+        {
+            Logger.LogInformation("配置文件未改变, 跳过写入");
+            return;
+        }
+        Logger.LogInformation("配置文件保存中...");
         // TODO: System.IO.Pipelines
         File.WriteAllBytes(ConfigFilePath, MemoryPackSerializer.Serialize(this));
+        IsChanged = false;
+        Logger.LogInformation("配置文件保存完成");
     }
 
     public static GlobalSettingService Load()
@@ -39,6 +92,16 @@ public sealed partial class GlobalSettingService
         var array = new Span<byte>(new byte[reader.Length]);
         _ = reader.Read(array);
         var result = MemoryPackSerializer.Deserialize<GlobalSettingService>(array);
-        return result ?? new GlobalSettingService();
+
+        if (result is null)
+        {
+            result = new GlobalSettingService();
+        }
+        else
+        {
+            result.IsChanged = false;
+        }
+
+        return result;
     }
 }

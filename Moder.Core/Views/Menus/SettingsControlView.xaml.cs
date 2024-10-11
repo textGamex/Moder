@@ -1,29 +1,41 @@
-using Windows.System;
 using CommunityToolkit.WinUI.Controls;
 using Microsoft.UI.Xaml;
+using Moder.Core.Services.Config;
 using Moder.Core.ViewsModels.Menus;
+using Windows.System;
 
 namespace Moder.Core.Views.Menus;
 
 public sealed partial class SettingsControlView
 {
-	public SettingsControlViewModel ViewModel => (SettingsControlViewModel)DataContext;
-	public SettingsControlView(SettingsControlViewModel settingsViewModel)
-	{
-		InitializeComponent();
+    private readonly GlobalSettingService _globalSettingService;
+    public SettingsControlViewModel ViewModel => (SettingsControlViewModel)DataContext;
 
-		DataContext = settingsViewModel;
-	}
+    public SettingsControlView(SettingsControlViewModel settingsViewModel, GlobalSettingService globalSettingService)
+    {
+        _globalSettingService = globalSettingService;
+        InitializeComponent();
 
-	private async void OnRootPathCardClicked(object sender, RoutedEventArgs e)
-	{
-		var card = (SettingsCard)sender;
-		await Launcher.LaunchFolderPathAsync(card.Description.ToString());
-	}
+        DataContext = settingsViewModel;
+    }
 
-	private async void OnGitHubUrlCardClicked(object sender, RoutedEventArgs e)
-	{
-		var card = (SettingsCard)sender;
-		await Launcher.LaunchUriAsync(new Uri(card.Description.ToString() ?? throw new InvalidOperationException()));
-	}
+    private async void OnRootPathCardClicked(object sender, RoutedEventArgs e)
+    {
+        var card = (SettingsCard)sender;
+        await Launcher.LaunchFolderPathAsync(card.Description.ToString());
+    }
+
+    private async void OnGitHubUrlCardClicked(object sender, RoutedEventArgs e)
+    {
+        var card = (SettingsCard)sender;
+        await Launcher.LaunchUriAsync(new Uri(card.Description.ToString() ?? throw new InvalidOperationException()));
+    }
+
+    /// <summary>
+    /// 如果有更改，保存更改
+    /// </summary>
+    public void SaveChanged()
+    {
+        _globalSettingService.SaveChanged();
+    }
 }

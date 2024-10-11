@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -8,6 +8,7 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using Moder.Core.Extensions;
 using Moder.Core.Messages;
 using Moder.Core.Services.Config;
 using Moder.Core.Views;
@@ -145,9 +146,7 @@ public sealed partial class MainWindow
 
     private void MainWindow_OnClosed(object sender, WindowEventArgs args)
     {
-        _logger.LogInformation("配置文件保存中...");
-        _settings.Save();
-        _logger.LogInformation("配置文件保存完成");
+        _settings.SaveChanged();
     }
 
     private void MainTabView_OnTabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
@@ -163,6 +162,10 @@ public sealed partial class MainWindow
             {
                 WeakReferenceMessenger.Default.Send(new SyncSideWorkSelectedItemMessage(null));
             }
+        }
+        else if (args.Tab.Content is SettingsControlView settings)
+        {
+            settings.SaveChanged();
         }
     }
 
