@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -20,11 +20,15 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
     public NodeVo? Parent { get; } = parent;
     public string TypeString => Type.ToString();
     public IReadOnlyList<GameVoType> VoTypes => Enums.GetValues<GameVoType>();
-    protected GameValueType Type { get; init; }
+    public GameValueType Type { get; init; }
 
     public IRelayCommand RemoveSelfInParentCommand =>
         _removeSelfInParentCommand ??= new RelayCommand(RemoveSelfInParent);
     private RelayCommand? _removeSelfInParentCommand;
+
+    public IRelayCommand<StackPanel> AddAdjacentValueCommand =>
+        _addAdjacentValueCommand ??= new RelayCommand<StackPanel>(AddAdjacentValue);
+    private RelayCommand<StackPanel>? _addAdjacentValueCommand;
 
     private static readonly ILogger<ObservableGameValue> Logger = App.Current.Services.GetRequiredService<
         ILogger<ObservableGameValue>
@@ -32,7 +36,7 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
     protected static readonly LeafConverterService ConverterService =
         App.Current.Services.GetRequiredService<LeafConverterService>();
 
-    public abstract Child ToRawChild();
+    public abstract Child[] ToRawChildren();
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
@@ -57,9 +61,13 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
         // }
     }
 
-    [RelayCommand]
-    private void AddAdjacentValue(StackPanel value)
+    private void AddAdjacentValue(StackPanel? value)
     {
+        if (value is null)
+        {
+            return;
+        }
+
         if (Parent is null)
         {
             Logger.LogWarning("添加相邻节点失败, 父节点为空");
@@ -94,6 +102,7 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
             GameVoType.Node => new NodeVo(newKeyword, Parent),
             GameVoType.Leaf => ConverterService.GetSpecificLeafVo(newKeyword, newValue, Parent),
             GameVoType.LeafValues => new LeafValuesVo(newKeyword, [newValue], Parent),
+            GameVoType.Comment => new CommentVo(newKeyword, Parent),
             _ => throw new ArgumentOutOfRangeException()
         };
         Parent.Children.Insert(index, newObservableGameValue);

@@ -1,7 +1,8 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Moder.Core.Models.Vo;
+using ParadoxPower.Process;
 
 namespace Moder.Core.Views.Game;
 
@@ -13,6 +14,7 @@ public partial class StateFileDataTemplateSelector : DataTemplateSelector
     public DataTemplate IntLeaf { get; set; } = null!;
     public DataTemplate FloatLeaf { get; set; } = null!;
     public DataTemplate LeafValues { get; set; } = null!;
+    public DataTemplate Comment { get; set; } = null!;
     public DataTemplate StateCategoryLeaf { get; set; } = null!;
     public DataTemplate BuildingLeaf { get; set; } = null!;
     public DataTemplate NameLeaf { get; set; } = null!;
@@ -36,6 +38,7 @@ public partial class StateFileDataTemplateSelector : DataTemplateSelector
             NodeVo => Node,
             LeafVo => Leaf,
             LeafValuesVo => LeafValues,
+            CommentVo => Comment,
             _ => throw new ArgumentException("未知对象", nameof(item))
         };
     }

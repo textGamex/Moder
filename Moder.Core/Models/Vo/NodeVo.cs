@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -9,7 +9,6 @@ namespace Moder.Core.Models.Vo;
 
 public partial class NodeVo(string key, NodeVo? parent) : ObservableGameValue(key, parent)
 {
-    
     public ObservableCollection<ObservableGameValue> Children { get; } = [];
     public Visibility AddedValueTextBoxVisibility =>
         SelectedVoType == GameVoType.Node ? Visibility.Collapsed : Visibility.Visible;
@@ -35,13 +34,16 @@ public partial class NodeVo(string key, NodeVo? parent) : ObservableGameValue(ke
         Debug.Assert(isRemoved, "Failed to remove child from NodeVo.");
     }
 
-    public override Child ToRawChild()
+    public override Child[] ToRawChildren()
     {
         var node = new Node(Key);
         var children = new List<Child>(Children.Count);
-        children.AddRange(Children.Select(child => child.ToRawChild()));
+        foreach (var child in Children)
+        {
+            children.AddRange(child.ToRawChildren());
+        }
         node.AllArray = children.ToArray();
-        return Child.NewNodeChild(node);
+        return [Child.NewNodeChild(node)];
     }
 
     [RelayCommand]
@@ -101,7 +103,7 @@ public partial class NodeVo(string key, NodeVo? parent) : ObservableGameValue(ke
         }
     }
 
-    private enum AddType
+    private enum AddType : byte
     {
         AddChild,
         AddAdjacent

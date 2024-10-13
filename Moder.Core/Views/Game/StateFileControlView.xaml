@@ -23,6 +23,23 @@
         </Style>
 
         <local:StateFileDataTemplateSelector x:Key="StateFileDataTemplateSelector">
+
+            <local:StateFileDataTemplateSelector.Comment>
+                <DataTemplate x:DataType="vo:CommentVo">
+                    <controls:BaseLeaf LeafContext="{x:Bind}">
+                        <controls:BaseLeaf.SlotContent>
+                            <TextBox
+                                MinWidth="400"
+                                Margin="0,4"
+                                AcceptsReturn="True"
+                                AutomationProperties.Name="multi-line TextBox"
+                                Text="{x:Bind Comment, Mode=TwoWay}"
+                                TextWrapping="Wrap" />
+                        </controls:BaseLeaf.SlotContent>
+                    </controls:BaseLeaf>
+                </DataTemplate>
+            </local:StateFileDataTemplateSelector.Comment>
+
             <local:StateFileDataTemplateSelector.Leaf>
                 <DataTemplate x:DataType="vo:LeafVo">
                     <controls:BaseLeaf LeafContext="{x:Bind}">

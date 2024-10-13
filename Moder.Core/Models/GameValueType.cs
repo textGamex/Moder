@@ -1,11 +1,12 @@
-﻿namespace Moder.Core.Models;
+namespace Moder.Core.Models;
 
 public enum GameValueType : byte
 {
-	None,
-	String,
-	StringWithQuotation,
-	Bool,
-	Int,
-	Float
+    None,
+    String,
+    StringWithQuotation,
+    Bool,
+    Int,
+    Float,
+    Comment
 }

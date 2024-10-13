@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MethodTimer;
@@ -49,7 +50,7 @@ public sealed partial class StateFileControlViewModel : ObservableObject
 
         var rootNode = parser.GetResult();
         var elapsedTime = Stopwatch.GetElapsedTime(timestamp);
-        logger.LogInformation("解析时间: {time} ms", elapsedTime.TotalMilliseconds);
+        logger.LogInformation("解析时间: {Time} ms", elapsedTime.TotalMilliseconds);
 
         // 递归遍历所有节点
         ConvertData(rootNode);
@@ -59,16 +60,20 @@ public sealed partial class StateFileControlViewModel : ObservableObject
     private void ConvertData(Node rootNode)
     {
         Debug.Assert(rootNode.Key == _fileItem.Name);
-        Convert(rootNode, _rootNodeVo);
+        NodeConvertToVo(rootNode, _rootNodeVo);
     }
 
-    private void Convert(Node node, NodeVo nodeVo)
+    // TODO: 重构
+    private void NodeConvertToVo(Node node, NodeVo nodeVo)
     {
-        foreach (var child in node.AllArray)
+        var children = node.AllArray;
+        for (var index = 0; index < children.Length; index++)
         {
+            var child = children[index];
             if (child.IsLeafChild)
             {
                 var leaf = child.leaf;
+                AddCommentInAdvance(ref index, leaf.Position.StartLine);
                 var leafVo = _leafConverterService.GetSpecificLeafVo(
                     leaf.Key,
                     leaf.Value.ToRawString(),
@@ -77,8 +82,7 @@ public sealed partial class StateFileControlViewModel : ObservableObject
                 );
                 nodeVo.Add(leafVo);
             }
-
-            if (child.IsNodeChild)
+            else if (child.IsNodeChild)
             {
                 var childNode = child.node;
                 // 当 LeafValues 不为空时，表示该节点是 LeafValues 节点
@@ -90,78 +94,90 @@ public sealed partial class StateFileControlViewModel : ObservableObject
                 {
                     // 是普通节点
                     var childNodeVo = new NodeVo(childNode.Key, nodeVo);
+                    AddCommentInAdvance(ref index, childNode.Position.StartLine);
                     nodeVo.Add(childNodeVo);
-                    Convert(childNode, childNodeVo);
+                    NodeConvertToVo(childNode, childNodeVo);
                 }
             }
+            else if (child.IsCommentChild)
+            {
+                var comment = child.comment;
+                var nextChildIndex = index + 1;
+                if (nextChildIndex < children.Length && children[nextChildIndex].IsCommentChild)
+                {
+                    // 将连续的注释合并为一个节点
+                    // FuncName 合并连续注释
+                    var builder = new StringBuilder(comment.Comment, 64 + comment.Comment.Length);
+                    builder.Append(Environment.NewLine);
+                    while (index + 1 < children.Length && children[index + 1].IsCommentChild)
+                    {
+                        builder.AppendLine(children[index + 1].comment.Comment);
+                        ++index;
+                    }
 
-            // if (child.IsCommentChild)
-            // {
-            //     var comment = child.comment;
-            // }
+                    // 移除尾部换行符
+                    builder.Remove(builder.Length - Environment.NewLine.Length, Environment.NewLine.Length);
+                    nodeVo.Add(new CommentVo(builder.ToString(), nodeVo));
+                }
+                else
+                {
+                    nodeVo.Add(new CommentVo(comment.Comment, nodeVo));
+                }
+            }
+        }
+        return;
+
+        // 将尾后的注释移动到被注释代码的上一行, 方便我们显示和处理
+        // 注意: 这会导致注释的位置发生变化, 例如:
+        // #comment1
+        // key = value #comment2
+        // 转换后:
+        // #comment1
+        // #comment2
+        // key = value
+        void AddCommentInAdvance(ref int currentIndex, int statementStartLine)
+        {
+            var nextChildIndex = currentIndex + 1;
+
+            if (nextChildIndex >= children.Length)
+            {
+                return;
+            }
+
+            var nextChild = children[nextChildIndex];
+            if (nextChild.IsCommentChild && nextChild.comment.Position.StartLine == statementStartLine)
+            {
+                var comment = nextChild.comment;
+                nodeVo.Add(new CommentVo(comment.Comment, nodeVo));
+                ++currentIndex;
+            }
         }
     }
 
     [RelayCommand]
     private void SaveData()
     {
-        var parser = new TextParser(_fileItem.FullPath);
-        if (parser.IsFailure)
-        {
-            return;
-        }
-
-        // 与 Items 相同的层级结构
-        var rootNode = parser.GetResult();
         var timestamp = Stopwatch.GetTimestamp();
         // TODO: 数值有效性检查, int, float, bool
-        Save(rootNode, _rootNodeVo.Children.ToList());
-        var elapsedTime = Stopwatch.GetElapsedTime(timestamp);
-        _logger.LogInformation("保存成功, 耗时: {time} ms", elapsedTime.TotalMilliseconds);
-        _logger.LogDebug(
-            "Content: {content}",
-            CKPrinter.PrettyPrintStatements(rootNode.AllArray.Select(child => child.GetRawStatement(rootNode.Key)))
+        var rootNode = VoConvertToNode(_fileItem.Name, _rootNodeVo.Children.ToArray());
+        var text = CKPrinter.PrettyPrintStatements(
+            Array.ConvertAll(rootNode.AllArray, child => child.GetRawStatement(rootNode.Key))
         );
+        var elapsedTime = Stopwatch.GetElapsedTime(timestamp);
+        _logger.LogInformation("保存成功, 耗时: {Time} ms", elapsedTime.TotalMilliseconds);
+        _logger.LogDebug("Content: {Content}", text);
     }
 
-    private static void Save(Node rawNode, List<ObservableGameValue> gameVos)
+    private static Node VoConvertToNode(string key, ObservableGameValue[] gameVos)
     {
-        var rawList = rawNode.AllChildren;
-        for (var index = 0; index < rawList.Count; index++)
+        var node = new Node(key);
+        var list = new List<Child>(gameVos.Length);
+
+        foreach (var gameVo in gameVos)
         {
-            var rawChild = rawList[index];
-            if (rawChild.IsLeafChild || rawChild.IsNodeChild)
-            {
-                var gameVo = gameVos.Find(item => item.Key == rawChild.GetKey());
-                // 如果在原始文件中有该节点，但编辑器中不存在, 则说明用户删除了该节点, 则删除文件中对应的这个节点
-                if (gameVo is null)
-                {
-                    rawList.RemoveAt(index--);
-                }
-                else
-                {
-                    // 原始文件和编辑器都存在该节点, 更新节点值
-                    if (gameVo is LeafVo { IsChanged: true } leafVo)
-                    {
-                        rawChild.leaf.Value = leafVo.ToRawValue();
-                    }
-                    else if (gameVo is LeafValuesVo { IsChanged: true } leafValuesVo)
-                    {
-                        rawChild.node.AllArray = leafValuesVo.ToLeafValues();
-                    }
-                    else if (gameVo is NodeVo nodeVo)
-                    {
-                        Save(rawChild.node, nodeVo.Children.ToList());
-                    }
-
-                    // 删除所有原始文件和编辑器中都存在的节点, 留下的节点都是编辑器中新增的节点
-                    gameVos.Remove(gameVo);
-                }
-            }
+            list.AddRange(gameVo.ToRawChildren());
         }
-
-        // 将编辑器中新增的节点添加到原始文件中
-        rawList.AddRange(gameVos.Select(item => item.ToRawChild()));
-        rawNode.AllArray = rawList.ToArray();
+        node.AllArray = list.ToArray();
+        return node;
     }
 }

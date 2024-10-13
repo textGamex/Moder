@@ -1,8 +1,9 @@
-﻿namespace Moder.Core.Models.Vo;
+namespace Moder.Core.Models.Vo;
 
 public enum GameVoType : byte
 {
-	Node,
-	Leaf,
-	LeafValues
+    Node,
+    Leaf,
+    LeafValues,
+    Comment
 }

@@ -156,7 +156,13 @@ public sealed partial class MainWindow
         // 关闭文件标签页时，从缓存列表中移除对应的文件并同步侧边栏选中项
         if (args.Tab.Content is IFileView fileView)
         {
-            _openedTabFileItems.RemoveAt(_openedTabFileItems.FindIndex(item => item.FullPath == fileView.FullPath));
+            var index = _openedTabFileItems.FindIndex(item => item.FullPath == fileView.FullPath);
+            if (index == -1)
+            {
+                _logger.LogWarning("未找到");
+                return;
+            }
+            _openedTabFileItems.RemoveAt(index);
 
             if (sender.TabItems.Count == 0)
             {
