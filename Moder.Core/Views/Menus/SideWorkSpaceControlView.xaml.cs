@@ -1,10 +1,17 @@
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.WinUI;
 using Microsoft.Extensions.Logging;
+using Microsoft.UI.Input;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using Moder.Core.Messages;
 using Moder.Core.Services;
 using Moder.Core.ViewsModels.Menus;
+using Windows.UI;
 
 namespace Moder.Core.Views.Menus;
 
@@ -13,6 +20,7 @@ public sealed partial class SideWorkSpaceControlView : UserControl
     public SideWorkSpaceControlViewModel ViewModel => (SideWorkSpaceControlViewModel)DataContext;
     private readonly ILogger<SideWorkSpaceControlView> _logger;
     private readonly GlobalResourceService _resourceService;
+    private TreeViewItem? _lastSelectedItem;
 
     public SideWorkSpaceControlView(
         SideWorkSpaceControlViewModel model,
@@ -45,6 +53,8 @@ public sealed partial class SideWorkSpaceControlView : UserControl
 
     private void FileTreeView_OnSelectionChanged(TreeView sender, TreeViewSelectionChangedEventArgs args)
     {
+        ClearTreeViewItemRightSelectEffect();
+
         if (args.AddedItems.Count != 1)
         {
             _logger.LogDebug("未选中文件");
@@ -58,6 +68,23 @@ public sealed partial class SideWorkSpaceControlView : UserControl
             _resourceService.SetCurrentSelectFileItem(file);
 
             WeakReferenceMessenger.Default.Send(new OpenFileMessage(file));
+        }
+    }
+
+    private void TreeViewItem_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
+    {
+        ClearTreeViewItemRightSelectEffect();
+
+        var item = (TreeViewItem)sender;
+        _lastSelectedItem = item;
+        item.BorderBrush = new SolidColorBrush(Colors.CornflowerBlue);
+    }
+
+    private void ClearTreeViewItemRightSelectEffect()
+    {
+        if (_lastSelectedItem is not null)
+        {
+            _lastSelectedItem.BorderBrush = new SolidColorBrush(Colors.Transparent);
         }
     }
 }

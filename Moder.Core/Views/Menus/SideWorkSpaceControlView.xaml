@@ -20,7 +20,18 @@
         SelectionChanged="FileTreeView_OnSelectionChanged">
         <TreeView.ItemTemplate>
             <DataTemplate x:DataType="vms:SystemFileItem">
-                <TreeViewItem Content="{x:Bind Name}" ItemsSource="{x:Bind Children}" />
+                <TreeViewItem
+                    BorderThickness="0.5"
+                    Content="{x:Bind Name}"
+                    ItemsSource="{x:Bind Children}"
+                    RightTapped="TreeViewItem_OnRightTapped">
+                    <TreeViewItem.ContextFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Icon="Delete" Text="删除" />
+                            <MenuFlyoutItem Command="{x:Bind ShowInExplorerCommand}" Text="在文件资源管理器中显示" />
+                        </MenuFlyout>
+                    </TreeViewItem.ContextFlyout>
+                </TreeViewItem>
             </DataTemplate>
         </TreeView.ItemTemplate>
     </TreeView>
