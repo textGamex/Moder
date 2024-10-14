@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Moder.Core.Services.Config;
 
@@ -11,7 +11,7 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
 
     public SideWorkSpaceControlViewModel(GlobalSettingService globalSettings)
     {
-        var items = new SystemFileItem(globalSettings.ModRootFolderPath, false);
+        var items = new SystemFileItem(globalSettings.ModRootFolderPath, false, null);
         LoadFileSystem(globalSettings.ModRootFolderPath, items);
         Items = [items];
     }
@@ -26,14 +26,14 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
 
         foreach (var directoryPath in directories)
         {
-            var item = new SystemFileItem(directoryPath, false);
+            var item = new SystemFileItem(directoryPath, false, parent);
             parent.Children.Add(item);
             LoadFileSystem(directoryPath, item);
         }
 
         foreach (var filePath in files)
         {
-            parent.Children.Add(new SystemFileItem(filePath, true));
+            parent.Children.Add(new SystemFileItem(filePath, true, parent));
         }
     }
 

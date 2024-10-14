@@ -1,27 +1,35 @@
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using CommunityToolkit.Mvvm.Input;
-using Windows.Storage;
-using Windows.System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.UI.Xaml.Controls;
+using Windows.Storage;
+using Windows.System;
 
 namespace Moder.Core.ViewsModels.Menus;
 
 public sealed partial class SystemFileItem
 {
+    /// <summary>
+    /// 当是文件时是文件名, 文件夹时是文件夹名
+    /// </summary>
     public string Name { get; }
     public string FullPath { get; }
     public bool IsFile { get; }
+    public SystemFileItem? Parent { get; }
     public ObservableCollection<SystemFileItem> Children { get; } = [];
 
-    private static readonly ILogger<SystemFileItem> Logger =
-        App.Current.Services.GetRequiredService<ILogger<SystemFileItem>>();
+    private static readonly ILogger<SystemFileItem> Logger = App.Current.Services.GetRequiredService<
+        ILogger<SystemFileItem>
+    >();
 
-    public SystemFileItem(string fullPath, bool isFile)
+    public SystemFileItem(string fullPath, bool isFile, SystemFileItem? parent)
     {
         Name = Path.GetFileName(fullPath);
         FullPath = fullPath;
         IsFile = isFile;
+        Parent = parent;
     }
 
     public override string ToString()
@@ -50,9 +58,88 @@ public sealed partial class SystemFileItem
             Logger.LogWarning("在资源管理器中打开失败，无法获取路径：{FullPath}", FullPath);
             return;
         }
-        await Launcher.LaunchFolderPathAsync(
-            folder,
-            new FolderLauncherOptions { ItemsToSelect = { selectedItem } }
-        );
+        await Launcher.LaunchFolderPathAsync(folder, new FolderLauncherOptions { ItemsToSelect = { selectedItem } });
     }
+
+    [RelayCommand]
+    private async Task DeleteFile()
+    {
+        var dialog = new ContentDialog
+        {
+            XamlRoot = App.Current.MainWindow.Content.XamlRoot,
+            Title = IsFile ? $"确认删除 '{Name}' 吗?" : $"确认删除 '{Name}' 及其内容吗?",
+            Content = "您可以从回收站还原此文件",
+            PrimaryButtonText = "移动到回收站",
+            CloseButtonText = "取消"
+        };
+        var result = await dialog.ShowAsync();
+        if (result == ContentDialogResult.Primary)
+        {
+            if (TryMoveToRecycleBin(FullPath))
+            {
+                Parent?.Children.Remove(this);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 尝试删除文件或文件夹
+    /// </summary>
+    /// <param name="fileOrDirectoryPath"></param>
+    /// <returns>成功返回 <c>true</c>, 失败返回 <c>false</c></returns>
+    private static bool TryMoveToRecycleBin(string fileOrDirectoryPath)
+    {
+        // 可以使用 dynamic
+        // // from https://learn.microsoft.com/en-us/windows/win32/api/shldisp/ne-shldisp-shellspecialfolderconstants
+        // const int ssfBITBUCKET = 0xa;
+        // dynamic? shell = Activator.CreateInstance(Type.GetTypeFromProgID("Shell.Application")!);
+        // var recycleBin = shell?.Namespace(ssfBITBUCKET);
+        // recycleBin?.MoveHere(fileOrDirectoryPath);
+
+        if (!Path.Exists(fileOrDirectoryPath))
+        {
+            return false;
+        }
+
+        var shf = new SHFILEOPSTRUCT
+        {
+            wFunc = FO_DELETE,
+            fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION,
+            // 需要双null结尾
+            pFrom = fileOrDirectoryPath + '\0'
+        };
+        var errorCode = SHFileOperation(ref shf);
+        if (errorCode != Ok)
+        {
+            Logger.LogWarning("删除文件失败, Code: {Code}", errorCode);
+            return false;
+        }
+
+        return true;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    private struct SHFILEOPSTRUCT
+    {
+        public IntPtr hwnd;
+
+        [MarshalAs(UnmanagedType.U4)]
+        public int wFunc;
+        public string pFrom;
+        public string pTo;
+        public short fFlags;
+
+        [MarshalAs(UnmanagedType.Bool)]
+        public bool fAnyOperationsAborted;
+        public IntPtr hNameMappings;
+        public string lpszProgressTitle;
+    }
+
+    [DllImport("shell32.dll", CharSet = CharSet.Auto)]
+    private static extern int SHFileOperation(ref SHFILEOPSTRUCT fileOp);
+
+    private const int FO_DELETE = 3;
+    private const int FOF_ALLOWUNDO = 0x40;
+    private const int FOF_NOCONFIRMATION = 0x10;
+    private const int Ok = 0;
 }

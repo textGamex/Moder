@@ -27,7 +27,10 @@
                     RightTapped="TreeViewItem_OnRightTapped">
                     <TreeViewItem.ContextFlyout>
                         <MenuFlyout>
-                            <MenuFlyoutItem Icon="Delete" Text="删除" />
+                            <MenuFlyoutItem
+                                Command="{x:Bind DeleteFileCommand}"
+                                Icon="Delete"
+                                Text="删除" />
                             <MenuFlyoutItem Command="{x:Bind ShowInExplorerCommand}" Text="在文件资源管理器中显示" />
                         </MenuFlyout>
                     </TreeViewItem.ContextFlyout>
