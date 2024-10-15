@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,8 +18,10 @@ public sealed partial class SystemFileItem
     public string Name { get; }
     public string FullPath { get; }
     public bool IsFile { get; }
+    public bool IsFolder =>!IsFile;
     public SystemFileItem? Parent { get; }
-    public ObservableCollection<SystemFileItem> Children { get; } = [];
+    public IReadOnlyList<SystemFileItem> Children => _children;
+    private readonly ObservableCollection<SystemFileItem> _children = [];
 
     private static readonly ILogger<SystemFileItem> Logger = App.Current.Services.GetRequiredService<
         ILogger<SystemFileItem>
@@ -32,13 +35,43 @@ public sealed partial class SystemFileItem
         Parent = parent;
     }
 
+    /// <summary>
+    /// 添加子节点
+    /// </summary>
+    /// <param name="child">添加的子节点</param>
+    /// <exception cref="ArgumentException">如果子节点的父节点不是当前节点, 则抛出此异常</exception>
+    public void AddChild(SystemFileItem child)
+    {
+        if (!ReferenceEquals(child.Parent, this))
+        {
+            throw new ArgumentException("Child's parent should be this");
+        }
+
+        _children.Add(child);
+    }
+
+    public void AddChild(string fullPath, bool isFile)
+    {
+        AddChild(new SystemFileItem(fullPath, isFile, this));
+    }
+
+    public void InsertChild(int index, SystemFileItem child)
+    {
+        if (!ReferenceEquals(child.Parent, this))
+        {
+            throw new ArgumentException("Child's parent should be this");
+        }
+
+        App.Current.MainWindow.DispatcherQueue.TryEnqueue(() => _children.Insert(index, child));
+    }
+
     public override string ToString()
     {
         return $"{nameof(Name)}: {Name}, {nameof(FullPath)}: {FullPath}, {nameof(IsFile)}: {IsFile}, {nameof(Children)}: {Children}";
     }
 
     [RelayCommand]
-    private async Task ShowInExplorer()
+    private async Task ShowInExplorerAsync()
     {
         string? folder;
         IStorageItem selectedItem;
@@ -77,7 +110,7 @@ public sealed partial class SystemFileItem
         {
             if (TryMoveToRecycleBin(FullPath))
             {
-                Parent?.Children.Remove(this);
+                Parent?._children.Remove(this);
             }
         }
     }

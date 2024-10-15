@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Windows.Foundation;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -8,16 +9,14 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
-using Moder.Core.Extensions;
 using Moder.Core.Messages;
 using Moder.Core.Services.Config;
-using Moder.Core.Views;
 using Moder.Core.Views.Game;
 using Moder.Core.Views.Menus;
+using Moder.Core.ViewsModels;
 using Moder.Core.ViewsModels.Menus;
-using Windows.Foundation;
 
-namespace Moder.Core;
+namespace Moder.Core.Views;
 
 public sealed partial class MainWindow
 {

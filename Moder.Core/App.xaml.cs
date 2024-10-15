@@ -15,7 +15,7 @@ public partial class App : Application
     public static new App Current => (App)Application.Current;
 
     public IServiceProvider Services => Current._serviceProvider;
-    public MainWindow MainWindow { get; private set; } = null!;
+    public Views.MainWindow MainWindow { get; private set; } = null!;
     public static string ConfigFolder { get; } = Path.Combine(Environment.CurrentDirectory, "Configs");
     public static string ParserRulesFolder { get; } = Path.Combine(ConfigFolder, "ParserRules");
 
@@ -53,7 +53,7 @@ public partial class App : Application
     /// <param name="args">Details about the launch request and process.</param>
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        MainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+        MainWindow = _serviceProvider.GetRequiredService<Views.MainWindow>();
         SetAppTheme();
         MainWindow.Activate();
     }

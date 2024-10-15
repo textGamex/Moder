@@ -8,6 +8,7 @@ using Moder.Core.Services.ParserRules;
 using Moder.Core.Views;
 using Moder.Core.Views.Game;
 using Moder.Core.Views.Menus;
+using Moder.Core.ViewsModels;
 using Moder.Core.ViewsModels.Game;
 using Moder.Core.ViewsModels.Menus;
 using Moder.Hosting.WinUI;
@@ -35,7 +36,7 @@ public static partial class Program
 		var builder = Host.CreateApplicationBuilder(args);
 
 		// View, ViewModel
-		builder.Services.AddSingleton<MainWindow>();
+		builder.Services.AddSingleton<Views.MainWindow>();
 		builder.Services.AddSingleton<MainWindowViewModel>();
 		builder.Services.AddTransient<OpenFolderControlView>();
 		builder.Services.AddTransient<OpenFolderControlViewModel>();
