@@ -126,7 +126,7 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
             ++i;
         }
 
-        return i - 1;
+        return i == 0 ? 0 : i - 1;
     }
 
     private static void LoadFileSystem(string path, SystemFileItem parent)
