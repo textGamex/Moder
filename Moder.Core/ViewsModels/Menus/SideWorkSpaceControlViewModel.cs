@@ -10,8 +10,9 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
 {
     private readonly ILogger<SideWorkSpaceControlViewModel> _logger;
 
-    [ObservableProperty]
-    private SystemFileItem[] _items;
+    // [ObservableProperty]
+    public IReadOnlyList<SystemFileItem> Items => _root.Children;
+    private readonly SystemFileItem _root;
 
     private readonly FileSystemWatcher _watcher;
 
@@ -21,20 +22,34 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
     )
     {
         _logger = logger;
+
         _watcher = new FileSystemWatcher(globalSettings.ModRootFolderPath, "*.*");
         _watcher.Deleted += ContentOnDeleted;
         _watcher.Created += ContentOnCreated;
+        _watcher.Renamed += ContentOnRenamed;
         _watcher.IncludeSubdirectories = true;
         _watcher.EnableRaisingEvents = true;
 
         var root = new SystemFileItem(globalSettings.ModRootFolderPath, false, null);
         LoadFileSystem(globalSettings.ModRootFolderPath, root);
-        _items = [root];
+        _root = root;
+    }
+
+    private void ContentOnRenamed(object sender, RenamedEventArgs e)
+    {
+        var target = FindFileItemByPath(e.OldFullPath, Items);
     }
 
     private void ContentOnDeleted(object sender, FileSystemEventArgs e)
     {
-        
+        var target = FindFileItemByPath(e.FullPath, Items);
+        if (target is null)
+        {
+            _logger.LogWarning("找不到: {FullPath}", e.FullPath);
+            return;
+        }
+        var parent = target.Parent;
+        parent?.RemoveChild(target);
     }
 
     private void ContentOnCreated(object sender, FileSystemEventArgs e)
@@ -47,7 +62,7 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
         }
 
         var isFile = !Directory.Exists(e.FullPath);
-        var parent = FindInsertParent(directoryPath, Items);
+        var parent = FindFileItemByPath(directoryPath, Items);
         if (parent is null)
         {
             _logger.LogWarning("找不到插入的位置: {FullPath}", directoryPath);
@@ -60,17 +75,23 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
         _logger.LogInformation("添加的位置: {FullPath}", parent?.FullPath ?? "null");
     }
 
-    private static SystemFileItem? FindInsertParent(string directoryPath, IReadOnlyList<SystemFileItem> items)
+    /// <summary>
+    /// 查找系统文件夹或文件对应的 <see cref="SystemFileItem"/>
+    /// </summary>
+    /// <param name="fullPath">文件或文件夹的路径</param>
+    /// <param name="items"></param>
+    /// <returns></returns>
+    private static SystemFileItem? FindFileItemByPath(string fullPath, IReadOnlyList<SystemFileItem> items)
     {
         for (var index = 0; index < items.Count; index++)
         {
             var fileItem = items[index];
-            if (fileItem.FullPath == directoryPath)
+            if (fileItem.FullPath == fullPath)
             {
                 return fileItem;
             }
 
-            var result = FindInsertParent(directoryPath, fileItem.Children);
+            var result = FindFileItemByPath(fullPath, fileItem.Children);
             if (result is not null)
             {
                 return result;

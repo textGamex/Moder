@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Numerics;
 using System.Runtime.InteropServices;
@@ -63,6 +64,11 @@ public sealed partial class SystemFileItem
         }
 
         App.Current.MainWindow.DispatcherQueue.TryEnqueue(() => _children.Insert(index, child));
+    }
+
+    public void RemoveChild(SystemFileItem child)
+    {
+        App.Current.MainWindow.DispatcherQueue.TryEnqueue(() => _children.Remove(child));
     }
 
     public override string ToString()
