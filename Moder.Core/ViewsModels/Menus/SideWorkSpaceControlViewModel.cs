@@ -8,14 +8,12 @@ namespace Moder.Core.ViewsModels.Menus;
 
 public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
 {
-    private readonly ILogger<SideWorkSpaceControlViewModel> _logger;
-
-    // [ObservableProperty]
     public IReadOnlyList<SystemFileItem> Items => _root.Children;
     private readonly SystemFileItem _root;
 
     private readonly FileSystemWatcher _watcher;
-
+    private readonly ILogger<SideWorkSpaceControlViewModel> _logger;
+    
     public SideWorkSpaceControlViewModel(
         GlobalSettingService globalSettings,
         ILogger<SideWorkSpaceControlViewModel> logger
@@ -37,7 +35,28 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
 
     private void ContentOnRenamed(object sender, RenamedEventArgs e)
     {
+        // 如果在标签页内已经打开了, 不做处理
         var target = FindFileItemByPath(e.OldFullPath, Items);
+        if (target is null)
+        {
+            _logger.LogWarning("找不到改名前的项目: {FullPath}", e.OldFullPath);
+            return;
+        }
+
+        var parent = target.Parent;
+        if (parent is null)
+        {
+            _logger.LogWarning("找不到父节点: {FullPath}", e.OldFullPath);
+            return;
+        }
+        parent.RemoveChild(target);
+        var newItem = new SystemFileItem(e.FullPath, target.IsFile, parent);
+        if (newItem.IsFolder)
+        {
+            LoadFileSystem(e.FullPath, newItem);
+        }
+        var insertIndex = FindInsertIndex(newItem);
+        parent.InsertChild(insertIndex, newItem);
     }
 
     private void ContentOnDeleted(object sender, FileSystemEventArgs e)
@@ -70,7 +89,7 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
         }
 
         var item = new SystemFileItem(e.FullPath, isFile, parent);
-        var insertIndex = FindInsertIndex(parent.Children, item);
+        var insertIndex = FindInsertIndex(item);
         parent.InsertChild(insertIndex, item);
         _logger.LogInformation("添加的位置: {FullPath}", parent?.FullPath ?? "null");
     }
@@ -101,8 +120,20 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
         return null;
     }
 
-    private static int FindInsertIndex(IReadOnlyList<SystemFileItem> parentChildren, SystemFileItem newItem)
+    /// <summary>
+    /// 查找插入的位置
+    /// </summary>
+    /// <param name="newItem">新增的项目</param>
+    /// <returns>新项目的插入位置</returns>
+    /// <exception cref="ArgumentException">如果 <paramref name="newItem"/> 的父节点为<c>null</c></exception>
+    private static int FindInsertIndex(SystemFileItem newItem)
     {
+        var parentChildren = newItem.Parent?.Children;
+        if (parentChildren is null)
+        {
+            throw new ArgumentException("找不到父节点");
+        }
+        
         if (parentChildren.Count == 0)
         {
             return 0;

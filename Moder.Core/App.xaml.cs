@@ -28,7 +28,7 @@ public partial class App : Application
     public App(IServiceProvider serviceProvider, ILogger<App> logger)
     {
         _serviceProvider = serviceProvider;
-        UnhandledException += (sender, args) => logger.LogError(args.Exception, "Unhandled exception");
+        UnhandledException += (_, args) => logger.LogError(args.Exception, "Unhandled exception");
         InitializeComponent();
 
         InitializeApp();
