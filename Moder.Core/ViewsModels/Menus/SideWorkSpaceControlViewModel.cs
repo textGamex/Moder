@@ -119,7 +119,7 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
         {
             maxIndex = lastFolderIndex;
             // 未找到时，添加到最后一个文件夹之后,
-            insertIndex = lastFolderIndex;
+            insertIndex = lastFolderIndex + 1;
         }
         else
         {
