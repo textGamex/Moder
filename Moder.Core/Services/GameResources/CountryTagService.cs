@@ -1,53 +1,57 @@
 ﻿using System.Collections.Frozen;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Moder.Core.Extensions;
-using Moder.Core.Parser;
+using Moder.Core.Services.GameResources.Base;
+using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources;
 
-public sealed class CountryTagService
+public sealed class CountryTagService : CommonResourcesService<CountryTagService, FrozenSet<string>>
 {
     /// <summary>
     /// 在游戏内注册的国家标签
     /// </summary>
-    public IReadOnlyCollection<string> CountryTags => _countryTags;
+    public IReadOnlyCollection<string> CountryTags => _countryTagsLazy.Value;
 
-    private readonly FrozenSet<string> _countryTags;
-    private readonly ILogger<CountryTagService> _logger;
+    private Lazy<IReadOnlyCollection<string>> _countryTagsLazy;
 
-    public CountryTagService(IEnumerable<string> filePaths)
+    public CountryTagService()
+        : base(Path.Combine(Keywords.Common, "country_tags"), WatcherFilter.Text)
     {
-        _logger = App.Current.Services.GetRequiredService<ILogger<CountryTagService>>();
-
-        var countryTags = new HashSet<string>(256);
-        foreach (var filePath in filePaths)
+        _countryTagsLazy = new Lazy<IReadOnlyCollection<string>>(GetCountryTags);
+        OnResourceChanged += (_, _) =>
         {
-            if (!TextParser.TryParse(filePath, out var rootNode, out var error))
-            {
-                _logger.LogParseError(error);
-                continue;
-            }
+            _countryTagsLazy = new Lazy<IReadOnlyCollection<string>>(GetCountryTags);
+            Logger.LogDebug("Country tags changed, 已重置");
+        };
+    }
 
-            // 不加载临时标签
-            if (
-                Array.Exists(
-                    rootNode.Leaves.ToArray(),
-                    leaf =>
-                        leaf.Key.Equals("dynamic_tags", StringComparison.OrdinalIgnoreCase)
-                        && leaf.ValueText.Equals("yes", StringComparison.OrdinalIgnoreCase)
-                )
+    private string[] GetCountryTags()
+    {
+        return Resources.Values.SelectMany(set => set.Items).ToArray();
+    }
+
+    protected override FrozenSet<string>? ParseFileToContent(Node rootNode)
+    {
+        var leaves = rootNode.Leaves.ToArray();
+        var countryTags = new HashSet<string>(leaves.Length);
+
+        // 不加载临时标签
+        if (
+            Array.Exists(
+                leaves,
+                leaf =>
+                    leaf.Key.Equals("dynamic_tags", StringComparison.OrdinalIgnoreCase)
+                    && leaf.ValueText.Equals("yes", StringComparison.OrdinalIgnoreCase)
             )
-            {
-                continue;
-            }
-
-            foreach (var leaf in rootNode.Leaves)
-            {
-                countryTags.Add(leaf.Key);
-            }
+        )
+        {
+            return null;
         }
 
-        _countryTags = countryTags.ToFrozenSet();
+        foreach (var leaf in leaves)
+        {
+            countryTags.Add(leaf.Key);
+        }
+        return countryTags.ToFrozenSet(StringComparer.OrdinalIgnoreCase);
     }
 }

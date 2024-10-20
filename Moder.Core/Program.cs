@@ -54,6 +54,8 @@ public static partial class Program
 		builder.Services.AddSingleton<GameModDescriptorService>();
 		builder.Services.AddSingleton<LeafConverterService>();
 		builder.Services.AddSingleton<CountryTagConsumerService>();
+		builder.Services.AddSingleton<GameResourcesWatcherService>();
+		builder.Services.AddSingleton<GameResourcesPathService>();
 
 		// Setup and provision the hosting context for the User Interface
 		// service.

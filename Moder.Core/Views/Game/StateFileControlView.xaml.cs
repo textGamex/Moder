@@ -78,7 +78,7 @@ public sealed partial class StateFileControlView : IFileView
 
 	private async void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
 	{
-		// È·±£ ItemsSource ²»Îª¿Õ, ±ÜÃâÅ×³öÒì³£
+		// ç¡®ä¿ ItemsSource ä¸ä¸ºç©º, é¿å…æŠ›å‡ºå¼‚å¸¸
 		if (sender is ListView { ItemsSource: ICollection { Count: > 0 } } listView)
 		{
 			await listView.SmoothScrollIntoViewWithIndexAsync(
@@ -104,7 +104,7 @@ public sealed partial class StateFileControlView : IFileView
 		{
 			var suggestions = SearchCountryTag(sender.Text);
 
-			sender.ItemsSource = suggestions.Length > 0 ? suggestions : ["Î´ÕÒµ½"];
+			sender.ItemsSource = suggestions.Length > 0 ? suggestions : ["æœªæ‰¾åˆ°"];
 		}
 	}
 
@@ -141,7 +141,7 @@ public sealed partial class StateFileControlView : IFileView
 	{
 		_timer.Start();
 
-		// TODO: ²»ÄÜ¼ÓÈëµ½ Leaf, LeafValue ÖĞ |  ¼ÓÈëÒ»¸ö Node, Àë¿ªÒ»¸ö Node, µ÷ÕûÎ»ÖÃ
+		// TODO: ä¸èƒ½åŠ å…¥åˆ° Leaf, LeafValue ä¸­ |  åŠ å…¥ä¸€ä¸ª Node, ç¦»å¼€ä¸€ä¸ª Node, è°ƒæ•´ä½ç½®
 	}
 
 	[DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Auto)]

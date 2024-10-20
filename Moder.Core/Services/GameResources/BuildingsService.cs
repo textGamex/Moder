@@ -1,50 +1,65 @@
 using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Moder.Core.Extensions;
 using Moder.Core.Models;
-using Moder.Core.Parser;
+using Moder.Core.Services.GameResources.Base;
 using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources;
 
 public sealed class BuildingsService
+    : CommonResourcesService<BuildingsService, FrozenDictionary<string, BuildingInfo>>
 {
-    private readonly FrozenDictionary<string, BuildingInfo> _buildings;
-    private readonly ILogger<BuildingsService> _logger;
+    private Dictionary<string, FrozenDictionary<string, BuildingInfo>>.ValueCollection Buildings =>
+        Resources.Values;
+    private const string BuildingsKeyword = "buildings";
 
-    public BuildingsService(IEnumerable<string> filePaths)
+    public BuildingsService()
+        : base(Path.Combine(Keywords.Common, BuildingsKeyword), WatcherFilter.Text) { }
+
+    public bool Contains(string buildingType)
     {
-        _logger = App.Current.Services.GetRequiredService<ILogger<BuildingsService>>();
-
-        // 预设容量数据来自 1.14.8 版本
-        var buildings = new Dictionary<string, BuildingInfo>(16);
-        foreach (var filePath in filePaths)
+        foreach (var building in Buildings)
         {
-            if (!TextParser.TryParse(filePath, out var rootNode, out var error))
+            if (building.ContainsKey(buildingType))
             {
-                _logger.LogParseError(error);
-                continue;
+                return true;
             }
-
-            if (!rootNode.TryGetChild("buildings", out var buildingsNode))
-            {
-                _logger.LogWarning("buildings node not found");
-                continue;
-            }
-
-            ParseBuildingNodeToDictionary(buildingsNode.Nodes, buildings);
         }
-
-        _buildings = buildings.ToFrozenDictionary();
+        return false;
     }
 
-    private static void ParseBuildingNodeToDictionary(
-        IEnumerable<Node> buildingNodes,
-        Dictionary<string, BuildingInfo> buildings
+    public bool TryGetBuildingInfo(string buildingType, [NotNullWhen(true)] out BuildingInfo? buildingInfo)
+    {
+        foreach (var building in Buildings)
+        {
+            if (building.TryGetValue(buildingType, out buildingInfo))
+            {
+                return true;
+            }
+        }
+
+        buildingInfo = null;
+        return false;
+    }
+
+    protected override FrozenDictionary<string, BuildingInfo>? ParseFileToContent(Node rootNode)
+    {
+        if (!rootNode.TryGetChild(BuildingsKeyword, out var buildingsNode))
+        {
+            Logger.LogWarning("buildings node not found");
+            return null;
+        }
+
+        var buildings = ParseBuildingNodeToDictionary(buildingsNode.Nodes);
+        return buildings;
+    }
+
+    private static FrozenDictionary<string, BuildingInfo> ParseBuildingNodeToDictionary(
+        IEnumerable<Node> buildingNodes
     )
     {
+        var buildings = new Dictionary<string, BuildingInfo>(8);
         foreach (var buildingNode in buildingNodes)
         {
             byte? maxLevel = null;
@@ -59,12 +74,10 @@ public sealed class BuildingsService
                     break;
                 }
             }
+
             buildings[buildingNode.Key] = new BuildingInfo(buildingNode.Key, maxLevel);
         }
+
+        return buildings.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
     }
-
-    public bool Contains(string buildingType) => _buildings.ContainsKey(buildingType);
-
-    public bool TryGetBuildingInfo(string buildingType, [NotNullWhen(true)] out BuildingInfo? buildingInfo) =>
-        _buildings.TryGetValue(buildingType, out buildingInfo);
 }

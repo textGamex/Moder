@@ -1,12 +1,11 @@
 using System.Runtime.InteropServices;
 using CommunityToolkit.Mvvm.ComponentModel;
-using MethodTimer;
 using Microsoft.Extensions.Logging;
 using Moder.Core.Services.Config;
 
 namespace Moder.Core.ViewsModels.Menus;
 
-public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
+public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, IDisposable
 {
     public IReadOnlyList<SystemFileItem> Items => _root.Children;
     private readonly SystemFileItem _root;
@@ -25,12 +24,18 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
         _watcher.Deleted += ContentOnDeleted;
         _watcher.Created += ContentOnCreated;
         _watcher.Renamed += ContentOnRenamed;
+        _watcher.Changed += ContentOnChanged;
         _watcher.IncludeSubdirectories = true;
         _watcher.EnableRaisingEvents = true;
 
         var root = new SystemFileItem(globalSettings.ModRootFolderPath, false, null);
         LoadFileSystem(globalSettings.ModRootFolderPath, root);
         _root = root;
+    }
+
+    private void ContentOnChanged(object sender, FileSystemEventArgs e)
+    {
+        _logger.LogTrace("Changed: {FullPath}", e.FullPath);
     }
 
     private void ContentOnRenamed(object sender, RenamedEventArgs e)
@@ -49,12 +54,14 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
             _logger.LogWarning("找不到父节点: {FullPath}", e.OldFullPath);
             return;
         }
+        
         parent.RemoveChild(target);
         var newItem = new SystemFileItem(e.FullPath, target.IsFile, parent);
         if (newItem.IsFolder)
         {
             LoadFileSystem(e.FullPath, newItem);
         }
+        
         var insertIndex = FindInsertIndex(newItem);
         parent.InsertChild(insertIndex, newItem);
     }
@@ -73,7 +80,7 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
 
     private void ContentOnCreated(object sender, FileSystemEventArgs e)
     {
-        _logger.LogInformation("Created: {FullPath}", e.FullPath);
+        _logger.LogTrace("Created: {FullPath}", e.FullPath);
         var directoryPath = Path.GetDirectoryName(e.FullPath);
         if (directoryPath is null)
         {
@@ -91,7 +98,6 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
         var item = new SystemFileItem(e.FullPath, isFile, parent);
         var insertIndex = FindInsertIndex(item);
         parent.InsertChild(insertIndex, item);
-        _logger.LogInformation("添加的位置: {FullPath}", parent?.FullPath ?? "null");
     }
 
     /// <summary>
@@ -228,5 +234,11 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject
 
             return StrCmpLogicalW(x, y);
         }
+    }
+
+    // Host 会在应用退出时自动调用 Dispose 方法
+    public void Dispose()
+    {
+        _watcher.Dispose();
     }
 }

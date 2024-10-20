@@ -1,8 +1,6 @@
-﻿using System.Collections.Frozen;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Moder.Core.Extensions;
-using Moder.Core.Parser;
+﻿using Microsoft.Extensions.Logging;
+using Moder.Core.Services.GameResources.Base;
+using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources;
 
@@ -13,39 +11,43 @@ namespace Moder.Core.Services.GameResources;
 /// Resource 现在指代的是游戏资源, 游戏内的只好用 Ore 来代替了.
 /// </remarks>
 /// 单例模式
-public sealed class OreService
+public sealed class OreService : CommonResourcesService<OreService, string[]>
 {
-    private readonly FrozenSet<string> _resources;
-    private readonly ILogger<OreService> _logger;
+    private const string ResourcesKeyword = "resources";
+    private Dictionary<string, string[]>.ValueCollection Ores => Resources.Values;
 
-    public OreService(IEnumerable<string> filePaths)
+    public OreService()
+        : base(Path.Combine(Keywords.Common, ResourcesKeyword), WatcherFilter.Text) { }
+
+    public bool Contains(string resource)
     {
-        _logger = App.Current.Services.GetRequiredService<ILogger<OreService>>();
-        var set = new HashSet<string>(6);
-
-        foreach (var filePath in filePaths)
+        foreach (var ore in Ores)
         {
-            if (!TextParser.TryParse(filePath, out var rootNode, out var error))
+            if (Array.Exists(ore, x => StringComparer.OrdinalIgnoreCase.Equals(x, resource)))
             {
-                _logger.LogParseError(error);
-                continue;
-            }
-
-            if (rootNode.TryGetChild("resources", out var resourcesNode))
-            {
-                foreach (var resource in resourcesNode.Nodes)
-                {
-                    set.Add(resource.Key);
-                }
-            }
-            else
-            {
-                _logger.LogWarning("未找到 resources 节点");
+                return true;
             }
         }
 
-        _resources = set.ToFrozenSet();
+        return false;
     }
 
-    public bool Contains(string resource) => _resources.Contains(resource);
+    protected override string[] ParseFileToContent(Node rootNode)
+    {
+        // 一般来说, 每个资源文件只会有一个 resources 节点
+        var ores = new List<string>(1);
+
+        if (rootNode.TryGetChild(ResourcesKeyword, out var resourcesNode))
+        {
+            foreach (var resource in resourcesNode.Nodes)
+            {
+                ores.Add(resource.Key);
+            }
+        }
+        else
+        {
+            Logger.LogWarning("未找到 resources 节点");
+        }
+        return ores.ToArray();
+    }
 }

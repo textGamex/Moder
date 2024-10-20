@@ -1,53 +1,80 @@
 ﻿using System.Collections.Frozen;
+using Microsoft.Extensions.DependencyInjection;
+using Moder.Core.Extensions;
+using Moder.Core.Services.Config;
+using Moder.Core.Services.GameResources.Base;
 using ParadoxPower.CSharp;
 using ParadoxPower.Localisation;
 
 namespace Moder.Core.Services.GameResources;
 
 public sealed class LocalisationService
+    : ResourcesService<LocalisationService, FrozenDictionary<string, string>, YAMLLocalisationParser.LocFile>
 {
-	private readonly FrozenDictionary<string, string> _localisations;
+    private Dictionary<string, FrozenDictionary<string, string>>.ValueCollection Localisations =>
+        Resources.Values;
 
-	public LocalisationService(IEnumerable<string> filePaths)
-	{
-		// 预设容量值来自 1.14.8 版本
-		var localisations = new Dictionary<string, string>(88188);
-		foreach (var filePath in filePaths)
-		{
-			var localisation = YAMLLocalisationParser.parseLocFile(filePath);
-			if (localisation.IsFailure)
-			{
-				continue;
-			}
+    public LocalisationService()
+        : base(
+            Path.Combine(
+                "localisation",
+                App.Current.Services.GetRequiredService<GlobalSettingService>()
+                    .GameLanguage.ToGameLocalizationLanguage()
+            ),
+            WatcherFilter.LocalizationFiles
+        ) { }
 
-			var result = localisation.GetResult();
+    /// <summary>
+    /// 如果本地化文本不存在, 则返回<c>key</c>
+    /// </summary>
+    /// <returns></returns>
+    public string GetValue(string key)
+    {
+        foreach (var localisation in Localisations)
+        {
+            if (localisation.TryGetValue(key, out var value))
+            {
+                return value;
+            }
+        }
 
-			foreach (var item in result.entries)
-			{
-				localisations[item.key] = GetCleanDesc(item.desc);
-			}
-		}
+        return key;
+    }
 
-		_localisations = localisations.ToFrozenDictionary();
-	}
+    protected override FrozenDictionary<string, string> ParseFileToContent(
+        YAMLLocalisationParser.LocFile result
+    )
+    {
+        var localisations = new Dictionary<string, string>(result.entries.Length);
+        foreach (var item in result.entries)
+        {
+            localisations[item.key] = GetCleanDesc(item.desc);
+        }
 
-	// 去除开头和结尾的 "
-	private static string GetCleanDesc(string rawDesc)
-	{
-		return rawDesc.Length switch
-		{
-			> 2 => rawDesc[1..^1],
-			2 => string.Empty,
-			_ => rawDesc
-		};
-	}
+        return localisations.ToFrozenDictionary();
+    }
 
-	/// <summary>
-	/// 如果本地化文本不存在, 则返回<c>key</c>
-	/// </summary>
-	/// <returns></returns>
-	public string GetValue(string key)
-	{
-		return _localisations.GetValueOrDefault(key, key);
-	}
+    /// 去除开头和结尾的 "
+    private static string GetCleanDesc(string rawDesc)
+    {
+        return rawDesc.Length switch
+        {
+            > 2 => rawDesc[1..^1],
+            2 => string.Empty,
+            _ => rawDesc
+        };
+    }
+
+    protected override YAMLLocalisationParser.LocFile? GetParseResult(string filePath)
+    {
+        var localisation = YAMLLocalisationParser.parseLocFile(filePath);
+        if (localisation.IsFailure)
+        {
+            Logger.LogParseError(localisation.GetError());
+            return null;
+        }
+
+        var result = localisation.GetResult();
+        return result;
+    }
 }
