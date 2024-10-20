@@ -11,6 +11,8 @@ namespace Moder.Core.Parser;
 
 public class BmpParser
 {
+    private ushort BmpType = 0x4d42;
+    private ushort MapBitcount = 24;
     public string FilePath { get; }
 
     public bool IsSuccess { get; }
@@ -55,13 +57,13 @@ public class BmpParser
         YPelsPerMeter = bmpBinaryReader.ReadUInt32();
         ClrUsed = bmpBinaryReader.ReadUInt32();
         ClrImportant = bmpBinaryReader.ReadUInt32();
-        if (Type != 0x4d42) { throw new Exception("Type Error"); }
+        if (Type != BmpType) { throw new Exception("Type Error"); }
         if (Reserved1!=0) { throw new Exception("Reserved1 Error"); }
         if (Reserved2 != 0) { throw new Exception("Reserved2 Error"); }
         if (Planes != 1) { throw new Exception("Planes Error"); }
         if (Compression != 0) { throw new Exception("Compression Error"); }
         if (Wide > 4000 || Height > 4000) { throw new Exception("File too large"); }
-        if (Bitcount!=24) { throw new Exception("没有使用24位保存"); }
+        if (Bitcount!=MapBitcount) { throw new Exception("没有使用24位保存"); }
         for (uint i = 0; i < Height; i++) 
         for (uint j = 0; j < Wide; j++){
                 byte[] ThisPixel=new byte[3];
