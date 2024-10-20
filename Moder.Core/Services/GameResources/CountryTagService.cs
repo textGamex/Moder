@@ -33,8 +33,6 @@ public sealed class CountryTagService : CommonResourcesService<CountryTagService
     protected override FrozenSet<string>? ParseFileToContent(Node rootNode)
     {
         var leaves = rootNode.Leaves.ToArray();
-        var countryTags = new HashSet<string>(leaves.Length);
-
         // 不加载临时标签
         if (
             Array.Exists(
@@ -47,10 +45,17 @@ public sealed class CountryTagService : CommonResourcesService<CountryTagService
         {
             return null;
         }
-
+        
+        var countryTags = new HashSet<string>(leaves.Length);
         foreach (var leaf in leaves)
         {
-            countryTags.Add(leaf.Key);
+            var countryTag = leaf.Key;
+            // 国家标签长度必须为 3
+            if (countryTag.Length != 3)
+            {
+                continue;
+            }
+            countryTags.Add(countryTag);
         }
         return countryTags.ToFrozenSet(StringComparer.OrdinalIgnoreCase);
     }
