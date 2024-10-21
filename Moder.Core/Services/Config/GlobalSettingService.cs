@@ -1,8 +1,7 @@
 using MemoryPack;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using Moder.Core.Models;
+using NLog;
 
 namespace Moder.Core.Services.Config;
 
@@ -49,8 +48,8 @@ public sealed partial class GlobalSettingService
     private const string ConfigFileName = "globalSettings.bin";
     private static string ConfigFilePath => Path.Combine(App.ConfigFolder, ConfigFileName);
 
-    private static readonly ILogger<GlobalSettingService> Logger =
-        App.Current.Services.GetRequiredService<ILogger<GlobalSettingService>>();
+    private static readonly Logger Log =
+        LogManager.GetCurrentClassLogger();
 
     private GlobalSettingService() { }
 
@@ -71,14 +70,14 @@ public sealed partial class GlobalSettingService
     {
         if (IsUnchanged)
         {
-            Logger.LogInformation("配置文件未改变, 跳过写入");
+            Log.Info("配置文件未改变, 跳过写入");
             return;
         }
-        Logger.LogInformation("配置文件保存中...");
+        Log.Info("配置文件保存中...");
         // TODO: System.IO.Pipelines
         File.WriteAllBytes(ConfigFilePath, MemoryPackSerializer.Serialize(this));
         IsChanged = false;
-        Logger.LogInformation("配置文件保存完成");
+        Log.Info("配置文件保存完成");
     }
 
     public static GlobalSettingService Load()

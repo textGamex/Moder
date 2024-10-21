@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.Extensions.Logging;
 using Moder.Core.Services.Config;
+using NLog;
 
 namespace Moder.Core.ViewsModels.Menus;
 
@@ -11,15 +11,12 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
     private readonly SystemFileItem _root;
 
     private readonly FileSystemWatcher _watcher;
-    private readonly ILogger<SideWorkSpaceControlViewModel> _logger;
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
     
     public SideWorkSpaceControlViewModel(
-        GlobalSettingService globalSettings,
-        ILogger<SideWorkSpaceControlViewModel> logger
+        GlobalSettingService globalSettings
     )
     {
-        _logger = logger;
-
         _watcher = new FileSystemWatcher(globalSettings.ModRootFolderPath, "*.*");
         _watcher.Deleted += ContentOnDeleted;
         _watcher.Created += ContentOnCreated;
@@ -35,7 +32,7 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
 
     private void ContentOnChanged(object sender, FileSystemEventArgs e)
     {
-        _logger.LogTrace("Changed: {FullPath}", e.FullPath);
+        Log.Trace("Changed: {FullPath}", e.FullPath);
     }
 
     private void ContentOnRenamed(object sender, RenamedEventArgs e)
@@ -44,14 +41,14 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
         var target = FindFileItemByPath(e.OldFullPath, Items);
         if (target is null)
         {
-            _logger.LogWarning("找不到改名前的项目: {FullPath}", e.OldFullPath);
+            Log.Warn("找不到改名前的项目: {FullPath}", e.OldFullPath);
             return;
         }
 
         var parent = target.Parent;
         if (parent is null)
         {
-            _logger.LogWarning("找不到父节点: {FullPath}", e.OldFullPath);
+            Log.Warn("找不到父节点: {FullPath}", e.OldFullPath);
             return;
         }
         
@@ -71,7 +68,7 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
         var target = FindFileItemByPath(e.FullPath, Items);
         if (target is null)
         {
-            _logger.LogWarning("找不到: {FullPath}", e.FullPath);
+            Log.Warn("找不到: {FullPath}", e.FullPath);
             return;
         }
         var parent = target.Parent;
@@ -80,7 +77,7 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
 
     private void ContentOnCreated(object sender, FileSystemEventArgs e)
     {
-        _logger.LogTrace("Created: {FullPath}", e.FullPath);
+        Log.Trace("Created: {FullPath}", e.FullPath);
         var directoryPath = Path.GetDirectoryName(e.FullPath);
         if (directoryPath is null)
         {
@@ -91,7 +88,7 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
         var parent = FindFileItemByPath(directoryPath, Items);
         if (parent is null)
         {
-            _logger.LogWarning("找不到插入的位置: {FullPath}", directoryPath);
+            Log.Warn("找不到插入的位置: {FullPath}", directoryPath);
             return;
         }
 

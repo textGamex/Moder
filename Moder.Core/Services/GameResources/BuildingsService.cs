@@ -1,6 +1,5 @@
 using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Logging;
 using Moder.Core.Models;
 using Moder.Core.Services.GameResources.Base;
 using ParadoxPower.Process;
@@ -47,7 +46,7 @@ public sealed class BuildingsService
     {
         if (!rootNode.TryGetChild(BuildingsKeyword, out var buildingsNode))
         {
-            Logger.LogWarning("buildings node not found");
+            Logger.Warn("buildings node not found");
             return null;
         }
 

@@ -5,10 +5,10 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.WinUI;
 using EnumsNET;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml.Controls;
 using Moder.Core.Models.Vo;
 using Moder.Core.Services;
+using NLog;
 using ParadoxPower.Process;
 
 namespace Moder.Core.Models;
@@ -30,9 +30,7 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
         _addAdjacentValueCommand ??= new RelayCommand<StackPanel>(AddAdjacentValue);
     private RelayCommand<StackPanel>? _addAdjacentValueCommand;
 
-    private static readonly ILogger<ObservableGameValue> Logger = App.Current.Services.GetRequiredService<
-        ILogger<ObservableGameValue>
-    >();
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
     protected static readonly LeafConverterService ConverterService =
         App.Current.Services.GetRequiredService<LeafConverterService>();
 
@@ -49,7 +47,7 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
         Debug.Assert(Parent != null, "Parent cannot be null");
         if (Parent is null)
         {
-            Logger.LogWarning("删除节点失败, 父节点为空");
+            Log.Warn("删除节点失败, 父节点为空");
             return;
         }
 
@@ -70,19 +68,22 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
 
         if (Parent is null)
         {
-            Logger.LogWarning("添加相邻节点失败, 父节点为空");
+            Log.Warn("添加相邻节点失败, 父节点为空");
             return;
         }
 
         var addedKeywordTextBox = value.FindChild<TextBox>(box => box.Name == "NewKeywordTextBox");
         var addedValueTextBox = value.FindChild<TextBox>(box => box.Name == "NewValueTextBox");
         var typeComboBox = value.FindChild<ComboBox>(box => box.Name == "TypeComboBox");
-        Debug.Assert(addedKeywordTextBox is not null && addedValueTextBox is not null, "添加相邻节点失败, 未找到TextBox");
+        Debug.Assert(
+            addedKeywordTextBox is not null && addedValueTextBox is not null,
+            "添加相邻节点失败, 未找到TextBox"
+        );
         Debug.Assert(typeComboBox is not null, "添加相邻节点失败, 未找到ComboBox");
 
         if (typeComboBox.SelectedItem is null)
         {
-            Logger.LogWarning("添加相邻节点失败, 未选择类型");
+            Log.Warn("添加相邻节点失败, 未选择类型");
             return;
         }
 
@@ -90,9 +91,12 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
         var newValue = addedValueTextBox.Text;
         var voType = (GameVoType)typeComboBox.SelectedItem;
 
-        if (string.IsNullOrWhiteSpace(newKeyword) || (voType == GameVoType.Leaf && string.IsNullOrWhiteSpace(newValue)))
+        if (
+            string.IsNullOrWhiteSpace(newKeyword)
+            || (voType == GameVoType.Leaf && string.IsNullOrWhiteSpace(newValue))
+        )
         {
-            Logger.LogWarning("添加相邻节点失败, 输入值为空");
+            Log.Warn("添加相邻节点失败, 输入值为空");
             return;
         }
 
@@ -110,6 +114,6 @@ public abstract partial class ObservableGameValue(string key, NodeVo? parent) : 
         addedKeywordTextBox.Text = string.Empty;
         addedValueTextBox.Text = string.Empty;
 
-        Logger.LogInformation("添加相邻节点成功, 关键字: {Keyword}, 值: {Value}, 父节点: {Parent}", newKeyword, newValue, Parent.Key);
+        Log.Info("添加相邻节点成功, 关键字: {Keyword}, 值: {Value}, 父节点: {Parent}", newKeyword, newValue, Parent.Key);
     }
 }

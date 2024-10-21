@@ -1,20 +1,20 @@
 ﻿using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Moder.Core.Services.Config;
+using NLog;
 
 namespace Moder.Core.Services.GameResources.Base;
 
 public abstract partial class ResourcesService<TType, TContent, TParseResult> : IResourcesService
     where TType : ResourcesService<TType, TContent, TParseResult>
 {
-    protected readonly string FolderRelativePath;
+    public readonly string FolderRelativePath;
 
     /// <summary>
     /// key: 文件路径, value: 文件内资源内容
     /// </summary>
     protected readonly Dictionary<string, TContent> Resources;
-    protected readonly ILogger<TType> Logger;
+    protected readonly Logger Logger;
     protected event EventHandler<ResourceChangedEventArgs>? OnResourceChanged;
 
     private readonly GlobalSettingService _settingService;
@@ -22,7 +22,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
     protected ResourcesService(string folderRelativePath, WatcherFilter filter)
     {
         FolderRelativePath = folderRelativePath;
-        Logger = App.Current.Services.GetRequiredService<ILogger<TType>>();
+        Logger = LogManager.GetLogger(typeof(TType).FullName);
         _settingService = App.Current.Services.GetRequiredService<GlobalSettingService>();
         var gameResourcesPathService = App.Current.Services.GetRequiredService<GameResourcesPathService>();
         var watcherService = App.Current.Services.GetRequiredService<GameResourcesWatcherService>();
@@ -40,7 +40,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         }
 
         watcherService.Watch(FolderRelativePath, this, filter.Name);
-        Logger.LogInformation(
+        Logger.Info(
             "初始化资源成功: {FolderRelativePath}, 共 {Count} 个文件",
             FolderRelativePath,
             filePaths.Count
@@ -53,7 +53,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
     {
         if (typeof(IReadOnlyCollection<object>).IsAssignableFrom(typeof(TContent)))
         {
-            Logger.LogDebug(
+            Logger.Debug(
                 "'{}'下资源数量: {Count}",
                 FolderRelativePath,
                 Resources.Values.Cast<IReadOnlyCollection<object>>().Sum(content => content.Count)
@@ -63,7 +63,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
 
     public void Add(string folderOrFilePath)
     {
-        Logger.LogDebug("添加 Mod 资源: {FolderOrFilePath}", folderOrFilePath);
+        Logger.Debug("添加 Mod 资源: {FolderOrFilePath}", folderOrFilePath);
         Debug.Assert(File.Exists(folderOrFilePath), "必须为文件");
 
         // 如果新增加的mod资源在原版资源中存在, 移除原版资源, 添加mod资源
@@ -72,18 +72,18 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         var isRemoved = Resources.Remove(gameFilePath);
         if (isRemoved)
         {
-            Logger.LogInformation("移除游戏资源成功: {GameFilePath}", gameFilePath);
+            Logger.Info("移除游戏资源成功: {GameFilePath}", gameFilePath);
         }
 
         ParseFileAndAddToResources(folderOrFilePath);
         OnOnResourceChanged(new ResourceChangedEventArgs(folderOrFilePath));
 
-        Logger.LogInformation("添加 Mod 资源成功: {FolderOrFilePath}", folderOrFilePath);
+        Logger.Info("添加 Mod 资源成功: {FolderOrFilePath}", folderOrFilePath);
     }
 
     public void Remove(string folderOrFilePath)
     {
-        Logger.LogDebug("移除 Mod 资源: {FolderOrFilePath}", folderOrFilePath);
+        Logger.Debug("移除 Mod 资源: {FolderOrFilePath}", folderOrFilePath);
         if (Directory.Exists(folderOrFilePath))
         {
             foreach (
@@ -100,7 +100,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
 
         if (Resources.Remove(folderOrFilePath))
         {
-            Logger.LogInformation("移除 Mod 资源成功");
+            Logger.Info("移除 Mod 资源成功");
             var relativeFilePath = Path.GetRelativePath(_settingService.ModRootFolderPath, folderOrFilePath);
 
             // 如果删除的mod资源在原版资源中存在, 移除mod资源, 添加原版资源
@@ -113,16 +113,16 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
             ParseFileAndAddToResources(gameFilePath);
             OnOnResourceChanged(new ResourceChangedEventArgs(folderOrFilePath));
 
-            Logger.LogInformation("添加原版游戏资源: {GameFilePath}", gameFilePath);
+            Logger.Info("添加原版游戏资源: {GameFilePath}", gameFilePath);
         }
     }
 
     public void Reload(string folderOrFilePath)
     {
-        Logger.LogDebug("尝试重新加载 Mod 资源: {FolderOrFilePath}", folderOrFilePath);
+        Logger.Debug("尝试重新加载 Mod 资源: {FolderOrFilePath}", folderOrFilePath);
         if (Directory.Exists(folderOrFilePath))
         {
-            Logger.LogDebug("跳过文件夹");
+            Logger.Debug("跳过文件夹");
             return;
         }
 
@@ -131,15 +131,15 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         ParseFileAndAddToResources(folderOrFilePath);
         OnOnResourceChanged(new ResourceChangedEventArgs(folderOrFilePath));
 
-        Logger.LogInformation("重新加载 Mod 资源成功");
+        Logger.Info("重新加载 Mod 资源成功");
     }
 
     public void Renamed(string oldPath, string newPath)
     {
-        Logger.LogDebug("Mod 资源重命名: {OldPath} -> {NewPath}", oldPath, newPath);
+        Logger.Debug("Mod 资源重命名: {OldPath} -> {NewPath}", oldPath, newPath);
         if (Directory.Exists(newPath))
         {
-            Logger.LogDebug("跳过文件夹");
+            Logger.Debug("跳过文件夹");
             return;
         }
 
@@ -154,7 +154,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         var isRemoved = Resources.Remove(oldPath);
 
         Debug.Assert(isRemoved, "Mod 资源不存在, 但尝试重命名");
-        Logger.LogInformation("Mod 资源重命名成功");
+        Logger.Info("Mod 资源重命名成功");
     }
 
     /// <summary>

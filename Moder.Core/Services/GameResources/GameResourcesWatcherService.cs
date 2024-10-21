@@ -1,8 +1,8 @@
 ﻿using EnumsNET;
-using Microsoft.Extensions.Logging;
 using Moder.Core.Helper;
 using Moder.Core.Services.Config;
 using Moder.Core.Services.GameResources.Base;
+using NLog;
 
 namespace Moder.Core.Services.GameResources;
 
@@ -23,15 +23,11 @@ public sealed partial class GameResourcesWatcherService : IDisposable
         string filter,
         bool includeSubFolders
     )> _waitingWatchFolders = new(8);
-    private readonly ILogger<GameResourcesWatcherService> _logger;
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
     private readonly GlobalSettingService _settingService;
 
-    public GameResourcesWatcherService(
-        ILogger<GameResourcesWatcherService> logger,
-        GlobalSettingService settingService
-    )
+    public GameResourcesWatcherService(GlobalSettingService settingService)
     {
-        _logger = logger;
         _settingService = settingService;
         _watcher = new FileSystemSafeWatcher(_settingService.ModRootFolderPath, "*.*");
         _watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.DirectoryName;
@@ -51,10 +47,7 @@ public sealed partial class GameResourcesWatcherService : IDisposable
             Watch(relativePath, resourcesService, filter, includeSubFolders);
             _waitingWatchFolders.RemoveAt(index);
 
-            _logger.LogInformation(
-                "等待监听的文件夹 '{FolderName}' 被创建或重命名, 从待监听列表中移除并开始监听",
-                Path.GetFileName(args.FullPath)
-            );
+            Log.Info("等待监听的文件夹 '{FolderName}' 被创建或重命名, 从待监听列表中移除并开始监听", Path.GetFileName(args.FullPath));
         }
     }
 
@@ -67,7 +60,7 @@ public sealed partial class GameResourcesWatcherService : IDisposable
     {
         if (_watchedPaths.ContainsKey(folderRelativePath))
         {
-            _logger.LogWarning("已监听文件夹, 重复监听, Path: {FolderPath}", folderRelativePath);
+            Log.Warn("已监听文件夹, 重复监听, Path: {FolderPath}", folderRelativePath);
             return;
         }
 
@@ -76,9 +69,9 @@ public sealed partial class GameResourcesWatcherService : IDisposable
         if (!Directory.Exists(modFolderPath))
         {
             _waitingWatchFolders.Add((folderRelativePath, resourcesService, filter, includeSubFolders));
-            
-            _logger.LogInformation("Mod 目录中 '{FolderPath}' 文件夹不存在, 无法监听, 已添加到等待监听列表", folderRelativePath);
-            _logger.LogDebug("Path: {FolderPath}", modFolderPath);
+
+            Log.Info("Mod 目录中 '{FolderPath}' 文件夹不存在, 无法监听, 已添加到等待监听列表", folderRelativePath);
+            Log.Debug("Path: {FolderPath}", modFolderPath);
             return;
         }
 
@@ -91,7 +84,7 @@ public sealed partial class GameResourcesWatcherService : IDisposable
                 resourcesService.Reload(args.FullPath);
             }
 
-            _logger.LogDebug("资源文件: {Path} 发生变化, 类型: {ChangeType}", args.FullPath, args.ChangeType);
+            Log.Debug("资源文件: {Path} 发生变化, 类型: {ChangeType}", args.FullPath, args.ChangeType);
 #if DEBUG
             if (
                 args.ChangeType.HasAnyFlags(WatcherChangeTypes.Changed)
@@ -100,7 +93,7 @@ public sealed partial class GameResourcesWatcherService : IDisposable
                 )
             )
             {
-                _logger.LogError("在单个事件中同时进行两项更改, Path: {Path}", args.FullPath);
+                Log.Error("在单个事件中同时进行两项更改, Path: {Path}", args.FullPath);
             }
 #endif
         };
@@ -111,11 +104,12 @@ public sealed partial class GameResourcesWatcherService : IDisposable
         watcher.EnableRaisingEvents = true;
 
         _watchedPaths.Add(folderRelativePath, watcher);
-        _logger.LogInformation("开始监听资源文件夹: {FolderPath}", modFolderPath);
+        Log.Info("开始监听资源文件夹: {FolderPath}", modFolderPath);
     }
 
     public void Unwatch(string folderRelativePath)
     {
+        Log.Debug("尝试停止监听资源文件夹: {FolderPath}", folderRelativePath);
         if (_watchedPaths.TryGetValue(folderRelativePath, out var watcher))
         {
             watcher.Dispose();
@@ -124,9 +118,9 @@ public sealed partial class GameResourcesWatcherService : IDisposable
                 _waitingWatchFolders.RemoveAll(tuple => tuple.folderRelativePath == folderRelativePath) != 0;
             if (isRemoved)
             {
-                _logger.LogInformation("从待监听文件夹列表中移除: {FolderPath}", folderRelativePath);
+                Log.Info("从待监听文件夹列表中移除: {FolderPath}", folderRelativePath);
             }
-            _logger.LogInformation("停止监听资源文件夹: {FolderPath}", folderRelativePath);
+            Log.Info("成功停止监听资源文件夹: {FolderPath}", folderRelativePath);
         }
     }
 

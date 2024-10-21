@@ -1,6 +1,5 @@
 ﻿using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Logging;
 using Moder.Core.Models;
 using Moder.Core.Services.GameResources.Base;
 using ParadoxPower.Process;
@@ -70,7 +69,7 @@ public sealed class StateCategoryService
         var stateCategories = new Dictionary<string, StateCategory>(8);
         if (!rootNode.TryGetChild("state_categories", out var stateCategoriesNode))
         {
-            Logger.LogWarning("文件: {FileName} 中未找到 state_categories 节点", rootNode.Position.FileName);
+            Logger.Warn("文件: {FileName} 中未找到 state_categories 节点", rootNode.Position.FileName);
             return null;
         }
 
@@ -87,7 +86,7 @@ public sealed class StateCategoryService
                 }
                 else
                 {
-                    Logger.LogWarning(
+                    Logger.Warn(
                         "文件: {FileName} 中 local_building_slots 解析失败, 文本: {Text}",
                         typeNode.Position.FileName,
                         localBuildingSlotsLeaf.ValueText
@@ -96,7 +95,7 @@ public sealed class StateCategoryService
             }
             else
             {
-                Logger.LogWarning("文件: {FileName} 中未找到 local_building_slots", typeNode.Position.FileName);
+                Logger.Warn("文件: {FileName} 中未找到 local_building_slots", typeNode.Position.FileName);
             }
 
             stateCategories.Add(typeName, new StateCategory(typeName, localBuildingSlots));

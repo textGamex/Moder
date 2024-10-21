@@ -2,7 +2,6 @@ using System.Diagnostics;
 using Windows.Foundation;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Input;
 using Microsoft.UI.Windowing;
@@ -15,6 +14,7 @@ using Moder.Core.Views.Game;
 using Moder.Core.Views.Menus;
 using Moder.Core.ViewsModels;
 using Moder.Core.ViewsModels.Menus;
+using NLog;
 
 namespace Moder.Core.Views;
 
@@ -24,20 +24,18 @@ public sealed partial class MainWindow
 
     private readonly GlobalSettingService _settings;
     private readonly IServiceProvider _serviceProvider;
-    private readonly ILogger<MainWindow> _logger;
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
     private readonly List<SystemFileItem> _openedTabFileItems = new(16);
     private SystemFileItem? _latestFileItem;
 
     public MainWindow(
         MainWindowViewModel model,
         GlobalSettingService settings,
-        IServiceProvider serviceProvider,
-        ILogger<MainWindow> logger
+        IServiceProvider serviceProvider
     )
     {
         _settings = settings;
         _serviceProvider = serviceProvider;
-        _logger = logger;
         InitializeComponent();
 
         ExtendsContentIntoTitleBar = true;
@@ -158,7 +156,7 @@ public sealed partial class MainWindow
             var index = _openedTabFileItems.FindIndex(item => item.FullPath == fileView.FullPath);
             if (index == -1)
             {
-                _logger.LogWarning("未找到");
+                Log.Warn("未在标签文件缓存列表中找到指定文件, Path: {Path}", fileView.FullPath);
                 return;
             }
             _openedTabFileItems.RemoveAt(index);

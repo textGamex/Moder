@@ -1,22 +1,17 @@
-﻿using Microsoft.Extensions.Logging;
-using Moder.Core.Extensions;
+﻿using Moder.Core.Extensions;
 using Moder.Core.Services.Config;
+using NLog;
 
 namespace Moder.Core.Services.GameResources;
 
 public sealed class GameResourcesPathService
 {
-    private readonly ILogger<GameResourcesPathService> _logger;
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
     private readonly GlobalSettingService _settingService;
     private readonly GameModDescriptorService _descriptor;
 
-    public GameResourcesPathService(
-        ILogger<GameResourcesPathService> logger,
-        GlobalSettingService settingService,
-        GameModDescriptorService descriptor
-    )
+    public GameResourcesPathService(GlobalSettingService settingService, GameModDescriptorService descriptor)
     {
-        _logger = logger;
         _settingService = settingService;
         _descriptor = descriptor;
     }
@@ -32,10 +27,12 @@ public sealed class GameResourcesPathService
     /// <param name="folderRelativePaths"></param>
     /// <returns></returns>
     /// <exception cref="DirectoryNotFoundException"></exception>
-    public IReadOnlyCollection<string> GetAllFilePriorModByRelativePathForFolder(params string[] folderRelativePaths)
+    public IReadOnlyCollection<string> GetAllFilePriorModByRelativePathForFolder(
+        params string[] folderRelativePaths
+    )
     {
         var relativePath = Path.Combine(folderRelativePaths);
-        _logger.LogInformation("正在加载文件夹: {Path}", relativePath);
+        Log.Info("正在加载文件夹: {Path}", relativePath);
         var modFolder = Path.Combine(_settingService.ModRootFolderPath, relativePath);
         var gameFolder = Path.Combine(_settingService.GameRootFolderPath, relativePath);
 
@@ -51,7 +48,7 @@ public sealed class GameResourcesPathService
 
         if (_descriptor.ReplacePaths.Contains(relativePath))
         {
-            _logger.LogDebug(
+            Log.Debug(
                 "MOD文件夹已完全替换游戏文件夹: \n\t {GamePath} => {ModPath}",
                 gameFolder.ToFilePath(),
                 modFolder.ToFilePath()
@@ -71,7 +68,10 @@ public sealed class GameResourcesPathService
     /// <param name="modFilePaths"></param>
     /// <returns>不重名的文件路径</returns>
     /// <exception cref="ArgumentException"></exception>
-    private static IReadOnlyCollection<string> RemoveFileOfEqualName(string[] gameFilePaths, string[] modFilePaths)
+    private static IReadOnlyCollection<string> RemoveFileOfEqualName(
+        string[] gameFilePaths,
+        string[] modFilePaths
+    )
     {
         var set = new Dictionary<string, string>(Math.Max(gameFilePaths.Length, modFilePaths.Length));
 

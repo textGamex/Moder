@@ -1,5 +1,4 @@
 ﻿using System.Collections.Frozen;
-using Microsoft.Extensions.Logging;
 using Moder.Core.Services.GameResources.Base;
 using ParadoxPower.Process;
 
@@ -21,7 +20,7 @@ public sealed class CountryTagService : CommonResourcesService<CountryTagService
         OnResourceChanged += (_, _) =>
         {
             _countryTagsLazy = new Lazy<IReadOnlyCollection<string>>(GetCountryTags);
-            Logger.LogDebug("Country tags changed, 已重置");
+            Logger.Debug("Country tags changed, 已重置");
         };
     }
 

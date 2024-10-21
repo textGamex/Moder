@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Moder.Core.Services.GameResources.Base;
+﻿using Moder.Core.Services.GameResources.Base;
 using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources;
@@ -46,7 +45,7 @@ public sealed class OreService : CommonResourcesService<OreService, string[]>
         }
         else
         {
-            Logger.LogWarning("未找到 resources 节点");
+            Logger.Warn("未找到 resources 节点");
         }
         return ores.ToArray();
     }

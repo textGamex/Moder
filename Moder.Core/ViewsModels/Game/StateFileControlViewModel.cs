@@ -3,13 +3,13 @@ using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MethodTimer;
-using Microsoft.Extensions.Logging;
 using Moder.Core.Extensions;
 using Moder.Core.Models;
 using Moder.Core.Models.Vo;
 using Moder.Core.Parser;
 using Moder.Core.Services;
 using Moder.Core.ViewsModels.Menus;
+using NLog;
 using ParadoxPower.Parser;
 using ParadoxPower.Process;
 
@@ -24,16 +24,14 @@ public sealed partial class StateFileControlViewModel : ObservableObject
 
     private readonly NodeVo _rootNodeVo = new("Root", null);
     private readonly SystemFileItem _fileItem;
-    private readonly ILogger<StateFileControlViewModel> _logger;
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
     private readonly LeafConverterService _leafConverterService;
 
     public StateFileControlViewModel(
         GlobalResourceService resourceService,
-        ILogger<StateFileControlViewModel> logger,
         LeafConverterService leafConverterService
     )
     {
-        _logger = logger;
         _leafConverterService = leafConverterService;
         _fileItem = resourceService.PopCurrentSelectFileItem();
         Debug.Assert(_fileItem.IsFile);
@@ -50,7 +48,7 @@ public sealed partial class StateFileControlViewModel : ObservableObject
 
         var rootNode = parser.GetResult();
         var elapsedTime = Stopwatch.GetElapsedTime(timestamp);
-        logger.LogInformation("解析时间: {Time} ms", elapsedTime.TotalMilliseconds);
+        Log.Info("解析时间: {Time} ms", elapsedTime.TotalMilliseconds);
 
         // 递归遍历所有节点
         ConvertData(rootNode);
@@ -164,8 +162,8 @@ public sealed partial class StateFileControlViewModel : ObservableObject
             Array.ConvertAll(rootNode.AllArray, child => child.GetRawStatement(rootNode.Key))
         );
         var elapsedTime = Stopwatch.GetElapsedTime(timestamp);
-        _logger.LogInformation("保存成功, 耗时: {Time} ms", elapsedTime.TotalMilliseconds);
-        _logger.LogDebug("Content: {Content}", text);
+        Log.Info("保存成功, 耗时: {Time} ms", elapsedTime.TotalMilliseconds);
+        Log.Debug("Content: {Content}", text);
     }
 
     private static Node VoConvertToNode(string key, ObservableGameValue[] gameVos)

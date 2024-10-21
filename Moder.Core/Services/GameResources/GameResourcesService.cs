@@ -1,8 +1,7 @@
 using CommunityToolkit.Mvvm.Messaging;
 using MethodTimer;
-using Microsoft.Extensions.Logging;
 using Moder.Core.Messages;
-using Moder.Core.Services.Config;
+using NLog;
 
 namespace Moder.Core.Services.GameResources;
 
@@ -19,26 +18,13 @@ public sealed class GameResourcesService
     private readonly Lazy<OreService> _oreServiceLazy;
     private readonly Lazy<BuildingsService> _buildingsLazy;
     private readonly Lazy<CountryTagService> _countryTagsLazy;
-
-    private readonly GlobalSettingService _settingService;
-    private readonly ILogger<GameResourcesService> _logger;
     private readonly GameResourcesWatcherService _watcherService;
-    private readonly GameResourcesPathService _pathService;
+    
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
-    private static class Keywords
+    public GameResourcesService(GameResourcesWatcherService watcherService)
     {
-        public const string Common = "common";
-    }
-
-    public GameResourcesService(
-        GlobalSettingService settingService,
-        ILogger<GameResourcesService> logger,
-        GameResourcesWatcherService watcherService, GameResourcesPathService pathService)
-    {
-        _logger = logger;
         _watcherService = watcherService;
-        _pathService = pathService;
-        _settingService = settingService;
 
         _stateCategoryLazy = new Lazy<StateCategoryService>(LoadStateCategory);
         _localisationLazy = new Lazy<LocalisationService>(LoadLocalisation);
@@ -46,7 +32,10 @@ public sealed class GameResourcesService
         _buildingsLazy = new Lazy<BuildingsService>(LoadBuildings);
         _countryTagsLazy = new Lazy<CountryTagService>(LoadCountriesTag);
 
-        WeakReferenceMessenger.Default.Register<ReloadLocalizationFiles>(this, (_, _) => ReloadLocalisation());
+        WeakReferenceMessenger.Default.Register<ReloadLocalizationFiles>(
+            this,
+            (_, _) => ReloadLocalisation()
+        );
     }
 
     [Time("加载 Country Tags")]
@@ -82,10 +71,10 @@ public sealed class GameResourcesService
 
     private void ReloadLocalisation()
     {
-        _localisationLazy = new Lazy<LocalisationService>(LoadLocalisation);
         // 取消原文件夹的观察
-        // _watcherService.Unwatch();
+        _watcherService.Unwatch(_localisationLazy.Value.FolderRelativePath);
+        _localisationLazy = new Lazy<LocalisationService>(LoadLocalisation);
+        
+        Log.Info("重新加载本地化资源");
     }
-
-
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Frozen;
-using Microsoft.Extensions.Logging;
 using Moder.Core.Parser;
 using Moder.Core.Services.Config;
+using NLog;
 
 namespace Moder.Core.Services;
 
@@ -25,13 +25,14 @@ public sealed class GameModDescriptorService
     /// </summary>
     /// <exception cref="FileNotFoundException">当文件不存在时</exception>
     /// <exception cref="IOException"></exception>
-    public GameModDescriptorService(ILogger<GameModDescriptorService> logger, GlobalSettingService settingService)
+    public GameModDescriptorService(GlobalSettingService settingService)
     {
+        var logger = LogManager.GetCurrentClassLogger();
         var descriptorFilePath = Path.Combine(settingService.ModRootFolderPath, FileName);
         if (!File.Exists(descriptorFilePath))
         {
             _replacePaths = FrozenSet<string>.Empty;
-            logger.LogWarning("Mod 描述文件不存在");
+            logger.Warn("Mod 描述文件不存在");
             return;
         }
 
@@ -39,7 +40,7 @@ public sealed class GameModDescriptorService
         if (parser.IsFailure)
         {
             _replacePaths = FrozenSet<string>.Empty;
-            logger.LogWarning("Mod descriptor.mod file read is failure");
+            logger.Warn("Mod descriptor.mod file read is failure");
             return;
         }
 

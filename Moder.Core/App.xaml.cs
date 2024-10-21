@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using Moder.Core.Services.Config;
+using NLog;
 
 namespace Moder.Core;
 
@@ -20,15 +20,16 @@ public partial class App : Application
     public static string ParserRulesFolder { get; } = Path.Combine(ConfigFolder, "ParserRules");
 
     private readonly IServiceProvider _serviceProvider;
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     /// <summary>
     /// Initializes the singleton application object.  This is the first line of authored code
     /// executed, and as such is the logical equivalent of main() or WinMain().
     /// </summary>
-    public App(IServiceProvider serviceProvider, ILogger<App> logger)
+    public App(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        UnhandledException += (_, args) => logger.LogError(args.Exception, "Unhandled exception");
+        UnhandledException += (_, args) => Log.Error(args.Exception, "Unhandled exception");
         InitializeComponent();
 
         InitializeApp();

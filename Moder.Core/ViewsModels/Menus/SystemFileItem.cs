@@ -1,11 +1,10 @@
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml.Controls;
 using Windows.Storage;
 using Windows.System;
+using NLog;
 
 namespace Moder.Core.ViewsModels.Menus;
 
@@ -22,9 +21,7 @@ public sealed partial class SystemFileItem
     public IReadOnlyList<SystemFileItem> Children => _children;
     private readonly ObservableCollection<SystemFileItem> _children = [];
 
-    private static readonly ILogger<SystemFileItem> Logger = App.Current.Services.GetRequiredService<
-        ILogger<SystemFileItem>
-    >();
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     public SystemFileItem(string fullPath, bool isFile, SystemFileItem? parent)
     {
@@ -92,7 +89,7 @@ public sealed partial class SystemFileItem
 
         if (folder is null)
         {
-            Logger.LogWarning("在资源管理器中打开失败，无法获取路径：{FullPath}", FullPath);
+            Log.Warn("在资源管理器中打开失败，无法获取路径：{FullPath}", FullPath);
             return;
         }
         await Launcher.LaunchFolderPathAsync(folder, new FolderLauncherOptions { ItemsToSelect = { selectedItem } });
@@ -148,7 +145,7 @@ public sealed partial class SystemFileItem
         var errorCode = SHFileOperation(ref shf);
         if (errorCode != Ok)
         {
-            Logger.LogWarning("删除文件失败, Code: {Code}", errorCode);
+            Log.Warn("删除文件失败, Error Code: {Code}", errorCode);
             return false;
         }
 

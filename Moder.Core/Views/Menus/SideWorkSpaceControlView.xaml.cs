@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
@@ -8,23 +7,22 @@ using Moder.Core.Messages;
 using Moder.Core.Services;
 using Moder.Core.ViewsModels.Menus;
 using Windows.UI;
+using NLog;
 
 namespace Moder.Core.Views.Menus;
 
 public sealed partial class SideWorkSpaceControlView : UserControl
 {
     public SideWorkSpaceControlViewModel ViewModel => (SideWorkSpaceControlViewModel)DataContext;
-    private readonly ILogger<SideWorkSpaceControlView> _logger;
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
     private readonly GlobalResourceService _resourceService;
     private TreeViewItem? _lastSelectedItem;
 
     public SideWorkSpaceControlView(
         SideWorkSpaceControlViewModel model,
-        ILogger<SideWorkSpaceControlView> logger,
         GlobalResourceService resourceService
     )
     {
-        _logger = logger;
         _resourceService = resourceService;
         InitializeComponent();
 
@@ -53,13 +51,13 @@ public sealed partial class SideWorkSpaceControlView : UserControl
 
         if (args.AddedItems.Count != 1)
         {
-            _logger.LogDebug("未选中文件");
+            Log.Debug("未选中文件");
             return;
         }
 
         if (args.AddedItems[0] is SystemFileItem { IsFile: true } file)
         {
-            _logger.LogInformation("文件: {File}", file.Name);
+            Log.Info("文件: {File}", file.Name);
             // TODO: 这样做只能打开一个文件
             _resourceService.SetCurrentSelectFileItem(file);
 
