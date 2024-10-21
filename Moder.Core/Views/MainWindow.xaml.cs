@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using Windows.Foundation;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Composition.SystemBackdrops;
@@ -15,6 +14,7 @@ using Moder.Core.Views.Menus;
 using Moder.Core.ViewsModels;
 using Moder.Core.ViewsModels.Menus;
 using NLog;
+using Windows.Foundation;
 
 namespace Moder.Core.Views;
 
@@ -26,7 +26,7 @@ public sealed partial class MainWindow
     private readonly IServiceProvider _serviceProvider;
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
     private readonly List<SystemFileItem> _openedTabFileItems = new(16);
-    private SystemFileItem? _latestFileItem;
+    private string _selectedSideFileItemFullPath = string.Empty;
 
     public MainWindow(
         MainWindowViewModel model,
@@ -57,42 +57,54 @@ public sealed partial class MainWindow
 
         WeakReferenceMessenger.Default.Register<CompleteWorkFolderSelectMessage>(
             this,
-            (_, _) => SideContentControl.Content = _serviceProvider.GetRequiredService<SideWorkSpaceControlView>()
+            (_, _) =>
+                SideContentControl.Content = _serviceProvider.GetRequiredService<SideWorkSpaceControlView>()
         );
-        WeakReferenceMessenger.Default.Register<OpenFileMessage>(
-            this,
-            (_, message) =>
+        
+        WeakReferenceMessenger.Default.Register<OpenFileMessage>(this, OnOpenFile);
+    }
+    
+    private void OnOpenFile(object sender, OpenFileMessage message)
+    {
+        _selectedSideFileItemFullPath = message.FileItem.FullPath;
+        
+        var openedTab = MainTabView.TabItems.FirstOrDefault(item =>
+        {
+            if (item is not TabViewItem tabViewItem)
             {
-                _latestFileItem = message.FileItem;
-
-                var content = GetContent(message.FileItem);
-                var openedTab = MainTabView.TabItems.FirstOrDefault(item =>
-                {
-                    if (item is not TabViewItem tabViewItem)
-                    {
-                        return false;
-                    }
-
-                    var view = tabViewItem.Content as IFileView;
-                    return view?.FullPath == message.FileItem.FullPath;
-                });
-
-                if (openedTab is null)
-                {
-                    // 打开新的标签页
-                    var newTab = new TabViewItem { Content = content, Header = message.FileItem.Name };
-                    ToolTipService.SetToolTip(newTab, message.FileItem.FullPath);
-                    NavigateToNewTab(newTab);
-
-                    _openedTabFileItems.Add(message.FileItem);
-                }
-                else
-                {
-                    // 切换到已打开的标签页
-                    MainTabView.SelectedItem = openedTab;
-                }
+                return false;
             }
-        );
+
+            var view = tabViewItem.Content as IFileView;
+            return view?.FullPath == message.FileItem.FullPath;
+        });
+
+        if (openedTab is null)
+        {
+            // 打开新的标签页
+            var content = GetContent(message.FileItem);
+            var newTab = new TabViewItem { Content = content, Header = message.FileItem.Name };
+            ToolTipService.SetToolTip(newTab, message.FileItem.FullPath);
+            NavigateToNewTab(newTab);
+
+            _openedTabFileItems.Add(message.FileItem);
+        }
+        else
+        {
+            // 切换到已打开的标签页
+            MainTabView.SelectedItem = openedTab;
+        }
+    }
+
+    private IFileView GetContent(SystemFileItem fileItem)
+    {
+        var relativePath = Path.GetRelativePath(_settings.ModRootFolderPath, fileItem.FullPath);
+        if (relativePath.Contains("states"))
+        {
+            return _serviceProvider.GetRequiredService<StateFileControlView>();
+        }
+
+        return _serviceProvider.GetRequiredService<NotSupportInfoControlView>();
     }
 
     private void AppTitleBarOnSizeChanged(object sender, SizeChangedEventArgs e)
@@ -111,7 +123,9 @@ public sealed partial class MainWindow
         RightPaddingColumn.Width = new GridLength(AppWindow.TitleBar.RightInset / scaleAdjustment);
         LeftPaddingColumn.Width = new GridLength(AppWindow.TitleBar.LeftInset / scaleAdjustment);
         var transform = SettingsButton.TransformToVisual(null);
-        var bounds = transform.TransformBounds(new Rect(0, 0, SettingsButton.ActualWidth, SettingsButton.ActualHeight));
+        var bounds = transform.TransformBounds(
+            new Rect(0, 0, SettingsButton.ActualWidth, SettingsButton.ActualHeight)
+        );
         var settingsButtonRect = GetRect(bounds, scaleAdjustment);
 
         var rectArray = new[] { settingsButtonRect };
@@ -128,17 +142,6 @@ public sealed partial class MainWindow
             _Width: (int)Math.Round(bounds.Width * scale),
             _Height: (int)Math.Round(bounds.Height * scale)
         );
-    }
-
-    private IFileView GetContent(SystemFileItem fileItem)
-    {
-        var relativePath = Path.GetRelativePath(_settings.ModRootFolderPath, fileItem.FullPath);
-        if (relativePath.Contains("states"))
-        {
-            return _serviceProvider.GetRequiredService<StateFileControlView>();
-        }
-
-        return _serviceProvider.GetRequiredService<NotSupportInfoControlView>();
     }
 
     private void MainWindow_OnClosed(object sender, WindowEventArgs args)
@@ -187,8 +190,9 @@ public sealed partial class MainWindow
         }
 
         // 切换标签页时，同步侧边栏选中项
-        if (_latestFileItem?.FullPath != currentFileView.FullPath)
+        if (_selectedSideFileItemFullPath != currentFileView.FullPath)
         {
+            _selectedSideFileItemFullPath = currentFileView.FullPath;
             var target = _openedTabFileItems.Find(item => item.FullPath == currentFileView.FullPath);
             Debug.Assert(target is not null, "在标签文件缓存列表中未找到目标文件");
             WeakReferenceMessenger.Default.Send(new SyncSideWorkSelectedItemMessage(target));
@@ -198,7 +202,7 @@ public sealed partial class MainWindow
     private void ClearSideWorkSelectState()
     {
         WeakReferenceMessenger.Default.Send(new SyncSideWorkSelectedItemMessage(null));
-        _latestFileItem = null;
+        _selectedSideFileItemFullPath = string.Empty;
     }
 
     /// <summary>
