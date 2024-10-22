@@ -16,25 +16,25 @@ public sealed class GameResourcesPathService
         _descriptor = descriptor;
     }
 
-    public IReadOnlyCollection<string> GetAllFilePriorModByRelativePathForFolder(string relativePath)
-    {
-        return GetAllFilePriorModByRelativePathForFolder(relativePath, string.Empty);
-    }
-
-    /// <summary>
-    /// 获得所有应该加载的文件绝对路径, Mod优先, 遵循 replace_path 指令
-    /// </summary>
-    /// <param name="folderRelativePaths"></param>
-    /// <returns></returns>
-    /// <exception cref="DirectoryNotFoundException"></exception>
     public IReadOnlyCollection<string> GetAllFilePriorModByRelativePathForFolder(
         params string[] folderRelativePaths
     )
     {
         var relativePath = Path.Combine(folderRelativePaths);
-        Log.Info("正在加载文件夹: {Path}", relativePath);
-        var modFolder = Path.Combine(_settingService.ModRootFolderPath, relativePath);
-        var gameFolder = Path.Combine(_settingService.GameRootFolderPath, relativePath);
+        return GetAllFilePriorModByRelativePathForFolder(relativePath);
+    }
+
+    /// <summary>
+    /// 获得所有应该加载的文件绝对路径, Mod优先, 遵循 replace_path 指令
+    /// </summary>
+    /// <param name="folderRelativePath"></param>
+    /// <returns></returns>
+    /// <exception cref="DirectoryNotFoundException"></exception>
+    public IReadOnlyCollection<string> GetAllFilePriorModByRelativePathForFolder(string folderRelativePath)
+    {
+        Log.Info("正在获取文件夹 {Path} 下的文件", folderRelativePath);
+        var modFolder = Path.Combine(_settingService.ModRootFolderPath, folderRelativePath);
+        var gameFolder = Path.Combine(_settingService.GameRootFolderPath, folderRelativePath);
 
         if (!Directory.Exists(gameFolder))
         {
@@ -46,7 +46,7 @@ public sealed class GameResourcesPathService
             return Directory.GetFiles(gameFolder);
         }
 
-        if (_descriptor.ReplacePaths.Contains(relativePath))
+        if (_descriptor.ReplacePaths.Contains(folderRelativePath))
         {
             Log.Debug(
                 "MOD文件夹已完全替换游戏文件夹: \n\t {GamePath} => {ModPath}",
