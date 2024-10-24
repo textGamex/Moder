@@ -9,11 +9,6 @@ namespace Moder.Core.Extensions;
 
 public static class ParserExtensions
 {
-    public static bool HasNot(this Node node, string key)
-    {
-        return !node.Has(key);
-    }
-
     public static GameValueType ToLocalValueType(this Types.Value value)
     {
         if (value.IsBool)
@@ -50,6 +45,17 @@ public static class ParserExtensions
 
     public static string GetKey(this Child child)
     {
+        var key = child.GetKeyOrNull();
+        if (key is null)
+        {
+            throw new InvalidOperationException("这个 child 不存在 key");
+        }
+        
+        return key;
+    }
+
+    public static string? GetKeyOrNull(this Child child)
+    {
         if (child.IsLeafChild)
         {
             return child.leaf.Key;
@@ -64,12 +70,8 @@ public static class ParserExtensions
         {
             return child.leafvalue.Key;
         }
-
-        if (child.IsCommentChild || child.IsValueClauseChild)
-        {
-            throw new InvalidOperationException("这个 child 不存在 key");
-        }
-        throw new InvalidEnumArgumentException(nameof(child));
+        
+        return null;
     }
 
     public static Types.Statement GetRawStatement(this Child child, string key)
