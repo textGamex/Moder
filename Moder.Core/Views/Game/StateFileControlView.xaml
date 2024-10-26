@@ -276,7 +276,7 @@
                         <controls:BaseLeaf.SlotContent>
 
                             <StackPanel Orientation="Horizontal" Spacing="4">
-                                <TextBox Margin="0,4" Text="{x:Bind Value, Mode=TwoWay}" />
+                                <TextBox Margin="0,4" Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <TextBlock Style="{StaticResource TextBlockGameDescriptionStyle}" Text="{x:Bind LocalisedName, Mode=OneWay}" />
                             </StackPanel>
 
