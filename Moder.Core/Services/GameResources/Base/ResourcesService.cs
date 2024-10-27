@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Services.Config;
 using NLog;
@@ -9,13 +9,13 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
     where TType : ResourcesService<TType, TContent, TParseResult>
 {
     public readonly string FolderRelativePath;
+    public event EventHandler<ResourceChangedEventArgs>? OnResourceChanged;
 
     /// <summary>
     /// key: 文件路径, value: 文件内资源内容
     /// </summary>
     protected readonly Dictionary<string, TContent> Resources;
     protected readonly Logger Logger;
-    protected event EventHandler<ResourceChangedEventArgs>? OnResourceChanged;
 
     private readonly GlobalSettingService _settingService;
 
@@ -189,15 +189,5 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
     private void OnOnResourceChanged(ResourceChangedEventArgs e)
     {
         OnResourceChanged?.Invoke(this, e);
-    }
-
-    protected sealed class ResourceChangedEventArgs : EventArgs
-    {
-        public string FilePath { get; }
-
-        public ResourceChangedEventArgs(string filePath)
-        {
-            FilePath = filePath;
-        }
     }
 }
