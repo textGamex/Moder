@@ -60,14 +60,14 @@ public sealed partial class MainWindow
             (_, _) =>
                 SideContentControl.Content = _serviceProvider.GetRequiredService<SideWorkSpaceControlView>()
         );
-        
+
         WeakReferenceMessenger.Default.Register<OpenFileMessage>(this, OnOpenFile);
     }
-    
+
     private void OnOpenFile(object sender, OpenFileMessage message)
     {
         _selectedSideFileItemFullPath = message.FileItem.FullPath;
-        
+
         var openedTab = MainTabView.TabItems.FirstOrDefault(item =>
         {
             if (item is not TabViewItem tabViewItem)
@@ -124,7 +124,12 @@ public sealed partial class MainWindow
         LeftPaddingColumn.Width = new GridLength(AppWindow.TitleBar.LeftInset / scaleAdjustment);
         var transform = SettingsButton.TransformToVisual(null);
         var bounds = transform.TransformBounds(
-            new Rect(0, 0, SettingsButton.ActualWidth, SettingsButton.ActualHeight)
+            new Rect(
+                0,
+                0,
+                SettingsButton.ActualWidth + CharacterEditorButton.ActualWidth,
+                SettingsButton.ActualHeight + CharacterEditorButton.ActualHeight
+            )
         );
         var settingsButtonRect = GetRect(bounds, scaleAdjustment);
 
@@ -208,8 +213,6 @@ public sealed partial class MainWindow
     /// <summary>
     /// 打开设置标签页
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     private void TitleBarSettingsButton_OnClick(object sender, RoutedEventArgs e)
     {
         var isSelected = MainTabView.SelectedItem is TabViewItem { Content: SettingsControlView };
@@ -238,10 +241,38 @@ public sealed partial class MainWindow
         NavigateToNewTab(settingsTab);
     }
 
+    private void CharacterEditorButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var isSelected = MainTabView.SelectedItem is TabViewItem { Content: CharacterEditorControlView };
+        if (isSelected)
+        {
+            return;
+        }
+
+        var existingSettingsTab = MainTabView
+            .TabItems.Cast<TabViewItem>()
+            .FirstOrDefault(item => item.Content is CharacterEditorControlView);
+
+        if (existingSettingsTab is not null)
+        {
+            MainTabView.SelectedItem = existingSettingsTab;
+            return;
+        }
+
+        var editorView = _serviceProvider.GetRequiredService<CharacterEditorControlView>();
+        var editorTab = new TabViewItem
+        {
+            Content = editorView,
+            Header = "将领编辑器",
+            IconSource = new FontIconSource { Glyph = "\uE70F" }
+        };
+        NavigateToNewTab(editorTab);
+    }
+
     /// <summary>
     /// 添加标签页并切换到新标签页, 在此方法运行之后，会触发 <see cref="MainTabView_OnSelectionChanged"/> 方法
     /// </summary>
-    /// <param name="tab"></param>
+    /// <param name="tab">添加的标签页</param>
     private void NavigateToNewTab(TabViewItem tab)
     {
         MainTabView.TabItems.Add(tab);

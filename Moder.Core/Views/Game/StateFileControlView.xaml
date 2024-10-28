@@ -221,7 +221,7 @@
                                     Margin="0,4"
                                     HorizontalAlignment="Left"
                                     VerticalContentAlignment="Center"
-                                    ItemsSource="{Binding StateCategories}"
+                                    ItemsSource="{x:Bind StateCategories, Mode=OneWay}"
                                     SuggestionChosen="AutoSuggestBox_OnSuggestionChosen"
                                     Text="{x:Bind Value, Mode=TwoWay}">
                                     <AutoSuggestBox.ItemTemplate>

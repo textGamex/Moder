@@ -3,11 +3,13 @@ using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MethodTimer;
+using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Extensions;
 using Moder.Core.Models;
 using Moder.Core.Models.Vo;
 using Moder.Core.Parser;
 using Moder.Core.Services;
+using Moder.Core.Services.GameResources;
 using Moder.Core.ViewsModels.Menus;
 using NLog;
 using ParadoxPower.Parser;
@@ -158,9 +160,7 @@ public sealed partial class StateFileControlViewModel : ObservableObject
         var timestamp = Stopwatch.GetTimestamp();
         // TODO: 数值有效性检查, int, float, bool
         var rootNode = VoConvertToNode(_fileItem.Name, _rootNodeVo.Children.ToArray());
-        var text = CKPrinter.PrettyPrintStatements(
-            Array.ConvertAll(rootNode.AllArray, child => child.GetRawStatement(rootNode.Key))
-        );
+        var text = rootNode.PrintChildren();
         var elapsedTime = Stopwatch.GetElapsedTime(timestamp);
         Log.Info("保存成功, 耗时: {Time} ms", elapsedTime.TotalMilliseconds);
         Log.Debug("Content: {Content}", text);

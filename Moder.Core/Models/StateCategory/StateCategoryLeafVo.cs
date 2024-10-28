@@ -9,7 +9,7 @@ public sealed partial class StateCategoryLeafVo : LeafVo
         : base(key, value, type, parent)
     {
         StateCategory.OnResourceChanged += (_, _) =>
-            App.Current.MainWindow.DispatcherQueue.TryEnqueue(
+            App.Current.DispatcherQueue.TryEnqueue(
                 () => OnPropertyChanged(nameof(StateCategories))
             );
     }

@@ -1,7 +1,8 @@
-﻿using System.Collections.Frozen;
+using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using Moder.Core.Models;
 using Moder.Core.Services.GameResources.Base;
+using ParadoxPower.CSharpExtensions;
 using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources;
@@ -67,7 +68,7 @@ public sealed class StateCategoryService
     protected override FrozenDictionary<string, StateCategory>? ParseFileToContent(Node rootNode)
     {
         var stateCategories = new Dictionary<string, StateCategory>(8);
-        if (!rootNode.TryGetChild("state_categories", out var stateCategoriesNode))
+        if (!rootNode.TryGetNode("state_categories", out var stateCategoriesNode))
         {
             Logger.Warn("文件: {FileName} 中未找到 state_categories 节点", rootNode.Position.FileName);
             return null;

@@ -45,13 +45,19 @@
                 Style="{StaticResource CaptionTextBlockStyle}"
                 Text="Moder" />
 
-            <MenuFlyoutItem
-                x:Name="SettingsButton"
-                Grid.Column="2"
-                Margin="8,0,0,0"
-                HorizontalAlignment="Left"
-                Click="TitleBarSettingsButton_OnClick"
-                Text="设置" />
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <MenuFlyoutItem
+                    x:Name="SettingsButton"
+                    Grid.Column="2"
+                    Margin="8,0,0,0"
+                    HorizontalAlignment="Left"
+                    Click="TitleBarSettingsButton_OnClick"
+                    Text="设置" />
+                <MenuFlyoutItem
+                    x:Name="CharacterEditorButton"
+                    Click="CharacterEditorButton_OnClick"
+                    Text="将领编辑器" />
+            </StackPanel>
         </Grid>
 
         <Grid Grid.Row="1">

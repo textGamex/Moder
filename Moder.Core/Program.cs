@@ -50,6 +50,8 @@ public static partial class Program
         builder.Services.AddTransient<NotSupportInfoControlView>();
         builder.Services.AddTransient<SettingsControlView>();
         builder.Services.AddTransient<SettingsControlViewModel>();
+        builder.Services.AddTransient<CharacterEditorControlView>();
+        builder.Services.AddTransient<CharacterEditorControlViewModel>();
 
         builder.Logging.ClearProviders();
         builder.Logging.AddNLog(builder.Configuration);
@@ -57,6 +59,7 @@ public static partial class Program
             builder.Configuration.GetSection("NLog")
         );
 
+        builder.Services.AddSingleton<MessageBoxService>();
         builder.Services.AddSingleton<GlobalSettingService>(_ => GlobalSettingService.Load());
         builder.Services.AddSingleton<GlobalResourceService>();
         builder.Services.AddSingleton<GameResourcesService>();
@@ -65,6 +68,7 @@ public static partial class Program
         builder.Services.AddSingleton<CountryTagConsumerService>();
         builder.Services.AddSingleton<GameResourcesWatcherService>();
         builder.Services.AddSingleton<GameResourcesPathService>();
+        builder.Services.AddSingleton<CharacterSkillService>();
 
         // Setup and provision the hosting context for the User Interface
         // service.

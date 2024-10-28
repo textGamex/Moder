@@ -1,4 +1,5 @@
-﻿using Moder.Core.Services.GameResources.Base;
+using Moder.Core.Services.GameResources.Base;
+using ParadoxPower.CSharpExtensions;
 using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources;
@@ -36,7 +37,7 @@ public sealed class OreService : CommonResourcesService<OreService, string[]>
         // 一般来说, 每个资源文件只会有一个 resources 节点
         var ores = new List<string>(1);
 
-        if (rootNode.TryGetChild(ResourcesKeyword, out var resourcesNode))
+        if (rootNode.TryGetNode(ResourcesKeyword, out var resourcesNode))
         {
             foreach (var resource in resourcesNode.Nodes)
             {

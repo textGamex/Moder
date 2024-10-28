@@ -36,6 +36,7 @@
     </ItemGroup>
     <ItemGroup>
         <None Remove="Views\Game\BaseLeafControl.xaml" />
+        <None Remove="Views\Game\CharacterEditorControlView.xaml" />
         <None Remove="Views\Game\StateFileControlView.xaml" />
         <None Remove="Views\Menus\OpenFolderControlView.xaml" />
         <None Remove="Views\Menus\SettingsControlView.xaml" />
@@ -93,8 +94,10 @@
         <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.240923002" />
         <PackageReference Include="NLog" Version="5.3.4" />
         <PackageReference Include="NLog.Extensions.Logging" Version="5.3.14" />
-        <PackageReference Include="ParadoxPower" Version="0.3.1-beta" />
+        <PackageReference Include="ParadoxPower" Version="0.4.0-beta" />
+        <PackageReference Include="ParadoxPower.CSharpExtensions" Version="0.1.0-beta" />
         <PackageReference Include="WinUICommunity.Components" Version="6.9.0" />
+        <PackageReference Include="WinUIEdit" Version="0.0.3-prerelease" />
         <PackageReference Include="WinUIEx" Version="2.4.2" />
         <Manifest Include="$(ApplicationManifest)" />
     </ItemGroup>
@@ -114,6 +117,9 @@
         <None Update="appsettings.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <Page Update="Views\Game\CharacterEditorControlView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </Page>
         <Page Update="Views\Menus\SettingsControlView.xaml">
           <Generator>MSBuild:Compile</Generator>
         </Page>

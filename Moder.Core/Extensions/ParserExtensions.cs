@@ -50,7 +50,7 @@ public static class ParserExtensions
         {
             throw new InvalidOperationException("这个 child 不存在 key");
         }
-        
+
         return key;
     }
 
@@ -70,7 +70,7 @@ public static class ParserExtensions
         {
             return child.leafvalue.Key;
         }
-        
+
         return null;
     }
 
@@ -102,9 +102,15 @@ public static class ParserExtensions
             var keys = new Types.Statement[valueClause.Keys.Length + 1];
             for (int i = 0; i < keys.Length; i++)
             {
-                keys[i] = Types.Statement.NewValue(Position.Range.Zero, Types.Value.NewString(valueClause.Keys[i]));
+                keys[i] = Types.Statement.NewValue(
+                    Position.Range.Zero,
+                    Types.Value.NewString(valueClause.Keys[i])
+                );
             }
-            keys[^1] = Types.Statement.NewValue(valueClause.Position, Types.Value.NewClause(valueClause.ToRaw));
+            keys[^1] = Types.Statement.NewValue(
+                valueClause.Position,
+                Types.Value.NewClause(valueClause.ToRaw)
+            );
 
             return Types.Statement.NewKeyValue(
                 Types.PosKeyValue.NewPosKeyValue(
@@ -119,5 +125,25 @@ public static class ParserExtensions
         }
 
         throw new InvalidEnumArgumentException(nameof(child));
+    }
+
+    /// <summary>
+    /// 添加一个<see cref="Node"/>子节点
+    /// </summary>
+    /// <param name="node"></param>
+    /// <param name="key">添加的<see cref="Node"/>的 key</param>
+    /// <returns>添加的<see cref="Node"/></returns>
+    public static Node AddNodeChild(this Node node, string key)
+    {
+        var nodeChild = new Node(key);
+        node.AddChild(Child.NewNodeChild(nodeChild));
+        return nodeChild;
+    }
+
+    public static string PrintChildren(this Node node)
+    {
+        return CKPrinter.PrettyPrintStatements(
+            Array.ConvertAll(node.AllArray, child => child.GetRawStatement(node.Key))
+        );
     }
 }

@@ -11,11 +11,7 @@ public abstract class CommonResourcesService<TType, TContent>
     protected CommonResourcesService(string folderRelativePath, WatcherFilter filter)
         : base(folderRelativePath, filter) { }
 
-    /// <summary>
-    /// 解析文件
-    /// </summary>
-    /// <param name="rootNode">文件根节点</param>
-    /// <returns>文件内资源内容</returns>
+    ///<inheritdoc />
     protected abstract override TContent? ParseFileToContent(Node rootNode);
 
     protected override Node? GetParseResult(string filePath)

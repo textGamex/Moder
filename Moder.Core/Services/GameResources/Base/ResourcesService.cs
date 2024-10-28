@@ -158,7 +158,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
     }
 
     /// <summary>
-    /// 解析文件
+    /// 解析 folderRelativePath 目录下的所有文件, 并将解析结果添加到 Resources 中
     /// </summary>
     /// <param name="result">文件解析结果</param>
     /// <returns>文件内资源内容</returns>

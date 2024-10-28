@@ -2,6 +2,7 @@ using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using Moder.Core.Models;
 using Moder.Core.Services.GameResources.Base;
+using ParadoxPower.CSharpExtensions;
 using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources;
@@ -44,7 +45,7 @@ public sealed class BuildingsService
 
     protected override FrozenDictionary<string, BuildingInfo>? ParseFileToContent(Node rootNode)
     {
-        if (!rootNode.TryGetChild(BuildingsKeyword, out var buildingsNode))
+        if (!rootNode.TryGetNode(BuildingsKeyword, out var buildingsNode))
         {
             Logger.Warn("buildings node not found");
             return null;

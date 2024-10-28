@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Moder.Core.Services.Config;
 using NLog;
@@ -16,6 +17,10 @@ public partial class App : Application
 
     public IServiceProvider Services => Current._serviceProvider;
     public Views.MainWindow MainWindow { get; private set; } = null!;
+    /// <summary>
+    /// 在 <see cref="MainWindow"/> UI线程上运行的调度器队列
+    /// </summary>
+    public DispatcherQueue DispatcherQueue => MainWindow.DispatcherQueue;
     public static string ConfigFolder { get; } = Path.Combine(Environment.CurrentDirectory, "Configs");
     public static string ParserRulesFolder { get; } = Path.Combine(ConfigFolder, "ParserRules");
 
