@@ -17,7 +17,6 @@ public sealed partial class SideWorkSpaceControlView : UserControl
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
     private readonly GlobalResourceService _resourceService;
     private TreeViewItem? _lastSelectedItem;
-    private bool _isTabViewChanged;
 
     public SideWorkSpaceControlView(
         SideWorkSpaceControlViewModel model,
@@ -34,7 +33,6 @@ public sealed partial class SideWorkSpaceControlView : UserControl
             (_, message) =>
             {
                 AssertNeedSync(message);
-                _isTabViewChanged = true;
                 FileTreeView.SelectedItem = message.TargetItem;
                 Log.Debug("侧边栏同步选中项为: {SelectedItem}", message.TargetItem?.Name);
             }
@@ -60,13 +58,6 @@ public sealed partial class SideWorkSpaceControlView : UserControl
         // 这里不处理第一次的离开事件, 只处理第二次的进入事件
         if (args.AddedItems.Count != 1)
         {
-            return;
-        }
-        
-        // 如果是标签页切换, 则仅仅切换 FileTreeView 的选中项, 不做任何多余的操作
-        if (_isTabViewChanged)
-        {
-            _isTabViewChanged = false;
             return;
         }
 

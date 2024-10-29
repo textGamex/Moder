@@ -25,6 +25,10 @@ public sealed partial class MainWindow
     private readonly GlobalSettingService _settings;
     private readonly IServiceProvider _serviceProvider;
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
+    /// <summary>
+    /// 缓存已打开的文件标签页, 避免在侧边栏中查询
+    /// </summary>
     private readonly List<SystemFileItem> _openedTabFileItems = new(16);
     private string _selectedSideFileItemFullPath = string.Empty;
 
@@ -68,6 +72,8 @@ public sealed partial class MainWindow
     {
         _selectedSideFileItemFullPath = message.FileItem.FullPath;
 
+        // 如果文件已经打开，则切换到已打开的标签页
+        // 如果文件未打开，则打开新的标签页
         var openedTab = MainTabView.TabItems.FirstOrDefault(item =>
         {
             if (item is not TabViewItem tabViewItem)
