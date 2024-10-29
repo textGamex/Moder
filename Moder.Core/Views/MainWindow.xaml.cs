@@ -29,7 +29,7 @@ public sealed partial class MainWindow
     /// <summary>
     /// 缓存已打开的文件标签页, 避免在侧边栏中查询
     /// </summary>
-    private readonly List<SystemFileItem> _openedTabFileItems = new(16);
+    private readonly List<SystemFileItem> _openedTabFileItems = new(8);
     private string _selectedSideFileItemFullPath = string.Empty;
 
     public MainWindow(
