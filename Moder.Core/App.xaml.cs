@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Moder.Core.Services.Config;
@@ -31,13 +32,15 @@ public partial class App : Application
     /// Initializes the singleton application object.  This is the first line of authored code
     /// executed, and as such is the logical equivalent of main() or WinMain().
     /// </summary>
-    public App(IServiceProvider serviceProvider)
+    public App(IServiceProvider serviceProvider, IHostApplicationLifetime lifetime)
     {
         _serviceProvider = serviceProvider;
         UnhandledException += (_, args) => Log.Error(args.Exception, "Unhandled exception");
         InitializeComponent();
 
         InitializeApp();
+        // 在应用程序退出时，刷新所有待处理的日志
+        lifetime.ApplicationStopped.Register(LogManager.Flush);
     }
 
     private static void InitializeApp()
