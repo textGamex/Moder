@@ -2,9 +2,10 @@ using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
+using Moder.Core.Views.Menus;
+using NLog;
 using Windows.Storage;
 using Windows.System;
-using NLog;
 
 namespace Moder.Core.ViewsModels.Menus;
 
@@ -14,9 +15,10 @@ public sealed partial class SystemFileItem
     /// 当是文件时是文件名, 文件夹时是文件夹名
     /// </summary>
     public string Name { get; }
+
     public string FullPath { get; }
     public bool IsFile { get; }
-    public bool IsFolder =>!IsFile;
+    public bool IsFolder => !IsFile;
     public SystemFileItem? Parent { get; }
     public IReadOnlyList<SystemFileItem> Children => _children;
     private readonly ObservableCollection<SystemFileItem> _children = [];
@@ -58,12 +60,12 @@ public sealed partial class SystemFileItem
             throw new ArgumentException("Child's parent should be this");
         }
 
-        App.Current.MainWindow.DispatcherQueue.TryEnqueue(() => _children.Insert(index, child));
+        App.Current.DispatcherQueue.TryEnqueue(() => _children.Insert(index, child));
     }
 
     public void RemoveChild(SystemFileItem child)
     {
-        App.Current.MainWindow.DispatcherQueue.TryEnqueue(() => _children.Remove(child));
+        App.Current.DispatcherQueue.TryEnqueue(() => _children.Remove(child));
     }
 
     public override string ToString()
@@ -92,7 +94,65 @@ public sealed partial class SystemFileItem
             Log.Warn("在资源管理器中打开失败，无法获取路径：{FullPath}", FullPath);
             return;
         }
-        await Launcher.LaunchFolderPathAsync(folder, new FolderLauncherOptions { ItemsToSelect = { selectedItem } });
+
+        await Launcher.LaunchFolderPathAsync(
+            folder,
+            new FolderLauncherOptions { ItemsToSelect = { selectedItem } }
+        );
+    }
+
+    [RelayCommand]
+    private async Task RenameAsync()
+    {
+        var dialog = new ContentDialog
+        {
+            XamlRoot = App.Current.XamlRoot,
+            Title = "重命名",
+            PrimaryButtonText = "确定",
+            CloseButtonText = "取消"
+        };
+        var view = new RenameFileControlView(dialog, this);
+        dialog.Content = view;
+
+        var result = await dialog.ShowAsync();
+        if (result != ContentDialogResult.Primary)
+        {
+            Log.Debug("取消重命名");
+            return;
+        }
+
+        if (view.IsInvalid || view.NewName == Name)
+        {
+            return;
+        }
+
+        var parentDir = Path.GetDirectoryName(FullPath);
+        if (parentDir is null)
+        {
+            Log.Warn("重命名文件失败，无法获取路径：{FullPath}", FullPath);
+            return;
+        }
+
+        var newPath = Path.Combine(parentDir, view.NewName);
+        if (Path.Exists(newPath))
+        {
+            Log.Warn("重命名失败，目标文件或文件夹已存在：{FullPath}", FullPath);
+            return;
+        }
+
+        Rename(newPath);
+    }
+
+    private void Rename(string newPath)
+    {
+        if (IsFile)
+        {
+            File.Move(FullPath, newPath);
+        }
+        else
+        {
+            Directory.Move(FullPath, newPath);
+        }
     }
 
     [RelayCommand]

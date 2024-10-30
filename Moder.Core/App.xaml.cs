@@ -22,6 +22,8 @@ public partial class App : Application
     /// 在 <see cref="MainWindow"/> UI线程上运行的调度器队列
     /// </summary>
     public DispatcherQueue DispatcherQueue => MainWindow.DispatcherQueue;
+    public XamlRoot XamlRoot => MainWindow.Content.XamlRoot;
+    
     public static string ConfigFolder { get; } = Path.Combine(Environment.CurrentDirectory, "Configs");
     public static string ParserRulesFolder { get; } = Path.Combine(ConfigFolder, "ParserRules");
 

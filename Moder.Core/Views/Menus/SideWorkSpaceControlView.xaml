@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <UserControl
+    d:DataContext="{d:DesignInstance vms:SideWorkSpaceControlViewModel}"
+    mc:Ignorable="d"
     x:Class="Moder.Core.Views.Menus.SideWorkSpaceControlView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Moder.Core.Views.Menus"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:CommunityToolkit.WinUI"
     xmlns:vms="using:Moder.Core.ViewsModels.Menus"
-    d:DataContext="{d:DesignInstance vms:SideWorkSpaceControlViewModel}"
-    mc:Ignorable="d">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <TreeView
-        x:Name="FileTreeView"
-        MinWidth="70"
-        VerticalContentAlignment="Stretch"
         CanReorderItems="False"
         ItemsSource="{x:Bind ViewModel.Items}"
-        SelectionChanged="FileTreeView_OnSelectionChanged">
+        MinWidth="70"
+        SelectionChanged="FileTreeView_OnSelectionChanged"
+        VerticalContentAlignment="Stretch"
+        x:Name="FileTreeView">
         <TreeView.ItemTemplate>
             <DataTemplate x:DataType="vms:SystemFileItem">
                 <TreeViewItem
@@ -30,8 +31,22 @@
                             <MenuFlyoutItem
                                 Command="{x:Bind DeleteFileCommand}"
                                 Icon="Delete"
-                                Text="删除" />
-                            <MenuFlyoutItem Command="{x:Bind ShowInExplorerCommand}" Text="在文件资源管理器中显示" />
+                                Text="删除">
+                                <MenuFlyoutItem.KeyboardAccelerators>
+                                    <KeyboardAccelerator Key="Delete" />
+                                </MenuFlyoutItem.KeyboardAccelerators>
+                            </MenuFlyoutItem>
+
+                            <MenuFlyoutItem
+                                Command="{x:Bind ShowInExplorerCommand}"
+                                Icon="{ui:FontIcon Glyph=&#xE838;}"
+                                Text="在文件资源管理器中显示" />
+
+                            <MenuFlyoutItem Command="{x:Bind RenameCommand}" Text="重命名">
+                                <MenuFlyoutItem.KeyboardAccelerators>
+                                    <KeyboardAccelerator Key="F2" />
+                                </MenuFlyoutItem.KeyboardAccelerators>
+                            </MenuFlyoutItem>
                         </MenuFlyout>
                     </TreeViewItem.ContextFlyout>
                 </TreeViewItem>
