@@ -96,8 +96,10 @@
         <PackageReference Include="NLog.Extensions.Logging" Version="5.3.14" />
         <PackageReference Include="ParadoxPower" Version="0.4.0-beta" />
         <PackageReference Include="ParadoxPower.CSharpExtensions" Version="0.1.0-beta" />
+        <PackageReference Include="Vanara.PInvoke.ShlwApi" Version="4.0.4" />
+        <PackageReference Include="Vanara.PInvoke.User32" Version="4.0.4" />
+        <PackageReference Include="Vanara.Windows.Shell" Version="4.0.4" />
         <PackageReference Include="WinUICommunity.Components" Version="6.9.0" />
-        <PackageReference Include="WinUIEdit" Version="0.0.3-prerelease" />
         <PackageReference Include="WinUIEx" Version="2.4.2" />
         <Manifest Include="$(ApplicationManifest)" />
     </ItemGroup>

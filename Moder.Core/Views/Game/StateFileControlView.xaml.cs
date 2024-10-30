@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using CommunityToolkit.WinUI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -10,8 +9,8 @@ using Moder.Core.Models;
 using Moder.Core.Models.Vo;
 using Moder.Core.Services.GameResources;
 using Moder.Core.ViewsModels.Game;
+using Vanara.PInvoke;
 using Windows.Foundation;
-using Windows.Graphics;
 using WinUIEx;
 
 namespace Moder.Core.Views.Game;
@@ -32,8 +31,8 @@ public sealed partial class StateFileControlView : IFileView
         _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50) };
         _timer.Tick += (_, _) =>
         {
-            GetCursorPos(out var point);
-            ScreenToClient(App.Current.MainWindow.GetWindowHandle(), ref point);
+            User32.GetCursorPos(out var point);
+            User32.ScreenToClient(App.Current.MainWindow.GetWindowHandle(), ref point);
 
             var resolutionScale = MainTreeView.XamlRoot.RasterizationScale;
             var elements = VisualTreeHelper.FindElementsInHostCoordinates(
@@ -144,10 +143,4 @@ public sealed partial class StateFileControlView : IFileView
 
         // TODO: 不能加入到 Leaf, LeafValue 中 |  加入一个 Node, 离开一个 Node, 调整位置
     }
-
-    [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-    private static extern bool GetCursorPos(out PointInt32 lpPoint);
-
-    [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-    private static extern bool ScreenToClient(IntPtr hWnd, ref PointInt32 lpPoint);
 }

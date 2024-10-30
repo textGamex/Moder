@@ -1,7 +1,7 @@
-using System.Runtime.InteropServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Moder.Core.Services.Config;
 using NLog;
+using Vanara.PInvoke;
 
 namespace Moder.Core.ViewsModels.Menus;
 
@@ -12,10 +12,8 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
 
     private readonly FileSystemWatcher _watcher;
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
-    
-    public SideWorkSpaceControlViewModel(
-        GlobalSettingService globalSettings
-    )
+
+    public SideWorkSpaceControlViewModel(GlobalSettingService globalSettings)
     {
         _watcher = new FileSystemWatcher(globalSettings.ModRootFolderPath, "*.*");
         _watcher.Deleted += ContentOnDeleted;
@@ -51,14 +49,14 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
             Log.Warn("找不到父节点: {FullPath}", e.OldFullPath);
             return;
         }
-        
+
         parent.RemoveChild(target);
         var newItem = new SystemFileItem(e.FullPath, target.IsFile, parent);
         if (newItem.IsFolder)
         {
             LoadFileSystem(e.FullPath, newItem);
         }
-        
+
         var insertIndex = FindInsertIndex(newItem);
         parent.InsertChild(insertIndex, newItem);
     }
@@ -136,7 +134,7 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
         {
             throw new ArgumentException("找不到父节点");
         }
-        
+
         if (parentChildren.Count == 0)
         {
             return 0;
@@ -163,7 +161,9 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
 
         for (; index < maxIndex; index++)
         {
-            if (WindowsStringComparer.Instance.Compare(newItem.FullPath, parentChildren[index].FullPath) == -1)
+            if (
+                WindowsStringComparer.Instance.Compare(newItem.FullPath, parentChildren[index].FullPath) == -1
+            )
             {
                 insertIndex = index;
                 break;
@@ -205,13 +205,10 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
         }
     }
 
-    private sealed partial class WindowsStringComparer : IComparer<string>
+    private sealed class WindowsStringComparer : IComparer<string>
     {
-        public static WindowsStringComparer Instance { get; } = new();
-
         // CSharp 实现 https://www.codeproject.com/Articles/11016/Numeric-String-Sort-in-C?msg=1183262#xx1183262xx
-        [LibraryImport("shlwapi.dll", SetLastError = false, StringMarshalling = StringMarshalling.Utf16)]
-        private static partial int StrCmpLogicalW(string x, string y);
+        public static WindowsStringComparer Instance { get; } = new();
 
         public int Compare(string? x, string? y)
         {
@@ -229,7 +226,7 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
                 return 1;
             }
 
-            return StrCmpLogicalW(x, y);
+            return ShlwApi.StrCmpLogicalW(x, y);
         }
     }
 
