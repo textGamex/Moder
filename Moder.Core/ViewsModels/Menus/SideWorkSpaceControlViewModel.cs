@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using Moder.Core.Helper;
 using Moder.Core.Services.Config;
 using NLog;
 using Vanara.PInvoke;
@@ -10,12 +11,12 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
     public IReadOnlyList<SystemFileItem> Items => _root.Children;
     private readonly SystemFileItem _root;
 
-    private readonly FileSystemWatcher _watcher;
+    private readonly FileSystemSafeWatcher _watcher;
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     public SideWorkSpaceControlViewModel(GlobalSettingService globalSettings)
     {
-        _watcher = new FileSystemWatcher(globalSettings.ModRootFolderPath, "*.*");
+        _watcher = new FileSystemSafeWatcher(globalSettings.ModRootFolderPath, "*.*");
         _watcher.Deleted += ContentOnDeleted;
         _watcher.Created += ContentOnCreated;
         _watcher.Renamed += ContentOnRenamed;
