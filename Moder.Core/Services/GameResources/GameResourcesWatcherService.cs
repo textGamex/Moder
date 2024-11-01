@@ -11,7 +11,10 @@ namespace Moder.Core.Services.GameResources;
 /// </summary>
 public sealed partial class GameResourcesWatcherService : IDisposable
 {
-    private readonly Dictionary<string, FileSystemSafeWatcher> _watchedPaths = new(8);
+    /// <summary>
+    /// key: 资源文件夹路径, value: 监听器列表
+    /// </summary>
+    private readonly Dictionary<string, List<FileSystemSafeWatcher>> _watchedPaths = new(8);
     private readonly FileSystemSafeWatcher _watcher;
 
     /// <summary>
@@ -58,12 +61,6 @@ public sealed partial class GameResourcesWatcherService : IDisposable
         bool includeSubFolders = false
     )
     {
-        if (_watchedPaths.ContainsKey(folderRelativePath))
-        {
-            Log.Warn("已监听文件夹, 重复监听, Path: {FolderPath}", folderRelativePath);
-            return;
-        }
-
         var modFolderPath = Path.Combine(_settingService.ModRootFolderPath, folderRelativePath);
         // 如果 Mod文件夹 不存在, 监听上一级文件夹, 当 Mod文件夹 创建后, 自动监听
         if (!Directory.Exists(modFolderPath))
@@ -103,16 +100,25 @@ public sealed partial class GameResourcesWatcherService : IDisposable
         watcher.IncludeSubdirectories = includeSubFolders;
         watcher.EnableRaisingEvents = true;
 
-        _watchedPaths.Add(folderRelativePath, watcher);
+        if (_watchedPaths.TryGetValue(folderRelativePath, out var watcherList))
+        {
+            Log.Debug("多个服务监听同一文件夹, Path: {FolderPath}", modFolderPath);
+            watcherList.Add(watcher);
+        }
+        else
+        {
+            _watchedPaths.Add(folderRelativePath, [watcher]);
+        }
+        
         Log.Info("开始监听资源文件夹: {FolderPath}", modFolderPath);
     }
 
     public void Unwatch(string folderRelativePath)
     {
         Log.Debug("尝试停止监听资源文件夹: {FolderPath}", folderRelativePath);
-        if (_watchedPaths.TryGetValue(folderRelativePath, out var watcher))
+        if (_watchedPaths.TryGetValue(folderRelativePath, out var watcherList))
         {
-            watcher.Dispose();
+            watcherList.ForEach(watcher => watcher.Dispose());
             _watchedPaths.Remove(folderRelativePath);
             var isRemoved =
                 _waitingWatchFolders.RemoveAll(tuple => tuple.folderRelativePath == folderRelativePath) != 0;
@@ -127,7 +133,7 @@ public sealed partial class GameResourcesWatcherService : IDisposable
     public void Dispose()
     {
         _watcher.Dispose();
-        foreach (var watcher in _watchedPaths.Values)
+        foreach (var watcher in _watchedPaths.Values.SelectMany(watcherList => watcherList))
         {
             watcher.Dispose();
         }

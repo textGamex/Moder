@@ -39,7 +39,7 @@ public sealed partial class FileSystemSafeWatcher : IDisposable
     private ArrayList _events;
 
     private Timer _serverTimer;
-    private int _consolidationInterval = 1000; // milliseconds
+    private int _consolidationInterval = 700; // milliseconds
     #region Delegate to FileSystemWatcher
 
     public FileSystemSafeWatcher()
@@ -439,7 +439,7 @@ public sealed partial class FileSystemSafeWatcher : IDisposable
     /// <summary>
     /// This class wraps FileSystemEventArgs and RenamedEventArgs objects and detection of duplicate events.
     /// </summary>
-    private class DelayedEvent
+    private sealed class DelayedEvent
     {
         private readonly FileSystemEventArgs _args;
 

@@ -40,11 +40,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         }
 
         watcherService.Watch(FolderRelativePath, this, filter.Name);
-        Logger.Info(
-            "初始化资源成功: {FolderRelativePath}, 共 {Count} 个文件",
-            FolderRelativePath,
-            filePaths.Count
-        );
+        Logger.Info("初始化资源成功: {FolderRelativePath}, 共 {Count} 个文件", FolderRelativePath, filePaths.Count);
         LogItemsSum();
     }
 
@@ -126,8 +122,13 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
             return;
         }
 
-        var isRemoved = Resources.Remove(folderOrFilePath);
-        Debug.Assert(isRemoved, "Mod 资源不存在, 但尝试重新加载");
+        // 如果不存在, 则说明不在管理范围内, 不需要处理
+        if (!Resources.ContainsKey(folderOrFilePath))
+        {
+            return;
+        }
+        
+        Resources.Remove(folderOrFilePath);
         ParseFileAndAddToResources(folderOrFilePath);
         OnOnResourceChanged(new ResourceChangedEventArgs(folderOrFilePath));
 
@@ -142,18 +143,18 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
             Logger.Debug("跳过文件夹");
             return;
         }
-
+        
         if (Resources.TryGetValue(oldPath, out var countryTags))
         {
             Resources.Add(newPath, countryTags);
         }
         else
         {
-            ParseFileAndAddToResources(newPath);
+            Logger.Debug("{ServiceName} 跳过处理 {NewPath} 重命名", GetType().Name, newPath);
+            return;
         }
-        var isRemoved = Resources.Remove(oldPath);
+        Resources.Remove(oldPath);
 
-        Debug.Assert(isRemoved, "Mod 资源不存在, 但尝试重命名");
         Logger.Info("Mod 资源重命名成功");
     }
 
@@ -176,6 +177,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
     {
         if (result is null)
         {
+            Logger.Warn("文件 {FilePath} 解析失败", filePath);
             return;
         }
 
