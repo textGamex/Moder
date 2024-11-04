@@ -68,6 +68,9 @@ public static partial class Program
         builder.Services.AddSingleton<CountryTagConsumerService>();
         builder.Services.AddSingleton<GameResourcesWatcherService>();
         builder.Services.AddSingleton<GameResourcesPathService>();
+        builder.Services.AddSingleton<ModifierService>();
+
+        // 游戏内资源
         builder.Services.AddSingleton<CharacterSkillService>();
 
         // Setup and provision the hosting context for the User Interface

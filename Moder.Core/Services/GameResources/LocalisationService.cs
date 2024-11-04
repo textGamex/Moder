@@ -1,4 +1,5 @@
 ﻿using System.Collections.Frozen;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Extensions;
 using Moder.Core.Services.Config;
@@ -30,15 +31,32 @@ public sealed class LocalisationService
     /// <returns></returns>
     public string GetValue(string key)
     {
+        return TryGetValue(key, out var value) ? value : key;
+    }
+
+    public bool TryGetValue(string key, out string value)
+    {
         foreach (var localisation in Localisations)
         {
-            if (localisation.TryGetValue(key, out var value))
+            if (localisation.TryGetValue(key, out var result))
             {
-                return value;
+                value = result;
+                return true;
             }
         }
 
-        return key;
+        value = string.Empty;
+        return false;
+    }
+
+    public string GetModifier(string modifier)
+    {
+        return GetValue($"MODIFIER_{modifier}");
+    }
+
+    public bool TryGetModifierTt(string modifier, out string result)
+    {
+        return TryGetValue($"{modifier}_tt", out result);
     }
 
     protected override FrozenDictionary<string, string> ParseFileToContent(
@@ -51,7 +69,7 @@ public sealed class LocalisationService
             localisations[item.key] = GetCleanDesc(item.desc);
         }
 
-        return localisations.ToFrozenDictionary();
+        return localisations.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
     }
 
     /// 去除开头和结尾的 "

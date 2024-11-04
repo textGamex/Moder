@@ -1,17 +1,15 @@
-using System.Diagnostics;
+using System.Runtime.InteropServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Documents;
 using Moder.Core.Extensions;
 using Moder.Core.Models.Character;
 using Moder.Core.Parser;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Core.Services.GameResources;
-using Moder.Core.Services.GameResources.Base;
 using NLog;
-using ParadoxPower.CSharp;
 using ParadoxPower.CSharpExtensions;
 using ParadoxPower.Process;
 
@@ -25,6 +23,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
             new() { Content = "陆军元帅 (field_marshal)", Tag = "field_marshal" },
             new() { Content = "海军将领 (navy_leader)", Tag = "navy_leader" }
         ];
+
     public IEnumerable<string> CharacterFiles =>
         Directory
             .GetFiles(CharactersFolder, "*.txt", SearchOption.TopDirectoryOnly)
@@ -39,44 +38,58 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
     [ObservableProperty]
     private ushort _levelMaxValue;
 
+    public InlineCollection LevelModifierDescription { get; set; } = null!;
+
     [ObservableProperty]
-    private ushort _level = 1;
+    private ushort _level;
 
     [ObservableProperty]
     private ushort _attackMaxValue;
 
+    public InlineCollection AttackModifierDescription { get; set; } = null!;
+
     [ObservableProperty]
-    private ushort _attack = 1;
+    private ushort _attack;
 
     [ObservableProperty]
     private ushort _defenseMaxValue;
 
+    public InlineCollection DefenseModifierDescription { get; set; } = null!;
+
     [ObservableProperty]
-    private ushort _defense = 1;
+    private ushort _defense;
 
     [ObservableProperty]
     private ushort _planningMaxValue;
 
+    public InlineCollection PlanningModifierDescription { get; set; } = null!;
+
     [ObservableProperty]
-    private ushort _planning = 1;
+    private ushort _planning;
 
     [ObservableProperty]
     private ushort _logisticsMaxValue;
 
+    public InlineCollection LogisticsModifierDescription { get; set; } = null!;
+
     [ObservableProperty]
-    private ushort _logistics = 1;
+    private ushort _logistics;
 
     [ObservableProperty]
     private ushort _maneuveringMaxValue;
 
+    public InlineCollection ManeuveringModifierDescription { get; set; } = null!;
+
     [ObservableProperty]
-    private ushort _maneuvering = 1;
+    private ushort _maneuvering;
 
     [ObservableProperty]
     private ushort _coordinationMaxValue;
 
+    public InlineCollection CoordinationModifierDescription { get; set; } = null!;
+
     [ObservableProperty]
-    private ushort _coordination = 1;
+    private ushort _coordination;
 
     [ObservableProperty]
     private string _name = string.Empty;
@@ -91,12 +104,15 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
     private string SelectedCharacterTypeCode =>
         CharactersType[SelectedCharacterTypeIndex].Tag.ToString()
         ?? throw new InvalidOperationException("未设置 CharactersType 的 null");
+    private CharacterSkillType SelectedCharacterSkillType =>
+        CharacterSkillType.FromCharacterType(SelectedCharacterTypeCode);
+
     private readonly GlobalSettingService _globalSettingService;
     private readonly MessageBoxService _messageBoxService;
     private readonly CharacterSkillService _characterSkillService;
 
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
-
+    
     public CharacterEditorControlViewModel(
         GlobalSettingService globalSettingService,
         MessageBoxService messageBoxService,
@@ -109,12 +125,136 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
 
         SetSkillsMaxValue();
         _characterSkillService.OnResourceChanged += (_, _) =>
-            App.Current.DispatcherQueue.TryEnqueue(SetSkillsMaxValue);
+            App.Current.DispatcherQueue.TryEnqueue(() =>
+            {
+                SetSkillsMaxValue();
+                ResetSkillsModifierDescription();
+            });
+    }
+    
+    public void SetSkillDefaultValue()
+    {
+        Level = 1;
+        Attack = 1;
+        Defense = 1;
+        Planning = 1;
+        Logistics = 1;
+        Maneuvering = 1;
+        Coordination = 1;
+    }
+
+    partial void OnLevelChanged(ushort value)
+    {
+        var description = _characterSkillService.GetSkillModifierDescription(
+            SkillType.Level,
+            SelectedCharacterSkillType,
+            value
+        );
+
+        AddModifierDescription(LevelModifierDescription, description);
+    }
+
+    partial void OnAttackChanged(ushort value)
+    {
+        var description = _characterSkillService.GetSkillModifierDescription(
+            SkillType.Attack,
+            SelectedCharacterSkillType,
+            value
+        );
+
+        AddModifierDescription(AttackModifierDescription, description);
+    }
+
+    partial void OnDefenseChanged(ushort value)
+    {
+        var description = _characterSkillService.GetSkillModifierDescription(
+            SkillType.Defense,
+            SelectedCharacterSkillType,
+            value
+        );
+
+        AddModifierDescription(DefenseModifierDescription, description);
+    }
+
+    partial void OnPlanningChanged(ushort value)
+    {
+        var description = _characterSkillService.GetSkillModifierDescription(
+            SkillType.Planning,
+            SelectedCharacterSkillType,
+            value
+        );
+
+        AddModifierDescription(PlanningModifierDescription, description);
+    }
+
+    partial void OnLogisticsChanged(ushort value)
+    {
+        var description = _characterSkillService.GetSkillModifierDescription(
+            SkillType.Logistics,
+            SelectedCharacterSkillType,
+            value
+        );
+
+        AddModifierDescription(LogisticsModifierDescription, description);
+    }
+
+    partial void OnManeuveringChanged(ushort value)
+    {
+        if (!IsSelectedNavy)
+        {
+            return;
+        }
+
+        var description = _characterSkillService.GetSkillModifierDescription(
+            SkillType.Maneuvering,
+            SelectedCharacterSkillType,
+            value
+        );
+
+        AddModifierDescription(ManeuveringModifierDescription, description);
+    }
+
+    partial void OnCoordinationChanged(ushort value)
+    {
+        if (!IsSelectedNavy)
+        {
+            return;
+        }
+
+        var description = _characterSkillService.GetSkillModifierDescription(
+            SkillType.Coordination,
+            SelectedCharacterSkillType,
+            value
+        );
+
+        AddModifierDescription(CoordinationModifierDescription, description);
+    }
+
+    private static void AddModifierDescription(InlineCollection collection, IEnumerable<Inline> inlines)
+    {
+        collection.Clear();
+        try
+        {
+            foreach (var inline in inlines)
+            {
+                collection.Add(inline);
+            }
+        }
+        catch (COMException e)
+        {
+            Log.Error(e);
+        }
+    }
+
+    partial void OnSelectedCharacterTypeIndexChanged(int value)
+    {
+        SetSkillsMaxValue();
+        ResetSkillsModifierDescription();
     }
 
     private void SetSkillsMaxValue()
     {
-        var type = CharacterSkillType.FromCharacterType(SelectedCharacterTypeCode);
+        var type = SelectedCharacterSkillType;
         LevelMaxValue = _characterSkillService.GetMaxSkillValue(SkillType.Level, type);
         AttackMaxValue = _characterSkillService.GetMaxSkillValue(SkillType.Attack, type);
         DefenseMaxValue = _characterSkillService.GetMaxSkillValue(SkillType.Defense, type);
@@ -134,9 +274,15 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         }
     }
 
-    partial void OnSelectedCharacterTypeIndexChanged(int value)
+    private void ResetSkillsModifierDescription()
     {
-        SetSkillsMaxValue();
+        OnLevelChanged(Level);
+        OnAttackChanged(Attack);
+        OnDefenseChanged(Defense);
+        OnPlanningChanged(Planning);
+        OnCoordinationChanged(Coordination);
+        OnLogisticsChanged(Logistics);
+        OnManeuveringChanged(Maneuvering);
     }
 
     [RelayCommand]

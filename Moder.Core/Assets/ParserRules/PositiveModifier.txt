@@ -1,0 +1,8 @@
+﻿offence
+offence_factor
+defence
+defence_factor
+planning_speed
+max_planning
+naval_hit_chance
+naval_retreat_speed

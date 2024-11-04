@@ -5,6 +5,7 @@ using NLog;
 
 namespace Moder.Core.Services.GameResources;
 
+// TODO: 可以考虑删了这个类
 public sealed class GameResourcesService
 {
     public StateCategoryService StateCategory => _stateCategoryLazy.Value;

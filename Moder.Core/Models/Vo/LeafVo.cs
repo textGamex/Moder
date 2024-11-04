@@ -33,11 +33,6 @@ public partial class LeafVo : ObservableGameValue
         return ValueConverterHelper.ToValueType(Type, Value);
     }
 
-    // ~LeafVo()
-    // {
-    //     Debug.WriteLine($"LeafVo Finalized");
-    // }
-
     public override Child[] ToRawChildren()
     {
         return [Child.NewLeafChild(new Leaf(Key, ToRawValue(), Position.Range.Zero, Types.Operator.Equals))];
