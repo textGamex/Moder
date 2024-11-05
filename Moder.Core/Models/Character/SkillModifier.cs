@@ -1,4 +1,5 @@
-﻿using ParadoxPower.Process;
+﻿using Moder.Core.Models.Modifiers;
+using ParadoxPower.Process;
 
 namespace Moder.Core.Models.Character;
 
@@ -10,6 +11,6 @@ public sealed class SkillModifier
     public SkillModifier(ushort level, IEnumerable<Leaf> modifiers)
     {
         Level = level;
-        Modifiers = modifiers.Select(m => new Modifier(m)).ToArray();
+        Modifiers = modifiers.Select(Modifier.FromLeaf).ToArray();
     }
 }

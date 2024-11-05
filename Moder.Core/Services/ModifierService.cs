@@ -3,6 +3,7 @@ using MethodTimer;
 using Moder.Core.Models;
 using Moder.Core.Services.GameResources;
 using Windows.UI;
+using Moder.Core.Models.Modifiers;
 
 namespace Moder.Core.Services;
 
@@ -13,7 +14,7 @@ public sealed class ModifierService
     /// <summary>
     /// 无法在本地化文件中判断类型的修饰符, 在文件中手动设置
     /// </summary>
-    private readonly FrozenDictionary<string, ModifierType> _modifierTypes;
+    private readonly FrozenDictionary<string, ModifierEffectType> _modifierTypes;
 
     public ModifierService(GameResourcesService gameResourcesService)
     {
@@ -22,33 +23,33 @@ public sealed class ModifierService
     }
 
     [Time("读取文件中的修饰符类型")]
-    private static FrozenDictionary<string, ModifierType> ReadModifierTypes()
+    private static FrozenDictionary<string, ModifierEffectType> ReadModifierTypes()
     {
         var positiveFilePath = Path.Combine(App.ParserRulesFolder, "PositiveModifier.txt");
         var reversedFilePath = Path.Combine(App.ParserRulesFolder, "ReversedModifier.txt");
         var positives = File.Exists(positiveFilePath) ? File.ReadAllLines(positiveFilePath) : [];
         var reversedModifiers = File.Exists(reversedFilePath) ? File.ReadAllLines(reversedFilePath) : [];
 
-        var modifierTypes = new Dictionary<string, ModifierType>(positives.Length + reversedModifiers.Length);
+        var modifierTypes = new Dictionary<string, ModifierEffectType>(positives.Length + reversedModifiers.Length);
         foreach (var positive in positives)
         {
             if (!string.IsNullOrWhiteSpace(positive))
             {
-                modifierTypes.Add(positive.Trim(), ModifierType.Positive);
+                modifierTypes.Add(positive.Trim(), ModifierEffectType.Positive);
             }
         }
         foreach (var modifier in reversedModifiers)
         {
             if (!string.IsNullOrWhiteSpace(modifier))
             {
-                modifierTypes.Add(modifier.Trim(), ModifierType.Negative);
+                modifierTypes.Add(modifier.Trim(), ModifierEffectType.Negative);
             }
         }
 
         return modifierTypes.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
     }
 
-    private ModifierType GetModifierType(string modifierName)
+    private ModifierEffectType GetModifierType(string modifierName)
     {
         if (_modifierTypes.TryGetValue(modifierName, out var modifierType))
         {
@@ -62,19 +63,19 @@ public sealed class ModifierService
                 var c = value[index];
                 if (c == '+')
                 {
-                    return ModifierType.Positive;
+                    return ModifierEffectType.Positive;
                 }
 
                 if (c == '-')
                 {
-                    return ModifierType.Negative;
+                    return ModifierEffectType.Negative;
                 }
             }
 
-            return ModifierType.Unknown;
+            return ModifierEffectType.Unknown;
         }
 
-        return ModifierType.Unknown;
+        return ModifierEffectType.Unknown;
     }
 
     public Color GetModifierColor(Modifier modifier)
@@ -86,19 +87,19 @@ public sealed class ModifierService
         }
 
         var modifierType = GetModifierType(modifier.Name);
-        if (modifierType == ModifierType.Unknown)
+        if (modifierType == ModifierEffectType.Unknown)
         {
             return Colors.Black;
         }
 
         if (value > 0.0)
         {
-            if (modifierType == ModifierType.Positive)
+            if (modifierType == ModifierEffectType.Positive)
             {
                 return Colors.Green;
             }
 
-            if (modifierType == ModifierType.Negative)
+            if (modifierType == ModifierEffectType.Negative)
             {
                 return Colors.Red;
             }
@@ -108,12 +109,12 @@ public sealed class ModifierService
 
         if (value < 0.0)
         {
-            if (modifierType == ModifierType.Positive)
+            if (modifierType == ModifierEffectType.Positive)
             {
                 return Colors.Red;
             }
 
-            if (modifierType == ModifierType.Negative)
+            if (modifierType == ModifierEffectType.Negative)
             {
                 return Colors.Green;
             }

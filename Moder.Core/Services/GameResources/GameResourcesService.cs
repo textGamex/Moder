@@ -13,7 +13,6 @@ public sealed class GameResourcesService
     public OreService OreService => _oreServiceLazy.Value;
     public BuildingsService Buildings => _buildingsLazy.Value;
     public CountryTagService CountryTagsService => _countryTagsLazy.Value;
-    public CharacterTraitsService CharacterTraits => _characterTraitsLazy.Value;
 
     private readonly Lazy<StateCategoryService> _stateCategoryLazy;
     private Lazy<LocalisationService> _localisationLazy;
@@ -21,7 +20,6 @@ public sealed class GameResourcesService
     private readonly Lazy<BuildingsService> _buildingsLazy;
     private readonly Lazy<CountryTagService> _countryTagsLazy;
     private readonly GameResourcesWatcherService _watcherService;
-    private readonly Lazy<CharacterTraitsService> _characterTraitsLazy;
 
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
@@ -34,17 +32,11 @@ public sealed class GameResourcesService
         _oreServiceLazy = new Lazy<OreService>(LoadOre);
         _buildingsLazy = new Lazy<BuildingsService>(LoadBuildings);
         _countryTagsLazy = new Lazy<CountryTagService>(LoadCountriesTag);
-        _characterTraitsLazy = new Lazy<CharacterTraitsService>(LoadCharacterTraits);
-        LoadCharacterTraits();
+
         WeakReferenceMessenger.Default.Register<ReloadLocalizationFiles>(
             this,
             (_, _) => ReloadLocalisation()
         );
-    }
-
-    private CharacterTraitsService LoadCharacterTraits()
-    {
-        return new CharacterTraitsService();
     }
 
     [Time("加载 Country Tags")]

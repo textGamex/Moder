@@ -1,6 +1,6 @@
-﻿namespace Moder.Core.Models;
+﻿namespace Moder.Core.Models.Modifiers;
 
-public enum ModifierType : byte
+public enum ModifierEffectType : byte
 {
     Unknown,
     /// <summary>

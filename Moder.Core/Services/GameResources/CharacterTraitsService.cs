@@ -1,7 +1,10 @@
 ﻿using System.Collections.Frozen;
 using System.Runtime.InteropServices;
+using MethodTimer;
 using Moder.Core.Extensions;
+using Moder.Core.Helper;
 using Moder.Core.Models.Character;
+using Moder.Core.Models.Modifiers;
 using Moder.Core.Services.GameResources.Base;
 using NLog.Fluent;
 using ParadoxPower.Process;
@@ -11,8 +14,13 @@ namespace Moder.Core.Services.GameResources;
 public sealed class CharacterTraitsService
     : CommonResourcesService<CharacterTraitsService, FrozenDictionary<string, Trait>>
 {
+    private Dictionary<string, FrozenDictionary<string, Trait>>.ValueCollection Traits => Resources.Values;
+
+    [Time("加载人物特质")]
     public CharacterTraitsService()
         : base(Path.Combine(Keywords.Common, "unit_leader"), WatcherFilter.Text) { }
+
+    public IEnumerable<Trait> GetAllTraits() => Traits.SelectMany(trait => trait.Values);
 
     protected override FrozenDictionary<string, Trait>? ParseFileToContent(Node rootNode)
     {
@@ -27,12 +35,13 @@ public sealed class CharacterTraitsService
             return null;
         }
 
-        var dictionary = new Dictionary<string, Trait>(128, StringComparer.OrdinalIgnoreCase);
+        // 在 1.14 版本中, 人物特质文件中大约有 145 个特质
+        var dictionary = new Dictionary<string, Trait>(163, StringComparer.OrdinalIgnoreCase);
         foreach (var traitsChild in traitsNodes)
         {
             foreach (var traits in ParseTraitsNode(traitsChild.node))
             {
-                dictionary.Add(traits.Name, traits);
+                dictionary[traits.Name] = traits;
             }
         }
 
@@ -47,6 +56,7 @@ public sealed class CharacterTraitsService
     private ReadOnlySpan<Trait> ParseTraitsNode(Node traitsNode)
     {
         var traits = new List<Trait>(traitsNode.AllArray.Length);
+
         foreach (var child in traitsNode.AllArray)
         {
             if (!child.IsNodeChild)
@@ -57,23 +67,49 @@ public sealed class CharacterTraitsService
             var traitNode = child.node;
             var traitName = traitNode.Key;
 
+            var modifiers = new List<ModifierCollection>(4);
+            var traitType = TraitType.None;
             foreach (var traitAttribute in traitNode.AllArray)
             {
+                var key = traitAttribute.GetKeyOrNull();
                 // type 可以为 Leaf 或 Node
-                if (StringComparer.OrdinalIgnoreCase.Equals(traitAttribute.GetKeyOrNull(), "type"))
+                if (StringComparer.OrdinalIgnoreCase.Equals(key, "type"))
                 {
-                    var traitType = TraitType.None;
-                    foreach (var traitTypeString in GetTraitTypes(traitAttribute))
-                    {
-                        traitType |= GetTraitType(traitTypeString);
-                    }
-                    traits.Add(new Trait(traitName, traitType));
-                    break;
+                    traitType = GetTraitType(traitAttribute);
+                }
+                else if (
+                    traitAttribute.IsNodeChild
+                    && Array.Exists(ModifierNodeKeys, s => StringComparer.OrdinalIgnoreCase.Equals(s, key))
+                )
+                {
+                    modifiers.Add(ModifierHelper.ParseModifier(traitAttribute.node));
                 }
             }
+            traits.Add(new Trait(traitName, traitType, modifiers));
         }
 
         return CollectionsMarshal.AsSpan(traits);
+    }
+
+    // TODO: 等 .NET 9 发布后, 改用 SearchValues
+    private static readonly string[] ModifierNodeKeys =
+    [
+        "modifier",
+        "non_shared_modifier",
+        "corps_commander_modifier",
+        "field_marshal_modifier",
+        "sub_unit_modifiers"
+    ];
+
+    private TraitType GetTraitType(Child traitAttribute)
+    {
+        var traitType = TraitType.None;
+        foreach (var traitTypeString in GetTraitTypes(traitAttribute))
+        {
+            traitType |= GetTraitType(traitTypeString);
+        }
+
+        return traitType;
     }
 
     private static List<string> GetTraitTypes(Child traitTypeAttribute)
@@ -86,10 +122,7 @@ public sealed class CharacterTraitsService
 
         if (traitTypeAttribute.IsNodeChild)
         {
-            foreach (var trait in traitTypeAttribute.node.LeafValues)
-            {
-                list.Add(trait.ValueText);
-            }
+            list.AddRange(traitTypeAttribute.node.LeafValues.Select(trait => trait.ValueText));
         }
 
         return list;
