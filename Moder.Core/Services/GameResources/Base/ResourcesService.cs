@@ -58,7 +58,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         }
     }
 
-    public void Add(string folderOrFilePath)
+    void IResourcesService.Add(string folderOrFilePath)
     {
         Logger.Debug("添加 Mod 资源: {FolderOrFilePath}", folderOrFilePath);
         Debug.Assert(File.Exists(folderOrFilePath), "必须为文件");
@@ -78,7 +78,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         Logger.Info("添加 Mod 资源成功: {FolderOrFilePath}", folderOrFilePath);
     }
 
-    public void Remove(string folderOrFilePath)
+    void IResourcesService.Remove(string folderOrFilePath)
     {
         Logger.Debug("移除 Mod 资源: {FolderOrFilePath}", folderOrFilePath);
         if (Directory.Exists(folderOrFilePath))
@@ -91,7 +91,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
                 )
             )
             {
-                Remove(filePath);
+                ((IResourcesService)this).Remove(filePath);
             }
         }
 
@@ -114,7 +114,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         }
     }
 
-    public void Reload(string folderOrFilePath)
+    void IResourcesService.Reload(string folderOrFilePath)
     {
         Logger.Debug("尝试重新加载 Mod 资源: {FolderOrFilePath}", folderOrFilePath);
         if (Directory.Exists(folderOrFilePath))
@@ -139,7 +139,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         Logger.Info("{ServiceName} 重新加载 Mod 资源成功", ServiceName);
     }
 
-    public void Renamed(string oldPath, string newPath)
+    void IResourcesService.Renamed(string oldPath, string newPath)
     {
         Logger.Debug("Mod 资源重命名: {OldPath} -> {NewPath}", oldPath, newPath);
         if (Directory.Exists(newPath))
