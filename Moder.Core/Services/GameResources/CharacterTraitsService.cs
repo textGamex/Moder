@@ -1,5 +1,7 @@
 ﻿using System.Collections.Frozen;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using EnumsNET;
 using MethodTimer;
 using Moder.Core.Extensions;
 using Moder.Core.Helper;
@@ -16,9 +18,33 @@ public sealed class CharacterTraitsService
 {
     private Dictionary<string, FrozenDictionary<string, Trait>>.ValueCollection Traits => Resources.Values;
 
+    // TODO: 等 .NET 9 发布后, 改用 SearchValues
+    private static readonly string[] ModifierNodeKeys =
+    [
+        "modifier",
+        "non_shared_modifier",
+        "corps_commander_modifier",
+        "field_marshal_modifier",
+        "sub_unit_modifiers"
+    ];
+
     [Time("加载人物特质")]
     public CharacterTraitsService()
         : base(Path.Combine(Keywords.Common, "unit_leader"), WatcherFilter.Text) { }
+
+    public bool TryGetTrait(string name, [NotNullWhen(true)] out Trait? trait)
+    {
+        foreach (var traitMap in Traits)
+        {
+            if (traitMap.TryGetValue(name, out trait))
+            {
+                return true;
+            }
+        }
+
+        trait = null;
+        return false;
+    }
 
     public IEnumerable<Trait> GetAllTraits() => Traits.SelectMany(trait => trait.Values);
 
@@ -48,6 +74,28 @@ public sealed class CharacterTraitsService
         return dictionary.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
     }
 
+    private static readonly string[] SkillTypes =
+    [
+        "skill",
+        "attack_skill",
+        "defense_skill",
+        "planning_skill",
+        "logistics_skill",
+        "maneuvering_skill",
+        "coordination_skill"
+    ];
+
+    private static readonly string[] SkillTypesFactor =
+    [
+        "skill_factor",
+        "attack_skill_factor",
+        "defense_skill_factor",
+        "planning_skill_factor",
+        "logistics_skill_factor",
+        "maneuvering_skill_factor",
+        "coordination_skill_factor"
+    ];
+
     /// <summary>
     ///
     /// </summary>
@@ -68,6 +116,7 @@ public sealed class CharacterTraitsService
             var traitName = traitNode.Key;
 
             var modifiers = new List<ModifierCollection>(4);
+            var skillModifiers = new List<LeafModifier>();
             var traitType = TraitType.None;
             foreach (var traitAttribute in traitNode.AllArray)
             {
@@ -84,22 +133,21 @@ public sealed class CharacterTraitsService
                 {
                     modifiers.Add(ModifierHelper.ParseModifier(traitAttribute.node));
                 }
+                else if (IsSkillModifier(traitAttribute))
+                {
+                    skillModifiers.Add(LeafModifier.FromLeaf(traitAttribute.leaf));
+                }
+            }
+
+            if (skillModifiers.Count != 0)
+            {
+                modifiers.Add(new ModifierCollection(Trait.TraitSkillModifiersKey, skillModifiers));
             }
             traits.Add(new Trait(traitName, traitType, modifiers));
         }
 
         return CollectionsMarshal.AsSpan(traits);
     }
-
-    // TODO: 等 .NET 9 发布后, 改用 SearchValues
-    private static readonly string[] ModifierNodeKeys =
-    [
-        "modifier",
-        "non_shared_modifier",
-        "corps_commander_modifier",
-        "field_marshal_modifier",
-        "sub_unit_modifiers"
-    ];
 
     private TraitType GetTraitType(Child traitAttribute)
     {
@@ -165,7 +213,22 @@ public sealed class CharacterTraitsService
             return TraitType.All;
         }
 
-        Logger.Warn($"Unknown trait type: {traitType}");
+        Logger.Warn("Unknown trait type: {TraitType}", traitType);
         return TraitType.None;
+    }
+
+    private static bool IsSkillModifier(Child traitAttribute)
+    {
+        return traitAttribute.IsLeafChild
+            && (
+                Array.Exists(
+                    SkillTypes,
+                    s => StringComparer.OrdinalIgnoreCase.Equals(s, traitAttribute.leaf.Key)
+                )
+                || Array.Exists(
+                    SkillTypesFactor,
+                    s => StringComparer.OrdinalIgnoreCase.Equals(s, traitAttribute.leaf.Key)
+                )
+            );
     }
 }

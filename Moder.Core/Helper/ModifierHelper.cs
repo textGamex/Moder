@@ -12,13 +12,13 @@ public static class ModifierHelper
         {
             if (child.IsLeafChild)
             {
-                var modifier = Modifier.FromLeaf(child.leaf);
+                var modifier = LeafModifier.FromLeaf(child.leaf);
                 list.Add(modifier);
             }
             else if (child.IsNodeChild)
             {
                 var node = child.node;
-                var modifier = new NodeModifier(node.Key, node.Leaves.Select(Modifier.FromLeaf));
+                var modifier = new NodeModifier(node.Key, node.Leaves.Select(LeafModifier.FromLeaf));
                 list.Add(modifier);
             }
         }

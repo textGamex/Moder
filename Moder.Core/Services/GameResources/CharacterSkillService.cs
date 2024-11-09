@@ -49,43 +49,7 @@ public sealed class CharacterSkillService : CommonResourcesService<CharacterSkil
             return [new Run { Text = "无" }];
         }
 
-        var inlines = new List<Inline>(skillModifier.Modifiers.Count * 3);
-        for (var index = 0; index < skillModifier.Modifiers.Count; index++)
-        {
-            var modifier = skillModifier.Modifiers[index];
-            inlines.Add(
-                new Run { Text = $"{_gameResourcesService.Localisation.GetModifier(modifier.Name)}: " }
-            );
-
-            if (modifier.ValueType is GameValueType.Int or GameValueType.Float)
-            {
-                var sign = string.Empty;
-                if (!modifier.Value.StartsWith('-'))
-                {
-                    sign = "+";
-                }
-
-                var value = double.Parse(modifier.Value);
-                inlines.Add(
-                    new Run
-                    {
-                        Text = $"{sign}{value:P1}",
-                        Foreground = new SolidColorBrush(_modifierService.GetModifierColor(modifier))
-                    }
-                );
-            }
-            else
-            {
-                inlines.Add(new Run { Text = modifier.Value });
-            }
-
-            if (index != skillModifier.Modifiers.Count - 1)
-            {
-                inlines.Add(new LineBreak());
-            }
-        }
-
-        return inlines;
+        return _modifierService.GetModifierInlines(skillModifier.Modifiers);
     }
 
     protected override List<SkillInfo>? ParseFileToContent(Node rootNode)

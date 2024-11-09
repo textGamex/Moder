@@ -6,3 +6,6 @@ planning_speed
 max_planning
 naval_hit_chance
 naval_retreat_speed
+recon_factor
+army_infantry_attack_factor
+army_infantry_defence_factor

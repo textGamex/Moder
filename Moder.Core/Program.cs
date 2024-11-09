@@ -52,6 +52,8 @@ public static partial class Program
         builder.Services.AddTransient<SettingsControlViewModel>();
         builder.Services.AddTransient<CharacterEditorControlView>();
         builder.Services.AddTransient<CharacterEditorControlViewModel>();
+        builder.Services.AddTransient<TraitsSelectionWindowView>();
+        builder.Services.AddTransient<TraitsSelectionWindowViewModel>();
 
         builder.Logging.ClearProviders();
         builder.Logging.AddNLog(builder.Configuration);
@@ -72,6 +74,8 @@ public static partial class Program
 
         // 游戏内资源
         builder.Services.AddSingleton<CharacterSkillService>();
+        builder.Services.AddSingleton<CharacterTraitsService>();
+        builder.Services.AddSingleton<TerrainService>();
 
         // Setup and provision the hosting context for the User Interface
         // service.

@@ -66,7 +66,10 @@
                     SelectedItem="{x:Bind ViewModel.SelectedCharacterFile, Mode=TwoWay}" />
             </Grid>
 
-            <Button Command="{x:Bind ViewModel.SaveCommand}" Content="保存" />
+            <Button
+                Command="{x:Bind ViewModel.SaveCommand}"
+                Content="保存"
+                HorizontalAlignment="Center" />
         </StackPanel>
 
         <StackPanel
@@ -145,6 +148,7 @@
                 <TextBlock Style="{StaticResource ModifierDescriptionTextBlockStyle}" x:Name="CoordinationModifierDescriptionTextBlock" />
             </StackPanel>
 
+            <Button Command="{x:Bind ViewModel.OpenTraitsSelectionWindowCommand}" Content="管理特质" />
         </StackPanel>
 
         <VisualStateManager.VisualStateGroups>

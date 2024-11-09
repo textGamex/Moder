@@ -2,13 +2,13 @@
 
 public sealed class NodeModifier : IModifier
 {
-    public string Name { get; }
-    public IReadOnlyCollection<Modifier> Modifiers { get; }
+    public string Key { get; }
+    public IReadOnlyList<LeafModifier> Modifiers { get; }
     public ModifierType Type => ModifierType.Node;
 
-    public NodeModifier(string name, IEnumerable<Modifier> modifiers)
+    public NodeModifier(string key, IEnumerable<LeafModifier> modifiers)
     {
-        Name = name;
+        Key = key;
         Modifiers = modifiers.ToArray();
     }
 }

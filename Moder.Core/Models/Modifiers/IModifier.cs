@@ -2,6 +2,6 @@
 
 public interface IModifier
 {
-    public string Name { get; }
+    public string Key { get; }
     public ModifierType Type { get; }
 }

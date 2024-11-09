@@ -191,13 +191,13 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         }
 
         var content = ParseFileToContent(result);
-        if (content is not null)
+        if (content is null)
         {
-            Resources.Add(filePath, content);
-            return true;
+            return false;
         }
 
-        return false;
+        Resources.Add(filePath, content);
+        return true;
     }
 
     private void OnOnResourceChanged(ResourceChangedEventArgs e)

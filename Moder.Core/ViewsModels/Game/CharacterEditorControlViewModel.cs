@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Moder.Core.Extensions;
@@ -9,6 +10,7 @@ using Moder.Core.Parser;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Core.Services.GameResources;
+using Moder.Core.Views.Game;
 using NLog;
 using ParadoxPower.CSharpExtensions;
 using ParadoxPower.Process;
@@ -110,18 +112,24 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
     private readonly GlobalSettingService _globalSettingService;
     private readonly MessageBoxService _messageBoxService;
     private readonly CharacterSkillService _characterSkillService;
+    private readonly CharacterTraitsService _characterTraitsService;
+    private readonly GlobalResourceService _globalResourceService;
 
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
-    
+
     public CharacterEditorControlViewModel(
         GlobalSettingService globalSettingService,
         MessageBoxService messageBoxService,
-        CharacterSkillService characterSkillService
+        CharacterSkillService characterSkillService,
+        CharacterTraitsService characterTraitsService,
+        GlobalResourceService globalResourceService
     )
     {
         _globalSettingService = globalSettingService;
         _messageBoxService = messageBoxService;
         _characterSkillService = characterSkillService;
+        _characterTraitsService = characterTraitsService;
+        _globalResourceService = globalResourceService;
 
         SetSkillsMaxValue();
         _characterSkillService.OnResourceChanged += (_, _) =>
@@ -131,7 +139,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
                 ResetSkillsModifierDescription();
             });
     }
-    
+
     public void SetSkillDefaultValue()
     {
         Level = 1;
@@ -364,5 +372,22 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         }
 
         return array;
+    }
+
+    [RelayCommand]
+    private async Task OpenTraitsSelectionWindow()
+    {
+        _globalResourceService.CurrentSelectSelectSkillType = SelectedCharacterSkillType;
+
+        var window = App.Current.Services.GetRequiredService<TraitsSelectionWindowView>();
+        var dialog = new ContentDialog
+        {
+            XamlRoot = App.Current.XamlRoot,
+            Content = window,
+            PrimaryButtonText = "保存",
+            SecondaryButtonText = "关闭"
+        };
+
+        await dialog.ShowAsync();
     }
 }

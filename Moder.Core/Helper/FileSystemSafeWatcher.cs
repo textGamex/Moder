@@ -247,7 +247,6 @@ public sealed partial class FileSystemSafeWatcher : IDisposable
     /// <returns>A System.IO.WaitForChangedResult that contains specific information on the change that occurred.</returns>
     public WaitForChangedResult WaitForChanged(WatcherChangeTypes changeType)
     {
-        //TODO
         throw new NotImplementedException();
     }
 
@@ -260,7 +259,6 @@ public sealed partial class FileSystemSafeWatcher : IDisposable
     /// <returns>A System.IO.WaitForChangedResult that contains specific information on the change that occurred.</returns>
     public WaitForChangedResult WaitForChanged(WatcherChangeTypes changeType, int timeout)
     {
-        //TODO
         throw new NotImplementedException();
     }
 

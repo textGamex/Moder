@@ -51,7 +51,17 @@ public sealed class LocalisationService
 
     public string GetModifier(string modifier)
     {
-        return GetValue($"MODIFIER_{modifier}");
+        if (TryGetValue($"MODIFIER_{modifier}", out var value))
+        {
+            return value;
+        }
+
+        if (TryGetValue($"MODIFIER_UNIT_LEADER_{modifier}", out value))
+        {
+            return value;
+        }
+
+        return modifier;
     }
 
     public bool TryGetModifierTt(string modifier, out string result)
