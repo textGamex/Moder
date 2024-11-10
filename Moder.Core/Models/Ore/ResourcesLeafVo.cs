@@ -7,6 +7,4 @@ public sealed partial class ResourcesLeafVo(string key, string value, GameValueT
     : IntLeafVo(key, value, type, parent)
 {
     public string Name => LocalisationService.GetValue($"state_resource_{Key}");
-
-    private static readonly OreService OreService = GameResourcesService.OreService;
 }

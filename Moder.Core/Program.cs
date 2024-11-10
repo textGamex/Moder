@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -64,18 +63,24 @@ public static partial class Program
         builder.Services.AddSingleton<MessageBoxService>();
         builder.Services.AddSingleton<GlobalSettingService>(_ => GlobalSettingService.Load());
         builder.Services.AddSingleton<GlobalResourceService>();
-        builder.Services.AddSingleton<GameResourcesService>();
-        builder.Services.AddSingleton<GameModDescriptorService>();
+
         builder.Services.AddSingleton<LeafConverterService>();
         builder.Services.AddSingleton<CountryTagConsumerService>();
         builder.Services.AddSingleton<GameResourcesWatcherService>();
         builder.Services.AddSingleton<GameResourcesPathService>();
         builder.Services.AddSingleton<ModifierService>();
+        builder.Services.AddSingleton<LocalisationKeyMappingService>();
 
+        builder.Services.AddSingleton<GameModDescriptorService>();
         // 游戏内资源
         builder.Services.AddSingleton<CharacterSkillService>();
         builder.Services.AddSingleton<CharacterTraitsService>();
         builder.Services.AddSingleton<TerrainService>();
+        builder.Services.AddSingleton<StateCategoryService>();
+        builder.Services.AddSingleton<LocalisationService>();
+        builder.Services.AddSingleton<OreService>();
+        builder.Services.AddSingleton<BuildingsService>();
+        builder.Services.AddSingleton<CountryTagService>();
 
         // Setup and provision the hosting context for the User Interface
         // service.

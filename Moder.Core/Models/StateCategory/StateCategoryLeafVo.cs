@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Services.GameResources;
 
 // ReSharper disable once CheckNamespace
@@ -28,7 +29,7 @@ public sealed partial class StateCategoryLeafVo : LeafVo
 
     public IReadOnlyCollection<StateCategory> StateCategories => StateCategory.StateCategories;
 
-    private static StateCategoryService StateCategory => GameResourcesService.StateCategory;
+    private static readonly StateCategoryService StateCategory = App.Current.Services.GetRequiredService<StateCategoryService>();
 
     private string GetStateCategoryUiDescription()
     {

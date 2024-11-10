@@ -14,17 +14,15 @@ namespace Moder.Core.Services.GameResources;
 /// </summary>
 public sealed class CharacterSkillService : CommonResourcesService<CharacterSkillService, List<SkillInfo>>
 {
-    private readonly GameResourcesService _gameResourcesService;
     private readonly ModifierService _modifierService;
     private const ushort DefaultSkillMaxValue = 1;
 
     private IEnumerable<SkillInfo> Skills => Resources.Values.SelectMany(s => s);
 
     [Time("加载人物技能信息")]
-    public CharacterSkillService(GameResourcesService gameResourcesService, ModifierService modifierService)
+    public CharacterSkillService(ModifierService modifierService)
         : base(Path.Combine(Keywords.Common, "unit_leader"), WatcherFilter.Text)
     {
-        _gameResourcesService = gameResourcesService;
         _modifierService = modifierService;
     }
 

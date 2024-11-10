@@ -21,7 +21,6 @@ public sealed partial class CountryTagLeafVo(string key, string value, GameValue
 
     public string CountryName => LocalisationService.GetValue(Value);
 
-    private static readonly CountryTagService CountryTagService = App
-        .Current.Services.GetRequiredService<GameResourcesService>()
-        .CountryTagsService;
+    private static readonly CountryTagService CountryTagService =
+        App.Current.Services.GetRequiredService<CountryTagService>();
 }

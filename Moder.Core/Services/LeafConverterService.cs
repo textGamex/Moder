@@ -7,16 +7,21 @@ using Moder.Core.Services.ParserRules;
 namespace Moder.Core.Services;
 
 public sealed class LeafConverterService(
-    GameResourcesService gameResourcesService,
-    CountryTagConsumerService countryTagConsumer
+    CountryTagConsumerService countryTagConsumer,
+    BuildingsService buildingsService
 )
 {
-    private readonly GameResourcesService _gameResourcesService = gameResourcesService;
     private readonly CountryTagConsumerService _countryTagConsumer = countryTagConsumer;
+    private readonly BuildingsService _buildingsService = buildingsService;
 
     public LeafVo GetSpecificLeafVo(string key, string value, NodeVo parentNodeVo)
     {
-        return GetSpecificLeafVo(key, value, GameValueTypeConverterHelper.GetTypeForString(value), parentNodeVo);
+        return GetSpecificLeafVo(
+            key,
+            value,
+            GameValueTypeConverterHelper.GetTypeForString(value),
+            parentNodeVo
+        );
     }
 
     public LeafVo GetSpecificLeafVo(string leafKey, string leafValue, GameValueType type, NodeVo parentNodeVo)
@@ -45,7 +50,7 @@ public sealed class LeafConverterService(
                 parentNodeVo.Key.Equals("buildings", StringComparison.OrdinalIgnoreCase)
                 // province 中的建筑物
                 || parentNodeVo.Parent?.Key.Equals("buildings", StringComparison.OrdinalIgnoreCase) == true
-            ) && _gameResourcesService.Buildings.Contains(leafKey)
+            ) && _buildingsService.Contains(leafKey)
         )
         {
             leafVo = new BuildingLeafVo(leafKey, leafValue, type, parentNodeVo);

@@ -21,13 +21,12 @@ public sealed partial class StateFileControlView : IFileView
     public string FullPath => ViewModel.FullPath;
     public StateFileControlViewModel ViewModel => (StateFileControlViewModel)DataContext;
 
-    private readonly GameResourcesService _gameResourcesService;
+    private readonly CountryTagService _countryTagService;
     private readonly DispatcherTimer _timer;
 
-    public StateFileControlView(StateFileControlViewModel model, GameResourcesService gameResourcesService)
+    public StateFileControlView(StateFileControlViewModel model, CountryTagService countryTagService)
     {
-        _gameResourcesService = gameResourcesService;
-
+        _countryTagService = countryTagService;
         _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50) };
         _timer.Tick += (_, _) =>
         {
@@ -108,7 +107,7 @@ public sealed partial class StateFileControlView : IFileView
 
     private string[] SearchCountryTag(string query)
     {
-        var countryTags = _gameResourcesService.CountryTagsService.CountryTags;
+        var countryTags = _countryTagService.CountryTags;
         if (string.IsNullOrWhiteSpace(query))
         {
             return countryTags.ToArray();
