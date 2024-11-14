@@ -1,3 +1,4 @@
+using System.Reflection;
 using CommunityToolkit.WinUI.Controls;
 using Microsoft.UI.Xaml;
 using Moder.Core.Services.Config;
@@ -8,10 +9,15 @@ namespace Moder.Core.Views.Menus;
 
 public sealed partial class SettingsControlView
 {
-    private readonly GlobalSettingService _globalSettingService;
-    public SettingsControlViewModel ViewModel => (SettingsControlViewModel)DataContext;
+    public static string RuntimeInfo => $"Runtime: .NET {Environment.Version.ToString()}";
 
-    public SettingsControlView(SettingsControlViewModel settingsViewModel, GlobalSettingService globalSettingService)
+    public SettingsControlViewModel ViewModel => (SettingsControlViewModel)DataContext;
+    private readonly GlobalSettingService _globalSettingService;
+
+    public SettingsControlView(
+        SettingsControlViewModel settingsViewModel,
+        GlobalSettingService globalSettingService
+    )
     {
         _globalSettingService = globalSettingService;
         InitializeComponent();
@@ -28,7 +34,9 @@ public sealed partial class SettingsControlView
     private async void OnGitHubUrlCardClicked(object sender, RoutedEventArgs e)
     {
         var card = (SettingsCard)sender;
-        await Launcher.LaunchUriAsync(new Uri(card.Description.ToString() ?? throw new InvalidOperationException()));
+        await Launcher.LaunchUriAsync(
+            new Uri(card.Description.ToString() ?? throw new InvalidOperationException())
+        );
     }
 
     /// <summary>

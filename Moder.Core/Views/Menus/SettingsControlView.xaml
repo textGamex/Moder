@@ -25,7 +25,8 @@
 
     </UserControl.Resources>
 
-    <Grid Margin="12">
+<ScrollView>
+        <Grid Margin="12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -80,8 +81,11 @@
                         Header="代码仓库"
                         HeaderIcon="{winUi:FontIcon Glyph=&#xE943;}"
                         IsClickEnabled="True" />
+                    
+                    <controls:SettingsCard Header="{x:Bind local:SettingsControlView.RuntimeInfo}"/>
                 </controls:SettingsExpander.Items>
             </controls:SettingsExpander>
         </StackPanel>
     </Grid>
+</ScrollView>
 </UserControl>
