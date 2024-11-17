@@ -84,7 +84,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="FSharp.Core" Version="8.0.401" />
+        <PackageReference Include="FSharp.Core" Version="9.0.100" />
         <PackageReference Include="MemoryPack" Version="1.21.3" />
         <PackageReference Include="MethodTimer.Fody" Version="3.2.2" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
