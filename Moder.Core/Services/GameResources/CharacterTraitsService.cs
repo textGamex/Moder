@@ -16,9 +16,6 @@ public sealed class CharacterTraitsService
 {
     private Dictionary<string, FrozenDictionary<string, Trait>>.ValueCollection Traits => Resources.Values;
 
-    // private readonly
-
-    // TODO: 等 .NET 9 发布后, 改用 SearchValues
     /// <summary>
     /// 特质修饰符节点名称
     /// </summary>
