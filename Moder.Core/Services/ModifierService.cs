@@ -222,6 +222,11 @@ public sealed class ModifierService
                     }
                 }
             }
+            else
+            {
+                inlines.Add(new Run { Text = localisationName });
+                Log.Warn("无法解析本地化格式: {Format}", localisationName);
+            }
 
             return inlines;
         }
