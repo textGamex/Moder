@@ -4,7 +4,7 @@ using static Pidgin.Parser;
 
 namespace Moder.Core.Parser;
 
-public sealed class LocalizationFormatParser
+public static class LocalizationFormatParser
 {
     private static readonly Parser<char, char> CharExcept = Parser<char>.Token(c => c != '$');
 
