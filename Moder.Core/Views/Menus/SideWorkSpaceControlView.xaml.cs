@@ -6,7 +6,7 @@ using Microsoft.UI.Xaml.Media;
 using Moder.Core.Messages;
 using Moder.Core.Services;
 using Moder.Core.ViewsModels.Menus;
-using Windows.UI;
+using Microsoft.UI;
 using NLog;
 
 namespace Moder.Core.Views.Menus;

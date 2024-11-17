@@ -1,4 +1,4 @@
-﻿using EnumsNET;
+using EnumsNET;
 using Moder.Core.Helper;
 using Moder.Core.Services.Config;
 using Moder.Core.Services.GameResources.Base;
@@ -109,7 +109,7 @@ public sealed partial class GameResourcesWatcherService : IDisposable
         {
             _watchedPaths.Add(folderRelativePath, [watcher]);
         }
-        
+
         Log.Info("开始监听资源文件夹: {FolderPath}", modFolderPath);
     }
 

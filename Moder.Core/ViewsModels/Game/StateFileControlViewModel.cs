@@ -3,16 +3,13 @@ using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MethodTimer;
-using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Extensions;
 using Moder.Core.Models;
 using Moder.Core.Models.Vo;
 using Moder.Core.Parser;
 using Moder.Core.Services;
-using Moder.Core.Services.GameResources;
 using Moder.Core.ViewsModels.Menus;
 using NLog;
-using ParadoxPower.Parser;
 using ParadoxPower.Process;
 
 namespace Moder.Core.ViewsModels.Game;

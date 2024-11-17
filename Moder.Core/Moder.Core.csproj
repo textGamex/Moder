@@ -94,6 +94,7 @@
         <PackageReference Include="NLog.Extensions.Logging" Version="5.3.14" />
         <PackageReference Include="ParadoxPower" Version="0.4.0-beta" />
         <PackageReference Include="ParadoxPower.CSharpExtensions" Version="0.1.0-beta" />
+        <PackageReference Include="Pidgin" Version="3.3.0" />
         <PackageReference Include="Vanara.PInvoke.ShlwApi" Version="4.0.4" />
         <PackageReference Include="Vanara.PInvoke.User32" Version="4.0.4" />
         <PackageReference Include="Vanara.Windows.Shell" Version="4.0.4" />

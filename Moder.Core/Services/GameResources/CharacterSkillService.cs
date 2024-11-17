@@ -1,11 +1,8 @@
-﻿using MethodTimer;
+using MethodTimer;
 using Microsoft.UI.Xaml.Documents;
-using Microsoft.UI.Xaml.Media;
-using Moder.Core.Models;
 using Moder.Core.Models.Character;
 using Moder.Core.Services.GameResources.Base;
 using ParadoxPower.Process;
-using Colors = Microsoft.UI.Colors;
 
 namespace Moder.Core.Services.GameResources;
 

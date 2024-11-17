@@ -1,4 +1,3 @@
-using System.Reflection;
 using CommunityToolkit.WinUI.Controls;
 using Microsoft.UI.Xaml;
 using Moder.Core.Services.Config;

@@ -21,29 +21,25 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
     [ObservableProperty]
     private string _searchText = string.Empty;
 
-    private readonly GameResourcesService _gameResourcesService;
-    private readonly CharacterTraitsService _characterTraitsService;
     private readonly GlobalResourceService _globalResourceService;
     private readonly ModifierService _modifierService;
     private readonly ModifierMergeManager _modifierMergeManager = new();
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     public TraitsSelectionWindowViewModel(
-        GameResourcesService gameResourcesService,
+        LocalisationService localisationService,
         CharacterTraitsService characterTraitsService,
         GlobalResourceService globalResourceService,
         ModifierService modifierService
     )
     {
-        _gameResourcesService = gameResourcesService;
-        _characterTraitsService = characterTraitsService;
         _globalResourceService = globalResourceService;
         _modifierService = modifierService;
         Traits = new AdvancedCollectionView(
-            _characterTraitsService
+            characterTraitsService
                 .GetAllTraits()
                 .Where(FilterTraitsByCharacterType)
-                .Select(trait => new TraitVo(trait, _gameResourcesService.Localisation.GetValue(trait.Name)))
+                .Select(trait => new TraitVo(trait, localisationService.GetValue(trait.Name)))
                 .ToArray()
         );
         Traits.Filter += FilterTraitsBySearchText;
@@ -98,7 +94,6 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
         if (args.RemovedItems.Count != 0)
         {
             var removedTraitVo = (TraitVo)args.RemovedItems[0];
-            Log.Info("RemovedItems: {}", args.RemovedItems.Count);
             _modifierMergeManager.RemoveAll(
                 removedTraitVo.Trait.Modifiers.SelectMany(collection => collection.Modifiers)
             );
@@ -109,8 +104,6 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
         if (args.AddedItems.Count != 0)
         {
             var traitVo = (TraitVo)args.AddedItems[0];
-            Log.Info("AddedItems: {}", args.AddedItems.Count);
-
             _modifierMergeManager.AddRange(
                 traitVo.Trait.Modifiers.SelectMany(collection => collection.Modifiers)
             );

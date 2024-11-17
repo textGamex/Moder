@@ -1,14 +1,12 @@
-﻿using System.Collections.Frozen;
+using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-using EnumsNET;
 using MethodTimer;
 using Moder.Core.Extensions;
 using Moder.Core.Helper;
 using Moder.Core.Models.Character;
 using Moder.Core.Models.Modifiers;
 using Moder.Core.Services.GameResources.Base;
-using NLog.Fluent;
 using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources;
@@ -18,7 +16,12 @@ public sealed class CharacterTraitsService
 {
     private Dictionary<string, FrozenDictionary<string, Trait>>.ValueCollection Traits => Resources.Values;
 
+    // private readonly
+
     // TODO: 等 .NET 9 发布后, 改用 SearchValues
+    /// <summary>
+    /// 特质修饰符节点名称
+    /// </summary>
     private static readonly string[] ModifierNodeKeys =
     [
         "modifier",
@@ -74,9 +77,8 @@ public sealed class CharacterTraitsService
         return dictionary.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
     }
 
-    private static readonly string[] SkillTypes =
+    private static readonly string[] SkillModifierKeywords =
     [
-        "skill",
         "attack_skill",
         "defense_skill",
         "planning_skill",
@@ -85,7 +87,7 @@ public sealed class CharacterTraitsService
         "coordination_skill"
     ];
 
-    private static readonly string[] SkillTypesFactor =
+    private static readonly string[] SkillFactorModifierKeywords =
     [
         "skill_factor",
         "attack_skill_factor",
@@ -222,11 +224,11 @@ public sealed class CharacterTraitsService
         return traitAttribute.IsLeafChild
             && (
                 Array.Exists(
-                    SkillTypes,
+                    SkillModifierKeywords,
                     s => StringComparer.OrdinalIgnoreCase.Equals(s, traitAttribute.leaf.Key)
                 )
                 || Array.Exists(
-                    SkillTypesFactor,
+                    SkillFactorModifierKeywords,
                     s => StringComparer.OrdinalIgnoreCase.Equals(s, traitAttribute.leaf.Key)
                 )
             );

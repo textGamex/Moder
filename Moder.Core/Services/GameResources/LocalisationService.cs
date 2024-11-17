@@ -1,5 +1,5 @@
-﻿using System.Collections.Frozen;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Frozen;
+using MethodTimer;
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Extensions;
 using Moder.Core.Services.Config;
@@ -14,8 +14,10 @@ public sealed class LocalisationService
 {
     private Dictionary<string, FrozenDictionary<string, string>>.ValueCollection Localisations =>
         Resources.Values;
+    private readonly LocalisationKeyMappingService _localisationKeyMapping;
 
-    public LocalisationService()
+    [Time("加载本地化文件")]
+    public LocalisationService(LocalisationKeyMappingService localisationKeyMapping)
         : base(
             Path.Combine(
                 "localisation",
@@ -23,7 +25,10 @@ public sealed class LocalisationService
                     .GameLanguage.ToGameLocalizationLanguage()
             ),
             WatcherFilter.LocalizationFiles
-        ) { }
+        )
+    {
+        _localisationKeyMapping = localisationKeyMapping;
+    }
 
     /// <summary>
     /// 如果本地化文本不存在, 则返回<c>key</c>
@@ -49,9 +54,41 @@ public sealed class LocalisationService
         return false;
     }
 
+    public string GetValueInAll(string key)
+    {
+        if (TryGetValueInAll(key, out var value))
+        {
+            return value;
+        }
+
+        return key;
+    }
+
+    /// <summary>
+    /// 查找本地化字符串, 先尝试在 <see cref="LocalisationKeyMappingService"/> 中查找 Key 是否有替换的 Key
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public bool TryGetValueInAll(string key, out string value)
+    {
+        if (_localisationKeyMapping.TryGetValue(key, out var config))
+        {
+            value = config.LocalisationKey;
+            return true;
+        }
+
+        return TryGetValue(key, out value);
+    }
+
     public string GetModifier(string modifier)
     {
-        if (TryGetValue($"MODIFIER_{modifier}", out var value))
+        if (TryGetValueInAll(modifier, out var value))
+        {
+            return value;
+        }
+
+        if (TryGetValue($"MODIFIER_{modifier}", out value))
         {
             return value;
         }

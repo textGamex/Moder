@@ -1,9 +1,11 @@
-﻿using System.Collections.Frozen;
+using System.Collections.Frozen;
 using MethodTimer;
+using Microsoft.UI;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
 using Moder.Core.Models;
 using Moder.Core.Models.Modifiers;
+using Moder.Core.Parser;
 using Moder.Core.Services.GameResources;
 using NLog;
 using Windows.UI;
@@ -12,8 +14,9 @@ namespace Moder.Core.Services;
 
 public sealed class ModifierService
 {
-    private readonly GameResourcesService _gameResourcesService;
+    private readonly LocalisationService _localisationService;
     private readonly TerrainService _terrainService;
+    private readonly LocalisationKeyMappingService _localisationKeyMappingService;
 
     /// <summary>
     /// 无法在本地化文件中判断类型的修饰符, 在文件中手动设置
@@ -24,10 +27,15 @@ public sealed class ModifierService
     private static readonly Color Yellow = Color.FromArgb(255, 255, 189, 0);
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
-    public ModifierService(GameResourcesService gameResourcesService, TerrainService terrainService)
+    public ModifierService(
+        LocalisationService localisationService,
+        TerrainService terrainService,
+        LocalisationKeyMappingService localisationKeyMappingService
+    )
     {
-        _gameResourcesService = gameResourcesService;
+        _localisationService = localisationService;
         _terrainService = terrainService;
+        _localisationKeyMappingService = localisationKeyMappingService;
         _modifierTypes = ReadModifierTypes();
     }
 
@@ -60,7 +68,7 @@ public sealed class ModifierService
         return modifierTypes.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
     }
 
-    private Color GetModifierColor(LeafModifier leafModifier, string modifierTypeDescription)
+    private Color GetModifierColor(LeafModifier leafModifier, string modifierFormat)
     {
         var value = double.Parse(leafModifier.Value);
         if (value == 0.0)
@@ -68,7 +76,7 @@ public sealed class ModifierService
             return Yellow;
         }
 
-        var modifierType = GetModifierType(leafModifier.Key, modifierTypeDescription);
+        var modifierType = GetModifierType(leafModifier.Key, modifierFormat);
         if (modifierType == ModifierEffectType.Unknown)
         {
             return Colors.Black;
@@ -107,16 +115,16 @@ public sealed class ModifierService
         return Colors.Black;
     }
 
-    private ModifierEffectType GetModifierType(string modifierName, string modifierTypeDescription)
+    private ModifierEffectType GetModifierType(string modifierName, string modifierFormat)
     {
         if (_modifierTypes.TryGetValue(modifierName, out var modifierType))
         {
             return modifierType;
         }
 
-        for (var index = modifierTypeDescription.Length - 1; index >= 0; index--)
+        for (var index = modifierFormat.Length - 1; index >= 0; index--)
         {
-            var c = modifierTypeDescription[index];
+            var c = modifierFormat[index];
             if (c == '+')
             {
                 return ModifierEffectType.Positive;
@@ -166,23 +174,79 @@ public sealed class ModifierService
 
     private List<Inline> GetModifierInlinesForLeaf(LeafModifier modifier)
     {
+        if (_localisationKeyMappingService.TryGetValue(modifier.Key, out var config))
+        {
+            return GetModifierDisplayMessageForMapping(modifier, config);
+        }
+
+        return GetModifierDisplayMessageUniversal(modifier);
+    }
+
+    private List<Inline> GetModifierDisplayMessageForMapping(
+        LeafModifier modifier,
+        LocalisationKeyMappingConfig config
+    )
+    {
+        if (config.ExistsValuePlaceholder)
+        {
+            var inlines = new List<Inline>(4);
+            var localisationName = _localisationService.GetValue(config.LocalisationKey);
+            if (LocalizationFormatParser.TryParse(localisationName, out var result))
+            {
+                foreach (var localizationFormat in result)
+                {
+                    if (localizationFormat.Type == LocalizationFormatType.Placeholder)
+                    {
+                        if (localizationFormat.Text.Contains(config.ValuePlaceholderKey))
+                        {
+                            var value = GetModifierDisplayValue(modifier, localizationFormat.Text);
+                            inlines.Add(
+                                new Run
+                                {
+                                    Text = value,
+                                    Foreground = new SolidColorBrush(
+                                        GetModifierColor(modifier, localizationFormat.Text)
+                                    )
+                                }
+                            );
+                        }
+                        else
+                        {
+                            // 如果是占位符且不包含 ValuePlaceholderKey, 则有可能是其他本地化值的键
+                            inlines.Add(new Run { Text = _localisationService.GetValue(localizationFormat.Text) });
+                        }
+                    }
+                    else if (localizationFormat.Type == LocalizationFormatType.Text)
+                    {
+                        inlines.Add(new Run { Text = localizationFormat.Text });
+                    }
+                }
+            }
+
+            return inlines;
+        }
+        else
+        {
+            return GetModifierDisplayMessageUniversal(modifier);
+        }
+    }
+
+    private List<Inline> GetModifierDisplayMessageUniversal(LeafModifier modifier)
+    {
         var inlines = new List<Inline>(4);
-        inlines.Add(new Run { Text = $"{_gameResourcesService.Localisation.GetModifier(modifier.Key)}: " });
+        inlines.Add(new Run { Text = $"{_localisationService.GetModifier(modifier.Key)}: " });
 
         if (modifier.ValueType is GameValueType.Int or GameValueType.Float)
         {
-            var modifierTypeDescription = _gameResourcesService.Localisation.TryGetModifierTt(
-                modifier.Key,
-                out var result
-            )
+            var modifierFormat = _localisationService.TryGetModifierTt(modifier.Key, out var result)
                 ? result
                 : string.Empty;
-            var value = GetModifierDisplayValue(modifier, modifierTypeDescription);
+            var value = GetModifierDisplayValue(modifier, modifierFormat);
             inlines.Add(
                 new Run
                 {
                     Text = value,
-                    Foreground = new SolidColorBrush(GetModifierColor(modifier, modifierTypeDescription))
+                    Foreground = new SolidColorBrush(GetModifierColor(modifier, modifierFormat))
                 }
             );
         }
@@ -190,7 +254,6 @@ public sealed class ModifierService
         {
             inlines.Add(new Run { Text = modifier.Value });
         }
-
         return inlines;
     }
 
@@ -221,17 +284,16 @@ public sealed class ModifierService
     private List<Inline> GetTerrainModifierInlines(NodeModifier nodeModifier)
     {
         var inlines = new List<Inline>(4);
-        var terrainName = _gameResourcesService.Localisation.GetValue(nodeModifier.Key);
+        var terrainName = _localisationService.GetValue(nodeModifier.Key);
         inlines.Add(new Run { Text = $"{terrainName}: " });
         inlines.Add(new LineBreak());
 
         for (var index = 0; index < nodeModifier.Modifiers.Count; index++)
         {
             var modifier = nodeModifier.Modifiers[index];
-            var modifierDescription = _gameResourcesService.Localisation.GetValue(
-                $"STAT_ADJUSTER_{modifier.Key}_DIFF"
-            );
-            var modifierName = _gameResourcesService.Localisation.GetValue($"STAT_ADJUSTER_{modifier.Key}");
+            // TODO: 转为 LocalisationKeyMappingService
+            var modifierDescription = _localisationService.GetValue($"STAT_ADJUSTER_{modifier.Key}_DIFF");
+            var modifierName = _localisationService.GetValue($"STAT_ADJUSTER_{modifier.Key}");
             var color = GetModifierColor(modifier, modifierDescription);
             inlines.Add(
                 new Run
@@ -254,33 +316,37 @@ public sealed class ModifierService
     /// 获取 Modifier 数值的显示值
     /// </summary>
     /// <param name="leafModifier"></param>
-    /// <param name="modifierDescription"></param>
+    /// <param name="modifierDisplayFormat"></param>
     /// <returns></returns>
-    private static string GetModifierDisplayValue(LeafModifier leafModifier, string modifierDescription)
+    private static string GetModifierDisplayValue(LeafModifier leafModifier, string modifierDisplayFormat)
     {
         if (leafModifier.ValueType is GameValueType.Int or GameValueType.Float)
         {
             var value = double.Parse(leafModifier.Value);
-            var sign = string.Empty;
-            var displayPlaces = '1';
-            if (!leafModifier.Value.StartsWith('-'))
-            {
-                sign = "+";
-            }
+            var sign = leafModifier.Value.StartsWith('-') ? string.Empty : "+";
 
-            for (var i = modifierDescription.Length - 1; i >= 0; i--)
-            {
-                var c = modifierDescription[i];
-                if (char.IsDigit(c))
-                {
-                    displayPlaces = c;
-                    break;
-                }
-            }
-
-            return $"{sign}{value.ToString($"P{displayPlaces}")}";
+            var displayDigits = GetModifierDisplayDigits(modifierDisplayFormat);
+            var isPercentage = string.IsNullOrEmpty(modifierDisplayFormat) || modifierDisplayFormat.Contains('%');
+            var format = isPercentage ? 'P' : 'F';
+            return $"{sign}{value.ToString($"{format}{displayDigits}")}";
         }
 
         return leafModifier.Value;
+    }
+
+    private static char GetModifierDisplayDigits(string modifierDescription)
+    {
+        var displayDigits = '1';
+        for (var i = modifierDescription.Length - 1; i >= 0; i--)
+        {
+            var c = modifierDescription[i];
+            if (char.IsDigit(c))
+            {
+                displayDigits = c;
+                break;
+            }
+        }
+
+        return displayDigits;
     }
 }
