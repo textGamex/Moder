@@ -292,7 +292,7 @@
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <AutoSuggestBox
                                     Margin="0,4"
-                                    ItemsSource="{Binding CountryTags, Mode=OneTime}"
+                                    ItemsSource="{Binding Path=CountryTags, Mode=OneTime}"
                                     Text="{x:Bind Value, Mode=TwoWay}"
                                     TextChanged="CountryTagAutoSuggestBox_OnTextChanged" />
                                 <TextBlock Style="{StaticResource TextBlockGameDescriptionStyle}" Text="{x:Bind CountryName, Mode=OneWay}" />
@@ -337,7 +337,7 @@
             DragItemsCompleted="TreeView_OnDragItemsCompleted"
             DragItemsStarting="TreeView_OnDragItemsStarting"
             ItemTemplateSelector="{StaticResource StateFileDataTemplateSelector}"
-            ItemsSource="{Binding Items}"
+            ItemsSource="{Binding Path=Items}"
             SelectionMode="None" />
 
         <Button
