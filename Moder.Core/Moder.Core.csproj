@@ -80,7 +80,7 @@
         <PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.1.240916" />
         <PackageReference Include="CommunityToolkit.WinUI.Triggers" Version="8.1.240916" />
         <PackageReference Include="Enums.NET" Version="5.0.0" />
-        <PackageReference Include="Fody" Version="6.8.2">
+        <PackageReference Include="Fody" Version="6.9.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
