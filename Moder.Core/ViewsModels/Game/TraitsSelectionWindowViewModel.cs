@@ -97,8 +97,6 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
             _modifierMergeManager.RemoveAll(
                 removedTraitVo.Trait.Modifiers.SelectMany(collection => collection.Modifiers)
             );
-
-            Log.Trace("移除特质: {Name}", removedTraitVo.LocalisationName);
         }
 
         if (args.AddedItems.Count != 0)
@@ -107,8 +105,6 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
             _modifierMergeManager.AddRange(
                 traitVo.Trait.Modifiers.SelectMany(collection => collection.Modifiers)
             );
-
-            Log.Trace("添加特质: {Name}", traitVo.LocalisationName);
         }
 
         if (TraitsModifierDescription is null)

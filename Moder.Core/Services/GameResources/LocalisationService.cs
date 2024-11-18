@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using System.Diagnostics.CodeAnalysis;
 using MethodTimer;
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Extensions;
@@ -39,7 +40,7 @@ public sealed class LocalisationService
         return TryGetValue(key, out var value) ? value : key;
     }
 
-    public bool TryGetValue(string key, out string value)
+    public bool TryGetValue(string key, [NotNullWhen(true)] out string? value)
     {
         foreach (var localisation in Localisations)
         {
@@ -50,7 +51,7 @@ public sealed class LocalisationService
             }
         }
 
-        value = string.Empty;
+        value = null;
         return false;
     }
 
@@ -70,7 +71,7 @@ public sealed class LocalisationService
     /// <param name="key"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public bool TryGetValueInAll(string key, out string value)
+    public bool TryGetValueInAll(string key, [NotNullWhen(true)] out string? value)
     {
         if (_localisationKeyMapping.TryGetValue(key, out var config))
         {
@@ -93,7 +94,17 @@ public sealed class LocalisationService
             return value;
         }
 
+        if (TryGetValue($"MODIFIER_NAVAL_{modifier}", out value))
+        {
+            return value;
+        }
+
         if (TryGetValue($"MODIFIER_UNIT_LEADER_{modifier}", out value))
+        {
+            return value;
+        }
+
+        if (TryGetValue($"MODIFIER_ARMY_LEADER_{modifier}", out value))
         {
             return value;
         }
@@ -101,7 +112,7 @@ public sealed class LocalisationService
         return modifier;
     }
 
-    public bool TryGetModifierTt(string modifier, out string result)
+    public bool TryGetModifierTt(string modifier, [NotNullWhen(true)] out string? result)
     {
         return TryGetValue($"{modifier}_tt", out result);
     }
