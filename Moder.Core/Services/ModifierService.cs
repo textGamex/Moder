@@ -189,50 +189,60 @@ public sealed class ModifierService
     {
         if (config.ExistsValuePlaceholder)
         {
-            var inlines = new List<Inline>(4);
+            var inlineTexts = new List<Inline>(4);
             var localisationName = _localisationService.GetValue(config.LocalisationKey);
             if (LocalizationFormatParser.TryParse(localisationName, out var result))
             {
-                foreach (var localizationFormat in result)
-                {
-                    if (localizationFormat.Type == LocalizationFormatType.Placeholder)
-                    {
-                        if (localizationFormat.Text.Contains(config.ValuePlaceholderKey))
-                        {
-                            var value = GetModifierDisplayValue(modifier, localizationFormat.Text);
-                            inlines.Add(
-                                new Run
-                                {
-                                    Text = value,
-                                    Foreground = new SolidColorBrush(
-                                        GetModifierColor(modifier, localizationFormat.Text)
-                                    )
-                                }
-                            );
-                        }
-                        else
-                        {
-                            // 如果是占位符且不包含 ValuePlaceholderKey, 则有可能是其他本地化值的键
-                            inlines.Add(new Run { Text = _localisationService.GetValue(localizationFormat.Text) });
-                        }
-                    }
-                    else if (localizationFormat.Type == LocalizationFormatType.Text)
-                    {
-                        inlines.Add(new Run { Text = localizationFormat.Text });
-                    }
-                }
+                ParseModifierFormatToInlineTexts(inlineTexts, result, config, modifier);
             }
             else
             {
-                inlines.Add(new Run { Text = localisationName });
+                inlineTexts.Add(new Run { Text = localisationName });
                 Log.Warn("无法解析本地化格式: {Format}", localisationName);
             }
 
-            return inlines;
+            return inlineTexts;
         }
-        else
+
+        return GetModifierDisplayMessageUniversal(modifier);
+    }
+
+    private void ParseModifierFormatToInlineTexts(
+        List<Inline> inlineTexts,
+        IEnumerable<LocalizationFormat> localizationFormats,
+        LocalisationKeyMappingConfig config,
+        LeafModifier modifier
+    )
+    {
+        foreach (var localizationFormat in localizationFormats)
         {
-            return GetModifierDisplayMessageUniversal(modifier);
+            if (localizationFormat.Type == LocalizationFormatType.Placeholder)
+            {
+                if (localizationFormat.Text.Contains(config.ValuePlaceholderKey))
+                {
+                    var value = GetModifierDisplayValue(modifier, localizationFormat.Text);
+                    inlineTexts.Add(
+                        new Run
+                        {
+                            Text = value,
+                            Foreground = new SolidColorBrush(
+                                GetModifierColor(modifier, localizationFormat.Text)
+                            )
+                        }
+                    );
+                }
+                else
+                {
+                    // 如果是占位符且不包含 ValuePlaceholderKey, 则有可能是其他本地化值的键
+                    inlineTexts.Add(
+                        new Run { Text = _localisationService.GetValue(localizationFormat.Text) }
+                    );
+                }
+            }
+            else if (localizationFormat.Type == LocalizationFormatType.Text)
+            {
+                inlineTexts.Add(new Run { Text = localizationFormat.Text });
+            }
         }
     }
 
@@ -331,8 +341,10 @@ public sealed class ModifierService
             var sign = leafModifier.Value.StartsWith('-') ? string.Empty : "+";
 
             var displayDigits = GetModifierDisplayDigits(modifierDisplayFormat);
-            var isPercentage = string.IsNullOrEmpty(modifierDisplayFormat) || modifierDisplayFormat.Contains('%');
+            var isPercentage =
+                string.IsNullOrEmpty(modifierDisplayFormat) || modifierDisplayFormat.Contains('%');
             var format = isPercentage ? 'P' : 'F';
+            
             return $"{sign}{value.ToString($"{format}{displayDigits}")}";
         }
 
