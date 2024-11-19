@@ -30,6 +30,7 @@ public sealed partial class MainWindow
     /// 缓存已打开的文件标签页, 避免在侧边栏中查询
     /// </summary>
     private readonly List<SystemFileItem> _openedTabFileItems = new(8);
+
     private string _selectedSideFileItemFullPath = string.Empty;
 
     public MainWindow(
@@ -173,6 +174,7 @@ public sealed partial class MainWindow
                 Log.Warn("未在标签文件缓存列表中找到指定文件, Path: {Path}", fileView.FullPath);
                 return;
             }
+
             _openedTabFileItems.RemoveAt(index);
 
             if (sender.TabItems.Count == 0)
