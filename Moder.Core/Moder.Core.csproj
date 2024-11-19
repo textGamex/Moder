@@ -90,7 +90,7 @@
         <PackageReference Include="MethodTimer.Fody" Version="3.2.2" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
         <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
-        <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.241106002" />
+        <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.241114003" />
         <PackageReference Include="NLog" Version="5.3.4" />
         <PackageReference Include="NLog.Extensions.Logging" Version="5.3.14" />
         <PackageReference Include="ParadoxPower" Version="0.4.0-beta" />
@@ -99,7 +99,7 @@
         <PackageReference Include="Vanara.PInvoke.ShlwApi" Version="4.0.4" />
         <PackageReference Include="Vanara.PInvoke.User32" Version="4.0.4" />
         <PackageReference Include="Vanara.Windows.Shell" Version="4.0.4" />
-        <PackageReference Include="WinUICommunity.Components" Version="6.9.0" />
+        <PackageReference Include="WinUICommunity.Components" Version="7.1.0" />
         <PackageReference Include="WinUIEx" Version="2.4.2" />
         <Manifest Include="$(ApplicationManifest)" />
     </ItemGroup>
