@@ -29,6 +29,10 @@ public sealed partial class SettingsControlViewModel : ObservableObject
 
     public BackdropTypeItemVo[] BackdropTypes { get; } = GetBackdropType();
 
+    /// <summary>
+    /// 获取所有支持的背景类型
+    /// </summary>
+    /// <returns>所有支持的背景类型</returns>
     private static BackdropTypeItemVo[] GetBackdropType()
     {
         var list = new List<BackdropTypeItemVo>(5)
