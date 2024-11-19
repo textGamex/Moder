@@ -50,17 +50,16 @@
                 Text="Moder"
                 VerticalAlignment="Center" />
 
-            <StackPanel Grid.Column="2" Orientation="Horizontal">
-                <MenuFlyoutItem
-                    Click="TitleBarSettingsButton_OnClick"
-                    HorizontalAlignment="Left"
-                    Margin="8,0,0,0"
-                    Text="设置"
-                    x:Name="SettingsButton" />
+            <StackPanel Margin="8,0,0,0" Grid.Column="2" Orientation="Horizontal">
                 <MenuFlyoutItem
                     Click="CharacterEditorButton_OnClick"
                     Text="将领编辑器"
                     x:Name="CharacterEditorButton" />
+                <MenuFlyoutItem
+                    Click="TitleBarSettingsButton_OnClick"
+                    HorizontalAlignment="Left"
+                    Text="设置"
+                    x:Name="SettingsButton" />
             </StackPanel>
         </Grid>
 
@@ -94,7 +93,8 @@
             <Border BorderBrush="{ThemeResource BottomStatusBarBorderBrush}" BorderThickness="0,1.5,0,0">
                 <StackPanel HorizontalAlignment="Right" Spacing="4" Orientation="Horizontal">
                     <TextBlock Text="{x:Bind ViewModel.ProgressPromptMessage, Mode=OneWay}" />
-                    <ProgressBar Width="150" Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}" IsIndeterminate="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />
+                    <ProgressBar Width="150" Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+                                 IsIndeterminate="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />
                 </StackPanel>
             </Border>
         </Grid>
