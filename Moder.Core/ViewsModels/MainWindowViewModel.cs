@@ -25,7 +25,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
 
     private void InitializeCompleteAfter()
     {
-        ProgressPromptMessage = $"初始化完成, 耗时: {_loadTime.TotalMilliseconds:F1} ms";
+        ProgressPromptMessage = $"初始化完成, 耗时: {_loadTime.TotalSeconds:F3} s";
         IsLoading = false;
     }
 
