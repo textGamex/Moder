@@ -17,16 +17,29 @@ public static class WindowHelper
     public static void SetSystemBackdropTypeByConfig(MainWindow window)
     {
         var settings = App.Current.Services.GetRequiredService<GlobalSettingService>();
-        SystemBackdrop backdrop = settings.WindowBackdropType switch
+        SystemBackdrop? backdrop;
+
+        switch (settings.WindowBackdropType)
         {
-            //TODO: 有可能不支持
-            WindowBackdropType.Default
-            or WindowBackdropType.Mica
-                => new MicaBackdrop(),
-            WindowBackdropType.MicaAlt => new MicaBackdrop { Kind = MicaKind.BaseAlt },
-            WindowBackdropType.Acrylic => new DesktopAcrylicBackdrop(),
-            _ => throw new ArgumentOutOfRangeException()
-        };
+            case WindowBackdropType.Default:
+                backdrop = MicaController.IsSupported() ? new MicaBackdrop { Kind = MicaKind.Base } : null;
+                break;
+            case WindowBackdropType.Mica:
+                backdrop = new MicaBackdrop { Kind = MicaKind.Base };
+                break;
+            case WindowBackdropType.MicaAlt:
+                backdrop = new MicaBackdrop { Kind = MicaKind.BaseAlt };
+                break;
+            case WindowBackdropType.Acrylic:
+                backdrop = new DesktopAcrylicBackdrop();
+                break;
+            case WindowBackdropType.None:
+                backdrop = null;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
         window.SystemBackdrop = backdrop;
     }
 }

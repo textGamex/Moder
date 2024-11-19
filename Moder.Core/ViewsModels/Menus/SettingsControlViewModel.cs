@@ -4,16 +4,14 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
+using Moder.Core.Helper;
 using Moder.Core.Messages;
 using Moder.Core.Models;
 using Moder.Core.Models.Vo;
 using Moder.Core.Services.Config;
 using Windows.Storage.Pickers;
-using Moder.Core.Helper;
 using WinRT.Interop;
 using WinUIEx;
-using SystemBackdrop = Microsoft.UI.Xaml.Media.SystemBackdrop;
 
 namespace Moder.Core.ViewsModels.Menus;
 
@@ -29,13 +27,29 @@ public sealed partial class SettingsControlViewModel : ObservableObject
             new() { Content = "暗黑", Tag = ElementTheme.Dark }
         ];
 
-    public BackdropTypeItemVo[] BackdropTypes { get; } =
-        [
+    public BackdropTypeItemVo[] BackdropTypes { get; } = GetBackdropType();
+
+    private static BackdropTypeItemVo[] GetBackdropType()
+    {
+        var list = new List<BackdropTypeItemVo>(5)
+        {
             new("默认", WindowBackdropType.Default),
-            new("云母", WindowBackdropType.Mica),
-            new("云母 Alt", WindowBackdropType.MicaAlt),
-            new("亚克力", WindowBackdropType.Acrylic)
-        ];
+            new("无背景", WindowBackdropType.None)
+        };
+
+        if (MicaController.IsSupported())
+        {
+            list.Add(new BackdropTypeItemVo("云母", WindowBackdropType.Mica));
+            list.Add(new BackdropTypeItemVo("云母 Alt", WindowBackdropType.MicaAlt));
+        }
+
+        if (DesktopAcrylicController.IsSupported())
+        {
+            list.Add(new BackdropTypeItemVo("亚克力", WindowBackdropType.Acrylic));
+        }
+
+        return list.ToArray();
+    }
 
     public ComboBoxItem[] Languages { get; } =
         [
