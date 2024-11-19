@@ -1,14 +1,19 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 using Moder.Core.Messages;
 using Moder.Core.Models;
+using Moder.Core.Models.Vo;
 using Moder.Core.Services.Config;
 using Windows.Storage.Pickers;
+using Moder.Core.Helper;
 using WinRT.Interop;
 using WinUIEx;
+using SystemBackdrop = Microsoft.UI.Xaml.Media.SystemBackdrop;
 
 namespace Moder.Core.ViewsModels.Menus;
 
@@ -22,6 +27,14 @@ public sealed partial class SettingsControlViewModel : ObservableObject
             new() { Content = "跟随系统设置", Tag = ElementTheme.Default },
             new() { Content = "明亮", Tag = ElementTheme.Light },
             new() { Content = "暗黑", Tag = ElementTheme.Dark }
+        ];
+
+    public BackdropTypeItemVo[] BackdropTypes { get; } =
+        [
+            new("默认", WindowBackdropType.Default),
+            new("云母", WindowBackdropType.Mica),
+            new("云母 Alt", WindowBackdropType.MicaAlt),
+            new("亚克力", WindowBackdropType.Acrylic)
         ];
 
     public ComboBoxItem[] Languages { get; } =
@@ -42,6 +55,9 @@ public sealed partial class SettingsControlViewModel : ObservableObject
     private ComboBoxItem _selectedThemeMode;
 
     [ObservableProperty]
+    private BackdropTypeItemVo _selectedBackdropType;
+
+    [ObservableProperty]
     private ComboBoxItem _selectedLanguage;
 
     private readonly GlobalSettingService _globalSettingService;
@@ -51,6 +67,13 @@ public sealed partial class SettingsControlViewModel : ObservableObject
         _globalSettingService = globalSettingService;
         _selectedLanguage = GetSelectedLanguage();
         _selectedThemeMode = GetSelectedThemeMode();
+        _selectedBackdropType = GetSelectedBackdropType();
+    }
+
+    private BackdropTypeItemVo GetSelectedBackdropType()
+    {
+        var backdrop = _globalSettingService.WindowBackdropType;
+        return BackdropTypes.First(backdropTypeItem => backdropTypeItem.Backdrop == backdrop);
     }
 
     private ComboBoxItem GetSelectedLanguage()
@@ -101,6 +124,12 @@ public sealed partial class SettingsControlViewModel : ObservableObject
         _globalSettingService.GameLanguage = language;
 
         WeakReferenceMessenger.Default.Send(new ReloadLocalizationFiles());
+    }
+
+    partial void OnSelectedBackdropTypeChanged(BackdropTypeItemVo value)
+    {
+        _globalSettingService.WindowBackdropType = value.Backdrop;
+        WindowHelper.SetSystemBackdropTypeByConfig();
     }
 
     [RelayCommand]

@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Diagnostics.CodeAnalysis;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.WinUI.Collections;
 using EnumsNET;
 using Microsoft.UI.Xaml.Controls;
@@ -26,6 +27,7 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
     private readonly ModifierMergeManager _modifierMergeManager = new();
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
+    [RequiresUnreferencedCode("Use AdvancedCollectionView")]
     public TraitsSelectionWindowViewModel(
         LocalisationService localisationService,
         CharacterTraitsService characterTraitsService,
@@ -35,6 +37,8 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
     {
         _globalResourceService = globalResourceService;
         _modifierService = modifierService;
+        // TODO: 影响裁剪, 换个解决方案
+        // BUG: 搜索后已选择的会取消选中
         Traits = new AdvancedCollectionView(
             characterTraitsService
                 .GetAllTraits()
@@ -47,7 +51,6 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
 
     partial void OnSearchTextChanged(string value)
     {
-        // BUG: 搜索后已选择的会取消选中
         Traits.RefreshFilter();
     }
 

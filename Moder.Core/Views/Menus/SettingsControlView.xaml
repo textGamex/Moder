@@ -8,7 +8,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Moder.Core.Views.Menus"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vms="using:Moder.Core.ViewsModels.Menus"
+    xmlns:vo="using:Moder.Core.Models.Vo"
     xmlns:winUi="using:CommunityToolkit.WinUI"
     mc:Ignorable="d">
 
@@ -40,6 +40,16 @@
         <StackPanel Grid.Row="1" Spacing="4">
             <controls:SettingsCard Header="App 主题" HeaderIcon="{winUi:FontIcon Glyph=&#xE790;}">
                 <ComboBox ItemsSource="{x:Bind ViewModel.ThemeMode}" SelectedItem="{x:Bind ViewModel.SelectedThemeMode, Mode=TwoWay}" />
+            </controls:SettingsCard>
+            
+            <controls:SettingsCard Header="窗体背景" HeaderIcon="{winUi:FontIcon Glyph=&#xE790;}">
+                <ComboBox ItemsSource="{x:Bind ViewModel.BackdropTypes}" SelectedItem="{x:Bind ViewModel.SelectedBackdropType, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="vo:BackdropTypeItemVo">
+                            <TextBlock Text="{Binding Path=Text}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </controls:SettingsCard>
 
             <controls:SettingsCard Header="游戏本地化语言" HeaderIcon="{winUi:FontIcon Glyph=&#xF2B7;}">

@@ -7,6 +7,7 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using Moder.Core.Helper;
 using Moder.Core.Messages;
 using Moder.Core.Services.Config;
 using Moder.Core.Views.Game;
@@ -39,6 +40,7 @@ public sealed partial class MainWindow
         IServiceProvider serviceProvider
     )
     {
+        ViewModel = model;
         _settings = settings;
         _serviceProvider = serviceProvider;
         InitializeComponent();
@@ -46,8 +48,8 @@ public sealed partial class MainWindow
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
         AppWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Standard;
-        SystemBackdrop = new MicaBackdrop { Kind = MicaKind.Base };
-        ViewModel = model;
+        WindowHelper.SetSystemBackdropTypeByConfig(this);
+
         AppTitleBar.Loaded += AppTitleBarOnLoaded;
         AppTitleBar.SizeChanged += AppTitleBarOnSizeChanged;
 

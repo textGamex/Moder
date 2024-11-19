@@ -39,6 +39,14 @@ public sealed partial class GlobalSettingService
         set => SetProperty(ref _gameLanguage, value);
     }
     private GameLanguage _gameLanguage = GameLanguage.Default;
+    
+    [MemoryPackOrder(4)]
+    public WindowBackdropType WindowBackdropType
+    {
+        get => _windowBackdropType;
+        set => SetProperty(ref _windowBackdropType, value);
+    }
+    private WindowBackdropType _windowBackdropType = WindowBackdropType.Default;
 
     [MemoryPackIgnore]
     public bool IsChanged { get; private set; }
