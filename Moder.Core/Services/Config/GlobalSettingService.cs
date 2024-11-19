@@ -11,53 +11,48 @@ public sealed partial class GlobalSettingService
     [MemoryPackOrder(0)]
     public string ModRootFolderPath
     {
-        get => _modRootFolderPath;
-        set => SetProperty(ref _modRootFolderPath, value);
-    }
-    private string _modRootFolderPath = string.Empty;
+        get;
+        set => SetProperty(ref field, value);
+    } = string.Empty;
 
     [MemoryPackOrder(1)]
     public string GameRootFolderPath
     {
-        get => _gameRootFolderPath;
-        set => SetProperty(ref _gameRootFolderPath, value);
-    }
-    private string _gameRootFolderPath = string.Empty;
+        get;
+        set => SetProperty(ref field, value);
+    } = string.Empty;
 
     [MemoryPackOrder(2)]
     public ElementTheme AppThemeMode
     {
-        get => _appThemeMode;
-        set => SetProperty(ref _appThemeMode, value);
-    }
-    private ElementTheme _appThemeMode = ElementTheme.Default;
+        get;
+        set => SetProperty(ref field, value);
+    } = ElementTheme.Default;
 
     [MemoryPackOrder(3)]
     public GameLanguage GameLanguage
     {
-        get => _gameLanguage;
-        set => SetProperty(ref _gameLanguage, value);
-    }
-    private GameLanguage _gameLanguage = GameLanguage.Default;
-    
+        get;
+        set => SetProperty(ref field, value);
+    } = GameLanguage.Default;
+
     [MemoryPackOrder(4)]
     public WindowBackdropType WindowBackdropType
     {
-        get => _windowBackdropType;
-        set => SetProperty(ref _windowBackdropType, value);
-    }
-    private WindowBackdropType _windowBackdropType = WindowBackdropType.Default;
+        get;
+        set => SetProperty(ref field, value);
+    } = WindowBackdropType.Default;
 
     [MemoryPackIgnore]
     public bool IsChanged { get; private set; }
+
     [MemoryPackIgnore]
     public bool IsUnchanged => !IsChanged;
 
     private const string ConfigFileName = "globalSettings.bin";
     private static string ConfigFilePath => Path.Combine(App.ConfigFolder, ConfigFileName);
 
-    private static readonly Logger Log =
-        LogManager.GetCurrentClassLogger();
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     private GlobalSettingService() { }
 
@@ -81,6 +76,7 @@ public sealed partial class GlobalSettingService
             Log.Info("配置文件未改变, 跳过写入");
             return;
         }
+
         Log.Info("配置文件保存中...");
         // TODO: System.IO.Pipelines
         File.WriteAllBytes(ConfigFilePath, MemoryPackSerializer.Serialize(this));
