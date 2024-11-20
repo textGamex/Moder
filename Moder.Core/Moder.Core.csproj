@@ -100,7 +100,7 @@
         <PackageReference Include="Vanara.PInvoke.User32" Version="4.0.4" />
         <PackageReference Include="Vanara.Windows.Shell" Version="4.0.4" />
         <PackageReference Include="WinUICommunity.Components" Version="6.9.0" />
-        <PackageReference Include="WinUIEx" Version="2.4.2" />
+        <PackageReference Include="WinUIEx" Version="2.5.0" />
         <Manifest Include="$(ApplicationManifest)" />
     </ItemGroup>
 
