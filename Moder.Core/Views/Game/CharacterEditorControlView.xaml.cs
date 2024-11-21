@@ -1,25 +1,42 @@
-using Microsoft.UI.Xaml.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.ViewsModels.Game;
 
 namespace Moder.Core.Views.Game;
 
-public sealed partial class CharacterEditorControlView : UserControl
+// 不能使用 Ioc 容器管理, 因为需要使用 IDisposable 接口释放资源
+public sealed partial class CharacterEditorControlView : IDisposable
 {
     public CharacterEditorControlViewModel ViewModel { get; }
 
-    public CharacterEditorControlView(CharacterEditorControlViewModel viewModel)
+    public CharacterEditorControlView()
     {
         InitializeComponent();
 
-        ViewModel = viewModel;
-        viewModel.LevelModifierDescription = LevelModifierDescriptionTextBlock.Inlines;
-        viewModel.AttackModifierDescription = AttackModifierDescriptionTextBlock.Inlines;
-        viewModel.DefenseModifierDescription = DefenseModifierDescriptionTextBlock.Inlines;
-        viewModel.PlanningModifierDescription = PlanningModifierDescriptionTextBlock.Inlines;
-        viewModel.LogisticsModifierDescription = LogisticsModifierDescriptionTextBlock.Inlines;
-        viewModel.ManeuveringModifierDescription = ManeuveringModifierDescriptionTextBlock.Inlines;
-        viewModel.CoordinationModifierDescription = CoordinationModifierDescriptionTextBlock.Inlines;
+        ViewModel = App.Current.Services.GetRequiredService<CharacterEditorControlViewModel>();
+        ViewModel.LevelModifierDescription = LevelModifierDescriptionTextBlock.Inlines;
+        ViewModel.AttackModifierDescription = AttackModifierDescriptionTextBlock.Inlines;
+        ViewModel.DefenseModifierDescription = DefenseModifierDescriptionTextBlock.Inlines;
+        ViewModel.PlanningModifierDescription = PlanningModifierDescriptionTextBlock.Inlines;
+        ViewModel.LogisticsModifierDescription = LogisticsModifierDescriptionTextBlock.Inlines;
+        ViewModel.ManeuveringModifierDescription = ManeuveringModifierDescriptionTextBlock.Inlines;
+        ViewModel.CoordinationModifierDescription = CoordinationModifierDescriptionTextBlock.Inlines;
 
         ViewModel.SetSkillDefaultValue();
+    }
+
+    public void Dispose()
+    {
+        ReleaseResources();
+        GC.SuppressFinalize(this);
+    }
+
+    ~CharacterEditorControlView()
+    {
+        ReleaseResources();
+    }
+
+    private void ReleaseResources()
+    {
+        ViewModel.Close();
     }
 }

@@ -59,6 +59,7 @@
                     Text="common\characters\"
                     VerticalAlignment="Center" />
                 <ComboBox
+                    x:Name="CharacterFilesComboBox"
                     Grid.Column="1"
                     IsEditable="True"
                     ItemsSource="{x:Bind ViewModel.CharacterFiles}"

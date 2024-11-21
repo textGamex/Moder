@@ -1,12 +1,10 @@
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Input;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
 using Moder.Core.Helper;
 using Moder.Core.Messages;
 using Moder.Core.Services.Config;
@@ -165,28 +163,35 @@ public sealed partial class MainWindow
 
     private void MainTabView_OnTabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
     {
-        sender.TabItems.Remove(args.Tab);
-
+        var isRemoved = sender.TabItems.Remove(args.Tab);
+        Debug.Assert(isRemoved);
+        
+        var tab = args.Tab.Content;
         // 关闭文件标签页时，从缓存列表中移除对应的文件并同步侧边栏选中项
-        if (args.Tab.Content is IFileView fileView)
+        if (tab is IFileView fileView)
         {
             var index = _openedTabFileItems.FindIndex(item => item.FullPath == fileView.FullPath);
             if (index == -1)
             {
                 Log.Warn("未在标签文件缓存列表中找到指定文件, Path: {Path}", fileView.FullPath);
-                return;
             }
-
-            _openedTabFileItems.RemoveAt(index);
-
-            if (sender.TabItems.Count == 0)
+            else
             {
-                WeakReferenceMessenger.Default.Send(new SyncSideWorkSelectedItemMessage(null));
+                _openedTabFileItems.RemoveAt(index);
+                if (sender.TabItems.Count == 0)
+                {
+                    WeakReferenceMessenger.Default.Send(new SyncSideWorkSelectedItemMessage(null));
+                }
             }
         }
-        else if (args.Tab.Content is SettingsControlView settings)
+        else if (tab is SettingsControlView settings)
         {
             settings.SaveChanged();
+        }
+
+        if (tab is IDisposable disposable)
+        {
+            disposable.Dispose();
         }
     }
 
@@ -259,17 +264,17 @@ public sealed partial class MainWindow
             return;
         }
 
-        var existingSettingsTab = MainTabView
+        var existingTab = MainTabView
             .TabItems.Cast<TabViewItem>()
             .FirstOrDefault(item => item.Content is CharacterEditorControlView);
 
-        if (existingSettingsTab is not null)
+        if (existingTab is not null)
         {
-            MainTabView.SelectedItem = existingSettingsTab;
+            MainTabView.SelectedItem = existingTab;
             return;
         }
 
-        var editorView = _serviceProvider.GetRequiredService<CharacterEditorControlView>();
+        var editorView = new CharacterEditorControlView();
         var editorTab = new TabViewItem
         {
             Content = editorView,

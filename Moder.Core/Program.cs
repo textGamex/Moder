@@ -49,9 +49,7 @@ public static partial class Program
         builder.Services.AddTransient<NotSupportInfoControlView>();
         builder.Services.AddTransient<SettingsControlView>();
         builder.Services.AddTransient<SettingsControlViewModel>();
-        builder.Services.AddTransient<CharacterEditorControlView>();
         builder.Services.AddTransient<CharacterEditorControlViewModel>();
-        builder.Services.AddTransient<TraitsSelectionWindowView>();
         builder.Services.AddTransient<TraitsSelectionWindowViewModel>();
 
         builder.Logging.ClearProviders();

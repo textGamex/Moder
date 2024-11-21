@@ -1,11 +1,13 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.WinUI.Collections;
 using EnumsNET;
-using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Moder.Core.Helper;
+using Moder.Core.Messages;
 using Moder.Core.Models.Character;
+using Moder.Core.Models.Vo;
 using Moder.Core.Services;
 using Moder.Core.Services.GameResources;
 using NLog;
@@ -17,7 +19,7 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
     public InlineCollection? TraitsModifierDescription { get; set; }
 
     // TODO: /搜索/, /显示修正效果/, 筛选, (图标?)
-    public AdvancedCollectionView Traits { get; }
+    public AdvancedCollectionView Traits { get; private set; }
 
     [ObservableProperty]
     private string _searchText = string.Empty;
@@ -47,6 +49,21 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
                 .ToArray()
         );
         Traits.Filter += FilterTraitsBySearchText;
+
+        WeakReferenceMessenger.Default.Register<SelectedTraitChangedMessage>(
+            this,
+            (_, message) =>
+            {
+                if (message.IsAdded)
+                {
+                    UpdateModifiersDescriptionOnAdd(message.Trait);
+                }
+                else
+                {
+                    UpdateModifiersDescriptionOnRemove(message.Trait);
+                }
+            }
+        );
     }
 
     partial void OnSearchTextChanged(string value)
@@ -92,24 +109,22 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
         return true;
     }
 
-    public void UpdateModifiersDescription(SelectionChangedEventArgs args)
+    private void UpdateModifiersDescriptionOnAdd(TraitVo traitVo)
     {
-        if (args.RemovedItems.Count != 0)
-        {
-            var removedTraitVo = (TraitVo)args.RemovedItems[0];
-            _modifierMergeManager.RemoveAll(
-                removedTraitVo.Trait.Modifiers.SelectMany(collection => collection.Modifiers)
-            );
-        }
+        _modifierMergeManager.AddRange(traitVo.Trait.AllModifiers);
+        UpdateModifiersDescriptionCore();
+        Log.Info("Added trait: {0}", traitVo.Name);
+    }
 
-        if (args.AddedItems.Count != 0)
-        {
-            var traitVo = (TraitVo)args.AddedItems[0];
-            _modifierMergeManager.AddRange(
-                traitVo.Trait.Modifiers.SelectMany(collection => collection.Modifiers)
-            );
-        }
+    private void UpdateModifiersDescriptionOnRemove(TraitVo traitVo)
+    {
+        _modifierMergeManager.RemoveAll(traitVo.Trait.AllModifiers);
+        UpdateModifiersDescriptionCore();
+        Log.Info("remove trait: {0}", traitVo.Name);
+    }
 
+    private void UpdateModifiersDescriptionCore()
+    {
         if (TraitsModifierDescription is null)
         {
             Log.Warn("TraitsModifierDescription is null");
@@ -125,36 +140,9 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
             TraitsModifierDescription.Add(inline);
         }
     }
-}
 
-public sealed class TraitVo(Trait trait, string localisationName) : IEquatable<TraitVo>
-{
-    public string Name => trait.Name;
-    public Trait Trait => trait;
-    public string LocalisationName => localisationName;
-
-    public bool Equals(TraitVo? other)
+    public void Close()
     {
-        if (other is null)
-        {
-            return false;
-        }
-
-        if (ReferenceEquals(this, other))
-        {
-            return true;
-        }
-
-        return Name == other.Name;
-    }
-
-    public override bool Equals(object? obj)
-    {
-        return Equals(obj as TraitVo);
-    }
-
-    public override int GetHashCode()
-    {
-        return Name.GetHashCode();
+        WeakReferenceMessenger.Default.UnregisterAll(this);
     }
 }
