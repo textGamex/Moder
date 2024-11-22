@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <UserControl
     x:Class="Moder.Core.Views.Game.TraitsSelectionWindowView"
@@ -25,15 +25,15 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-        
+
             <Grid Grid.Column="0">
                 <Grid>
-            
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-            
+
                     <TextBox
                         Grid.Row="0"
                         PlaceholderText="搜索"
@@ -60,7 +60,7 @@
                     </ListView>
                 </Grid>
             </Grid>
-        
+
             <Grid Grid.Column="1">
                 <ScrollView>
                     <TextBlock x:Name="TraitsModifierDescriptionTextBlock" MinWidth="380" />

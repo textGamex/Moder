@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <UserControl
     mc:Ignorable="d"
     x:Class="Moder.Core.Views.Game.CharacterEditorControlView"
@@ -84,7 +85,8 @@
                     Maximum="{x:Bind ViewModel.LevelMaxValue, Mode=OneWay}"
                     Style="{StaticResource AttributeNumberBoxStyle}"
                     Value="{x:Bind ViewModel.Level, Mode=TwoWay}" />
-                <TextBlock Style="{StaticResource ModifierDescriptionTextBlockStyle}" x:Name="LevelModifierDescriptionTextBlock" />
+                <TextBlock Style="{StaticResource ModifierDescriptionTextBlockStyle}"
+                           x:Name="LevelModifierDescriptionTextBlock" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
@@ -93,7 +95,8 @@
                     Maximum="{x:Bind ViewModel.AttackMaxValue, Mode=OneWay}"
                     Style="{StaticResource AttributeNumberBoxStyle}"
                     Value="{x:Bind ViewModel.Attack, Mode=TwoWay}" />
-                <TextBlock Style="{StaticResource ModifierDescriptionTextBlockStyle}" x:Name="AttackModifierDescriptionTextBlock" />
+                <TextBlock Style="{StaticResource ModifierDescriptionTextBlockStyle}"
+                           x:Name="AttackModifierDescriptionTextBlock" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
@@ -112,7 +115,8 @@
                     Maximum="{x:Bind ViewModel.PlanningMaxValue, Mode=OneWay}"
                     Style="{StaticResource AttributeNumberBoxStyle}"
                     Value="{x:Bind ViewModel.Planning, Mode=TwoWay}" />
-                <TextBlock Style="{StaticResource ModifierDescriptionTextBlockStyle}" x:Name="PlanningModifierDescriptionTextBlock" />
+                <TextBlock Style="{StaticResource ModifierDescriptionTextBlockStyle}"
+                           x:Name="PlanningModifierDescriptionTextBlock" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" x:Name="LogisticsStackPanel">
@@ -121,7 +125,8 @@
                     Maximum="{x:Bind ViewModel.LogisticsMaxValue, Mode=OneWay}"
                     Style="{StaticResource AttributeNumberBoxStyle}"
                     Value="{x:Bind ViewModel.Logistics, Mode=TwoWay}" />
-                <TextBlock Style="{StaticResource ModifierDescriptionTextBlockStyle}" x:Name="LogisticsModifierDescriptionTextBlock" />
+                <TextBlock Style="{StaticResource ModifierDescriptionTextBlockStyle}"
+                           x:Name="LogisticsModifierDescriptionTextBlock" />
             </StackPanel>
 
             <!--  海军属性  -->
@@ -134,7 +139,8 @@
                     Maximum="{x:Bind ViewModel.ManeuveringMaxValue, Mode=OneWay}"
                     Style="{StaticResource AttributeNumberBoxStyle}"
                     Value="{x:Bind ViewModel.Maneuvering, Mode=TwoWay}" />
-                <TextBlock Style="{StaticResource ModifierDescriptionTextBlockStyle}" x:Name="ManeuveringModifierDescriptionTextBlock" />
+                <TextBlock Style="{StaticResource ModifierDescriptionTextBlockStyle}"
+                           x:Name="ManeuveringModifierDescriptionTextBlock" />
             </StackPanel>
 
             <StackPanel
@@ -146,7 +152,8 @@
                     Maximum="{x:Bind ViewModel.CoordinationMaxValue, Mode=OneWay}"
                     Style="{StaticResource AttributeNumberBoxStyle}"
                     Value="{x:Bind ViewModel.Coordination, Mode=TwoWay}" />
-                <TextBlock Style="{StaticResource ModifierDescriptionTextBlockStyle}" x:Name="CoordinationModifierDescriptionTextBlock" />
+                <TextBlock Style="{StaticResource ModifierDescriptionTextBlockStyle}"
+                           x:Name="CoordinationModifierDescriptionTextBlock" />
             </StackPanel>
 
             <Button Command="{x:Bind ViewModel.OpenTraitsSelectionWindowCommand}" Content="管理特质" />
@@ -158,7 +165,8 @@
                 <!--  当选中的是海军时, 显示海军特有的属性并隐藏陆军的属性  -->
                 <VisualState x:Name="Normal">
                     <VisualState.StateTriggers>
-                        <triggers:IsEqualStateTrigger To="2" Value="{x:Bind Path=CharactersTypeComboBox.SelectedIndex, Mode=OneWay}" />
+                        <triggers:IsEqualStateTrigger To="2"
+                                                      Value="{x:Bind Path=CharactersTypeComboBox.SelectedIndex, Mode=OneWay}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="PlanningStackPanel.Visibility" Value="Collapsed" />
