@@ -19,7 +19,7 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
     public InlineCollection? TraitsModifierDescription { get; set; }
 
     // TODO: /搜索/, /显示修正效果/, 筛选, (图标?)
-    public AdvancedCollectionView Traits { get; private set; }
+    public AdvancedCollectionView Traits { get; }
 
     [ObservableProperty]
     private string _searchText = string.Empty;
@@ -39,8 +39,6 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
     {
         _globalResourceService = globalResourceService;
         _modifierService = modifierService;
-        // TODO: 影响裁剪, 换个解决方案
-        // BUG: 搜索后已选择的会取消选中
         Traits = new AdvancedCollectionView(
             characterTraitsService
                 .GetAllTraits()
@@ -113,14 +111,12 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
     {
         _modifierMergeManager.AddRange(traitVo.Trait.AllModifiers);
         UpdateModifiersDescriptionCore();
-        Log.Info("Added trait: {0}", traitVo.Name);
     }
 
     private void UpdateModifiersDescriptionOnRemove(TraitVo traitVo)
     {
         _modifierMergeManager.RemoveAll(traitVo.Trait.AllModifiers);
         UpdateModifiersDescriptionCore();
-        Log.Info("remove trait: {0}", traitVo.Name);
     }
 
     private void UpdateModifiersDescriptionCore()
