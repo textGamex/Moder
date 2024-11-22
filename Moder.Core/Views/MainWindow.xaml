@@ -89,9 +89,9 @@
                 x:Name="MainTabView" />
         </Grid>
 
-        <Grid Grid.Row="2" Margin="8">
+        <Grid Grid.Row="2">
             <Border BorderBrush="{ThemeResource BottomStatusBarBorderBrush}" BorderThickness="0,1.5,0,0">
-                <StackPanel HorizontalAlignment="Right" Spacing="4" Orientation="Horizontal">
+                <StackPanel Margin="8, 4" HorizontalAlignment="Right" Spacing="4" Orientation="Horizontal">
                     <TextBlock Text="{x:Bind ViewModel.ProgressPromptMessage, Mode=OneWay}" />
                     <ProgressBar Width="150" Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
                                  IsIndeterminate="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />
