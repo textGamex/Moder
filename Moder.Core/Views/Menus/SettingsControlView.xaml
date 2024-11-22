@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <UserControl
     x:Class="Moder.Core.Views.Menus.SettingsControlView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -25,77 +26,81 @@
 
     </UserControl.Resources>
 
-<ScrollView>
+    <ScrollView>
         <Grid Margin="12">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        <TextBlock
-            Grid.Row="0"
-            Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
-            Text="通用设置" />
+            <TextBlock
+                Grid.Row="0"
+                Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
+                Text="通用设置" />
 
-        <StackPanel Grid.Row="1" Spacing="4">
-            <controls:SettingsCard Header="App 主题" HeaderIcon="{winUi:FontIcon Glyph=&#xE790;}">
-                <ComboBox ItemsSource="{x:Bind ViewModel.ThemeMode}" SelectedItem="{x:Bind ViewModel.SelectedThemeMode, Mode=TwoWay}" />
-            </controls:SettingsCard>
-            
-            <controls:SettingsCard Header="窗体背景" HeaderIcon="{winUi:FontIcon Glyph=&#xE790;}">
-                <ComboBox ItemsSource="{x:Bind ViewModel.BackdropTypes}" SelectedItem="{x:Bind ViewModel.SelectedBackdropType, Mode=TwoWay}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate x:DataType="vo:BackdropTypeItemVo">
-                            <TextBlock Text="{Binding Path=Text}"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-            </controls:SettingsCard>
+            <StackPanel Grid.Row="1" Spacing="4">
+                <controls:SettingsCard Header="App 主题" HeaderIcon="{winUi:FontIcon Glyph=&#xE790;}">
+                    <ComboBox ItemsSource="{x:Bind ViewModel.ThemeMode}"
+                              SelectedItem="{x:Bind ViewModel.SelectedThemeMode, Mode=TwoWay}" />
+                </controls:SettingsCard>
 
-            <controls:SettingsCard Header="游戏本地化语言" HeaderIcon="{winUi:FontIcon Glyph=&#xF2B7;}">
-                <ComboBox ItemsSource="{x:Bind ViewModel.Languages}" SelectedItem="{x:Bind ViewModel.SelectedLanguage, Mode=TwoWay}" />
-            </controls:SettingsCard>
+                <controls:SettingsCard Header="窗体背景" HeaderIcon="{winUi:FontIcon Glyph=&#xE790;}">
+                    <ComboBox ItemsSource="{x:Bind ViewModel.BackdropTypes}"
+                              SelectedItem="{x:Bind ViewModel.SelectedBackdropType, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="vo:BackdropTypeItemVo">
+                                <TextBlock Text="{Binding Path=Text}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </controls:SettingsCard>
 
-            <controls:SettingsCard
-                ActionIcon="{winUi:FontIcon Glyph=&#xE8A7;}"
-                ActionIconToolTip="在资源管理器中打开"
-                Click="OnRootPathCardClicked"
-                Description="{x:Bind ViewModel.GameRootPath, Mode=OneWay}"
-                Header="游戏根目录"
-                HeaderIcon="{winUi:FontIcon Glyph=&#xE756;}"
-                IsClickEnabled="True">
-                <Button Command="{x:Bind ViewModel.SelectGameRootPathCommand}" Content="重新选择" />
-            </controls:SettingsCard>
+                <controls:SettingsCard Header="游戏本地化语言" Description="重启后生效"
+                                       HeaderIcon="{winUi:FontIcon Glyph=&#xF2B7;}">
+                    <ComboBox ItemsSource="{x:Bind ViewModel.Languages}"
+                              SelectedItem="{x:Bind ViewModel.SelectedLanguage, Mode=TwoWay}" />
+                </controls:SettingsCard>
 
-            <controls:SettingsCard
-                ActionIcon="{winUi:FontIcon Glyph=&#xE8A7;}"
-                ActionIconToolTip="在资源管理器中打开"
-                Click="OnRootPathCardClicked"
-                Description="{x:Bind ViewModel.ModRootPath, Mode=OneWay}"
-                Header="Mod 根目录"
-                HeaderIcon="{winUi:FontIcon Glyph=&#xE756;}"
-                IsClickEnabled="True">
-                <Button Command="{x:Bind ViewModel.SelectModRootPathCommand}" Content="重新选择" />
-            </controls:SettingsCard>
+                <controls:SettingsCard
+                    ActionIcon="{winUi:FontIcon Glyph=&#xE8A7;}"
+                    ActionIconToolTip="在资源管理器中打开"
+                    Click="OnRootPathCardClicked"
+                    Description="{x:Bind ViewModel.GameRootPath, Mode=OneWay}"
+                    Header="游戏根目录"
+                    HeaderIcon="{winUi:FontIcon Glyph=&#xE756;}"
+                    IsClickEnabled="True">
+                    <Button Command="{x:Bind ViewModel.SelectGameRootPathCommand}" Content="重新选择" />
+                </controls:SettingsCard>
 
-            <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="其他" />
-            <controls:SettingsExpander
-                Content="{x:Bind app:App.AppVersion}"
-                Description="Developed by textGamex, All rights reserved."
-                Header="Moder">
-                <controls:SettingsExpander.Items>
-                    <controls:SettingsCard
-                        ActionIcon="{winUi:FontIcon Glyph=&#xE8A7;}"
-                        Click="OnGitHubUrlCardClicked"
-                        Description="https://github.com/textGamex/Moder"
-                        Header="代码仓库"
-                        HeaderIcon="{winUi:FontIcon Glyph=&#xE943;}"
-                        IsClickEnabled="True" />
-                    
-                    <controls:SettingsCard Header="{x:Bind local:SettingsControlView.RuntimeInfo}"/>
-                </controls:SettingsExpander.Items>
-            </controls:SettingsExpander>
-        </StackPanel>
-    </Grid>
-</ScrollView>
+                <controls:SettingsCard
+                    ActionIcon="{winUi:FontIcon Glyph=&#xE8A7;}"
+                    ActionIconToolTip="在资源管理器中打开"
+                    Click="OnRootPathCardClicked"
+                    Description="{x:Bind ViewModel.ModRootPath, Mode=OneWay}"
+                    Header="Mod 根目录"
+                    HeaderIcon="{winUi:FontIcon Glyph=&#xE756;}"
+                    IsClickEnabled="True">
+                    <Button Command="{x:Bind ViewModel.SelectModRootPathCommand}" Content="重新选择" />
+                </controls:SettingsCard>
+
+                <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="其他" />
+                <controls:SettingsExpander
+                    Content="{x:Bind app:App.AppVersion}"
+                    Description="Developed by textGamex, All rights reserved."
+                    Header="Moder">
+                    <controls:SettingsExpander.Items>
+                        <controls:SettingsCard
+                            ActionIcon="{winUi:FontIcon Glyph=&#xE8A7;}"
+                            Click="OnGitHubUrlCardClicked"
+                            Description="https://github.com/textGamex/Moder"
+                            Header="代码仓库"
+                            HeaderIcon="{winUi:FontIcon Glyph=&#xE943;}"
+                            IsClickEnabled="True" />
+
+                        <controls:SettingsCard Header="{x:Bind local:SettingsControlView.RuntimeInfo}" />
+                    </controls:SettingsExpander.Items>
+                </controls:SettingsExpander>
+            </StackPanel>
+        </Grid>
+    </ScrollView>
 </UserControl>
