@@ -12,6 +12,7 @@
 <!--        <PublishProfile>win-$(Platform).pubxml</PublishProfile>-->
         <UseWinUI>true</UseWinUI>
         <EnableMsixTooling>true</EnableMsixTooling>
+        <ApplicationIcon>logo.ico</ApplicationIcon>
 
         <!-- Use our own Main entry point so we can control the HostBuilder -->
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
