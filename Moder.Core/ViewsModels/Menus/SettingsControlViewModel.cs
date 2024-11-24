@@ -178,8 +178,7 @@ public sealed partial class SettingsControlViewModel : ObservableObject
 
     private static async Task<string> ShowOpenFolderDialogAsync()
     {
-        var dialog = new FolderPicker();
-        InitializeWithWindow.Initialize(dialog, App.Current.MainWindow.GetWindowHandle());
+        var dialog = WindowHelper.CreateFolderPicker();
         var folder = await dialog.PickSingleFolderAsync();
 
         return folder is null ? string.Empty : folder.Path;

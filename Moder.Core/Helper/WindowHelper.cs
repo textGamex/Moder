@@ -4,6 +4,9 @@ using Microsoft.UI.Xaml.Media;
 using Moder.Core.Models;
 using Moder.Core.Services.Config;
 using Moder.Core.Views;
+using Windows.Storage.Pickers;
+using WinUIEx;
+using SystemBackdrop = Microsoft.UI.Xaml.Media.SystemBackdrop;
 
 namespace Moder.Core.Helper;
 
@@ -41,5 +44,15 @@ public static class WindowHelper
         }
 
         window.SystemBackdrop = backdrop;
+    }
+
+    public static FolderPicker CreateFolderPicker()
+    {
+        var folderPicker = new FolderPicker();
+        WinRT.Interop.InitializeWithWindow.Initialize(folderPicker, App.Current.MainWindow.GetWindowHandle());
+        // 不设置 FileTypeFilter 在某些 Windows 版本上会报错
+        folderPicker.FileTypeFilter.Add("*");
+
+        return folderPicker;
     }
 }

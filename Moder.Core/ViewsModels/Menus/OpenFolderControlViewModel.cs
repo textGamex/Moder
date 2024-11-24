@@ -3,8 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Moder.Core.Messages;
 using Moder.Core.Services.Config;
-using Windows.Storage.Pickers;
-using WinUIEx;
+using Moder.Core.Helper;
 
 namespace Moder.Core.ViewsModels.Menus;
 
@@ -20,8 +19,7 @@ public sealed partial class OpenFolderControlViewModel : ObservableObject
     [RelayCommand]
     private async Task OpenModFolderAsync()
     {
-        var folderPicker = new FolderPicker();
-        WinRT.Interop.InitializeWithWindow.Initialize(folderPicker, App.Current.MainWindow.GetWindowHandle());
+        var folderPicker = WindowHelper.CreateFolderPicker();
 
         var result = await folderPicker.PickSingleFolderAsync();
         if (result is null)
@@ -36,8 +34,7 @@ public sealed partial class OpenFolderControlViewModel : ObservableObject
     [RelayCommand]
     private async Task OpenGameRootFolderAsync()
     {
-        var folderPicker = new FolderPicker();
-        WinRT.Interop.InitializeWithWindow.Initialize(folderPicker, App.Current.MainWindow.GetWindowHandle());
+        var folderPicker = WindowHelper.CreateFolderPicker();
 
         var result = await folderPicker.PickSingleFolderAsync();
         if (result is null)
@@ -51,8 +48,10 @@ public sealed partial class OpenFolderControlViewModel : ObservableObject
 
     private void SendCompleteMessageIfReady()
     {
-        if (!string.IsNullOrEmpty(_globalSettings.ModRootFolderPath) &&
-            !string.IsNullOrEmpty(_globalSettings.GameRootFolderPath))
+        if (
+            !string.IsNullOrEmpty(_globalSettings.ModRootFolderPath)
+            && !string.IsNullOrEmpty(_globalSettings.GameRootFolderPath)
+        )
         {
             WeakReferenceMessenger.Default.Send(new CompleteWorkFolderSelectMessage());
         }
