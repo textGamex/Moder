@@ -25,7 +25,8 @@ public sealed class LocalisationService
                 App.Current.Services.GetRequiredService<GlobalSettingService>()
                     .GameLanguage.ToGameLocalizationLanguage()
             ),
-            WatcherFilter.LocalizationFiles
+            WatcherFilter.LocalizationFiles,
+            PathType.Folder
         )
     {
         _localisationKeyMapping = localisationKeyMapping;

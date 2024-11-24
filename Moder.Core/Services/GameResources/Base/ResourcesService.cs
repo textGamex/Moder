@@ -8,7 +8,6 @@ namespace Moder.Core.Services.GameResources.Base;
 public abstract partial class ResourcesService<TType, TContent, TParseResult> : IResourcesService
     where TType : ResourcesService<TType, TContent, TParseResult>
 {
-    public readonly string FolderRelativePath;
     public event EventHandler<ResourceChangedEventArgs>? OnResourceChanged;
 
     /// <summary>
@@ -18,19 +17,28 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
     protected readonly Logger Logger;
 
     private readonly GlobalSettingService _settingService;
-    private readonly string ServiceName = typeof(TType).Name;
+    private readonly string _serviceName = typeof(TType).Name;
+    private readonly string _folderOrFileRelativePath;
 
-    protected ResourcesService(string folderRelativePath, WatcherFilter filter)
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="folderOrFileRelativePath">文件夹或文件的相对路径</param>
+    /// <param name="filter">过滤条件</param>
+    /// <param name="pathType"><c>folderOrFileRelativePath</c>的类型</param>
+    protected ResourcesService(string folderOrFileRelativePath, WatcherFilter filter, PathType pathType)
     {
-        FolderRelativePath = folderRelativePath;
+        _folderOrFileRelativePath = folderOrFileRelativePath;
         Logger = LogManager.GetLogger(typeof(TType).FullName);
         _settingService = App.Current.Services.GetRequiredService<GlobalSettingService>();
+
         var gameResourcesPathService = App.Current.Services.GetRequiredService<GameResourcesPathService>();
         var watcherService = App.Current.Services.GetRequiredService<GameResourcesWatcherService>();
 
-        var filePaths = gameResourcesPathService.GetAllFilePriorModByRelativePathForFolder(
-            FolderRelativePath
-        );
+        var isFolderPath = pathType == PathType.Folder;
+        var filePaths = isFolderPath
+            ? gameResourcesPathService.GetAllFilePriorModByRelativePathForFolder(_folderOrFileRelativePath)
+            : [gameResourcesPathService.GetFilePathPriorModByRelativePath(folderOrFileRelativePath)];
 
         // Resources 必须在使用 ParseFileAndAddToResources 之前初始化
         Resources = new Dictionary<string, TContent>(filePaths.Count);
@@ -40,8 +48,18 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
             ParseFileAndAddToResources(filePath);
         }
 
-        watcherService.Watch(FolderRelativePath, this, filter.Name);
-        Logger.Info("初始化资源成功: {FolderRelativePath}, 共 {Count} 个文件", FolderRelativePath, filePaths.Count);
+        watcherService.Watch(
+            isFolderPath
+                ? _folderOrFileRelativePath
+                : Path.GetDirectoryName(folderOrFileRelativePath) ?? folderOrFileRelativePath,
+            this,
+            filter.Name
+        );
+        Logger.Info(
+            "初始化资源成功: {FolderRelativePath}, 共 {Count} 个文件",
+            _folderOrFileRelativePath,
+            filePaths.Count
+        );
         LogItemsSum();
     }
 
@@ -51,8 +69,8 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         if (typeof(IReadOnlyCollection<object>).IsAssignableFrom(typeof(TContent)))
         {
             Logger.Debug(
-                "'{Path}'下资源数量: {Count}",
-                FolderRelativePath,
+                "'{Path}'下已加载的资源数量: {Count}",
+                _folderOrFileRelativePath,
                 Resources.Values.Cast<IReadOnlyCollection<object>>().Sum(content => content.Count)
             );
         }
@@ -127,7 +145,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         var isAdded = ParseFileAndAddToResources(folderOrFilePath);
         if (!isAdded)
         {
-            Logger.Info("{ServiceName} 不加载此 Mod 资源", ServiceName);
+            Logger.Info("{ServiceName} 不加载此 Mod 资源", _serviceName);
             return;
         }
 
@@ -136,7 +154,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         {
             OnOnResourceChanged(new ResourceChangedEventArgs(folderOrFilePath));
         }
-        Logger.Info("{ServiceName} 重新加载 Mod 资源成功", ServiceName);
+        Logger.Info("{ServiceName} 重新加载 Mod 资源成功", _serviceName);
     }
 
     void IResourcesService.Renamed(string oldPath, string newPath)

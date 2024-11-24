@@ -4,12 +4,16 @@ using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources.Base;
 
-public abstract class CommonResourcesService<TType, TContent>
-    : ResourcesService<TType, TContent, Node>
+public abstract class CommonResourcesService<TType, TContent> : ResourcesService<TType, TContent, Node>
     where TType : CommonResourcesService<TType, TContent>
 {
-    protected CommonResourcesService(string folderRelativePath, WatcherFilter filter)
-        : base(folderRelativePath, filter) { }
+    /// <inheritdoc />
+    protected CommonResourcesService(
+        string folderOrFileRelativePath,
+        WatcherFilter filter,
+        PathType pathType = PathType.Folder
+    )
+        : base(folderOrFileRelativePath, filter, pathType) { }
 
     ///<inheritdoc />
     protected abstract override TContent? ParseFileToContent(Node rootNode);
