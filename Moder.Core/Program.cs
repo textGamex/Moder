@@ -79,6 +79,7 @@ public static partial class Program
         builder.Services.AddSingleton<OreService>();
         builder.Services.AddSingleton<BuildingsService>();
         builder.Services.AddSingleton<CountryTagService>();
+        builder.Services.AddSingleton<LocalizationTextColorsService>();
 
         // Setup and provision the hosting context for the User Interface
         // service.
