@@ -17,6 +17,7 @@ public sealed class ModifierService
     private readonly LocalisationService _localisationService;
     private readonly TerrainService _terrainService;
     private readonly LocalisationKeyMappingService _localisationKeyMappingService;
+    private readonly LocalizationFormatService _localisationFormatService;
 
     /// <summary>
     /// 无法在本地化文件中判断类型的修饰符, 在文件中手动设置
@@ -30,12 +31,14 @@ public sealed class ModifierService
     public ModifierService(
         LocalisationService localisationService,
         TerrainService terrainService,
-        LocalisationKeyMappingService localisationKeyMappingService
+        LocalisationKeyMappingService localisationKeyMappingService,
+        LocalizationFormatService localisationFormatService
     )
     {
         _localisationService = localisationService;
         _terrainService = terrainService;
         _localisationKeyMappingService = localisationKeyMappingService;
+        _localisationFormatService = localisationFormatService;
         _modifierTypes = ReadModifierTypes();
     }
 
@@ -243,13 +246,18 @@ public sealed class ModifierService
             {
                 inlineTexts.Add(new Run { Text = localizationFormat.Text });
             }
+            else if (localizationFormat.Type == LocalizationFormatType.TextWithColor)
+            {
+                inlineTexts.Add(_localisationFormatService.GetTextRun(localizationFormat));
+            }
         }
     }
 
     private List<Inline> GetModifierDisplayMessageUniversal(LeafModifier modifier)
     {
         var inlines = new List<Inline>(4);
-        inlines.Add(new Run { Text = $"{_localisationService.GetModifier(modifier.Key)}: " });
+        var modifierName = _localisationService.GetModifier(modifier.Key);
+        inlines.AddRange(_localisationFormatService.GetTextWithColor(modifierName));
 
         if (modifier.ValueType is GameValueType.Int or GameValueType.Float)
         {
@@ -344,7 +352,7 @@ public sealed class ModifierService
             var isPercentage =
                 string.IsNullOrEmpty(modifierDisplayFormat) || modifierDisplayFormat.Contains('%');
             var format = isPercentage ? 'P' : 'F';
-            
+
             return $"{sign}{value.ToString($"{format}{displayDigits}")}";
         }
 

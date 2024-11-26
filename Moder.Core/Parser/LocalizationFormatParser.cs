@@ -13,12 +13,21 @@ public static class LocalizationFormatParser
         .Before(Char('$'))
         .Map(placeholder => new LocalizationFormat(placeholder, LocalizationFormatType.Placeholder));
 
+    private static readonly Parser<char, LocalizationFormat> TextWithColorParser = 
+        Parser<char>.Token(c => c != '§').AtLeastOnceString().Optional()
+        .Between(Char('§'), String("§!"))
+        .Map(text => new LocalizationFormat(
+            text.HasValue ? text.Value : string.Empty,
+            LocalizationFormatType.TextWithColor
+        ));
+
     private static readonly Parser<char, LocalizationFormat> TextParser =
-        from text in Try(String("$$").WithResult('$')).Or(CharExcept).AtLeastOnceString()
+        from text in Try(String("$$").WithResult('$')).Or(AnyCharExcept('$', '§')).AtLeastOnceString()
         select new LocalizationFormat(text, LocalizationFormatType.Text);
 
     private static readonly Parser<char, IEnumerable<LocalizationFormat>> LocalizationTextParser = TextParser
         .Or(PlaceholderParser)
+        .Or(TextWithColorParser)
         .Many();
 
     public static bool TryParse(string input, [NotNullWhen(true)] out IEnumerable<LocalizationFormat>? result)

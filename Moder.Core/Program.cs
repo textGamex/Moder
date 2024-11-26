@@ -68,6 +68,7 @@ public static partial class Program
         builder.Services.AddSingleton<GameResourcesPathService>();
         builder.Services.AddSingleton<ModifierService>();
         builder.Services.AddSingleton<LocalisationKeyMappingService>();
+        builder.Services.AddSingleton<LocalizationFormatService>();
 
         builder.Services.AddSingleton<GameModDescriptorService>();
         // 游戏内资源
@@ -80,6 +81,7 @@ public static partial class Program
         builder.Services.AddSingleton<BuildingsService>();
         builder.Services.AddSingleton<CountryTagService>();
         builder.Services.AddSingleton<LocalizationTextColorsService>();
+        
 
         // Setup and provision the hosting context for the User Interface
         // service.

@@ -8,7 +8,7 @@ public sealed class MessageBoxService
     {
         var dialog = new ContentDialog
         {
-            XamlRoot = App.Current.MainWindow.Content.XamlRoot,
+            XamlRoot = App.Current.XamlRoot,
             Title = "警告",
             Content = message,
             CloseButtonText = "确定"
@@ -20,7 +20,7 @@ public sealed class MessageBoxService
     {
         var dialog = new ContentDialog
         {
-            XamlRoot = App.Current.MainWindow.Content.XamlRoot,
+            XamlRoot = App.Current.XamlRoot,
             Title = "错误",
             Content = message,
             CloseButtonText = "确定"
