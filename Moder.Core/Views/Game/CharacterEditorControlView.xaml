@@ -73,7 +73,7 @@
 
             <Button
                 Command="{x:Bind ViewModel.SaveCommand}"
-                Content="保存"
+                Content="保存到文件"
                 HorizontalAlignment="Center" />
         </StackPanel>
 

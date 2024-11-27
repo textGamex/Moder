@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.WinUI.Collections;
 using EnumsNET;
@@ -24,6 +25,10 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
     [ObservableProperty]
     private string _searchText = string.Empty;
 
+    [ObservableProperty]
+    private string _buttonText = "全选";
+
+    private ushort _selectedTraitCount;
     private readonly GlobalResourceService _globalResourceService;
     private readonly ModifierService _modifierService;
     private readonly ModifierMergeManager _modifierMergeManager = new();
@@ -54,10 +59,12 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
             {
                 if (message.IsAdded)
                 {
+                    _selectedTraitCount++;
                     UpdateModifiersDescriptionOnAdd(message.Trait);
                 }
                 else
                 {
+                    _selectedTraitCount--;
                     UpdateModifiersDescriptionOnRemove(message.Trait);
                 }
             }
@@ -134,6 +141,36 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
         foreach (var inline in addedModifiers)
         {
             TraitsModifierDescription.Add(inline);
+        }
+
+        // 每当选中或删除一个特性时，都会调用此方法, 此时我们需要更新按钮的文本
+        ButtonText = _selectedTraitCount == 0 ? "全选" : "清空";
+    }
+
+    [RelayCommand]
+    private void ClickButton()
+    {
+        if (_selectedTraitCount == 0)
+        {
+            // 全选
+            foreach (TraitVo trait in Traits)
+            {
+                if (!trait.IsSelected)
+                {
+                    trait.IsSelected = true;
+                }
+            }
+        }
+        else
+        {
+            // 清空
+            foreach (TraitVo trait in Traits)
+            {
+                if (trait.IsSelected)
+                {
+                    trait.IsSelected = false;
+                }
+            }
         }
     }
 

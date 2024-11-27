@@ -16,6 +16,9 @@ public sealed partial class TraitVo(Trait trait, string localisationName) : Obse
     public string LocalisationName => localisationName;
     public TextBlock Description => GetDescription();
 
+    /// <summary>
+    /// 是否已选择, 当值改变时, 发送 <see cref="SelectedTraitChangedMessage"/> 通知
+    /// </summary>
     [ObservableProperty]
     private bool _isSelected;
 

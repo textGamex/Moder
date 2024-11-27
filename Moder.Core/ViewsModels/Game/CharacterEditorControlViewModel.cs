@@ -410,8 +410,9 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         {
             XamlRoot = App.Current.XamlRoot,
             Content = window,
+            DefaultButton = ContentDialogButton.Primary,
             PrimaryButtonText = "保存",
-            SecondaryButtonText = "关闭"
+            CloseButtonText = "关闭"
         };
 
         window.ViewModel.SyncSelectedTraits(_selectedTraits);

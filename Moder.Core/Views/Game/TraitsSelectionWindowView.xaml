@@ -73,6 +73,7 @@
             Margin="0,8"
             HorizontalAlignment="Center"
             VerticalAlignment="Bottom"
-            Content="保存" />
+            Content="{x:Bind ViewModel.ButtonText, Mode=OneWay}"
+            Command="{x:Bind ViewModel.ClickButtonCommand}" />
     </Grid>
 </UserControl>
