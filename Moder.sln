@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		build.ps1 = build.ps1
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
+		Desc\README.zh-CN.md = Desc\README.zh-CN.md
 	EndProjectSection
 EndProject
 Global
