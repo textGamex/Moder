@@ -146,4 +146,9 @@ public static class ParserExtensions
             Array.ConvertAll(node.AllArray, child => child.GetRawStatement(node.Key))
         );
     }
+
+    public static string PrintRaw(this Node node)
+    {
+        return CKPrinter.PrettyPrintStatement(node.ToRaw);
+    }
 }

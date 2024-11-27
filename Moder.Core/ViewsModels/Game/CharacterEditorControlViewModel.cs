@@ -102,6 +102,9 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
     [ObservableProperty]
     private int _selectedCharacterTypeIndex;
 
+    [ObservableProperty]
+    private string _imageKey = string.Empty;
+
     private bool IsSelectedNavy => SelectedCharacterTypeCode == "navy_leader";
     private string SelectedCharacterTypeCode =>
         CharactersType[SelectedCharacterTypeIndex].Tag.ToString()
@@ -315,13 +318,11 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         }
 
         var filePath = Path.Combine(CharactersFolder, SelectedCharacterFile);
-        Node? rootNode = null;
         Node? charactersNode = null;
         if (File.Exists(filePath))
         {
             if (TextParser.TryParse(filePath, out var node, out var error))
             {
-                rootNode = node;
                 var child = Array.Find(
                     node.AllArray,
                     child =>
@@ -342,16 +343,25 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
 
         // 如果文件不存在或者在用户选择的文件下没有找到 characters 节点，则新建节点
         charactersNode ??= new Node("characters");
-        rootNode ??= charactersNode;
 
         var newCharacterNode = charactersNode.AddNodeChild(Name);
         newCharacterNode.AddChild(ChildHelper.LeafString("name", LocalizedName));
-
+        if (!string.IsNullOrEmpty(ImageKey))
+        {
+            AddCharacterImage(newCharacterNode);
+        }
         var type = newCharacterNode.AddNodeChild(SelectedCharacterTypeCode);
         type.AllArray = GetCharacterSkills();
 
-        await File.WriteAllTextAsync(filePath, rootNode.PrintChildren());
+        await File.WriteAllTextAsync(filePath, charactersNode.PrintRaw());
         Log.Info("保存成功");
+    }
+
+    private void AddCharacterImage(Node newCharacterNode)
+    {
+        var portraitsNode = newCharacterNode.AddNodeChild("portraits");
+        var node = portraitsNode.AddNodeChild(IsSelectedNavy ? "navy" : "army");
+        node.AddLeafString("large", ImageKey);
     }
 
     private Child[] GetCharacterSkills()

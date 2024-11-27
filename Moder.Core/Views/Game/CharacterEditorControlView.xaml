@@ -34,13 +34,17 @@
 
         <StackPanel Grid.Column="0" Spacing="4">
             <TextBox
+                IsSpellCheckEnabled="False"
                 Header="名称"
                 HorizontalAlignment="Left"
                 Text="{x:Bind ViewModel.Name, Mode=TwoWay}" />
             <TextBox
                 Header="本地化名称"
+                IsSpellCheckEnabled="False"
                 HorizontalAlignment="Left"
                 Text="{x:Bind ViewModel.LocalizedName, Mode=TwoWay}" />
+            <TextBox IsSpellCheckEnabled="False" Header="图像(需在interface/*.gfx中定义)" HorizontalAlignment="Left" 
+                     Text="{x:Bind ViewModel.ImageKey, Mode=TwoWay}" />
             <ComboBox
                 ItemsSource="{x:Bind ViewModel.CharactersType}"
                 SelectedIndex="{x:Bind ViewModel.SelectedCharacterTypeIndex, Mode=TwoWay}"
@@ -60,7 +64,6 @@
                     Text="common\characters\"
                     VerticalAlignment="Center" />
                 <ComboBox
-                    x:Name="CharacterFilesComboBox"
                     Grid.Column="1"
                     IsEditable="True"
                     ItemsSource="{x:Bind ViewModel.CharacterFiles}"
