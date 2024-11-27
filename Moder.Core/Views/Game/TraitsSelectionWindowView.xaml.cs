@@ -18,8 +18,7 @@ public sealed partial class TraitsSelectionWindowView : IDisposable
     private readonly Timer _showModifierToolTipTimer;
     private DependencyObject? _displayTarget;
     private TraitVo? _traitVo;
-    private readonly FlyoutShowOptions _flyoutShowOptions =
-        new() { ShowMode = FlyoutShowMode.Transient };
+    private readonly FlyoutShowOptions _flyoutShowOptions = new() { ShowMode = FlyoutShowMode.Transient };
 
     private readonly SolidColorBrush _whiteSmokeBrush = new(Colors.WhiteSmoke);
     private readonly SolidColorBrush _transparentBrush = new(Colors.Transparent);
@@ -64,9 +63,9 @@ public sealed partial class TraitsSelectionWindowView : IDisposable
 
     private void Border_OnPointerExited(object sender, PointerRoutedEventArgs e)
     {
+        _showModifierToolTipTimer.Stop();
         var border = (Border)sender;
         border.Background = _transparentBrush;
         ModifierToolTip.Hide();
-        _showModifierToolTipTimer.Stop();
     }
 }

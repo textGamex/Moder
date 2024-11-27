@@ -141,4 +141,21 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
     {
         WeakReferenceMessenger.Default.UnregisterAll(this);
     }
+
+    public void SyncSelectedTraits(IEnumerable<TraitVo> selectedTraits)
+    {
+        var selectedTraitNames = selectedTraits.Select(trait => trait.Name).ToHashSet();
+        if (selectedTraitNames.Count == 0)
+        {
+            return;
+        }
+
+        foreach (TraitVo trait in Traits)
+        {
+            if (selectedTraitNames.Contains(trait.Name))
+            {
+                trait.IsSelected = true;
+            }
+        }
+    }
 }

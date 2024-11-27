@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Moder.Core.Extensions;
 using Moder.Core.Models.Character;
+using Moder.Core.Models.Vo;
 using Moder.Core.Parser;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
@@ -104,6 +105,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
 
     [ObservableProperty]
     private string _imageKey = string.Empty;
+    private IEnumerable<TraitVo> _selectedTraits = [];
 
     private bool IsSelectedNavy => SelectedCharacterTypeCode == "navy_leader";
     private string SelectedCharacterTypeCode =>
@@ -350,11 +352,24 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         {
             AddCharacterImage(newCharacterNode);
         }
-        var type = newCharacterNode.AddNodeChild(SelectedCharacterTypeCode);
-        type.AllArray = GetCharacterSkills();
+        var characterTypeNode = newCharacterNode.AddNodeChild(SelectedCharacterTypeCode);
+        characterTypeNode.AllArray = GetCharacterSkills();
+
+        AddTraits(characterTypeNode);
 
         await File.WriteAllTextAsync(filePath, charactersNode.PrintRaw());
         Log.Info("保存成功");
+    }
+
+    private void AddTraits(Node characterTypeNode)
+    {
+        if (_selectedTraits.Any())
+        {
+            var traitsNode = characterTypeNode.AddNodeChild("traits");
+            traitsNode.AllArray = _selectedTraits
+                .Select(trait => ChildHelper.LeafValue(trait.Name))
+                .ToArray();
+        }
     }
 
     private void AddCharacterImage(Node newCharacterNode)
@@ -399,7 +414,13 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
             SecondaryButtonText = "关闭"
         };
 
+        window.ViewModel.SyncSelectedTraits(_selectedTraits);
         var result = await dialog.ShowAsync();
+        if (result == ContentDialogResult.Primary)
+        {
+            var selectedTraits = window.ViewModel.Traits.Cast<TraitVo>().Where(trait => trait.IsSelected);
+            _selectedTraits = selectedTraits;
+        }
     }
 
     public void Close()
