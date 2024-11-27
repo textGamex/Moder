@@ -6,17 +6,17 @@ English | [简体中文](Desc/README.zh-CN.md)
     Moder
 </h1>
 
-Moder 是 HOI4 (钢铁雄心4) 的可视化编辑器, 用于简化 Mod 开发
+Moder is a visual editor for HOI4 (Hearts of Iron IV)  that simplifies Mod development.
 
-## 运行环境要求
+## Operating environment requirements
 
-- Windows 10 1809 - Build 1776 及以上的版本
+- Windows 10 1809 - Build 1776 as well as Versions above
 
-## 功能
+## Funtions
 
-- state 文件编辑
-- 人物编辑器 (WIP)
+- state File Editing
+- Character Editor (WIP)
 
-## 截图
+## screenshot
 
 ![screenshot1](Images/screenshot1.png)
