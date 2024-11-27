@@ -8,7 +8,7 @@ English | [简体中文](Desc/README.zh-CN.md)
 
 Moder is a visual editor for HOI4 (Hearts of Iron IV)  that simplifies Mod development.
 
-## Operating environment requirements
+## Runtime environment requirements
 
 - Windows 10 1809 - Build 1776 as well as Versions above
 
