@@ -8,7 +8,7 @@ Moder 是 HOI4 (钢铁雄心4) 的可视化编辑器, 用于简化 Mod 开发
 
 - Windows 10 1809 - Build 1776 及以上的版本
 
-## 安装说明
+## 安装
 
 点击此链接下载[Moder](https://github.com/textGamex/Moder/releases)  
 解压后点击Moder.Core.exe运行
