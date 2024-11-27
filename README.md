@@ -14,7 +14,7 @@ Moder is a visual editor for HOI4 (Hearts of Iron IV)  that simplifies Mod devel
 
 ## Installation Instructions
 
-Click this link to download[Moder(7z)](https://github.com/textGamex/Moder/releases/download/pre-build-2024%2F11%2F10/win-x64.7z)
+Click this link to download[Moder(7z)](https://github.com/textGamex/Moder/releases)
 <br>
 After extracting, click on Moder.Core.exe to run the program.
 
