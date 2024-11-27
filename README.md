@@ -2,7 +2,7 @@ English | [简体中文](Desc/README.zh-CN.md)
 
 ---
 
-<h1 style="text-align: center">
+<h1 align="center">
     Moder
 </h1>
 
