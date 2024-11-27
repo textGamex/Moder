@@ -14,9 +14,9 @@ public sealed partial class LeafValuesVo : ObservableGameValue
     public LeafValuesVo(string key, IEnumerable<LeafValue> values, NodeVo parent)
         : base(key, parent)
     {
-        // TODO: 优化
-        Values = new ObservableCollection<string>(values.Select(value => value.Value.ToRawString()));
-        Type = values.First().Value.ToLocalValueType();
+        var valuesArray = values.Select(value => value.Value).ToArray();
+        Values = new ObservableCollection<string>(valuesArray.Select(value => value.ToRawString()));
+        Type = valuesArray[0].ToLocalValueType();
     }
 
     /// <summary>
