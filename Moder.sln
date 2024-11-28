@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Desc\README.zh-CN.md = Desc\README.zh-CN.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moder.Language", "Moder.Language\Moder.Language.csproj", "{8BC33701-BABA-4DAE-B250-BFF896590CDE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,11 +72,28 @@ Global
 		{06D43207-0706-40DC-B5E0-7CEFB1202411}.Release|x64.Build.0 = Release|Any CPU
 		{06D43207-0706-40DC-B5E0-7CEFB1202411}.Release|x86.ActiveCfg = Release|Any CPU
 		{06D43207-0706-40DC-B5E0-7CEFB1202411}.Release|x86.Build.0 = Release|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Debug|x64.Build.0 = Debug|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Debug|x86.Build.0 = Debug|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Release|ARM64.Build.0 = Release|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Release|x64.ActiveCfg = Release|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Release|x64.Build.0 = Release|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Release|x86.ActiveCfg = Release|Any CPU
+		{8BC33701-BABA-4DAE-B250-BFF896590CDE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
+		RESX_NeutralResourcesLanguage = zh-Hans
 		SolutionGuid = {027DB8A7-BBE3-4802-BA5B-3496C6BFEDFF}
 	EndGlobalSection
 EndGlobal

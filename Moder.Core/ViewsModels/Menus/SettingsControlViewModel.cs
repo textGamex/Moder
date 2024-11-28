@@ -1,3 +1,4 @@
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -9,9 +10,6 @@ using Moder.Core.Messages;
 using Moder.Core.Models;
 using Moder.Core.Models.Vo;
 using Moder.Core.Services.Config;
-using Windows.Storage.Pickers;
-using WinRT.Interop;
-using WinUIEx;
 
 namespace Moder.Core.ViewsModels.Menus;
 
@@ -69,6 +67,12 @@ public sealed partial class SettingsControlViewModel : ObservableObject
             new() { Content = "巴西葡萄牙语", Tag = GameLanguage.Portuguese }
         ];
 
+    public LanguageInfo[] ApplicationLanguages { get; } =
+        [new("跟随系统设置", string.Empty), new("简体中文", "zh-CN"), new("English", "en-US")];
+
+    [ObservableProperty]
+    private LanguageInfo _selectedAppLanguage;
+
     [ObservableProperty]
     private ComboBoxItem _selectedThemeMode;
 
@@ -86,6 +90,7 @@ public sealed partial class SettingsControlViewModel : ObservableObject
         _selectedLanguage = GetSelectedLanguage();
         _selectedThemeMode = GetSelectedThemeMode();
         _selectedBackdropType = GetSelectedBackdropType();
+        _selectedAppLanguage = ApplicationLanguages[0];
     }
 
     private BackdropTypeItemVo GetSelectedBackdropType()
@@ -141,13 +146,24 @@ public sealed partial class SettingsControlViewModel : ObservableObject
         var language = (GameLanguage)value.Tag;
         _globalSettingService.GameLanguage = language;
 
-        WeakReferenceMessenger.Default.Send(new ReloadLocalizationFiles());
+        // TODO: 重新实现热重载游戏本地化语言
+        // WeakReferenceMessenger.Default.Send(new ReloadLocalizationFiles());
     }
 
     partial void OnSelectedBackdropTypeChanged(BackdropTypeItemVo value)
     {
         _globalSettingService.WindowBackdropType = value.Backdrop;
         WindowHelper.SetSystemBackdropTypeByConfig();
+    }
+
+    partial void OnSelectedAppLanguageChanged(LanguageInfo value)
+    {
+        CultureInfo.CurrentUICulture = value.Code == LanguageInfo.Default
+            ? CultureInfo.InstalledUICulture
+            : new CultureInfo(value.Code);
+
+        _globalSettingService.AppLanguage = value.Code;
+        WeakReferenceMessenger.Default.Send(new AppLanguageChangedMessage());
     }
 
     [RelayCommand]

@@ -43,6 +43,13 @@ public sealed partial class GlobalSettingService
         set => SetProperty(ref field, value);
     } = WindowBackdropType.Default;
 
+    [MemoryPackOrder(5)]
+    public string AppLanguage
+    {
+        get;
+        set => SetProperty(ref field, value);
+    } = LanguageInfo.Default;
+
     [MemoryPackIgnore]
     public bool IsChanged { get; private set; }
 

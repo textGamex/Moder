@@ -10,6 +10,7 @@
     xmlns:local="using:Moder.Core.Views.Menus"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vo="using:Moder.Core.Models.Vo"
+    xmlns:models="using:Moder.Core.Models"
     xmlns:winUi="using:CommunityToolkit.WinUI"
     mc:Ignorable="d">
 
@@ -59,6 +60,17 @@
                                        HeaderIcon="{winUi:FontIcon Glyph=&#xF2B7;}">
                     <ComboBox ItemsSource="{x:Bind ViewModel.Languages}"
                               SelectedItem="{x:Bind ViewModel.SelectedLanguage, Mode=TwoWay}" />
+                </controls:SettingsCard>
+                
+                <controls:SettingsCard Header="App 语言" HeaderIcon="{winUi:FontIcon Glyph=&#xF2B7;}">
+                    <ComboBox ItemsSource="{x:Bind ViewModel.ApplicationLanguages}"
+                              SelectedItem="{x:Bind ViewModel.SelectedAppLanguage, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="models:LanguageInfo">
+                                <TextBlock Text="{Binding Path=DisplayName}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </controls:SettingsCard>
 
                 <controls:SettingsCard

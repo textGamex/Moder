@@ -115,6 +115,7 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Moder.Hosting\Moder.Hosting.csproj" />
+        <ProjectReference Include="..\Moder.Language\Moder.Language.csproj" />
     </ItemGroup>
     <ItemGroup>
         <None Update="appsettings.json">

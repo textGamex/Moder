@@ -67,6 +67,11 @@ public sealed partial class MainWindow
         );
 
         WeakReferenceMessenger.Default.Register<OpenFileMessage>(this, OnOpenFile);
+
+        WeakReferenceMessenger.Default.Register<AppLanguageChangedMessage>(this, (_, _) =>
+        {
+            Bindings.Update();
+        });
     }
 
     private void OnOpenFile(object sender, OpenFileMessage message)
