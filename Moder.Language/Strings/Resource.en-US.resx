@@ -119,10 +119,10 @@
 		<value>Code repository</value>
 	</data>
   <data name="SettingsPage.OpenInExplorer" xml:space="preserve">
-		<value>Open in Explorer</value>
+		<value>Show in File Explorer</value>
 	</data>
   <data name="SettingsPage.ReSelect" xml:space="preserve">
-		<value>Re select</value>
+		<value>Re-select</value>
 	</data>
   <data name="SettingsPage.AppTheme" xml:space="preserve">
 		<value>App Theme</value>
@@ -137,6 +137,6 @@
 		<value>Take effect after restart</value>
 	</data>
   <data name="SettingsPage.WindowBackdrop" xml:space="preserve">
-		<value>Form background</value>
+		<value>Window background</value>
 	</data>
 </root>
