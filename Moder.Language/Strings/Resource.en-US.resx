@@ -140,42 +140,42 @@
 		<value>Window background</value>
 	</data>
   <data name="Common.Name" xml:space="preserve">
-		<value>名称</value>
+		<value>Name</value>
 	</data>
   <data name="Common.LocalizedName" xml:space="preserve">
-		<value>本地化名称</value>
+		<value>Localized name</value>
 	</data>
   <data name="CharacterEditor.Image" xml:space="preserve">
 		<value>图像(需在interface/*.gfx中定义)</value>
 	</data>
   <data name="Common.WriteToFile" xml:space="preserve">
-		<value>写入到文件</value>
+		<value>Write to file</value>
 	</data>
   <data name="Common.Save" xml:space="preserve">
-		<value>保存</value>
+		<value>Save</value>
 	</data>
   <data name="Character.Level" xml:space="preserve">
-		<value>等级</value>
+		<value>Level</value>
 	</data>
   <data name="Character.Attack" xml:space="preserve">
-		<value>攻击</value>
+		<value>Attack</value>
 	</data>
   <data name="Character.Defense" xml:space="preserve">
-		<value>防御</value>
+		<value>Defense</value>
 	</data>
   <data name="Character.Planning" xml:space="preserve">
-		<value>计划</value>
+		<value>Planning</value>
 	</data>
   <data name="Character.Logistics" xml:space="preserve">
-		<value>后勤</value>
+		<value>Logistics</value>
 	</data>
   <data name="Character.Maneuvering" xml:space="preserve">
-		<value>机动</value>
+		<value>Maneuvering</value>
 	</data>
   <data name="Character.Coordination" xml:space="preserve">
-		<value>协调</value>
+		<value>Coordination</value>
 	</data>
   <data name="CharacterEditor.TraitManager" xml:space="preserve">
-		<value>管理特质</value>
+		<value>Trait Manager</value>
 	</data>
 </root>
