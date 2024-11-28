@@ -1,2 +1,5 @@
-bundles:
-  - 2
+files:
+  - source: /**/*.resx
+    ignore:
+      - /**/*.*.resx
+    translation: /%original_path%/%file_name%.%locale%.resx
