@@ -43,6 +43,7 @@ public sealed partial class MainWindow
         _serviceProvider = serviceProvider;
         InitializeComponent();
 
+        AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets/logo.ico"));
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
         AppWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Standard;
@@ -68,10 +69,13 @@ public sealed partial class MainWindow
 
         WeakReferenceMessenger.Default.Register<OpenFileMessage>(this, OnOpenFile);
 
-        WeakReferenceMessenger.Default.Register<AppLanguageChangedMessage>(this, (_, _) =>
-        {
-            Bindings.Update();
-        });
+        WeakReferenceMessenger.Default.Register<AppLanguageChangedMessage>(
+            this,
+            (_, _) =>
+            {
+                Bindings.Update();
+            }
+        );
     }
 
     private void OnOpenFile(object sender, OpenFileMessage message)
@@ -170,7 +174,7 @@ public sealed partial class MainWindow
     {
         var isRemoved = sender.TabItems.Remove(args.Tab);
         Debug.Assert(isRemoved);
-        
+
         var tab = args.Tab.Content;
         // 关闭文件标签页时，从缓存列表中移除对应的文件并同步侧边栏选中项
         if (tab is IFileView fileView)
