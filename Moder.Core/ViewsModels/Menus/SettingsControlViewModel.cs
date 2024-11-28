@@ -90,7 +90,7 @@ public sealed partial class SettingsControlViewModel : ObservableObject
         _selectedLanguage = GetSelectedLanguage();
         _selectedThemeMode = GetSelectedThemeMode();
         _selectedBackdropType = GetSelectedBackdropType();
-        _selectedAppLanguage = ApplicationLanguages[0];
+        _selectedAppLanguage = GetSelectedAppLanguage();
     }
 
     private BackdropTypeItemVo GetSelectedBackdropType()
@@ -123,6 +123,12 @@ public sealed partial class SettingsControlViewModel : ObservableObject
             }
         }
         return ThemeMode[0];
+    }
+
+    private LanguageInfo GetSelectedAppLanguage()
+    {
+        var code = _globalSettingService.AppLanguage;
+        return Array.Find(ApplicationLanguages, language => language.Code == code) ?? ApplicationLanguages[0];
     }
 
     partial void OnSelectedThemeModeChanged(ComboBoxItem value)
@@ -158,9 +164,8 @@ public sealed partial class SettingsControlViewModel : ObservableObject
 
     partial void OnSelectedAppLanguageChanged(LanguageInfo value)
     {
-        CultureInfo.CurrentUICulture = value.Code == LanguageInfo.Default
-            ? CultureInfo.InstalledUICulture
-            : new CultureInfo(value.Code);
+        CultureInfo.CurrentUICulture =
+            value.Code == LanguageInfo.Default ? CultureInfo.InstalledUICulture : new CultureInfo(value.Code);
 
         _globalSettingService.AppLanguage = value.Code;
         WeakReferenceMessenger.Default.Send(new AppLanguageChangedMessage());
