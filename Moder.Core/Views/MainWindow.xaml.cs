@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Input;
@@ -14,6 +15,7 @@ using Moder.Core.ViewsModels;
 using Moder.Core.ViewsModels.Menus;
 using NLog;
 using Windows.Foundation;
+using Moder.Core.Models;
 
 namespace Moder.Core.Views;
 
@@ -43,6 +45,7 @@ public sealed partial class MainWindow
         _serviceProvider = serviceProvider;
         InitializeComponent();
 
+        SetAppLanguage();
         AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets/logo.ico"));
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
@@ -76,6 +79,14 @@ public sealed partial class MainWindow
                 Bindings.Update();
             }
         );
+    }
+
+    private void SetAppLanguage()
+    {
+        if (_settings.AppLanguage != LanguageInfo.Default)
+        {
+            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(_settings.AppLanguage);
+        }
     }
 
     private void OnOpenFile(object sender, OpenFileMessage message)

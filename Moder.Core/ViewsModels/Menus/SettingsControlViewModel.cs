@@ -165,7 +165,9 @@ public sealed partial class SettingsControlViewModel : ObservableObject
     partial void OnSelectedAppLanguageChanged(LanguageInfo value)
     {
         CultureInfo.CurrentUICulture =
-            value.Code == LanguageInfo.Default ? CultureInfo.InstalledUICulture : new CultureInfo(value.Code);
+            value.Code == LanguageInfo.Default
+                ? CultureInfo.InstalledUICulture
+                : CultureInfo.GetCultureInfo(value.Code);
 
         _globalSettingService.AppLanguage = value.Code;
         WeakReferenceMessenger.Default.Send(new AppLanguageChangedMessage());
