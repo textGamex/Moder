@@ -60,6 +60,123 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 攻击.
+        /// </summary>
+        public static string Character_Attack {
+            get {
+                return ResourceManager.GetString("Character.Attack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 协调.
+        /// </summary>
+        public static string Character_Coordination {
+            get {
+                return ResourceManager.GetString("Character.Coordination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 防御.
+        /// </summary>
+        public static string Character_Defense {
+            get {
+                return ResourceManager.GetString("Character.Defense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 等级.
+        /// </summary>
+        public static string Character_Level {
+            get {
+                return ResourceManager.GetString("Character.Level", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 后勤.
+        /// </summary>
+        public static string Character_Logistics {
+            get {
+                return ResourceManager.GetString("Character.Logistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 机动.
+        /// </summary>
+        public static string Character_Maneuvering {
+            get {
+                return ResourceManager.GetString("Character.Maneuvering", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 计划.
+        /// </summary>
+        public static string Character_Planning {
+            get {
+                return ResourceManager.GetString("Character.Planning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 图像(需在interface/*.gfx中定义).
+        /// </summary>
+        public static string CharacterEditor_Image {
+            get {
+                return ResourceManager.GetString("CharacterEditor.Image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 管理特质.
+        /// </summary>
+        public static string CharacterEditor_TraitManager {
+            get {
+                return ResourceManager.GetString("CharacterEditor.TraitManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 本地化名称.
+        /// </summary>
+        public static string Common_LocalizedName {
+            get {
+                return ResourceManager.GetString("Common.LocalizedName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 名称.
+        /// </summary>
+        public static string Common_Name {
+            get {
+                return ResourceManager.GetString("Common.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 保存.
+        /// </summary>
+        public static string Common_Save {
+            get {
+                return ResourceManager.GetString("Common.Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 写入到文件.
+        /// </summary>
+        public static string Common_WriteToFile {
+            get {
+                return ResourceManager.GetString("Common.WriteToFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 人物编辑器.
         /// </summary>
         public static string Menu_CharacterEditor {

@@ -1,4 +1,6 @@
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
+using Moder.Core.Messages;
 using Moder.Core.ViewsModels.Game;
 
 namespace Moder.Core.Views.Game;
@@ -22,6 +24,13 @@ public sealed partial class CharacterEditorControlView : IDisposable
         ViewModel.CoordinationModifierDescription = CoordinationModifierDescriptionTextBlock.Inlines;
 
         ViewModel.SetSkillDefaultValue();
+
+        WeakReferenceMessenger.Default.Register<AppLanguageChangedMessage>(this, OnLanguageChanged);
+    }
+
+    private void OnLanguageChanged(object recipient, AppLanguageChangedMessage message)
+    {
+        Bindings.Update();
     }
 
     public void Dispose()
@@ -38,5 +47,6 @@ public sealed partial class CharacterEditorControlView : IDisposable
     private void ReleaseResources()
     {
         ViewModel.Close();
+        WeakReferenceMessenger.Default.UnregisterAll(this);
     }
 }

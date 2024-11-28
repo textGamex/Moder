@@ -270,7 +270,7 @@ public sealed partial class MainWindow
         var settingsTab = new TabViewItem
         {
             Content = settingsView,
-            Header = "设置",
+            Header = Language.Strings.Resource.Menu_Settings,
             IconSource = new FontIconSource { Glyph = "\uE713" }
         };
         NavigateToNewTab(settingsTab);
@@ -298,7 +298,7 @@ public sealed partial class MainWindow
         var editorTab = new TabViewItem
         {
             Content = editorView,
-            Header = "将领编辑器",
+            Header = Language.Strings.Resource.Menu_CharacterEditor,
             IconSource = new FontIconSource { Glyph = "\uE70F" }
         };
         NavigateToNewTab(editorTab);

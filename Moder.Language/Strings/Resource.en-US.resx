@@ -104,4 +104,37 @@
 	<data name="Menu.CharacterEditor" xml:space="preserve">
 		<value>Character Editor</value>
 	</data>
+	<data name="Common.Name" xml:space="preserve">
+		<value>Name</value>
+	</data>
+	<data name="Common.LocalizedName" xml:space="preserve">
+		<value>Localized name</value>
+	</data>
+	<data name="Common.WriteToFile" xml:space="preserve">
+		<value>Write to file</value>
+	</data>
+	<data name="Common.Save" xml:space="preserve">
+		<value>Save</value>
+	</data>
+	<data name="Character.Level" xml:space="preserve">
+		<value>Level</value>
+	</data>
+	<data name="Character.Attack" xml:space="preserve">
+		<value>Attack</value>
+	</data>
+	<data name="Character.Defense" xml:space="preserve">
+		<value>Defense</value>
+	</data>
+	<data name="Character.Planning" xml:space="preserve">
+		<value>Planning</value>
+	</data>
+	<data name="Character.Logistics" xml:space="preserve">
+		<value>Logistics</value>
+	</data>
+	<data name="Character.Maneuvering" xml:space="preserve">
+		<value>Maneuvering</value>
+	</data>
+	<data name="Character.Coordination" xml:space="preserve">
+		<value>Coordination</value>
+	</data>
 </root>
