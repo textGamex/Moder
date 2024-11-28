@@ -104,39 +104,39 @@
 		<value>Character Editor</value>
 	</data>
   <data name="SettingsPage.GameRootPath" xml:space="preserve">
-		<value>游戏根目录</value>
+		<value>Game root directory</value>
 	</data>
   <data name="SettingsPage.ModRootPath" xml:space="preserve">
-		<value>Mod 根目录</value>
+		<value>Mod root directory</value>
 	</data>
   <data name="SettingsPage.CommonSettings" xml:space="preserve">
-		<value>通用设置</value>
+		<value>General settings</value>
 	</data>
   <data name="SettingsPage.OtherSettings" xml:space="preserve">
-		<value>其他</value>
+		<value>Others</value>
 	</data>
   <data name="SettingsPage.CodeRepository" xml:space="preserve">
-		<value>代码仓库</value>
+		<value>Code repository</value>
 	</data>
   <data name="SettingsPage.OpenInExplorer" xml:space="preserve">
-		<value>在资源管理器中打开</value>
+		<value>Open in Explorer</value>
 	</data>
   <data name="SettingsPage.ReSelect" xml:space="preserve">
-		<value>重新选择</value>
+		<value>Re select</value>
 	</data>
   <data name="SettingsPage.AppTheme" xml:space="preserve">
-		<value>App 主题</value>
+		<value>App Theme</value>
 	</data>
   <data name="SettingsPage.GameLocalizationLanguage" xml:space="preserve">
-		<value>游戏本地化语言</value>
+		<value>Game localization language</value>
 	</data>
   <data name="SettingsPage.AppLanguage" xml:space="preserve">
-		<value>App 语言</value>
+		<value>App Language</value>
 	</data>
   <data name="SettingsPage.MustRestart" xml:space="preserve">
-		<value>重启后生效</value>
+		<value>Take effect after restart</value>
 	</data>
   <data name="SettingsPage.WindowBackdrop" xml:space="preserve">
-		<value>窗体背景</value>
+		<value>Form background</value>
 	</data>
 </root>
