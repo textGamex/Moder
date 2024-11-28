@@ -33,6 +33,7 @@
     </PropertyGroup>
     <ItemGroup>
       <Content Remove="Assets\ParserRules\CountryTag.txt" />
+      <Content Include="Assets\logo.ico" />
     </ItemGroup>
     <ItemGroup>
         <None Remove="Views\Game\BaseLeafControl.xaml" />

@@ -51,12 +51,12 @@
                 <MenuFlyoutItem
                     x:Name="CharacterEditorButton"
                     Click="CharacterEditorButton_OnClick"
-                    Text="将领编辑器" />
+                    Text="{x:Bind lang:Resource.Menu_CharacterEditor}" />
                 <MenuFlyoutItem
                     x:Name="SettingsButton"
                     HorizontalAlignment="Left"
                     Click="TitleBarSettingsButton_OnClick"
-                    Text="{x:Bind lang:Resource.Settings}" />
+                    Text="{x:Bind lang:Resource.Menu_Settings}" />
             </StackPanel>
         </Grid>
 

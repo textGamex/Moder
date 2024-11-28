@@ -98,7 +98,46 @@
 	<resheader name="writer">
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
-	<data name="Settings" xml:space="preserve">
+	<data name="Menu.Settings" xml:space="preserve">
 		<value>设置</value>
+	</data>
+	<data name="Menu.CharacterEditor" xml:space="preserve">
+		<value>人物编辑器</value>
+	</data>
+	<data name="SettingsPage.GameRootPath" xml:space="preserve">
+		<value>游戏根目录</value>
+	</data>
+	<data name="SettingsPage.ModRootPath" xml:space="preserve">
+		<value>Mod 根目录</value>
+	</data>
+	<data name="SettingsPage.CommonSettings" xml:space="preserve">
+		<value>通用设置</value>
+	</data>
+	<data name="SettingsPage.OtherSettings" xml:space="preserve">
+		<value>其他</value>
+	</data>
+	<data name="SettingsPage.CodeRepository" xml:space="preserve">
+		<value>代码仓库</value>
+	</data>
+	<data name="SettingsPage.OpenInExplorer" xml:space="preserve">
+		<value>在资源管理器中打开</value>
+	</data>
+	<data name="SettingsPage.ReSelect" xml:space="preserve">
+		<value>重新选择</value>
+	</data>
+	<data name="SettingsPage.AppTheme" xml:space="preserve">
+		<value>App 主题</value>
+	</data>
+	<data name="SettingsPage.GameLocalizationLanguage" xml:space="preserve">
+		<value>游戏本地化语言</value>
+	</data>
+	<data name="SettingsPage.AppLanguage" xml:space="preserve">
+		<value>App 语言</value>
+	</data>
+	<data name="SettingsPage.MustRestart" xml:space="preserve">
+		<value>重启后生效</value>
+	</data>
+	<data name="SettingsPage.WindowBackdrop" xml:space="preserve">
+		<value>窗体背景</value>
 	</data>
 </root>
