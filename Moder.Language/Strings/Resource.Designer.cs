@@ -168,11 +168,56 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 请填写写入文件名.
+        /// </summary>
+        public static string CharacterEditor_MissingCharacterFileNameTip {
+            get {
+                return ResourceManager.GetString("CharacterEditor.MissingCharacterFileNameTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 请填写必须的字段.
+        /// </summary>
+        public static string CharacterEditor_MissingRequiredInfoTip {
+            get {
+                return ResourceManager.GetString("CharacterEditor.MissingRequiredInfoTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 解析 &apos;{0}&apos; 文件失败, 错误原因: {1}, 行数: {2}, 列数: {3}.
+        /// </summary>
+        public static string CharacterEditor_ParserErrorInfo {
+            get {
+                return ResourceManager.GetString("CharacterEditor.ParserErrorInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 管理特质.
         /// </summary>
         public static string CharacterEditor_TraitManager {
             get {
                 return ResourceManager.GetString("CharacterEditor.TraitManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 清空.
+        /// </summary>
+        public static string Common_Clear {
+            get {
+                return ResourceManager.GetString("Common.Clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 关闭.
+        /// </summary>
+        public static string Common_Close {
+            get {
+                return ResourceManager.GetString("Common.Close", resourceCulture);
             }
         }
         
@@ -195,6 +240,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 错误.
+        /// </summary>
+        public static string Common_Error {
+            get {
+                return ResourceManager.GetString("Common.Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 本地化名称.
         /// </summary>
         public static string Common_LocalizedName {
@@ -209,6 +263,15 @@ namespace Moder.Language.Strings {
         public static string Common_Name {
             get {
                 return ResourceManager.GetString("Common.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 确定.
+        /// </summary>
+        public static string Common_Ok {
+            get {
+                return ResourceManager.GetString("Common.Ok", resourceCulture);
             }
         }
         
@@ -231,11 +294,38 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 搜索.
+        /// </summary>
+        public static string Common_Search {
+            get {
+                return ResourceManager.GetString("Common.Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 全选.
+        /// </summary>
+        public static string Common_SelectAll {
+            get {
+                return ResourceManager.GetString("Common.SelectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 跟随系统设置.
         /// </summary>
         public static string Common_UseSystemSetting {
             get {
                 return ResourceManager.GetString("Common.UseSystemSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 警告.
+        /// </summary>
+        public static string Common_Warning {
+            get {
+                return ResourceManager.GetString("Common.Warning", resourceCulture);
             }
         }
         

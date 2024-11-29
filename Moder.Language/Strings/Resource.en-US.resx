@@ -164,4 +164,25 @@
 	<data name="Common.Rename" xml:space="preserve">
 		<value>Rename</value>
 	</data>
+	<data name="Common.SelectAll" xml:space="preserve">
+		<value>Select All</value>
+	</data>
+	<data name="Common.Clear" xml:space="preserve">
+		<value>Clear</value>
+	</data>
+	<data name="Common.Search" xml:space="preserve">
+		<value>Search</value>
+	</data>
+	<data name="Common.Ok" xml:space="preserve">
+		<value>Ok</value>
+	</data>
+	<data name="Common.Close" xml:space="preserve">
+		<value>Close</value>
+	</data>
+	<data name="Common.Error" xml:space="preserve">
+		<value>Error</value>
+	</data>
+	<data name="Common.Warning" xml:space="preserve">
+		<value>Warning</value>
+	</data>
 </root>

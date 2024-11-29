@@ -12,6 +12,8 @@ using Moder.Core.Services.Config;
 using Moder.Core.Services.GameResources;
 using Moder.Core.Services.GameResources.Base;
 using Moder.Core.Views.Game;
+using Moder.Language.Strings;
+using Moder.Language.Strings;
 using NLog;
 using ParadoxPower.CSharpExtensions;
 using ParadoxPower.Process;
@@ -304,13 +306,13 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
     {
         if (string.IsNullOrEmpty(SelectedCharacterFile))
         {
-            await _messageBoxService.WarnAsync("请填写写入文件名");
+            await _messageBoxService.WarnAsync(Resource.CharacterEditor_MissingCharacterFileNameTip);
             return;
         }
 
         if (string.IsNullOrEmpty(Name))
         {
-            await _messageBoxService.WarnAsync("请填写必须的字段");
+            await _messageBoxService.WarnAsync(Resource.CharacterEditor_MissingRequiredInfoTip);
             return;
         }
 
@@ -337,7 +339,13 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
             else
             {
                 await _messageBoxService.ErrorAsync(
-                    $"解析 '{filePath}' 文件失败, 错误原因: {error.ErrorMessage}, 行数: {error.Line}, 列数: {error.Column}"
+                    string.Format(
+                        Resource.CharacterEditor_ParserErrorInfo,
+                        filePath,
+                        error.ErrorMessage,
+                        error.Line,
+                        error.Column
+                    )
                 );
                 return;
             }
@@ -411,8 +419,8 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
             XamlRoot = App.Current.XamlRoot,
             Content = window,
             DefaultButton = ContentDialogButton.Primary,
-            PrimaryButtonText = "保存",
-            CloseButtonText = "关闭"
+            PrimaryButtonText = Resource.Common_Ok,
+            CloseButtonText = Resource.Common_Close
         };
 
         window.ViewModel.SyncSelectedTraits(_selectedTraits);
