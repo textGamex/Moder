@@ -178,4 +178,31 @@
   <data name="CharacterEditor.TraitManager" xml:space="preserve">
 		<value>Trait Manager</value>
 	</data>
+  <data name="NotSupportFileTipInfo" xml:space="preserve">
+		<value>暂不支持此类型文件</value>
+	</data>
+  <data name="ThemeMode.Light" xml:space="preserve">
+		<value>明亮</value>
+	</data>
+  <data name="ThemeMode.Dark" xml:space="preserve">
+		<value>黑暗</value>
+	</data>
+  <data name="Common.UseSystemSetting" xml:space="preserve">
+		<value>跟随系统设置</value>
+	</data>
+  <data name="Common.Default" xml:space="preserve">
+		<value>默认</value>
+	</data>
+  <data name="Backdrop.None" xml:space="preserve">
+		<value>无背景</value>
+	</data>
+  <data name="Backdrop.Mica" xml:space="preserve">
+		<value>云母</value>
+	</data>
+  <data name="Backdrop.MicaAlt" xml:space="preserve">
+		<value>云母 Alt</value>
+	</data>
+  <data name="Backdrop.Acrylic" xml:space="preserve">
+		<value>亚克力</value>
+	</data>
 </root>
