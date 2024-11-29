@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Moder.Core.Views"
+    xmlns:lang="using:Moder.Language.Strings"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
@@ -12,5 +13,5 @@
         HorizontalAlignment="Center"
         VerticalAlignment="Center"
         Style="{StaticResource TitleTextBlockStyle}"
-        Text="暂不支持此类型文件" />
+        Text="{x:Bind lang:Resource.NotSupportFileTipInfo}" />
 </Page>

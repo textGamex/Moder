@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
+using Moder.Core.Helper;
 using Moder.Core.Services.Config;
 using NLog;
 
@@ -17,13 +18,19 @@ public partial class App : Application
     public static new App Current => (App)Application.Current;
 
     public IServiceProvider Services => Current._serviceProvider;
-    public Views.MainWindow MainWindow { get; private set; } = null!;
+
+    public Views.MainWindow MainWindow
+    {
+        get => field ?? throw new InvalidOperationException();
+        private set;
+    } = null!;
+
     /// <summary>
     /// 在 <see cref="MainWindow"/> UI线程上运行的调度器队列
     /// </summary>
     public DispatcherQueue DispatcherQueue => MainWindow.DispatcherQueue;
     public XamlRoot XamlRoot => MainWindow.Content.XamlRoot;
-    
+
     public static string ConfigFolder { get; } = Path.Combine(Environment.CurrentDirectory, "Configs");
     public static string ParserRulesFolder { get; } = Path.Combine(ConfigFolder, "ParserRules");
 
@@ -65,18 +72,7 @@ public partial class App : Application
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         MainWindow = _serviceProvider.GetRequiredService<Views.MainWindow>();
-        SetAppTheme();
+        WindowHelper.SetAppTheme(_serviceProvider.GetRequiredService<GlobalSettingService>().AppThemeMode);
         MainWindow.Activate();
-    }
-
-    private void SetAppTheme()
-    {
-        Debug.Assert(MainWindow is not null);
-
-        var settings = _serviceProvider.GetRequiredService<GlobalSettingService>();
-        if (MainWindow.Content is FrameworkElement root)
-        {
-            root.RequestedTheme = settings.AppThemeMode;
-        }
     }
 }

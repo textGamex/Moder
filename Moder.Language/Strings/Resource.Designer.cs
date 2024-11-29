@@ -60,6 +60,42 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 亚克力.
+        /// </summary>
+        public static string Backdrop_Acrylic {
+            get {
+                return ResourceManager.GetString("Backdrop.Acrylic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 云母.
+        /// </summary>
+        public static string Backdrop_Mica {
+            get {
+                return ResourceManager.GetString("Backdrop.Mica", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 云母 Alt.
+        /// </summary>
+        public static string Backdrop_MicaAlt {
+            get {
+                return ResourceManager.GetString("Backdrop.MicaAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 无背景.
+        /// </summary>
+        public static string Backdrop_None {
+            get {
+                return ResourceManager.GetString("Backdrop.None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 攻击.
         /// </summary>
         public static string Character_Attack {
@@ -141,6 +177,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 默认.
+        /// </summary>
+        public static string Common_Default {
+            get {
+                return ResourceManager.GetString("Common.Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 本地化名称.
         /// </summary>
         public static string Common_LocalizedName {
@@ -168,6 +213,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 跟随系统设置.
+        /// </summary>
+        public static string Common_UseSystemSetting {
+            get {
+                return ResourceManager.GetString("Common.UseSystemSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 写入到文件.
         /// </summary>
         public static string Common_WriteToFile {
@@ -191,6 +245,15 @@ namespace Moder.Language.Strings {
         public static string Menu_Settings {
             get {
                 return ResourceManager.GetString("Menu.Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 暂不支持此类型文件.
+        /// </summary>
+        public static string NotSupportFileTipInfo {
+            get {
+                return ResourceManager.GetString("NotSupportFileTipInfo", resourceCulture);
             }
         }
         
@@ -299,6 +362,24 @@ namespace Moder.Language.Strings {
         public static string SettingsPage_WindowBackdrop {
             get {
                 return ResourceManager.GetString("SettingsPage.WindowBackdrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 黑暗.
+        /// </summary>
+        public static string ThemeMode_Dark {
+            get {
+                return ResourceManager.GetString("ThemeMode.Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 明亮.
+        /// </summary>
+        public static string ThemeMode_Light {
+            get {
+                return ResourceManager.GetString("ThemeMode.Light", resourceCulture);
             }
         }
     }

@@ -83,7 +83,7 @@ public sealed partial class MainWindow
 
     private void SetAppLanguage()
     {
-        if (_settings.AppLanguage != LanguageInfo.Default)
+        if (_settings.AppLanguage != AppLanguageInfo.Default)
         {
             CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(_settings.AppLanguage);
         }

@@ -137,4 +137,25 @@
 	<data name="Character.Coordination" xml:space="preserve">
 		<value>Coordination</value>
 	</data>
+	<data name="ThemeMode.Light" xml:space="preserve">
+		<value>Light</value>
+	</data>
+	<data name="ThemeMode.Dark" xml:space="preserve">
+		<value>Dark</value>
+	</data>
+	<data name="Common.Default" xml:space="preserve">
+		<value>Default</value>
+	</data>
+	<data name="Backdrop.None" xml:space="preserve">
+		<value>None</value>
+	</data>
+	<data name="Backdrop.Mica" xml:space="preserve">
+		<value>Mica</value>
+	</data>
+	<data name="Backdrop.MicaAlt" xml:space="preserve">
+		<value>MicaAlt</value>
+	</data>
+	<data name="Backdrop.Acrylic" xml:space="preserve">
+		<value>Acrylic</value>
+	</data>
 </root>

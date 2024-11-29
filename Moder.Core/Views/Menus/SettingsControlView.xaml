@@ -42,14 +42,20 @@
 
             <StackPanel Grid.Row="1" Spacing="4">
                 <controls:SettingsCard Header="{x:Bind lang:Resource.SettingsPage_AppTheme}" HeaderIcon="{winUi:FontIcon Glyph=&#xE790;}">
-                    <ComboBox ItemsSource="{x:Bind ViewModel.ThemeMode}"
-                              SelectedItem="{x:Bind ViewModel.SelectedThemeMode, Mode=TwoWay}" />
+                    <ComboBox ItemsSource="{x:Bind ViewModel.ThemeMode, Mode=OneWay}"
+                              SelectedIndex="{x:Bind ViewModel.SelectedThemeModeIndex, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="models:ThemeModeInfo">
+                                <TextBlock Text="{x:Bind Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </controls:SettingsCard>
 
                 <controls:SettingsCard Header="{x:Bind lang:Resource.SettingsPage_WindowBackdrop}"
                                        HeaderIcon="{winUi:FontIcon Glyph=&#xE790;}">
-                    <ComboBox ItemsSource="{x:Bind ViewModel.BackdropTypes}"
-                              SelectedItem="{x:Bind ViewModel.SelectedBackdropType, Mode=TwoWay}">
+                    <ComboBox ItemsSource="{x:Bind ViewModel.BackdropTypes, Mode=OneWay}"
+                              SelectedIndex="{x:Bind ViewModel.SelectedBackdropTypeIndex, Mode=TwoWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate x:DataType="vo:BackdropTypeItemVo">
                                 <TextBlock Text="{Binding Path=Text}" />
@@ -61,8 +67,14 @@
                 <controls:SettingsCard Header="{x:Bind lang:Resource.SettingsPage_GameLocalizationLanguage}"
                                        Description="{x:Bind lang:Resource.SettingsPage_MustRestart}"
                                        HeaderIcon="{winUi:FontIcon Glyph=&#xF2B7;}">
-                    <ComboBox ItemsSource="{x:Bind ViewModel.Languages}"
-                              SelectedItem="{x:Bind ViewModel.SelectedLanguage, Mode=TwoWay}" />
+                    <ComboBox ItemsSource="{x:Bind ViewModel.GameLanguages}"
+                              SelectedIndex="{x:Bind ViewModel.SelectedGameLanguageIndex, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="models:GameLanguageInfo">
+                                <TextBlock Text="{Binding Path=DisplayName}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </controls:SettingsCard>
 
                 <controls:SettingsCard Header="{x:Bind lang:Resource.SettingsPage_AppLanguage}"
@@ -70,7 +82,7 @@
                     <ComboBox ItemsSource="{x:Bind ViewModel.ApplicationLanguages}"
                               SelectedItem="{x:Bind ViewModel.SelectedAppLanguage, Mode=TwoWay}">
                         <ComboBox.ItemTemplate>
-                            <DataTemplate x:DataType="models:LanguageInfo">
+                            <DataTemplate x:DataType="models:AppLanguageInfo">
                                 <TextBlock Text="{Binding Path=DisplayName}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>

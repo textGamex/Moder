@@ -48,7 +48,7 @@ public sealed partial class GlobalSettingService
     {
         get;
         set => SetProperty(ref field, value);
-    } = LanguageInfo.Default;
+    } = AppLanguageInfo.Default;
 
     [MemoryPackIgnore]
     public bool IsChanged { get; private set; }

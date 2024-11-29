@@ -4,12 +4,12 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 using Moder.Core.Helper;
 using Moder.Core.Messages;
 using Moder.Core.Models;
 using Moder.Core.Models.Vo;
 using Moder.Core.Services.Config;
+using Moder.Language.Strings;
 
 namespace Moder.Core.ViewsModels.Menus;
 
@@ -18,14 +18,64 @@ public sealed partial class SettingsControlViewModel : ObservableObject
     public string GameRootPath => _globalSettingService.GameRootFolderPath;
     public string ModRootPath => _globalSettingService.ModRootFolderPath;
 
-    public ComboBoxItem[] ThemeMode { get; } =
+    [ObservableProperty]
+    private ThemeModeInfo[] _themeMode;
+
+    [ObservableProperty]
+    private BackdropTypeItemVo[] _backdropTypes;
+
+    public GameLanguageInfo[] GameLanguages { get; } =
         [
-            new() { Content = "跟随系统设置", Tag = ElementTheme.Default },
-            new() { Content = "明亮", Tag = ElementTheme.Light },
-            new() { Content = "暗黑", Tag = ElementTheme.Dark }
+            new("跟随系统设置", GameLanguage.Default),
+            new("简体中文", GameLanguage.Chinese),
+            new("英文", GameLanguage.English),
+            new("日语", GameLanguage.Japanese),
+            new("俄语", GameLanguage.Russian),
+            new("法语", GameLanguage.French),
+            new("波兰语", GameLanguage.Polish),
+            new("德语", GameLanguage.German),
+            new("西班牙语", GameLanguage.Spanish),
+            new("巴西葡萄牙语", GameLanguage.Portuguese)
         ];
 
-    public BackdropTypeItemVo[] BackdropTypes { get; } = GetBackdropType();
+    public AppLanguageInfo[] ApplicationLanguages { get; } =
+        [new("跟随系统设置", string.Empty), new("简体中文", "zh-CN"), new("English", "en-US")];
+
+    [ObservableProperty]
+    private AppLanguageInfo _selectedAppLanguage;
+
+    [ObservableProperty]
+    private int _selectedThemeModeIndex;
+
+    [ObservableProperty]
+    private int _selectedBackdropTypeIndex;
+
+    [ObservableProperty]
+    private int _selectedGameLanguageIndex;
+
+    private readonly GlobalSettingService _globalSettingService;
+
+    public SettingsControlViewModel(GlobalSettingService globalSettingService)
+    {
+        _globalSettingService = globalSettingService;
+
+        _themeMode = GetThemeMode();
+        _selectedThemeModeIndex = GetSelectedThemeModeIndex();
+        _backdropTypes = GetBackdropType();
+        _selectedBackdropTypeIndex = GetSelectedBackdropTypeIndex();
+        _selectedGameLanguageIndex = GetSelectedGameLanguageIndex();
+        _selectedAppLanguage = GetSelectedAppLanguage();
+    }
+
+    private static ThemeModeInfo[] GetThemeMode()
+    {
+        return
+        [
+            new ThemeModeInfo(Resource.Common_UseSystemSetting, ElementTheme.Default),
+            new ThemeModeInfo(Resource.ThemeMode_Light, ElementTheme.Light),
+            new ThemeModeInfo(Resource.ThemeMode_Dark, ElementTheme.Dark)
+        ];
+    }
 
     /// <summary>
     /// 获取所有支持的背景类型
@@ -35,142 +85,118 @@ public sealed partial class SettingsControlViewModel : ObservableObject
     {
         var list = new List<BackdropTypeItemVo>(5)
         {
-            new("默认", WindowBackdropType.Default),
-            new("无背景", WindowBackdropType.None)
+            new(Resource.Common_Default, WindowBackdropType.Default),
+            new(Resource.Backdrop_None, WindowBackdropType.None)
         };
 
         if (MicaController.IsSupported())
         {
-            list.Add(new BackdropTypeItemVo("云母", WindowBackdropType.Mica));
-            list.Add(new BackdropTypeItemVo("云母 Alt", WindowBackdropType.MicaAlt));
+            list.Add(new BackdropTypeItemVo(Resource.Backdrop_Mica, WindowBackdropType.Mica));
+            list.Add(new BackdropTypeItemVo(Resource.Backdrop_MicaAlt, WindowBackdropType.MicaAlt));
         }
 
         if (DesktopAcrylicController.IsSupported())
         {
-            list.Add(new BackdropTypeItemVo("亚克力", WindowBackdropType.Acrylic));
+            list.Add(new BackdropTypeItemVo(Resource.Backdrop_Acrylic, WindowBackdropType.Acrylic));
         }
 
         return list.ToArray();
     }
 
-    public ComboBoxItem[] Languages { get; } =
-        [
-            new() { Content = "跟随系统设置", Tag = GameLanguage.Default },
-            new() { Content = "简体中文", Tag = GameLanguage.Chinese },
-            new() { Content = "英文", Tag = GameLanguage.English },
-            new() { Content = "日语", Tag = GameLanguage.Japanese },
-            new() { Content = "俄语", Tag = GameLanguage.Russian },
-            new() { Content = "法语", Tag = GameLanguage.French },
-            new() { Content = "波兰语", Tag = GameLanguage.Polish },
-            new() { Content = "德语", Tag = GameLanguage.German },
-            new() { Content = "西班牙语", Tag = GameLanguage.Spanish },
-            new() { Content = "巴西葡萄牙语", Tag = GameLanguage.Portuguese }
-        ];
-
-    public LanguageInfo[] ApplicationLanguages { get; } =
-        [new("跟随系统设置", string.Empty), new("简体中文", "zh-CN"), new("English", "en-US")];
-
-    [ObservableProperty]
-    private LanguageInfo _selectedAppLanguage;
-
-    [ObservableProperty]
-    private ComboBoxItem _selectedThemeMode;
-
-    [ObservableProperty]
-    private BackdropTypeItemVo _selectedBackdropType;
-
-    [ObservableProperty]
-    private ComboBoxItem _selectedLanguage;
-
-    private readonly GlobalSettingService _globalSettingService;
-
-    public SettingsControlViewModel(GlobalSettingService globalSettingService)
-    {
-        _globalSettingService = globalSettingService;
-        _selectedLanguage = GetSelectedLanguage();
-        _selectedThemeMode = GetSelectedThemeMode();
-        _selectedBackdropType = GetSelectedBackdropType();
-        _selectedAppLanguage = GetSelectedAppLanguage();
-    }
-
-    private BackdropTypeItemVo GetSelectedBackdropType()
+    private int GetSelectedBackdropTypeIndex()
     {
         var backdrop = _globalSettingService.WindowBackdropType;
-        return BackdropTypes.First(backdropTypeItem => backdropTypeItem.Backdrop == backdrop);
+        return Array.FindIndex(BackdropTypes, item => item.Backdrop == backdrop);
     }
 
-    private ComboBoxItem GetSelectedLanguage()
+    private int GetSelectedGameLanguageIndex()
     {
         var language = _globalSettingService.GameLanguage;
-        foreach (var item in Languages)
-        {
-            if ((GameLanguage)item.Tag == language)
-            {
-                return item;
-            }
-        }
-        return Languages[0];
+        var index = Array.FindIndex(GameLanguages, item => item.Type == language);
+        return index == -1 ? 0 : index;
     }
 
-    private ComboBoxItem GetSelectedThemeMode()
+    private int GetSelectedThemeModeIndex()
     {
         var themeMode = _globalSettingService.AppThemeMode;
-        foreach (var item in ThemeMode)
-        {
-            if ((ElementTheme)item.Tag == themeMode)
-            {
-                return item;
-            }
-        }
-        return ThemeMode[0];
+        var index = Array.FindIndex(ThemeMode, item => item.Mode == themeMode);
+        return index == -1 ? 0 : index;
     }
 
-    private LanguageInfo GetSelectedAppLanguage()
+    private AppLanguageInfo GetSelectedAppLanguage()
     {
         var code = _globalSettingService.AppLanguage;
         return Array.Find(ApplicationLanguages, language => language.Code == code) ?? ApplicationLanguages[0];
     }
 
-    partial void OnSelectedThemeModeChanged(ComboBoxItem value)
+    partial void OnSelectedThemeModeIndexChanged(int value)
     {
-        var theme = (ElementTheme)value.Tag;
-        SetThemeMode(theme);
+        // 当重新加载 ThemeMode 时, 会传入-1
+        if (value == -1)
+        {
+            return;
+        }
+        SetThemeMode(ThemeMode[value].Mode);
     }
 
     private void SetThemeMode(ElementTheme theme)
     {
-        var window = App.Current.MainWindow;
-        if (window.Content is FrameworkElement root)
-        {
-            root.RequestedTheme = theme;
-        }
+        WindowHelper.SetAppTheme(theme);
         _globalSettingService.AppThemeMode = theme;
     }
 
-    partial void OnSelectedLanguageChanged(ComboBoxItem value)
+    partial void OnSelectedGameLanguageIndexChanged(int value)
     {
-        var language = (GameLanguage)value.Tag;
+        // 当重新加载 GameLanguages 时, 会传入-1
+        if (value == -1)
+        {
+            return;
+        }
+
+        var language = GameLanguages[value].Type;
         _globalSettingService.GameLanguage = language;
 
         // TODO: 重新实现热重载游戏本地化语言
         // WeakReferenceMessenger.Default.Send(new ReloadLocalizationFiles());
     }
 
-    partial void OnSelectedBackdropTypeChanged(BackdropTypeItemVo value)
+    partial void OnSelectedBackdropTypeIndexChanged(int value)
     {
-        _globalSettingService.WindowBackdropType = value.Backdrop;
+        // 当重新加载 BackdropTypes 时, 会传入-1
+        if (value == -1)
+        {
+            return;
+        }
+
+        var backdrop = BackdropTypes[value].Backdrop;
+        if (backdrop == _globalSettingService.WindowBackdropType)
+        {
+            return;
+        }
+
+        _globalSettingService.WindowBackdropType = backdrop;
         WindowHelper.SetSystemBackdropTypeByConfig();
     }
 
-    partial void OnSelectedAppLanguageChanged(LanguageInfo value)
+    partial void OnSelectedAppLanguageChanged(AppLanguageInfo value)
     {
         CultureInfo.CurrentUICulture =
-            value.Code == LanguageInfo.Default
+            value.Code == AppLanguageInfo.Default
                 ? CultureInfo.InstalledUICulture
                 : CultureInfo.GetCultureInfo(value.Code);
 
         _globalSettingService.AppLanguage = value.Code;
+        OnAppLanguageChanged();
+
         WeakReferenceMessenger.Default.Send(new AppLanguageChangedMessage());
+    }
+
+    private void OnAppLanguageChanged()
+    {
+        ThemeMode = GetThemeMode();
+        SelectedThemeModeIndex = GetSelectedThemeModeIndex();
+        BackdropTypes = GetBackdropType();
+        SelectedBackdropTypeIndex = GetSelectedBackdropTypeIndex();
     }
 
     [RelayCommand]
