@@ -206,25 +206,25 @@
 		<value>Acrylic</value>
 	</data>
   <data name="Common.Delete" xml:space="preserve">
-		<value>删除</value>
+		<value>Delete</value>
 	</data>
   <data name="Common.Rename" xml:space="preserve">
-		<value>重命名</value>
+		<value>Rename</value>
 	</data>
   <data name="Common.SelectAll" xml:space="preserve">
-		<value>全选</value>
+		<value>Select All</value>
 	</data>
   <data name="Common.Clear" xml:space="preserve">
-		<value>清空</value>
+		<value>Clear</value>
 	</data>
   <data name="Common.Search" xml:space="preserve">
-		<value>搜索</value>
+		<value>Search</value>
 	</data>
   <data name="Common.Ok" xml:space="preserve">
-		<value>确定</value>
+		<value>Ok</value>
 	</data>
   <data name="Common.Close" xml:space="preserve">
-		<value>关闭</value>
+		<value>Close</value>
 	</data>
   <data name="CharacterEditor.MissingCharacterFileNameTip" xml:space="preserve">
 		<value>请填写写入文件名</value>
@@ -233,10 +233,10 @@
 		<value>请填写必须的字段</value>
 	</data>
   <data name="Common.Error" xml:space="preserve">
-		<value>错误</value>
+		<value>Error</value>
 	</data>
   <data name="Common.Warning" xml:space="preserve">
-		<value>警告</value>
+		<value>Warning</value>
 	</data>
   <data name="CharacterEditor.ParserErrorInfo" xml:space="preserve">
 		<value>解析 '{0}' 文件失败, 错误原因: {1}, 行数: {2}, 列数: {3}</value>
