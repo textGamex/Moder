@@ -186,6 +186,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 删除.
+        /// </summary>
+        public static string Common_Delete {
+            get {
+                return ResourceManager.GetString("Common.Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 本地化名称.
         /// </summary>
         public static string Common_LocalizedName {
@@ -200,6 +209,15 @@ namespace Moder.Language.Strings {
         public static string Common_Name {
             get {
                 return ResourceManager.GetString("Common.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 重命名.
+        /// </summary>
+        public static string Common_Rename {
+            get {
+                return ResourceManager.GetString("Common.Rename", resourceCulture);
             }
         }
         

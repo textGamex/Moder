@@ -13,6 +13,7 @@ namespace Moder.Core.Views.Menus;
 
 public sealed partial class SideWorkSpaceControlView : UserControl
 {
+    // TODO: 本地化文本无法及时刷新, 需重启软件
     public SideWorkSpaceControlViewModel ViewModel => (SideWorkSpaceControlViewModel)DataContext;
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
     private readonly GlobalResourceService _resourceService;

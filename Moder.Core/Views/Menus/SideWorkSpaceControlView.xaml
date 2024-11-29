@@ -10,6 +10,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="using:CommunityToolkit.WinUI"
     xmlns:vms="using:Moder.Core.ViewsModels.Menus"
+    xmlns:lang="using:Moder.Language.Strings"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <TreeView
@@ -31,7 +32,7 @@
                             <MenuFlyoutItem
                                 Command="{x:Bind DeleteFileCommand}"
                                 Icon="Delete"
-                                Text="删除">
+                                Text="{x:Bind lang:Resource.Common_Delete}">
                                 <MenuFlyoutItem.KeyboardAccelerators>
                                     <KeyboardAccelerator Key="Delete" />
                                 </MenuFlyoutItem.KeyboardAccelerators>
@@ -40,9 +41,9 @@
                             <MenuFlyoutItem
                                 Command="{x:Bind ShowInExplorerCommand}"
                                 Icon="{ui:FontIcon Glyph=&#xE838;}"
-                                Text="在文件资源管理器中显示" />
+                                Text="{x:Bind lang:Resource.SettingsPage_OpenInExplorer}" />
 
-                            <MenuFlyoutItem Command="{x:Bind RenameCommand}" Text="重命名">
+                            <MenuFlyoutItem Command="{x:Bind RenameCommand}" Text="{x:Bind lang:Resource.Common_Rename}">
                                 <MenuFlyoutItem.KeyboardAccelerators>
                                     <KeyboardAccelerator Key="F2" />
                                 </MenuFlyoutItem.KeyboardAccelerators>

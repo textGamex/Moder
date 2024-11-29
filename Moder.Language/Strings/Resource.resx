@@ -206,4 +206,10 @@
 	<data name="Backdrop.Acrylic" xml:space="preserve">
 		<value>亚克力</value>
 	</data>
+	<data name="Common.Delete" xml:space="preserve">
+		<value>删除</value>
+	</data>
+	<data name="Common.Rename" xml:space="preserve">
+		<value>重命名</value>
+	</data>
 </root>

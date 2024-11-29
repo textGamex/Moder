@@ -158,4 +158,10 @@
 	<data name="Backdrop.Acrylic" xml:space="preserve">
 		<value>Acrylic</value>
 	</data>
+	<data name="Common.Delete" xml:space="preserve">
+		<value>Delete</value>
+	</data>
+	<data name="Common.Rename" xml:space="preserve">
+		<value>Rename</value>
+	</data>
 </root>
