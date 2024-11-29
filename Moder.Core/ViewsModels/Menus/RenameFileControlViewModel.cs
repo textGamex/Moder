@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Xaml.Controls;
+using Moder.Language.Strings;
 
 namespace Moder.Core.ViewsModels.Menus;
 
@@ -14,7 +15,7 @@ public sealed partial class RenameFileControlViewModel : ObservableObject
     private string _newName = string.Empty;
 
     [ObservableProperty]
-    private string _errorMessage = "无效的文件或文件夹名称";
+    private string _errorMessage = Resource.RenameFile_InvalidFileOrFolderName;
 
     private readonly ContentDialog _dialog;
     private readonly SystemFileItem _fileItem;
@@ -37,7 +38,8 @@ public sealed partial class RenameFileControlViewModel : ObservableObject
     private bool IsValidValue()
     {
         var isValid = !string.IsNullOrWhiteSpace(NewName);
-        ErrorMessage = "无效的文件或文件夹名称";
+        ErrorMessage = Resource.RenameFile_InvalidFileOrFolderName;
+
         if (isValid && NewName.Length != 0)
         {
             isValid = NewName[0] != ' ' && NewName[^1] != ' ';
@@ -52,12 +54,12 @@ public sealed partial class RenameFileControlViewModel : ObservableObject
             {
                 isValid = NewName.IndexOfAny(_invalidChars) == -1;
             }
-            ErrorMessage = "文件或文件夹名称包含非法字符";
+            ErrorMessage = Resource.RenameFile_NameContainInvalidChar;
         }
         if (isValid && HasEqualsNameItem())
         {
             isValid = false;
-            ErrorMessage = $"此位置已存在同名文件或文件夹 {NewName}, 请重新命名";
+            ErrorMessage = string.Format(Resource.RenameFile_NameAlreadyExists, NewName);
         }
         return isValid;
     }

@@ -242,4 +242,13 @@
 	<data name="CharacterEditor.ParserErrorInfo" xml:space="preserve">
 		<value>解析 '{0}' 文件失败, 错误原因: {1}, 行数: {2}, 列数: {3}</value>
 	</data>
+	<data name="RenameFile.InvalidFileOrFolderName" xml:space="preserve">
+		<value>无效的文件或文件夹名称</value>
+	</data>
+	<data name="RenameFile.NameContainInvalidChar" xml:space="preserve">
+		<value>文件或文件夹名称包含非法字符</value>
+	</data>
+	<data name="RenameFile.NameAlreadyExists" xml:space="preserve">
+		<value>此位置已存在同名文件或文件夹 {0}, 请重新命名</value>
+	</data>
 </root>

@@ -366,6 +366,33 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 无效的文件或文件夹名称.
+        /// </summary>
+        public static string RenameFile_InvalidFileOrFolderName {
+            get {
+                return ResourceManager.GetString("RenameFile.InvalidFileOrFolderName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 此位置已存在同名文件或文件夹 {0}, 请重新命名.
+        /// </summary>
+        public static string RenameFile_NameAlreadyExists {
+            get {
+                return ResourceManager.GetString("RenameFile.NameAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 文件或文件夹名称包含非法字符.
+        /// </summary>
+        public static string RenameFile_NameContainInvalidChar {
+            get {
+                return ResourceManager.GetString("RenameFile.NameContainInvalidChar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to App 语言.
         /// </summary>
         public static string SettingsPage_AppLanguage {
