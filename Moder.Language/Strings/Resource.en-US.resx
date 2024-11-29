@@ -146,7 +146,7 @@
 		<value>Localized name</value>
 	</data>
   <data name="CharacterEditor.Image" xml:space="preserve">
-		<value>图像(需在interface/*.gfx中定义)</value>
+		<value>Images (in interface/*.gfx)</value>
 	</data>
   <data name="Common.WriteToFile" xml:space="preserve">
 		<value>Write to file</value>
@@ -179,30 +179,36 @@
 		<value>Trait Manager</value>
 	</data>
   <data name="NotSupportFileTipInfo" xml:space="preserve">
-		<value>暂不支持此类型文件</value>
+		<value>This file type is not currently supported</value>
 	</data>
   <data name="ThemeMode.Light" xml:space="preserve">
-		<value>明亮</value>
+		<value>Light</value>
 	</data>
   <data name="ThemeMode.Dark" xml:space="preserve">
-		<value>黑暗</value>
+		<value>Dark</value>
 	</data>
   <data name="Common.UseSystemSetting" xml:space="preserve">
-		<value>跟随系统设置</value>
+		<value>Follow System Settings</value>
 	</data>
   <data name="Common.Default" xml:space="preserve">
-		<value>默认</value>
+		<value>Default</value>
 	</data>
   <data name="Backdrop.None" xml:space="preserve">
-		<value>无背景</value>
+		<value>None</value>
 	</data>
   <data name="Backdrop.Mica" xml:space="preserve">
-		<value>云母</value>
+		<value>Mica</value>
 	</data>
   <data name="Backdrop.MicaAlt" xml:space="preserve">
-		<value>云母 Alt</value>
+		<value>MicaAlt</value>
 	</data>
   <data name="Backdrop.Acrylic" xml:space="preserve">
-		<value>亚克力</value>
+		<value>Acrylic</value>
+	</data>
+  <data name="Common.Delete" xml:space="preserve">
+		<value>删除</value>
+	</data>
+  <data name="Common.Rename" xml:space="preserve">
+		<value>重命名</value>
 	</data>
 </root>
