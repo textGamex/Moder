@@ -146,7 +146,7 @@
 		<value>Localized name</value>
 	</data>
   <data name="CharacterEditor.Image" xml:space="preserve">
-		<value>Images (in interface/*.gfx)</value>
+		<value>Image (defined in interface/*.gfx)</value>
 	</data>
   <data name="Common.WriteToFile" xml:space="preserve">
 		<value>Write to file</value>
