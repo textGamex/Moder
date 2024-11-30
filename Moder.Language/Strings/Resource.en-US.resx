@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-	<!-- 
+  <!-- 
 		Microsoft ResX Schema
 
 		Version 1.3
@@ -58,134 +58,212 @@
 			: using a System.ComponentModel.TypeConverter
 			: and then encoded with base64 encoding.
 	-->
-	
-	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-		<xsd:element name="root" msdata:IsDataSet="true">
-			<xsd:complexType>
-				<xsd:choice maxOccurs="unbounded">
-					<xsd:element name="data">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
-							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="resheader">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required" />
-						</xsd:complexType>
-					</xsd:element>
-				</xsd:choice>
-			</xsd:complexType>
-		</xsd:element>
-	</xsd:schema>
-	<resheader name="resmimetype">
-		<value>text/microsoft-resx</value>
-	</resheader>
-	<resheader name="version">
-		<value>1.3</value>
-	</resheader>
-	<resheader name="reader">
-		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<resheader name="writer">
-		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<data name="Menu.Settings" xml:space="preserve">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Menu.Settings" xml:space="preserve">
 		<value>Settings</value>
 	</data>
-	<data name="Menu.CharacterEditor" xml:space="preserve">
+  <data name="Menu.CharacterEditor" xml:space="preserve">
 		<value>Character Editor</value>
 	</data>
-	<data name="Common.Name" xml:space="preserve">
+
+  <data name="SettingsPage.GameRootPath" xml:space="preserve">
+		<value>Game root directory</value>
+	</data>
+  <data name="SettingsPage.ModRootPath" xml:space="preserve">
+		<value>Mod root directory</value>
+	</data>
+  <data name="SettingsPage.CommonSettings" xml:space="preserve">
+		<value>General settings</value>
+	</data>
+  <data name="SettingsPage.OtherSettings" xml:space="preserve">
+		<value>Others</value>
+	</data>
+  <data name="SettingsPage.CodeRepository" xml:space="preserve">
+		<value>Code repository</value>
+	</data>
+  <data name="SettingsPage.OpenInExplorer" xml:space="preserve">
+		<value>Show in File Explorer</value>
+	</data>
+  <data name="SettingsPage.ReSelect" xml:space="preserve">
+		<value>Re-select</value>
+	</data>
+  <data name="SettingsPage.AppTheme" xml:space="preserve">
+		<value>App Theme</value>
+	</data>
+  <data name="SettingsPage.GameLocalizationLanguage" xml:space="preserve">
+		<value>Game localization language</value>
+	</data>
+  <data name="SettingsPage.AppLanguage" xml:space="preserve">
+		<value>App Language</value>
+	</data>
+  <data name="SettingsPage.MustRestart" xml:space="preserve">
+		<value>Take effect after restart</value>
+	</data>
+  <data name="SettingsPage.WindowBackdrop" xml:space="preserve">
+		<value>Window background</value>
+	</data>
+  <data name="Common.Name" xml:space="preserve">
 		<value>Name</value>
 	</data>
-	<data name="Common.LocalizedName" xml:space="preserve">
+  <data name="Common.LocalizedName" xml:space="preserve">
 		<value>Localized name</value>
 	</data>
-	<data name="Common.WriteToFile" xml:space="preserve">
+  <data name="CharacterEditor.Image" xml:space="preserve">
+		<value>Image (defined in interface/*.gfx)</value>
+	</data>
+  <data name="Common.WriteToFile" xml:space="preserve">
 		<value>Write to file</value>
 	</data>
-	<data name="Common.Save" xml:space="preserve">
+  <data name="Common.Save" xml:space="preserve">
 		<value>Save</value>
 	</data>
-	<data name="Character.Level" xml:space="preserve">
+  <data name="Character.Level" xml:space="preserve">
 		<value>Level</value>
 	</data>
-	<data name="Character.Attack" xml:space="preserve">
+  <data name="Character.Attack" xml:space="preserve">
 		<value>Attack</value>
 	</data>
-	<data name="Character.Defense" xml:space="preserve">
+  <data name="Character.Defense" xml:space="preserve">
 		<value>Defense</value>
 	</data>
-	<data name="Character.Planning" xml:space="preserve">
+  <data name="Character.Planning" xml:space="preserve">
 		<value>Planning</value>
 	</data>
-	<data name="Character.Logistics" xml:space="preserve">
+  <data name="Character.Logistics" xml:space="preserve">
 		<value>Logistics</value>
 	</data>
-	<data name="Character.Maneuvering" xml:space="preserve">
+  <data name="Character.Maneuvering" xml:space="preserve">
 		<value>Maneuvering</value>
 	</data>
-	<data name="Character.Coordination" xml:space="preserve">
+  <data name="Character.Coordination" xml:space="preserve">
 		<value>Coordination</value>
 	</data>
-	<data name="ThemeMode.Light" xml:space="preserve">
+  <data name="CharacterEditor.TraitManager" xml:space="preserve">
+		<value>Trait Manager</value>
+	</data>
+  <data name="NotSupportFileTipInfo" xml:space="preserve">
+		<value>This file type is not currently supported</value>
+	</data>
+  <data name="ThemeMode.Light" xml:space="preserve">
 		<value>Light</value>
 	</data>
-	<data name="ThemeMode.Dark" xml:space="preserve">
+  <data name="ThemeMode.Dark" xml:space="preserve">
 		<value>Dark</value>
 	</data>
-	<data name="Common.Default" xml:space="preserve">
+  <data name="Common.UseSystemSetting" xml:space="preserve">
+		<value>Follow System Settings</value>
+	</data>
+  <data name="Common.Default" xml:space="preserve">
 		<value>Default</value>
 	</data>
-	<data name="Backdrop.None" xml:space="preserve">
+  <data name="Backdrop.None" xml:space="preserve">
 		<value>None</value>
 	</data>
-	<data name="Backdrop.Mica" xml:space="preserve">
+  <data name="Backdrop.Mica" xml:space="preserve">
 		<value>Mica</value>
 	</data>
-	<data name="Backdrop.MicaAlt" xml:space="preserve">
+  <data name="Backdrop.MicaAlt" xml:space="preserve">
 		<value>MicaAlt</value>
 	</data>
-	<data name="Backdrop.Acrylic" xml:space="preserve">
+  <data name="Backdrop.Acrylic" xml:space="preserve">
 		<value>Acrylic</value>
 	</data>
-	<data name="Common.Delete" xml:space="preserve">
+  <data name="Common.Delete" xml:space="preserve">
 		<value>Delete</value>
 	</data>
-	<data name="Common.Rename" xml:space="preserve">
+  <data name="Common.Rename" xml:space="preserve">
 		<value>Rename</value>
 	</data>
-	<data name="Common.SelectAll" xml:space="preserve">
+  <data name="Common.SelectAll" xml:space="preserve">
 		<value>Select All</value>
 	</data>
-	<data name="Common.Clear" xml:space="preserve">
+  <data name="Common.Clear" xml:space="preserve">
 		<value>Clear</value>
 	</data>
-	<data name="Common.Search" xml:space="preserve">
+  <data name="Common.Search" xml:space="preserve">
 		<value>Search</value>
 	</data>
-	<data name="Common.Ok" xml:space="preserve">
+  <data name="Common.Ok" xml:space="preserve">
 		<value>Ok</value>
 	</data>
-	<data name="Common.Close" xml:space="preserve">
+  <data name="Common.Close" xml:space="preserve">
 		<value>Close</value>
 	</data>
-	<data name="Common.Error" xml:space="preserve">
+  <data name="CharacterEditor.MissingCharacterFileNameTip" xml:space="preserve">
+		<value>Please write the filename</value>
+	</data>
+  <data name="CharacterEditor.MissingRequiredInfoTip" xml:space="preserve">
+		<value>Please fill in required fields</value>
+	</data>
+  <data name="Common.Error" xml:space="preserve">
 		<value>Error</value>
 	</data>
-	<data name="Common.Warning" xml:space="preserve">
+  <data name="Common.Warning" xml:space="preserve">
 		<value>Warning</value>
 	</data>
-	<data name="Common.Unknown" xml:space="preserve">
+  <data name="CharacterEditor.ParserErrorInfo" xml:space="preserve">
+		<value>Failed to parse the file '{0}'. Error message: {1}, Line: {2}, Column: {3}</value>
+	</data>
+  <data name="RenameFile.InvalidFileOrFolderName" xml:space="preserve">
+		<value>Invalid file or folder name</value>
+	</data>
+  <data name="RenameFile.NameContainInvalidChar" xml:space="preserve">
+		<value>The file or folder name contains invalid characters</value>
+	</data>
+  <data name="RenameFile.NameAlreadyExists" xml:space="preserve">
+		<value>A file or folder with the same name already exists at this location: {0}. Please rename it</value>
+	</data>
+  <data name="ModifierDisplay.Empty" xml:space="preserve">
+		<value>No modifier effect</value>
+	</data>
+  <data name="Menu.LoadingTip" xml:space="preserve">
+		<value>Loading localization file...</value>
+	</data>
+  <data name="Menu.LoadingCompletedTip" xml:space="preserve">
+		<value>Initialization complete, time taken: {0:F3} s</value>
+	</data>
+  <data name="StateFile.BuildingsSlot" xml:space="preserve">
+		<value>Building slots</value>
+	</data>
+  <data name="Common.Unknown" xml:space="preserve">
 		<value>Unknown</value>
 	</data>
 </root>
