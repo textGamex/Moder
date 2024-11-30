@@ -185,4 +185,7 @@
 	<data name="Common.Warning" xml:space="preserve">
 		<value>Warning</value>
 	</data>
+	<data name="Common.Unknown" xml:space="preserve">
+		<value>Unknown</value>
+	</data>
 </root>

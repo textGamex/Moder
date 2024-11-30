@@ -260,4 +260,10 @@
 	<data name="Menu.LoadingCompletedTip" xml:space="preserve">
 		<value>初始化完成, 耗时: {0:F3} s</value>
 	</data>
+	<data name="StateFile.BuildingsSlot" xml:space="preserve">
+		<value>建筑槽位</value>
+	</data>
+	<data name="Common.Unknown" xml:space="preserve">
+		<value>未知的</value>
+	</data>
 </root>

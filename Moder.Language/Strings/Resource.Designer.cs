@@ -312,6 +312,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 未知的.
+        /// </summary>
+        public static string Common_Unknown {
+            get {
+                return ResourceManager.GetString("Common.Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 跟随系统设置.
         /// </summary>
         public static string Common_UseSystemSetting {
@@ -524,6 +533,15 @@ namespace Moder.Language.Strings {
         public static string SettingsPage_WindowBackdrop {
             get {
                 return ResourceManager.GetString("SettingsPage.WindowBackdrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 建筑槽位.
+        /// </summary>
+        public static string StateFile_BuildingsSlot {
+            get {
+                return ResourceManager.GetString("StateFile.BuildingsSlot", resourceCulture);
             }
         }
         
