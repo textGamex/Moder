@@ -263,6 +263,6 @@
 		<value>建筑槽位</value>
 	</data>
   <data name="Common.Unknown" xml:space="preserve">
-		<value>未知的</value>
+		<value>Unknown</value>
 	</data>
 </root>
