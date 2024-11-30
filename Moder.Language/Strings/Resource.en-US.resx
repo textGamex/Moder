@@ -260,7 +260,7 @@
 		<value>Initialization complete, time taken: {0:F3} s</value>
 	</data>
   <data name="StateFile.BuildingsSlot" xml:space="preserve">
-		<value>Building slot</value>
+		<value>Building slots</value>
 	</data>
   <data name="Common.Unknown" xml:space="preserve">
 		<value>Unknown</value>
