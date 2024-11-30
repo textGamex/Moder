@@ -116,6 +116,7 @@ public sealed class CharacterTraitsService
 
             var modifiers = new List<ModifierCollection>(4);
             var skillModifiers = new List<LeafModifier>();
+            var customModifiersTooltip = new List<LeafModifier>();
             var traitType = TraitType.None;
             foreach (var traitAttribute in traitNode.AllArray)
             {
@@ -132,6 +133,13 @@ public sealed class CharacterTraitsService
                 {
                     modifiers.Add(ModifierHelper.ParseModifier(traitAttribute.node));
                 }
+                else if (
+                    traitAttribute.IsLeafChild
+                    && StringComparer.OrdinalIgnoreCase.Equals(LeafModifier.CustomEffectTooltipKey, key)
+                )
+                {
+                    customModifiersTooltip.Add(LeafModifier.FromLeaf(traitAttribute.leaf));
+                }
                 else if (IsSkillModifier(traitAttribute))
                 {
                     skillModifiers.Add(LeafModifier.FromLeaf(traitAttribute.leaf));
@@ -141,6 +149,13 @@ public sealed class CharacterTraitsService
             if (skillModifiers.Count != 0)
             {
                 modifiers.Add(new ModifierCollection(Trait.TraitSkillModifiersKey, skillModifiers));
+            }
+
+            if (customModifiersTooltip.Count != 0)
+            {
+                modifiers.Add(
+                    new ModifierCollection(LeafModifier.CustomEffectTooltipKey, customModifiersTooltip)
+                );
             }
             traits.Add(new Trait(traitName, traitType, modifiers));
         }

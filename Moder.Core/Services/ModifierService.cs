@@ -148,11 +148,25 @@ public sealed class ModifierService
 
         foreach (var modifier in modifiers)
         {
-            List<Inline> addedInlines;
+            IEnumerable<Inline> addedInlines;
             if (modifier.Type == ModifierType.Leaf)
             {
                 var leafModifier = (LeafModifier)modifier;
-                addedInlines = GetModifierInlinesForLeaf(leafModifier);
+                if (
+                    StringComparer.OrdinalIgnoreCase.Equals(
+                        leafModifier.Key,
+                        LeafModifier.CustomEffectTooltipKey
+                    )
+                )
+                {
+                    addedInlines = _localisationFormatService.GetTextWithColor(
+                        _localisationService.GetValue(leafModifier.Value)
+                    );
+                }
+                else
+                {
+                    addedInlines = GetModifierInlinesForLeaf(leafModifier);
+                }
             }
             else if (modifier.Type == ModifierType.Node)
             {
