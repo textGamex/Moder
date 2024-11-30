@@ -227,10 +227,10 @@
 		<value>Close</value>
 	</data>
   <data name="CharacterEditor.MissingCharacterFileNameTip" xml:space="preserve">
-		<value>请填写写入文件名</value>
+		<value>Please write the filename</value>
 	</data>
   <data name="CharacterEditor.MissingRequiredInfoTip" xml:space="preserve">
-		<value>请填写必须的字段</value>
+		<value>Please fill in required fields</value>
 	</data>
   <data name="Common.Error" xml:space="preserve">
 		<value>Error</value>
@@ -239,28 +239,28 @@
 		<value>Warning</value>
 	</data>
   <data name="CharacterEditor.ParserErrorInfo" xml:space="preserve">
-		<value>解析 '{0}' 文件失败, 错误原因: {1}, 行数: {2}, 列数: {3}</value>
+		<value>Failed to parse the file '{0}'. Error message: {1}, Line: {2}, Column: {3}</value>
 	</data>
   <data name="RenameFile.InvalidFileOrFolderName" xml:space="preserve">
-		<value>无效的文件或文件夹名称</value>
+		<value>Invalid file or folder name</value>
 	</data>
   <data name="RenameFile.NameContainInvalidChar" xml:space="preserve">
-		<value>文件或文件夹名称包含非法字符</value>
+		<value>The file or folder name contains invalid characters</value>
 	</data>
   <data name="RenameFile.NameAlreadyExists" xml:space="preserve">
-		<value>此位置已存在同名文件或文件夹 {0}, 请重新命名</value>
+		<value>A file or folder with the same name already exists at this location: {0}. Please rename it</value>
 	</data>
   <data name="ModifierDisplay.Empty" xml:space="preserve">
-		<value>无修正效果</value>
+		<value>No modifier effect</value>
 	</data>
   <data name="Menu.LoadingTip" xml:space="preserve">
-		<value>加载本地化文件中...</value>
+		<value>Loading localization file...</value>
 	</data>
   <data name="Menu.LoadingCompletedTip" xml:space="preserve">
-		<value>初始化完成, 耗时: {0:F3} s</value>
+		<value>Initialization complete, time taken: {0:F3} s</value>
 	</data>
   <data name="StateFile.BuildingsSlot" xml:space="preserve">
-		<value>建筑槽位</value>
+		<value>Building slot</value>
 	</data>
   <data name="Common.Unknown" xml:space="preserve">
 		<value>Unknown</value>
