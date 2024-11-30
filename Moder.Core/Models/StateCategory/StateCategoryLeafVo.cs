@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Services.GameResources;
+using Moder.Language.Strings;
 
 // ReSharper disable once CheckNamespace
 namespace Moder.Core.Models.Vo;
@@ -10,9 +11,7 @@ public sealed partial class StateCategoryLeafVo : LeafVo
         : base(key, value, type, parent)
     {
         StateCategory.OnResourceChanged += (_, _) =>
-            App.Current.DispatcherQueue.TryEnqueue(
-                () => OnPropertyChanged(nameof(StateCategories))
-            );
+            App.Current.DispatcherQueue.TryEnqueue(() => OnPropertyChanged(nameof(StateCategories)));
     }
 
     public override string Value
@@ -29,12 +28,13 @@ public sealed partial class StateCategoryLeafVo : LeafVo
 
     public IReadOnlyCollection<StateCategory> StateCategories => StateCategory.StateCategories;
 
-    private static readonly StateCategoryService StateCategory = App.Current.Services.GetRequiredService<StateCategoryService>();
+    private static readonly StateCategoryService StateCategory =
+        App.Current.Services.GetRequiredService<StateCategoryService>();
 
     private string GetStateCategoryUiDescription()
     {
         return StateCategory.TryGetValue(Value, out var stateCategory)
-            ? $"{stateCategory.TypeNameDescription} 建筑槽位 [{stateCategory.LocalBuildingSlots}]"
-            : $"未知的 {Key}";
+            ? $"{stateCategory.TypeNameDescription} {Resource.StateFile_BuildingsSlot} [{stateCategory.LocalBuildingSlots}]"
+            : $"{Resource.Common_Unknown} {Key}";
     }
 }

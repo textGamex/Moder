@@ -8,6 +8,7 @@
     xmlns:local="using:Moder.Core.Views.Game"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:triggers="using:CommunityToolkit.WinUI"
+    xmlns:lang="using:Moder.Language.Strings"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <UserControl.Resources>
@@ -35,22 +36,23 @@
         <StackPanel Grid.Column="0" Spacing="4">
             <TextBox
                 IsSpellCheckEnabled="False"
-                Header="名称"
+                Header="{x:Bind lang:Resource.Common_Name}"
                 HorizontalAlignment="Left"
                 Text="{x:Bind ViewModel.Name, Mode=TwoWay}" />
             <TextBox
-                Header="本地化名称"
+                Header="{x:Bind lang:Resource.Common_LocalizedName}"
                 IsSpellCheckEnabled="False"
                 HorizontalAlignment="Left"
                 Text="{x:Bind ViewModel.LocalizedName, Mode=TwoWay}" />
-            <TextBox IsSpellCheckEnabled="False" Header="图像(需在interface/*.gfx中定义)" HorizontalAlignment="Left" 
+            <TextBox IsSpellCheckEnabled="False" Header="{x:Bind lang:Resource.CharacterEditor_Image}"
+                     HorizontalAlignment="Left" 
                      Text="{x:Bind ViewModel.ImageKey, Mode=TwoWay}" />
             <ComboBox
                 ItemsSource="{x:Bind ViewModel.CharactersType}"
                 SelectedIndex="{x:Bind ViewModel.SelectedCharacterTypeIndex, Mode=TwoWay}"
                 x:Name="CharactersTypeComboBox" />
 
-            <TextBlock Margin="0,12,0,0" Text="写入文件" />
+            <TextBlock Margin="0,12,0,0" Text="{x:Bind lang:Resource.Common_WriteToFile}" />
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -73,7 +75,7 @@
 
             <Button
                 Command="{x:Bind ViewModel.SaveCommand}"
-                Content="保存到文件"
+                Content="{x:Bind lang:Resource.Common_Save}"
                 HorizontalAlignment="Center" />
         </StackPanel>
 
@@ -84,7 +86,7 @@
             Spacing="4">
             <StackPanel Orientation="Horizontal">
                 <NumberBox
-                    Header="等级"
+                    Header="{x:Bind lang:Resource.Character_Level}"
                     Maximum="{x:Bind ViewModel.LevelMaxValue, Mode=OneWay}"
                     Style="{StaticResource AttributeNumberBoxStyle}"
                     Value="{x:Bind ViewModel.Level, Mode=TwoWay}" />
@@ -94,7 +96,7 @@
 
             <StackPanel Orientation="Horizontal">
                 <NumberBox
-                    Header="攻击"
+                    Header="{x:Bind lang:Resource.Character_Attack}"
                     Maximum="{x:Bind ViewModel.AttackMaxValue, Mode=OneWay}"
                     Style="{StaticResource AttributeNumberBoxStyle}"
                     Value="{x:Bind ViewModel.Attack, Mode=TwoWay}" />
@@ -104,7 +106,7 @@
 
             <StackPanel Orientation="Horizontal">
                 <NumberBox
-                    Header="防御"
+                    Header="{x:Bind lang:Resource.Character_Defense}"
                     Maximum="{x:Bind ViewModel.DefenseMaxValue, Mode=OneWay}"
                     Style="{StaticResource AttributeNumberBoxStyle}"
                     Value="{x:Bind ViewModel.Defense, Mode=TwoWay}" />
@@ -114,7 +116,7 @@
             <!--  陆军指挥官属性  -->
             <StackPanel Orientation="Horizontal" x:Name="PlanningStackPanel">
                 <NumberBox
-                    Header="计划"
+                    Header="{x:Bind lang:Resource.Character_Planning}"
                     Maximum="{x:Bind ViewModel.PlanningMaxValue, Mode=OneWay}"
                     Style="{StaticResource AttributeNumberBoxStyle}"
                     Value="{x:Bind ViewModel.Planning, Mode=TwoWay}" />
@@ -124,7 +126,7 @@
 
             <StackPanel Orientation="Horizontal" x:Name="LogisticsStackPanel">
                 <NumberBox
-                    Header="后勤"
+                    Header="{x:Bind lang:Resource.Character_Logistics}"
                     Maximum="{x:Bind ViewModel.LogisticsMaxValue, Mode=OneWay}"
                     Style="{StaticResource AttributeNumberBoxStyle}"
                     Value="{x:Bind ViewModel.Logistics, Mode=TwoWay}" />
@@ -138,7 +140,7 @@
                 Visibility="Collapsed"
                 x:Name="ManeuveringStackPanel">
                 <NumberBox
-                    Header="机动"
+                    Header="{x:Bind lang:Resource.Character_Maneuvering}"
                     Maximum="{x:Bind ViewModel.ManeuveringMaxValue, Mode=OneWay}"
                     Style="{StaticResource AttributeNumberBoxStyle}"
                     Value="{x:Bind ViewModel.Maneuvering, Mode=TwoWay}" />
@@ -151,7 +153,7 @@
                 Visibility="Collapsed"
                 x:Name="CoordinationStackPanel">
                 <NumberBox
-                    Header="协调"
+                    Header="{x:Bind lang:Resource.Character_Coordination}"
                     Maximum="{x:Bind ViewModel.CoordinationMaxValue, Mode=OneWay}"
                     Style="{StaticResource AttributeNumberBoxStyle}"
                     Value="{x:Bind ViewModel.Coordination, Mode=TwoWay}" />
@@ -159,7 +161,8 @@
                            x:Name="CoordinationModifierDescriptionTextBlock" />
             </StackPanel>
 
-            <Button Command="{x:Bind ViewModel.OpenTraitsSelectionWindowCommand}" Content="管理特质" />
+            <Button Command="{x:Bind ViewModel.OpenTraitsSelectionWindowCommand}"
+                    Content="{x:Bind lang:Resource.CharacterEditor_TraitManager}" />
         </StackPanel>
 
         <VisualStateManager.VisualStateGroups>

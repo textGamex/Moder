@@ -103,6 +103,7 @@
   <data name="Menu.CharacterEditor" xml:space="preserve">
 		<value>Character Editor</value>
 	</data>
+
   <data name="SettingsPage.GameRootPath" xml:space="preserve">
 		<value>Game root directory</value>
 	</data>

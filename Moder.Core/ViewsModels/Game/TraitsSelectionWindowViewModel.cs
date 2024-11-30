@@ -11,6 +11,7 @@ using Moder.Core.Models.Character;
 using Moder.Core.Models.Vo;
 using Moder.Core.Services;
 using Moder.Core.Services.GameResources;
+using Moder.Language.Strings;
 using NLog;
 
 namespace Moder.Core.ViewsModels.Game;
@@ -26,7 +27,7 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
     private string _searchText = string.Empty;
 
     [ObservableProperty]
-    private string _buttonText = "全选";
+    private string _buttonText = Resource.Common_SelectAll;
 
     private ushort _selectedTraitCount;
     private readonly GlobalResourceService _globalResourceService;
@@ -144,7 +145,7 @@ public sealed partial class TraitsSelectionWindowViewModel : ObservableObject
         }
 
         // 每当选中或删除一个特性时，都会调用此方法, 此时我们需要更新按钮的文本
-        ButtonText = _selectedTraitCount == 0 ? "全选" : "清空";
+        ButtonText = _selectedTraitCount == 0 ? Resource.Common_SelectAll : Resource.Common_Clear;
     }
 
     [RelayCommand]

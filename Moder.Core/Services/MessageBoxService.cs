@@ -1,4 +1,5 @@
 using Microsoft.UI.Xaml.Controls;
+using Moder.Language.Strings;
 
 namespace Moder.Core.Services;
 
@@ -9,9 +10,9 @@ public sealed class MessageBoxService
         var dialog = new ContentDialog
         {
             XamlRoot = App.Current.XamlRoot,
-            Title = "警告",
+            Title = Resource.Common_Warning,
             Content = message,
-            CloseButtonText = "确定"
+            CloseButtonText = Resource.Common_Ok
         };
         await dialog.ShowAsync();
     }
@@ -21,9 +22,9 @@ public sealed class MessageBoxService
         var dialog = new ContentDialog
         {
             XamlRoot = App.Current.XamlRoot,
-            Title = "错误",
+            Title = Resource.Common_Error,
             Content = message,
-            CloseButtonText = "确定"
+            CloseButtonText = Resource.Common_Ok
         };
         await dialog.ShowAsync();
     }

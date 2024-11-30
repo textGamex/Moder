@@ -8,6 +8,7 @@
     xmlns:local="using:Moder.Core.Views.Game"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vo="using:Moder.Core.Models.Vo"
+    xmlns:lang="using:Moder.Language.Strings"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -36,7 +37,7 @@
 
                     <TextBox
                         Grid.Row="0"
-                        PlaceholderText="搜索"
+                        PlaceholderText="{x:Bind lang:Resource.Common_Search}"
                         Text="{x:Bind ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <ListView
                         Grid.Row="1"

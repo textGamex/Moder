@@ -5,6 +5,7 @@ using Moder.Core.Models;
 using Moder.Core.Services.Config;
 using Moder.Core.Views;
 using Windows.Storage.Pickers;
+using Microsoft.UI.Xaml;
 using WinUIEx;
 using SystemBackdrop = Microsoft.UI.Xaml.Media.SystemBackdrop;
 
@@ -54,5 +55,14 @@ public static class WindowHelper
         folderPicker.FileTypeFilter.Add("*");
 
         return folderPicker;
+    }
+    
+    public static void SetAppTheme(ElementTheme theme)
+    {
+        var window = App.Current.MainWindow;
+        if (window.Content is FrameworkElement root)
+        {
+            root.RequestedTheme = theme;
+        }
     }
 }

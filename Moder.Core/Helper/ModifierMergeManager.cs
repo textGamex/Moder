@@ -13,6 +13,8 @@ public sealed class ModifierMergeManager
 {
     private readonly Dictionary<string, decimal> _leafModifiers = [];
     private readonly Dictionary<string, Dictionary<string, decimal>> _nodeModifiers = [];
+    private readonly List<LeafModifier> _customEffectTooltipLocalizationKeys = [];
+
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     public void Add(IModifier modifier)
@@ -81,6 +83,12 @@ public sealed class ModifierMergeManager
 
     private void RemoveLeafModifier(LeafModifier modifier)
     {
+        if (StringComparer.OrdinalIgnoreCase.Equals(modifier.Key, LeafModifier.CustomEffectTooltipKey))
+        {
+            _customEffectTooltipLocalizationKeys.Remove(modifier);
+            return;
+        }
+
         RemoveLeafModifierInDictionary(_leafModifiers, modifier);
     }
 
@@ -129,11 +137,17 @@ public sealed class ModifierMergeManager
                 )
         );
 
-        return leafModifiers.Concat(nodeModifiers);
+        return _customEffectTooltipLocalizationKeys.Concat(leafModifiers).Concat(nodeModifiers);
     }
 
     private void AddLeafModifier(LeafModifier modifier)
     {
+        if (StringComparer.OrdinalIgnoreCase.Equals(LeafModifier.CustomEffectTooltipKey, modifier.Key))
+        {
+            _customEffectTooltipLocalizationKeys.Add(modifier);
+            return;
+        }
+
         AddLeafModifierToDictionary(_leafModifiers, modifier);
     }
 

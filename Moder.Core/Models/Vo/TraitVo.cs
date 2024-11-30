@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Documents;
 using Moder.Core.Messages;
 using Moder.Core.Models.Character;
 using Moder.Core.Services;
+using Moder.Language.Strings;
 
 namespace Moder.Core.Models.Vo;
 
@@ -41,7 +42,7 @@ public sealed partial class TraitVo(Trait trait, string localisationName) : Obse
 
         if (textBox.Inlines.Count == 0)
         {
-            textBox.Inlines.Add(new Run { Text = "无修正效果" });
+            textBox.Inlines.Add(new Run { Text = Resource.ModifierDisplay_Empty });
         }
 
         return textBox;
