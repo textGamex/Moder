@@ -1,12 +1,14 @@
+using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.WinUI.Controls;
 using Microsoft.UI.Xaml;
+using Moder.Core.Messages;
 using Moder.Core.Services.Config;
 using Moder.Core.ViewsModels.Menus;
 using Windows.System;
 
 namespace Moder.Core.Views.Menus;
 
-public sealed partial class SettingsControlView
+public sealed partial class SettingsControlView : IDisposable
 {
     public static string RuntimeInfo => $"Runtime: .NET {Environment.Version.ToString()}";
 
@@ -22,6 +24,8 @@ public sealed partial class SettingsControlView
         InitializeComponent();
 
         DataContext = settingsViewModel;
+
+        WeakReferenceMessenger.Default.Register<AppLanguageChangedMessage>(this, (_, _) => Bindings.Update());
     }
 
     private async void OnRootPathCardClicked(object sender, RoutedEventArgs e)
@@ -44,5 +48,10 @@ public sealed partial class SettingsControlView
     public void SaveChanged()
     {
         _globalSettingService.SaveChanged();
+    }
+
+    public void Dispose()
+    {
+        WeakReferenceMessenger.Default.UnregisterAll(this);
     }
 }
