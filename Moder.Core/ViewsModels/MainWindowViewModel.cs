@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Services.Config;
 using Moder.Core.Services.GameResources;
+using Moder.Language.Strings;
 
 namespace Moder.Core.ViewsModels;
 
@@ -24,7 +25,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
 
     private void InitializeResources()
     {
-        ProgressPromptMessage = "加载本地化文件中...";
+        ProgressPromptMessage = Resource.Menu_LoadingTip;
         var start = Stopwatch.GetTimestamp();
         _ = App.Current.Services.GetRequiredService<LocalisationService>();
         _loadTime = Stopwatch.GetElapsedTime(start);
@@ -32,7 +33,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
 
     private void InitializeCompleteAfter()
     {
-        ProgressPromptMessage = $"初始化完成, 耗时: {_loadTime.TotalSeconds:F3} s";
+        ProgressPromptMessage = string.Format(Resource.Menu_LoadingCompletedTip, _loadTime.TotalSeconds);
         IsLoading = false;
     }
 

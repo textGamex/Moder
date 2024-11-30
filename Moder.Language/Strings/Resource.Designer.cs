@@ -348,11 +348,38 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 初始化完成, 耗时: {0:F3} s.
+        /// </summary>
+        public static string Menu_LoadingCompletedTip {
+            get {
+                return ResourceManager.GetString("Menu.LoadingCompletedTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 加载本地化文件中....
+        /// </summary>
+        public static string Menu_LoadingTip {
+            get {
+                return ResourceManager.GetString("Menu.LoadingTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 设置.
         /// </summary>
         public static string Menu_Settings {
             get {
                 return ResourceManager.GetString("Menu.Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 无修正效果.
+        /// </summary>
+        public static string ModifierDisplay_Empty {
+            get {
+                return ResourceManager.GetString("ModifierDisplay.Empty", resourceCulture);
             }
         }
         
