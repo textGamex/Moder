@@ -250,4 +250,13 @@
   <data name="RenameFile.NameAlreadyExists" xml:space="preserve">
 		<value>此位置已存在同名文件或文件夹 {0}, 请重新命名</value>
 	</data>
+  <data name="ModifierDisplay.Empty" xml:space="preserve">
+		<value>无修正效果</value>
+	</data>
+  <data name="Menu.LoadingTip" xml:space="preserve">
+		<value>加载本地化文件中...</value>
+	</data>
+  <data name="Menu.LoadingCompletedTip" xml:space="preserve">
+		<value>初始化完成, 耗时: {0:F3} s</value>
+	</data>
 </root>
