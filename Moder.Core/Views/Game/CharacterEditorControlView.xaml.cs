@@ -23,7 +23,7 @@ public sealed partial class CharacterEditorControlView : IDisposable
         ViewModel.ManeuveringModifierDescription = ManeuveringModifierDescriptionTextBlock.Inlines;
         ViewModel.CoordinationModifierDescription = CoordinationModifierDescriptionTextBlock.Inlines;
 
-        ViewModel.SetSkillDefaultValue();
+        ViewModel.InitializeSkillDefaultValue();
 
         WeakReferenceMessenger.Default.Register<AppLanguageChangedMessage>(this, OnLanguageChanged);
     }

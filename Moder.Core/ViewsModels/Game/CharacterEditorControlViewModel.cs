@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -12,7 +13,6 @@ using Moder.Core.Services.Config;
 using Moder.Core.Services.GameResources;
 using Moder.Core.Services.GameResources.Base;
 using Moder.Core.Views.Game;
-using Moder.Language.Strings;
 using Moder.Language.Strings;
 using NLog;
 using ParadoxPower.CSharpExtensions;
@@ -36,6 +36,9 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
 
     private string CharactersFolder =>
         Path.Combine(_globalSettingService.ModRootFolderPath, Keywords.Common, "characters");
+
+    [ObservableProperty]
+    private string _generatedText = string.Empty;
 
     [ObservableProperty]
     private string _selectedCharacterFile = string.Empty;
@@ -120,6 +123,10 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
     private readonly MessageBoxService _messageBoxService;
     private readonly CharacterSkillService _characterSkillService;
     private readonly GlobalResourceService _globalResourceService;
+    /// <summary>
+    /// 是否已初始化, 防止在初始化期间多次调用生成人物方法
+    /// </summary>
+    private bool _isInitialized;
 
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
@@ -148,7 +155,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         });
     }
 
-    public void SetSkillDefaultValue()
+    public void InitializeSkillDefaultValue()
     {
         Level = 1;
         Attack = 1;
@@ -157,6 +164,8 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         Logistics = 1;
         Maneuvering = 1;
         Coordination = 1;
+
+        _isInitialized = true;
     }
 
     partial void OnLevelChanged(ushort value)
@@ -354,19 +363,24 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         // 如果文件不存在或者在用户选择的文件下没有找到 characters 节点，则新建节点
         charactersNode ??= new Node("characters");
 
-        var newCharacterNode = charactersNode.AddNodeChild(Name);
+        charactersNode.AddChild(GetGeneratedCharacterNode());
+        await File.WriteAllTextAsync(filePath, charactersNode.PrintRaw());
+        Log.Info("保存成功");
+    }
+
+    private Node GetGeneratedCharacterNode()
+    {
+        var newCharacterNode = Node.Create(Name);
         newCharacterNode.AddChild(ChildHelper.LeafString("name", LocalizedName));
-        if (!string.IsNullOrEmpty(ImageKey))
-        {
-            AddCharacterImage(newCharacterNode);
-        }
+
+        AddCharacterImage(newCharacterNode);
+
         var characterTypeNode = newCharacterNode.AddNodeChild(SelectedCharacterTypeCode);
         characterTypeNode.AllArray = GetCharacterSkills();
 
         AddTraits(characterTypeNode);
 
-        await File.WriteAllTextAsync(filePath, charactersNode.PrintRaw());
-        Log.Info("保存成功");
+        return newCharacterNode;
     }
 
     private void AddTraits(Node characterTypeNode)
@@ -382,6 +396,11 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
 
     private void AddCharacterImage(Node newCharacterNode)
     {
+        if (string.IsNullOrEmpty(ImageKey))
+        {
+            return;
+        }
+
         var portraitsNode = newCharacterNode.AddNodeChild("portraits");
         var node = portraitsNode.AddNodeChild(IsSelectedNavy ? "navy" : "army");
         node.AddLeafString("large", ImageKey);
@@ -396,13 +415,13 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
 
         if (IsSelectedNavy)
         {
-            array[3] = ChildHelper.Leaf("planning_skill", Planning);
-            array[4] = ChildHelper.Leaf("logistics_skill", Logistics);
+            array[3] = ChildHelper.Leaf("maneuvering_skill", Maneuvering);
+            array[4] = ChildHelper.Leaf("coordination_skill", Coordination);
         }
         else
         {
-            array[3] = ChildHelper.Leaf("maneuvering_skill", Maneuvering);
-            array[4] = ChildHelper.Leaf("coordination_skill", Coordination);
+            array[3] = ChildHelper.Leaf("planning_skill", Planning);
+            array[4] = ChildHelper.Leaf("logistics_skill", Logistics);
         }
 
         return array;
@@ -429,7 +448,29 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         {
             var selectedTraits = window.ViewModel.Traits.Cast<TraitVo>().Where(trait => trait.IsSelected);
             _selectedTraits = selectedTraits;
+            OnPropertyChanged(nameof(_selectedTraits));
         }
+    }
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+
+        if (e.PropertyName != nameof(GeneratedText) && _isInitialized)
+        {
+            Log.Info("123");
+            GeneratedText = GetGeneratedText();
+        }
+    }
+
+    private string GetGeneratedText()
+    {
+        if (string.IsNullOrEmpty(LocalizedName))
+        {
+            LocalizedName = Name;
+        }
+
+        return GetGeneratedCharacterNode().PrintRaw();
     }
 
     public void Close()

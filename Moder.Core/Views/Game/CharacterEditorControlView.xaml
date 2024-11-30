@@ -31,9 +31,10 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0" Spacing="4">
+        <StackPanel Margin="4,4,0,0" Grid.Column="0" Spacing="4">
             <TextBox
                 IsSpellCheckEnabled="False"
                 Header="{x:Bind lang:Resource.Common_Name}"
@@ -45,7 +46,7 @@
                 HorizontalAlignment="Left"
                 Text="{x:Bind ViewModel.LocalizedName, Mode=TwoWay}" />
             <TextBox IsSpellCheckEnabled="False" Header="{x:Bind lang:Resource.CharacterEditor_Image}"
-                     HorizontalAlignment="Left" 
+                     HorizontalAlignment="Left"
                      Text="{x:Bind ViewModel.ImageKey, Mode=TwoWay}" />
             <ComboBox
                 ItemsSource="{x:Bind ViewModel.CharactersType}"
@@ -81,7 +82,7 @@
 
         <StackPanel
             Grid.Column="1"
-            Margin="16"
+            Margin="16,4,16,0"
             Orientation="Vertical"
             Spacing="4">
             <StackPanel Orientation="Horizontal">
@@ -164,6 +165,9 @@
             <Button Command="{x:Bind ViewModel.OpenTraitsSelectionWindowCommand}"
                     Content="{x:Bind lang:Resource.CharacterEditor_TraitManager}" />
         </StackPanel>
+
+        <TextBox Margin="0,4,0,0" Header="Code" TextWrapping="Wrap" IsReadOnly="True" MinWidth="400" Grid.Column="2"
+                 Text="{x:Bind ViewModel.GeneratedText, Mode=OneWay}" />
 
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="CommonStates">
