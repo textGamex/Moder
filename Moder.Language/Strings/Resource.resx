@@ -266,4 +266,7 @@
 	<data name="Common.Unknown" xml:space="preserve">
 		<value>未知的</value>
 	</data>
+	<data name="Common.MaxLevel" xml:space="preserve">
+		<value>最大等级</value>
+	</data>
 </root>

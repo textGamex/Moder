@@ -258,6 +258,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 最大等级.
+        /// </summary>
+        public static string Common_MaxLevel {
+            get {
+                return ResourceManager.GetString("Common.MaxLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 名称.
         /// </summary>
         public static string Common_Name {

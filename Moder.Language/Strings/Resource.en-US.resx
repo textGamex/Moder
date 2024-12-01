@@ -266,4 +266,7 @@
   <data name="Common.Unknown" xml:space="preserve">
 		<value>Unknown</value>
 	</data>
+  <data name="Common.MaxLevel" xml:space="preserve">
+	  <value>Max level</value>
+  </data>
 </root>

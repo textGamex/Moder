@@ -458,7 +458,6 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
 
         if (e.PropertyName != nameof(GeneratedText) && _isInitialized)
         {
-            Log.Info("123");
             GeneratedText = GetGeneratedText();
         }
     }
