@@ -32,7 +32,8 @@ public partial class App : Application
     public XamlRoot XamlRoot => MainWindow.Content.XamlRoot;
 
     public static string ConfigFolder { get; } = Path.Combine(Environment.CurrentDirectory, "Configs");
-    public static string ParserRulesFolder { get; } = Path.Combine(ConfigFolder, "ParserRules");
+    public static string ParserRulesFolder { get; } =
+        Path.Combine(Environment.CurrentDirectory, "Assets", "ParserRules");
 
     private readonly IServiceProvider _serviceProvider;
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();

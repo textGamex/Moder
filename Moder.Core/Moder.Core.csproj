@@ -27,14 +27,11 @@
         <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
         <!-- <PublishSingleFile>true</PublishSingleFile> -->
         <SelfContained>true</SelfContained>
-        <TrimMode>full</TrimMode>
+        <TrimMode>partial</TrimMode>
         <!-- <PublishReadyToRun>false</PublishReadyToRun> -->
         <MvvmToolkitEnableINotifyPropertyChangingSupport>false</MvvmToolkitEnableINotifyPropertyChangingSupport>
     </PropertyGroup>
-    <ItemGroup>
-      <Content Remove="Assets\ParserRules\CountryTag.txt" />
-      <Content Include="Assets\logo.ico" />
-    </ItemGroup>
+
     <ItemGroup>
         <None Remove="Views\Game\BaseLeafControl.xaml" />
         <None Remove="Views\Game\CharacterEditorControlView.xaml" />
@@ -46,35 +43,14 @@
     </ItemGroup>
 
     <!-- 移除多余文件 -->
-    <Target Name="RemoveFoldersWithMuiFiles" AfterTargets="Build">
+    <Target Name="RemoveFoldersWithMuiFiles" BeforeTargets="Build">
         <ItemGroup>
             <RemovingFiles Include="$(OutDir)*\*.mui" Exclude="$(OutDir)zh-CN\*.mui;$(OutDir)en-US\*.mui" />
             <RemovingFolders Include="@(RemovingFiles->'%(RootDir)%(Directory)')" />
         </ItemGroup>
         <RemoveDir Directories="@(RemovingFolders)" />
     </Target>
-
-    <Target Name="CopyParserRuleFiles" AfterTargets="Build">
-        <ItemGroup>
-        <!-- Because this ItemGroup is inside the target, this will enumerate
-                 all files just before calling Copy. If the ItemGroup were outside
-                 the target , it would enumerate the files during evaluation, before
-                 the build starts, which may miss files created during the build. -->
-            <RuleFiles Include="$(ProjectDir)Assets\ParserRules\**\*.*" />
-        </ItemGroup>
-        <Copy SourceFiles="@(RuleFiles)" DestinationFolder="$(TargetDir)Configs\ParserRules\%(RecursiveDir)" />
-    </Target>
-
-    <ItemGroup>
-        <Content Include="Assets\SplashScreen.scale-200.png" />
-        <Content Include="Assets\LockScreenLogo.scale-200.png" />
-        <Content Include="Assets\Square150x150Logo.scale-200.png" />
-        <Content Include="Assets\Square44x44Logo.scale-200.png" />
-        <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-        <Content Include="Assets\StoreLogo.png" />
-        <Content Include="Assets\Wide310x150Logo.scale-200.png" />
-    </ItemGroup>
-
+    
     <ItemGroup>
         <PackageReference Include="Ardalis.SmartEnum" Version="8.2.0" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
@@ -157,4 +133,10 @@
     <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
         <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
     </PropertyGroup>
+
+    <ItemGroup>
+        <Content Update="Assets\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 </Project>

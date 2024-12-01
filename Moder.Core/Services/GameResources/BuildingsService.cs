@@ -73,8 +73,8 @@ public sealed class BuildingsService
     )
     {
         byte? maxLevel = null;
-        var levelCapNode = buildingNode.Nodes.FirstOrDefault(x =>
-            StringComparer.OrdinalIgnoreCase.Equals(x.Key, "level_cap")
+        var levelCapNode = buildingNode.Nodes.FirstOrDefault(node =>
+            StringComparer.OrdinalIgnoreCase.Equals(node.Key, "level_cap")
         );
         if (levelCapNode is null)
         {
