@@ -76,8 +76,7 @@ public sealed class LocalisationService
     {
         if (_localisationKeyMapping.TryGetValue(key, out var config))
         {
-            value = config.LocalisationKey;
-            return true;
+            key = config.LocalisationKey;
         }
 
         return TryGetValue(key, out value);

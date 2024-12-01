@@ -40,8 +40,15 @@ public sealed class LocalisationKeyMappingService
                 )
             );
         }
+        
+        AddKeyMapping("breakthrough_factor", new LocalisationKeyMappingConfig("MODIFIER_BREAKTHROUGH"));
     }
 
+    /// <summary>
+    /// 添加映射
+    /// </summary>
+    /// <param name="key">原始键</param>
+    /// <param name="config">配置</param>
     private void AddKeyMapping(string key, LocalisationKeyMappingConfig config)
     {
         _localisationKeyMapping[key] = config;

@@ -2,7 +2,6 @@ using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using Moder.Core.Models;
 using Moder.Core.Services.GameResources.Base;
-using NLog;
 using ParadoxPower.CSharpExtensions;
 using ParadoxPower.Process;
 
