@@ -24,4 +24,8 @@ After extracting, click on Moder.Core.exe to run the program.
 
 ## screenshot
 
+Character Editor
 ![screenshot1](Images/screenshot1.png)
+
+State File Edit
+![screenshot2](Images/screenshot2.png)
