@@ -2,6 +2,7 @@ using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using Moder.Core.Models;
 using Moder.Core.Services.GameResources.Base;
+using NLog;
 using ParadoxPower.CSharpExtensions;
 using ParadoxPower.Process;
 
@@ -47,37 +48,59 @@ public sealed class BuildingsService
     {
         if (!rootNode.TryGetNode(BuildingsKeyword, out var buildingsNode))
         {
-            Logger.Warn("buildings node not found");
+            Log.Warn("buildings node not found");
             return null;
         }
 
-        var buildings = ParseBuildingNodeToDictionary(buildingsNode.Nodes);
+        var buildings = ParseBuildingNode(buildingsNode.Nodes);
         return buildings;
     }
 
-    private static FrozenDictionary<string, BuildingInfo> ParseBuildingNodeToDictionary(
-        IEnumerable<Node> buildingNodes
-    )
+    private FrozenDictionary<string, BuildingInfo> ParseBuildingNode(IEnumerable<Node> buildingNodes)
     {
         var buildings = new Dictionary<string, BuildingInfo>(8);
         foreach (var buildingNode in buildingNodes)
         {
-            byte? maxLevel = null;
-            foreach (var buildingPropertyLeaf in buildingNode.Leaves)
-            {
-                if (buildingPropertyLeaf.Key.Equals("max_level", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (byte.TryParse(buildingPropertyLeaf.ValueText, out var value))
-                    {
-                        maxLevel = value;
-                    }
-                    break;
-                }
-            }
-
-            buildings[buildingNode.Key] = new BuildingInfo(buildingNode.Key, maxLevel);
+            ParseBuildingNodeToDictionary(buildingNode, buildings);
         }
 
         return buildings.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
+    }
+
+    private void ParseBuildingNodeToDictionary(
+        Node buildingNode,
+        Dictionary<string, BuildingInfo> buildings
+    )
+    {
+        byte? maxLevel = null;
+        var levelCapNode = buildingNode.Nodes.FirstOrDefault(x =>
+            StringComparer.OrdinalIgnoreCase.Equals(x.Key, "level_cap")
+        );
+        if (levelCapNode is null)
+        {
+            Log.Warn("建筑 {Building} 的 level_cap node 未找到", buildingNode.Key);
+            return;
+        }
+
+        foreach (var levelPropertyLeaf in levelCapNode.Leaves)
+        {
+            if (
+                levelPropertyLeaf.Key.Equals("state_max", StringComparison.OrdinalIgnoreCase)
+                || levelPropertyLeaf.Key.Equals("province_max", StringComparison.OrdinalIgnoreCase)
+            )
+            {
+                if (byte.TryParse(levelPropertyLeaf.ValueText, out var value))
+                {
+                    maxLevel = value;
+                }
+                break;
+            }
+        }
+
+        if (!maxLevel.HasValue)
+        {
+            Log.Warn("{Building} 的 最大等级 信息未找到", buildingNode.Key);
+        }
+        buildings[buildingNode.Key] = new BuildingInfo(buildingNode.Key, maxLevel);
     }
 }

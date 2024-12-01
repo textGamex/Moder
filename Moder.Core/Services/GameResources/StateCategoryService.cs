@@ -70,7 +70,7 @@ public sealed class StateCategoryService
         var stateCategories = new Dictionary<string, StateCategory>(8);
         if (!rootNode.TryGetNode("state_categories", out var stateCategoriesNode))
         {
-            Logger.Warn("文件: {FileName} 中未找到 state_categories 节点", rootNode.Position.FileName);
+            Log.Warn("文件: {FileName} 中未找到 state_categories 节点", rootNode.Position.FileName);
             return null;
         }
 
@@ -87,7 +87,7 @@ public sealed class StateCategoryService
                 }
                 else
                 {
-                    Logger.Warn(
+                    Log.Warn(
                         "文件: {FileName} 中 local_building_slots 解析失败, 文本: {Text}",
                         typeNode.Position.FileName,
                         localBuildingSlotsLeaf.ValueText
@@ -96,7 +96,7 @@ public sealed class StateCategoryService
             }
             else
             {
-                Logger.Warn("文件: {FileName} 中未找到 local_building_slots", typeNode.Position.FileName);
+                Log.Warn("文件: {FileName} 中未找到 local_building_slots", typeNode.Position.FileName);
             }
 
             stateCategories.Add(typeName, new StateCategory(typeName, localBuildingSlots));

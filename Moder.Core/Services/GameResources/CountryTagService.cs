@@ -20,7 +20,7 @@ public sealed class CountryTagService : CommonResourcesService<CountryTagService
         OnResourceChanged += (_, _) =>
         {
             _countryTagsLazy = new Lazy<IReadOnlyCollection<string>>(GetCountryTags);
-            Logger.Debug("Country tags changed, 已重置");
+            Log.Debug("Country tags changed, 已重置");
         };
     }
 

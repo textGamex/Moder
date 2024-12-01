@@ -147,7 +147,7 @@ public sealed class LocalisationService
         var localisation = YAMLLocalisationParser.parseLocFile(filePath);
         if (localisation.IsFailure)
         {
-            Logger.LogParseError(localisation.GetError());
+            Log.LogParseError(localisation.GetError());
             return null;
         }
 

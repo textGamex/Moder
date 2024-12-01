@@ -227,7 +227,7 @@ public sealed class CharacterTraitsService
             return TraitType.All;
         }
 
-        Logger.Warn("Unknown trait type: {TraitType}", traitType);
+        Log.Warn("Unknown trait type: {TraitType}", traitType);
         return TraitType.None;
     }
 

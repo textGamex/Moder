@@ -14,7 +14,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
     /// key: 文件路径, value: 文件内资源内容
     /// </summary>
     protected readonly Dictionary<string, TContent> Resources;
-    protected readonly Logger Logger;
+    protected readonly Logger Log;
 
     private readonly GlobalSettingService _settingService;
     private readonly string _serviceName = typeof(TType).Name;
@@ -29,7 +29,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
     protected ResourcesService(string folderOrFileRelativePath, WatcherFilter filter, PathType pathType)
     {
         _folderOrFileRelativePath = folderOrFileRelativePath;
-        Logger = LogManager.GetLogger(typeof(TType).FullName);
+        Log = LogManager.GetLogger(typeof(TType).FullName);
         _settingService = App.Current.Services.GetRequiredService<GlobalSettingService>();
 
         var gameResourcesPathService = App.Current.Services.GetRequiredService<GameResourcesPathService>();
@@ -55,7 +55,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
             this,
             filter.Name
         );
-        Logger.Info(
+        Log.Info(
             "初始化资源成功: {FolderRelativePath}, 共 {Count} 个文件",
             _folderOrFileRelativePath,
             filePaths.Count
@@ -68,7 +68,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
     {
         if (typeof(IReadOnlyCollection<object>).IsAssignableFrom(typeof(TContent)))
         {
-            Logger.Debug(
+            Log.Debug(
                 "'{Path}'下已加载的资源数量: {Count}",
                 _folderOrFileRelativePath,
                 Resources.Values.Cast<IReadOnlyCollection<object>>().Sum(content => content.Count)
@@ -78,7 +78,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
 
     void IResourcesService.Add(string folderOrFilePath)
     {
-        Logger.Debug("添加 Mod 资源: {FolderOrFilePath}", folderOrFilePath);
+        Log.Debug("添加 Mod 资源: {FolderOrFilePath}", folderOrFilePath);
         Debug.Assert(File.Exists(folderOrFilePath), "必须为文件");
 
         // 如果新增加的mod资源在原版资源中存在, 移除原版资源, 添加mod资源
@@ -87,18 +87,18 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         var isRemoved = Resources.Remove(gameFilePath);
         if (isRemoved)
         {
-            Logger.Info("移除游戏资源成功: {GameFilePath}", gameFilePath);
+            Log.Info("移除游戏资源成功: {GameFilePath}", gameFilePath);
         }
 
         ParseFileAndAddToResources(folderOrFilePath);
         OnOnResourceChanged(new ResourceChangedEventArgs(folderOrFilePath));
 
-        Logger.Info("添加 Mod 资源成功: {FolderOrFilePath}", folderOrFilePath);
+        Log.Info("添加 Mod 资源成功: {FolderOrFilePath}", folderOrFilePath);
     }
 
     void IResourcesService.Remove(string folderOrFilePath)
     {
-        Logger.Debug("移除 Mod 资源: {FolderOrFilePath}", folderOrFilePath);
+        Log.Debug("移除 Mod 资源: {FolderOrFilePath}", folderOrFilePath);
         if (Directory.Exists(folderOrFilePath))
         {
             foreach (
@@ -115,7 +115,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
 
         if (Resources.Remove(folderOrFilePath))
         {
-            Logger.Info("移除 Mod 资源成功");
+            Log.Info("移除 Mod 资源成功");
             var relativeFilePath = Path.GetRelativePath(_settingService.ModRootFolderPath, folderOrFilePath);
 
             // 如果删除的mod资源在原版资源中存在, 移除mod资源, 添加原版资源
@@ -128,16 +128,16 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
             ParseFileAndAddToResources(gameFilePath);
             OnOnResourceChanged(new ResourceChangedEventArgs(folderOrFilePath));
 
-            Logger.Info("添加原版游戏资源: {GameFilePath}", gameFilePath);
+            Log.Info("添加原版游戏资源: {GameFilePath}", gameFilePath);
         }
     }
 
     void IResourcesService.Reload(string folderOrFilePath)
     {
-        Logger.Debug("尝试重新加载 Mod 资源: {FolderOrFilePath}", folderOrFilePath);
+        Log.Debug("尝试重新加载 Mod 资源: {FolderOrFilePath}", folderOrFilePath);
         if (Directory.Exists(folderOrFilePath))
         {
-            Logger.Debug("跳过文件夹");
+            Log.Debug("跳过文件夹");
             return;
         }
 
@@ -145,7 +145,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         var isAdded = ParseFileAndAddToResources(folderOrFilePath);
         if (!isAdded)
         {
-            Logger.Info("{ServiceName} 不加载此 Mod 资源", _serviceName);
+            Log.Info("{ServiceName} 不加载此 Mod 资源", _serviceName);
             return;
         }
 
@@ -154,15 +154,15 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         {
             OnOnResourceChanged(new ResourceChangedEventArgs(folderOrFilePath));
         }
-        Logger.Info("{ServiceName} 重新加载 Mod 资源成功", _serviceName);
+        Log.Info("{ServiceName} 重新加载 Mod 资源成功", _serviceName);
     }
 
     void IResourcesService.Renamed(string oldPath, string newPath)
     {
-        Logger.Debug("Mod 资源重命名: {OldPath} -> {NewPath}", oldPath, newPath);
+        Log.Debug("Mod 资源重命名: {OldPath} -> {NewPath}", oldPath, newPath);
         if (Directory.Exists(newPath))
         {
-            Logger.Debug("跳过文件夹");
+            Log.Debug("跳过文件夹");
             return;
         }
 
@@ -172,12 +172,12 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
         }
         else
         {
-            Logger.Debug("{ServiceName} 跳过处理 {NewPath} 重命名", GetType().Name, newPath);
+            Log.Debug("{ServiceName} 跳过处理 {NewPath} 重命名", GetType().Name, newPath);
             return;
         }
         Resources.Remove(oldPath);
 
-        Logger.Info("Mod 资源重命名成功");
+        Log.Info("Mod 资源重命名成功");
     }
 
     /// <summary>
@@ -204,7 +204,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
     {
         if (result is null)
         {
-            Logger.Warn("文件 {FilePath} 解析失败", filePath);
+            Log.Warn("文件 {FilePath} 解析失败", filePath);
             return false;
         }
 

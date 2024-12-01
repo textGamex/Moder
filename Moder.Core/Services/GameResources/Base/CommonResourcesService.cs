@@ -22,7 +22,7 @@ public abstract class CommonResourcesService<TType, TContent> : ResourcesService
     {
         if (!TextParser.TryParse(filePath, out var rootNode, out var error))
         {
-            Logger.LogParseError(error);
+            Log.LogParseError(error);
             return null;
         }
         return rootNode;

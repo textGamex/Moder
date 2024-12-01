@@ -46,7 +46,7 @@ public sealed class OreService : CommonResourcesService<OreService, string[]>
         }
         else
         {
-            Logger.Warn("未找到 resources 节点");
+            Log.Warn("未找到 resources 节点");
         }
         return ores.ToArray();
     }

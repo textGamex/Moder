@@ -58,7 +58,7 @@ public sealed class LocalizationTextColorsService
 
             if (color.Length != 3)
             {
-                Logger.Warn("颜色 {Key} 的长度不正确", textColorNode.Key);
+                Log.Warn("颜色 {Key} 的长度不正确", textColorNode.Key);
                 continue;
             }
 
