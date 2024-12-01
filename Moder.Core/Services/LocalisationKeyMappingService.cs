@@ -40,7 +40,8 @@ public sealed class LocalisationKeyMappingService
                 )
             );
         }
-        
+
+        // 突破
         AddKeyMapping("breakthrough_factor", new LocalisationKeyMappingConfig("MODIFIER_BREAKTHROUGH"));
     }
 

@@ -142,7 +142,7 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
         }
 
         //  如果是文件, 添加到最后一个文件之后
-        var insertIndex = parentChildren.Count - 1;
+        var insertIndex = parentChildren.Count;
         var maxIndex = parentChildren.Count;
         var lastFolderIndex = FindLastFolderIndex(parentChildren);
         var index = 0;
@@ -157,10 +157,10 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
         else
         {
             // 跳过所有文件夹
-            index = lastFolderIndex + 1;
+            index = lastFolderIndex == 0 ? 0 : lastFolderIndex + 1;
         }
 
-        for (; index < maxIndex; index++)
+        while (index < maxIndex)
         {
             if (
                 WindowsStringComparer.Instance.Compare(newItem.FullPath, parentChildren[index].FullPath) == -1
@@ -169,6 +169,8 @@ public sealed partial class SideWorkSpaceControlViewModel : ObservableObject, ID
                 insertIndex = index;
                 break;
             }
+
+            index++;
         }
 
         return insertIndex;
