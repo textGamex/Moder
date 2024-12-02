@@ -16,6 +16,7 @@ public sealed class LeafModifier : IModifier, IEquatable<LeafModifier>
     public ModifierType Type => ModifierType.Leaf;
 
     public const string CustomEffectTooltipKey = "custom_effect_tooltip";
+    public const string CustomModifierTooltipKey = "custom_modifier_tooltip";
 
     /// <summary>
     /// 从 <see cref="Leaf"/> 构建一个叶子修饰符, <see cref="LocalizationKey"/> 属性被设置为 <c>leaf.Key</c>

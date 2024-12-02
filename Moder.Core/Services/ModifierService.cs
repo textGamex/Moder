@@ -157,6 +157,11 @@ public sealed class ModifierService
                         leafModifier.Key,
                         LeafModifier.CustomEffectTooltipKey
                     )
+                    ||
+                    StringComparer.OrdinalIgnoreCase.Equals(
+                        leafModifier.Key,
+                        LeafModifier.CustomModifierTooltipKey
+                    )
                 )
                 {
                     addedInlines = _localisationFormatService.GetTextWithColor(
