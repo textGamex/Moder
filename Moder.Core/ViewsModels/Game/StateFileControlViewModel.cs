@@ -25,6 +25,8 @@ public sealed partial class StateFileControlViewModel : ObservableObject
     private readonly SystemFileItem _fileItem;
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
     private readonly LeafConverterService _leafConverterService;
+    
+    private static readonly UTF8Encoding Encoding = new(false);
 
     public StateFileControlViewModel(
         GlobalResourceService resourceService,
@@ -158,6 +160,7 @@ public sealed partial class StateFileControlViewModel : ObservableObject
         // TODO: 数值有效性检查, int, float, bool
         var rootNode = VoConvertToNode(_fileItem.Name, _rootNodeVo.Children.ToArray());
         var text = rootNode.PrintChildren();
+        File.WriteAllText(_fileItem.FullPath, text, Encoding);
         var elapsedTime = Stopwatch.GetElapsedTime(timestamp);
         Log.Info("保存成功, 耗时: {Time} ms", elapsedTime.TotalMilliseconds);
         Log.Debug("Content: {Content}", text);
