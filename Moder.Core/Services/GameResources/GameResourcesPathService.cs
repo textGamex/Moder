@@ -28,9 +28,13 @@ public sealed class GameResourcesPathService
     /// 获得所有应该加载的文件绝对路径, Mod优先, 遵循 replace_path 指令
     /// </summary>
     /// <param name="folderRelativePath"></param>
+    /// <param name="filter"></param>
     /// <returns></returns>
     /// <exception cref="DirectoryNotFoundException"></exception>
-    public IReadOnlyCollection<string> GetAllFilePriorModByRelativePathForFolder(string folderRelativePath)
+    public IReadOnlyCollection<string> GetAllFilePriorModByRelativePathForFolder(
+        string folderRelativePath,
+        string filter = "*.*"
+    )
     {
         Log.Info("正在获取文件夹 {Path} 下的文件", folderRelativePath);
         var modFolder = Path.Combine(_settingService.ModRootFolderPath, folderRelativePath);
@@ -43,7 +47,7 @@ public sealed class GameResourcesPathService
 
         if (!Directory.Exists(modFolder))
         {
-            return Directory.GetFiles(gameFolder);
+            return Directory.GetFiles(gameFolder, filter);
         }
 
         if (_descriptor.ReplacePaths.Contains(folderRelativePath))
@@ -53,11 +57,11 @@ public sealed class GameResourcesPathService
                 gameFolder.ToFilePath(),
                 modFolder.ToFilePath()
             );
-            return Directory.GetFiles(modFolder);
+            return Directory.GetFiles(modFolder, filter);
         }
 
-        var gameFilesPath = Directory.GetFiles(gameFolder);
-        var modFilesPath = Directory.GetFiles(modFolder);
+        var gameFilesPath = Directory.GetFiles(gameFolder, filter);
+        var modFilesPath = Directory.GetFiles(modFolder, filter);
         return RemoveFileOfEqualName(gameFilesPath, modFilesPath);
     }
 

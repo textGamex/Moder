@@ -37,7 +37,10 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
 
         var isFolderPath = pathType == PathType.Folder;
         var filePaths = isFolderPath
-            ? gameResourcesPathService.GetAllFilePriorModByRelativePathForFolder(_folderOrFileRelativePath)
+            ? gameResourcesPathService.GetAllFilePriorModByRelativePathForFolder(
+                _folderOrFileRelativePath,
+                filter.Name
+            )
             : [gameResourcesPathService.GetFilePathPriorModByRelativePath(folderOrFileRelativePath)];
 
         // Resources 必须在使用 ParseFileAndAddToResources 之前初始化
@@ -55,11 +58,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
             this,
             filter.Name
         );
-        Log.Info(
-            "初始化资源成功: {FolderRelativePath}, 共 {Count} 个文件",
-            _folderOrFileRelativePath,
-            filePaths.Count
-        );
+        Log.Info("初始化资源成功: {FolderRelativePath}, 共 {Count} 个文件", _folderOrFileRelativePath, filePaths.Count);
         LogItemsSum();
     }
 
