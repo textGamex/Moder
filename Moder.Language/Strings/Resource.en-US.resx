@@ -103,7 +103,6 @@
   <data name="Menu.CharacterEditor" xml:space="preserve">
 		<value>Character Editor</value>
 	</data>
-
   <data name="SettingsPage.GameRootPath" xml:space="preserve">
 		<value>Game root directory</value>
 	</data>
@@ -267,6 +266,6 @@
 		<value>Unknown</value>
 	</data>
   <data name="Common.MaxLevel" xml:space="preserve">
-	  <value>Max level</value>
-  </data>
+		<value>最大等级</value>
+	</data>
 </root>
