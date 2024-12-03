@@ -40,6 +40,9 @@
         <None Remove="Views\Menus\SettingsControlView.xaml" />
         <None Remove="Views\Menus\SideWorkSpaceControlView.xaml" />
         <None Remove="Views\NotSupportInfoControlView.xaml" />
+        <None Update="appsettings.Development.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <!-- 移除多余文件 -->

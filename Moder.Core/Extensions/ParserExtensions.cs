@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.FSharp.Collections;
 using Moder.Core.Models;
 using ParadoxPower.Parser;
@@ -150,5 +151,24 @@ public static class ParserExtensions
     public static string PrintRaw(this Node node)
     {
         return CKPrinter.PrettyPrintStatement(node.ToRaw);
+    }
+
+    /// <summary>
+    /// 判断一个 <see cref="Child"/> 是否为带指定<c>key</c>的 <see cref="Node"/>
+    /// </summary>
+    /// <param name="child"></param>
+    /// <param name="key">键, 不区分大小写</param>
+    /// <param name="node"></param>
+    /// <returns></returns>
+    public static bool IsNodeWithKey(this Child child, string key, [NotNullWhen(true)] out Node? node)
+    {
+        if (child.IsNodeChild && StringComparer.OrdinalIgnoreCase.Equals(child.node.Key, key))
+        {
+            node = child.node;
+            return true;
+        }
+
+        node = null;
+        return false;
     }
 }

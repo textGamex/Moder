@@ -35,7 +35,14 @@ public static partial class Program
     {
         XamlCheckProcessRequirements();
 
-        var builder = Host.CreateApplicationBuilder(args);
+        var settings = new HostApplicationBuilderSettings { Args = args, ApplicationName = "Moder" };
+
+#if DEBUG
+        settings.EnvironmentName = "Development";
+#else
+        settings.EnvironmentName = "Production";
+#endif
+        var builder = Host.CreateApplicationBuilder(settings);
 
         // View, ViewModel
         builder.Services.AddSingleton<MainWindow>();
@@ -81,7 +88,6 @@ public static partial class Program
         builder.Services.AddSingleton<BuildingsService>();
         builder.Services.AddSingleton<CountryTagService>();
         builder.Services.AddSingleton<LocalizationTextColorsService>();
-        
 
         // Setup and provision the hosting context for the User Interface
         // service.
