@@ -98,7 +98,7 @@ public sealed class GameResourcesPathService
     /// </remarks>
     /// <param name="fileRelativePath">根目录下的相对路径</param>
     /// <exception cref="FileNotFoundException">游戏和mod中均不存在</exception>
-    /// <returns>文件路径</returns>
+    /// <returns>文件绝对路径</returns>
     public string GetFilePathPriorModByRelativePath(string fileRelativePath)
     {
         var modFilePath = Path.Combine(_settingService.ModRootFolderPath, fileRelativePath);

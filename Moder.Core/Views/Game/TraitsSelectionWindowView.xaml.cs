@@ -68,4 +68,11 @@ public sealed partial class TraitsSelectionWindowView : IDisposable
         border.Background = _transparentBrush;
         ModifierToolTip.Hide();
     }
+
+    private void Border_OnPointerPressed(object sender, PointerRoutedEventArgs e)
+    {
+        var border = (Border)sender;
+        var trait = (TraitVo)border.DataContext;
+        trait.IsSelected = !trait.IsSelected;
+    }
 }

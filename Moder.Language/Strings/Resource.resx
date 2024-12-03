@@ -269,4 +269,7 @@
 	<data name="Common.MaxLevel" xml:space="preserve">
 		<value>最大等级</value>
 	</data>
+	<data name="CharacterEditor.None" xml:space="preserve">
+		<value>无</value>
+	</data>
 </root>

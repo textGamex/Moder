@@ -49,12 +49,21 @@
                                     Background="Transparent"
                                     CornerRadius="2"
                                     DataContext="{x:Bind}"
+                                    PointerPressed="Border_OnPointerPressed"
                                     PointerEntered="Border_OnPointerEntered"
                                     PointerExited="Border_OnPointerExited">
-                                    <CheckBox
-                                        Margin="12,0,0,0"
-                                        Content="{x:Bind LocalisationName}"
-                                        IsChecked="{x:Bind IsSelected, Mode=TwoWay}" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox
+                                            Margin="12,0,0,0"
+                                            Content="{x:Bind LocalisationName}"
+                                            IsChecked="{x:Bind IsSelected, Mode=TwoWay}" />
+                                        <Image
+                                            HorizontalAlignment="Right"
+                                            Margin="12,0,0,0"
+                                            Height="33"
+                                            Width="23"
+                                            Source="{x:Bind ImageSource}" />
+                                    </StackPanel>
                                 </Border>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -64,7 +73,7 @@
 
             <Grid Grid.Column="1">
                 <ScrollView>
-                    <TextBlock x:Name="TraitsModifierDescriptionTextBlock" MinWidth="380" />
+                    <TextBlock x:Name="TraitsModifierDescriptionTextBlock" MinWidth="400" />
                 </ScrollView>
             </Grid>
         </Grid>

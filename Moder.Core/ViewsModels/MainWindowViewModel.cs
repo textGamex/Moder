@@ -28,6 +28,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
         ProgressPromptMessage = Resource.Menu_LoadingTip;
         var start = Stopwatch.GetTimestamp();
         _ = App.Current.Services.GetRequiredService<LocalisationService>();
+        App.Current.Services.GetRequiredService<SpriteService>();
         _loadTime = Stopwatch.GetElapsedTime(start);
     }
 

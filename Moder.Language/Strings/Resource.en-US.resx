@@ -269,4 +269,7 @@
   <data name="Common.MaxLevel" xml:space="preserve">
 	  <value>Max level</value>
   </data>
+  <data name="CharacterEditor.None" xml:space="preserve">
+	  <value>None</value>
+  </data>
 </root>

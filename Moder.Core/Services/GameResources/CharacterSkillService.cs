@@ -2,6 +2,7 @@ using MethodTimer;
 using Microsoft.UI.Xaml.Documents;
 using Moder.Core.Models.Character;
 using Moder.Core.Services.GameResources.Base;
+using Moder.Language.Strings;
 using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources;
@@ -41,7 +42,7 @@ public sealed class CharacterSkillService : CommonResourcesService<CharacterSkil
 
         if (skillModifier is null || skillModifier.Modifiers.Count == 0)
         {
-            return [new Run { Text = "无" }];
+            return [new Run { Text = Resource.CharacterEditor_None }];
         }
 
         return _modifierService.GetModifierInlines(skillModifier.Modifiers);

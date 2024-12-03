@@ -186,6 +186,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 无.
+        /// </summary>
+        public static string CharacterEditor_None {
+            get {
+                return ResourceManager.GetString("CharacterEditor.None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 解析 &apos;{0}&apos; 文件失败, 错误原因: {1}, 行数: {2}, 列数: {3}.
         /// </summary>
         public static string CharacterEditor_ParserErrorInfo {
