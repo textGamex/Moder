@@ -13,6 +13,9 @@ Moder 是 HOI4 (钢铁雄心4) 的可视化编辑器, 用于简化 Mod 开发
 点击此链接下载 [Moder](https://github.com/textGamex/Moder/releases)  
 解压后点击 Moder.Core.exe 运行
 
+> [!WARNING]
+> 不要以管理员权限运行程序, 会无法选择文件夹
+
 ## 功能
 
 - State 文件编辑
