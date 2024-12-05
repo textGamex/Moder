@@ -1,18 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
     <PropertyGroup>
-        <TargetFramework>net9.0-windows10.0.22621.0</TargetFramework>
-        <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
-        <RootNamespace>Moder.Hosting</RootNamespace>
-        <RuntimeIdentifiers Condition="$([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)')) &gt;= 8">win-x86;win-x64;win-arm64</RuntimeIdentifiers>
-        <RuntimeIdentifiers Condition="$([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)')) &lt; 8">win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
-        <UseWinUI>true</UseWinUI>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <EnableMsixTooling>true</EnableMsixTooling>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
-        <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.241114003" />
-        <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
+      <PackageReference Include="Avalonia" Version="11.2.2" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="ControlledHostedLifetime.cs" />
+      <Compile Remove="DesktopHostedLifetime.cs" />
+      <Compile Remove="ExitCodes.cs" />
+      <Compile Remove="FallbackHostedLifetime.cs" />
+      <Compile Remove="HostBuilderExtensions.cs" />
+      <Compile Remove="HostedLifetime.cs" />
+      <Compile Remove="HostedLifetimeBase.cs" />
+      <Compile Remove="HostExtensions.cs" />
+      <Compile Remove="IHostedLifetime.cs" />
+    </ItemGroup>
+
 </Project>

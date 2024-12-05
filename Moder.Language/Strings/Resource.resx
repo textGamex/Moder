@@ -272,4 +272,10 @@
 	<data name="CharacterEditor.None" xml:space="preserve">
 		<value>无</value>
 	</data>
+	<data name="InitializePage.SelectGameRootPath" xml:space="preserve">
+		<value>选择游戏根目录</value>
+	</data>
+	<data name="InitializePage.SelectModRootPath" xml:space="preserve">
+		<value>选择Mod根目录</value>
+	</data>
 </root>

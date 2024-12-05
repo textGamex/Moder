@@ -1,5 +1,0 @@
-﻿add_core_of
-owner
-add_claim_by
-controller
-transfer_state

@@ -1,0 +1,36 @@
+﻿<UserControl
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    x:Class="Moder.Core.Views.AppInitializeControlView"
+    x:DataType="vms:AppInitializeControlViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vms="clr-namespace:Moder.Core.ViewsModel"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid RowDefinitions="*,*,Auto">
+        <StackPanel
+            Grid.Row="0"
+            HorizontalAlignment="Center"
+            Spacing="4">
+            <TextBlock Text="{Binding GameRootFolderPath, Mode=OneWay}" />
+            <Button Command="{Binding SelectGameRootFolderCommand}" Content="{x:Static lang:Resource.InitializePage_SelectGameRootPath}" />
+        </StackPanel>
+        <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            Spacing="4">
+            <TextBlock Text="{Binding ModRootFolderPath, Mode=OneWay}" />
+            <Button Command="{Binding SelectModRootFolderCommand}" Content="{x:Static lang:Resource.InitializePage_SelectModRootPath}" />
+        </StackPanel>
+        <Button
+            Content="完成"
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            Margin="0,16"
+            VerticalAlignment="Center" />
+    </Grid>
+</UserControl>

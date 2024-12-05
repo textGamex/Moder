@@ -366,6 +366,24 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 选择游戏根目录.
+        /// </summary>
+        public static string InitializePage_SelectGameRootPath {
+            get {
+                return ResourceManager.GetString("InitializePage.SelectGameRootPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 选择Mod根目录.
+        /// </summary>
+        public static string InitializePage_SelectModRootPath {
+            get {
+                return ResourceManager.GetString("InitializePage.SelectModRootPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 人物编辑器.
         /// </summary>
         public static string Menu_CharacterEditor {

@@ -1,0 +1,13 @@
+<Application
+    RequestedThemeVariant="Default"
+    x:Class="Moder.Core.App"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:styling="clr-namespace:FluentAvalonia.Styling;assembly=FluentAvalonia"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--  "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options.  -->
+
+    <Application.Styles>
+        <FluentTheme />
+        <styling:FluentAvaloniaTheme />
+    </Application.Styles>
+</Application>
