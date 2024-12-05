@@ -230,7 +230,7 @@
 	<data name="CharacterEditor.MissingCharacterFileNameTip" xml:space="preserve">
 		<value>请填写写入文件名</value>
 	</data>
-	<data name="CharacterEditor.MissingRequiredInfoTip" xml:space="preserve">
+	<data name="UIErrorMessage.MissingRequiredInfoTip" xml:space="preserve">
 		<value>请填写必须的字段</value>
 	</data>
 	<data name="Common.Error" xml:space="preserve">
@@ -277,5 +277,8 @@
 	</data>
 	<data name="InitializePage.SelectModRootPath" xml:space="preserve">
 		<value>选择Mod根目录</value>
+	</data>
+	<data name="UIErrorMessage.Required" xml:space="preserve">
+		<value>此项为必填项</value>
 	</data>
 </root>

@@ -16,22 +16,34 @@
         <StackPanel
             Grid.Row="0"
             HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Orientation="Horizontal"
             Spacing="4">
-            <TextBlock Text="{Binding GameRootFolderPath, Mode=OneWay}" />
+            <TextBox
+                Width="280"
+                MaxHeight="55"
+                IsReadOnly="True"
+                Text="{Binding GameRootFolderPath, Mode=OneWay}" />
             <Button Command="{Binding SelectGameRootFolderCommand}" Content="{x:Static lang:Resource.InitializePage_SelectGameRootPath}" />
         </StackPanel>
         <StackPanel
             Grid.Row="1"
             HorizontalAlignment="Center"
+            Orientation="Horizontal"
             Spacing="4">
-            <TextBlock Text="{Binding ModRootFolderPath, Mode=OneWay}" />
+            <TextBox
+                Width="280"
+                MaxHeight="55"
+                IsReadOnly="True"
+                Text="{Binding ModRootFolderPath, Mode=OneWay}" />
             <Button Command="{Binding SelectModRootFolderCommand}" Content="{x:Static lang:Resource.InitializePage_SelectModRootPath}" />
         </StackPanel>
         <Button
             Grid.Row="2"
-            Margin="0,16"
+            Margin="0,0,0,32"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            Command="{Binding SubmitCommand}"
             Content="完成" />
     </Grid>
 </UserControl>

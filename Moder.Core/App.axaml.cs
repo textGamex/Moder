@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Core.Views;
 using Moder.Core.ViewsModel;
@@ -111,6 +112,7 @@ public class App : Application
         builder.Services.AddTransient<AppInitializeControlViewModel>();
 
         builder.Services.AddSingleton(_ => AppSettingService.Load());
+        builder.Services.AddSingleton<MessageBoxService>();
 
         return builder;
     }

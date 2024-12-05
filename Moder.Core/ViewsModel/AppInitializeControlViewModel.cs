@@ -1,23 +1,29 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.ComponentModel.DataAnnotations;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Moder.Core.Core;
+using Moder.Core.Services;
 using Moder.Core.Services.Config;
+using Moder.Language.Strings;
+using NLog;
 
 namespace Moder.Core.ViewsModel;
 
-public sealed partial class AppInitializeControlViewModel : ObservableObject
+public sealed partial class AppInitializeControlViewModel(
+    AppSettingService settingService,
+    MessageBoxService messageBox
+) : ObservableValidator
 {
+    [Required(ErrorMessageResourceName = "UIErrorMessage_Required", ErrorMessageResourceType = typeof(Resource))]
     [ObservableProperty]
     private string _gameRootFolderPath = string.Empty;
 
+    [Required(ErrorMessageResourceName = "UIErrorMessage_Required", ErrorMessageResourceType = typeof(Resource))]
     [ObservableProperty]
     private string _modRootFolderPath = string.Empty;
 
-    public AppInitializeControlViewModel(AppSettingService settingService)
-    {
-    }
-
     public Interaction<string, string> SelectFolderInteraction { get; } = new();
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     [RelayCommand]
     private async Task SelectGameRootFolder()
@@ -27,7 +33,7 @@ public sealed partial class AppInitializeControlViewModel : ObservableObject
         {
             return;
         }
-
+        
         GameRootFolderPath = gameRootPath;
     }
 
@@ -39,7 +45,22 @@ public sealed partial class AppInitializeControlViewModel : ObservableObject
         {
             return;
         }
-
+        
         ModRootFolderPath = modRootPath;
+    }
+
+    [RelayCommand]
+    private async Task Submit()
+    {
+        ValidateAllProperties();
+        if (string.IsNullOrEmpty(GameRootFolderPath) || string.IsNullOrEmpty(ModRootFolderPath))
+        {
+            await messageBox.WarnAsync(Resource.UIErrorMessage_MissingRequiredInfoTip);
+            return;
+        }
+
+        settingService.GameRootFolderPath = GameRootFolderPath;
+        settingService.ModRootFolderPath = ModRootFolderPath;
+        Log.Info("资源目录设置成功");
     }
 }

@@ -230,7 +230,7 @@
   <data name="CharacterEditor.MissingCharacterFileNameTip" xml:space="preserve">
 		<value>Please write the filename</value>
 	</data>
-  <data name="CharacterEditor.MissingRequiredInfoTip" xml:space="preserve">
+  <data name="UIErrorMessage.MissingRequiredInfoTip" xml:space="preserve">
 		<value>Please fill in required fields</value>
 	</data>
   <data name="Common.Error" xml:space="preserve">
@@ -271,5 +271,8 @@
   </data>
   <data name="CharacterEditor.None" xml:space="preserve">
 	  <value>None</value>
+  </data>
+  <data name="UIErrorMessage.Required" xml:space="preserve">
+	  <value>Required</value>
   </data>
 </root>

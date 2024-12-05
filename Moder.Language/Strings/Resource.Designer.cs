@@ -177,15 +177,6 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 请填写必须的字段.
-        /// </summary>
-        public static string CharacterEditor_MissingRequiredInfoTip {
-            get {
-                return ResourceManager.GetString("CharacterEditor.MissingRequiredInfoTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 无.
         /// </summary>
         public static string CharacterEditor_None {
@@ -596,6 +587,24 @@ namespace Moder.Language.Strings {
         public static string ThemeMode_Light {
             get {
                 return ResourceManager.GetString("ThemeMode.Light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 请填写必须的字段.
+        /// </summary>
+        public static string UIErrorMessage_MissingRequiredInfoTip {
+            get {
+                return ResourceManager.GetString("UIErrorMessage.MissingRequiredInfoTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 此项为必填项.
+        /// </summary>
+        public static string UIErrorMessage_Required {
+            get {
+                return ResourceManager.GetString("UIErrorMessage.Required", resourceCulture);
             }
         }
     }
