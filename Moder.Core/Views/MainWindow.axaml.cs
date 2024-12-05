@@ -11,8 +11,9 @@ public sealed partial class MainWindow : Window
     private readonly AppSettingService _settingService;
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
-    public MainWindow(AppSettingService settingService)
+    public MainWindow()
     {
+        var settingService = App.Current.Services.GetRequiredService<AppSettingService>();
         Log.Info("App Config path: {Path}", App.AppConfigFolder);
         _settingService = settingService;
         InitializeComponent();

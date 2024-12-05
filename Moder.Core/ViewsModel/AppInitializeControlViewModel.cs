@@ -1,19 +1,22 @@
-﻿using Avalonia.Controls;
-using Avalonia.Platform.Storage;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Moder.Core.Core;
 using Moder.Core.Services.Config;
 
 namespace Moder.Core.ViewsModel;
 
-public sealed partial class AppInitializeControlViewModel(AppSettingService settingService) : ObservableObject
+public sealed partial class AppInitializeControlViewModel : ObservableObject
 {
     [ObservableProperty]
     private string _gameRootFolderPath = string.Empty;
 
     [ObservableProperty]
     private string _modRootFolderPath = string.Empty;
+
+    public AppInitializeControlViewModel(AppSettingService settingService)
+    {
+    }
+
     public Interaction<string, string> SelectFolderInteraction { get; } = new();
 
     [RelayCommand]

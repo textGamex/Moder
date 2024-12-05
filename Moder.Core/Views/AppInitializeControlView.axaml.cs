@@ -6,11 +6,12 @@ namespace Moder.Core.Views;
 
 public partial class AppInitializeControlView : UserControl
 {
-    public AppInitializeControlView(AppInitializeControlViewModel viewModel)
+    public AppInitializeControlView()
     {
         //TODO: 释放
         InitializeComponent();
 
+        var viewModel = DesignData.AppInitializeControlViewModel;
         DataContext = viewModel;
         viewModel.SelectFolderInteraction.RegisterHandler(Handler);
     }
