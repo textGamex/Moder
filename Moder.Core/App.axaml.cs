@@ -5,10 +5,13 @@ using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Moder.Core.Extensions;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Core.Views;
+using Moder.Core.Views.Menus;
 using Moder.Core.ViewsModel;
+using Moder.Core.ViewsModel.Menus;
 using Moder.Hosting;
 using NLog;
 using NLog.Extensions.Logging;
@@ -19,7 +22,7 @@ public class App : Application
 {
     public const string AppVersion = "0.1.0-alpha";
     public static new App Current => (App)Application.Current!;
-    public IServiceProvider Services => Current._serviceProvider;
+    public static IServiceProvider Services => Current._serviceProvider;
     public static string AppConfigFolder { get; } =
         Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -106,10 +109,11 @@ public class App : Application
         builder.Logging.AddNLog(builder.Configuration);
         LogManager.Configuration = new NLogLoggingConfiguration(builder.Configuration.GetSection("NLog"));
 
-        builder.Services.AddSingleton<MainWindow>();
-        builder.Services.AddSingleton<MainWindowViewModel>();
-        builder.Services.AddTransient<AppInitializeControlView>();
-        builder.Services.AddTransient<AppInitializeControlViewModel>();
+        builder.Services.AddViewSingleton<MainWindow, MainWindowViewModel>();
+        builder.Services.AddViewTransient<AppInitializeControlView, AppInitializeControlViewModel>();
+        builder.Services.AddViewSingleton<MainControlView, MainControlViewModel>();
+        builder.Services.AddViewSingleton<SideBarControlView, SideBarControlViewModel>();
+        builder.Services.AddViewSingleton<WorkSpaceControlView, WorkSpaceControlViewModel>();
 
         builder.Services.AddSingleton(_ => AppSettingService.Load());
         builder.Services.AddSingleton<MessageBoxService>();

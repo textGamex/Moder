@@ -4,7 +4,7 @@ using Avalonia;
 
 namespace Moder.Core;
 
-public sealed class Program
+public static class Program
 {
     [STAThread]
     [SupportedOSPlatform("windows")]

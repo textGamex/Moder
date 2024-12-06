@@ -26,7 +26,7 @@ public sealed partial class SystemFileItem
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     private static readonly MessageBoxService MessageBoxService =
-        App.Current.Services.GetRequiredService<MessageBoxService>();
+        App.Services.GetRequiredService<MessageBoxService>();
 
     public SystemFileItem(string fullPath, bool isFile, SystemFileItem? parent)
     {
@@ -76,7 +76,7 @@ public sealed partial class SystemFileItem
         return $"{nameof(Name)}: {Name}, {nameof(FullPath)}: {FullPath}, {nameof(IsFile)}: {IsFile}, {nameof(Children)}: {Children}";
     }
 
-    [RelayCommand]
+    // [RelayCommand]
     // private async Task ShowInExplorerAsync()
     // {
     //     string? folder;

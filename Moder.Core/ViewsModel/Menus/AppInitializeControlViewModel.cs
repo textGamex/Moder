@@ -1,24 +1,32 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Moder.Core.Core;
+using Moder.Core.Messages;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Language.Strings;
 using NLog;
 
-namespace Moder.Core.ViewsModel;
+namespace Moder.Core.ViewsModel.Menus;
 
 public sealed partial class AppInitializeControlViewModel(
     AppSettingService settingService,
     MessageBoxService messageBox
 ) : ObservableValidator
 {
-    [Required(ErrorMessageResourceName = "UIErrorMessage_Required", ErrorMessageResourceType = typeof(Resource))]
+    [Required(
+        ErrorMessageResourceName = "UIErrorMessage_Required",
+        ErrorMessageResourceType = typeof(Resource)
+    )]
     [ObservableProperty]
     private string _gameRootFolderPath = string.Empty;
 
-    [Required(ErrorMessageResourceName = "UIErrorMessage_Required", ErrorMessageResourceType = typeof(Resource))]
+    [Required(
+        ErrorMessageResourceName = "UIErrorMessage_Required",
+        ErrorMessageResourceType = typeof(Resource)
+    )]
     [ObservableProperty]
     private string _modRootFolderPath = string.Empty;
 
@@ -33,7 +41,7 @@ public sealed partial class AppInitializeControlViewModel(
         {
             return;
         }
-        
+
         GameRootFolderPath = gameRootPath;
     }
 
@@ -45,7 +53,7 @@ public sealed partial class AppInitializeControlViewModel(
         {
             return;
         }
-        
+
         ModRootFolderPath = modRootPath;
     }
 
@@ -62,5 +70,7 @@ public sealed partial class AppInitializeControlViewModel(
         settingService.GameRootFolderPath = GameRootFolderPath;
         settingService.ModRootFolderPath = ModRootFolderPath;
         Log.Info("资源目录设置成功");
+
+        WeakReferenceMessenger.Default.Send(new CompleteAppInitializeMessage());
     }
 }

@@ -1,19 +1,33 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.ViewsModel;
+using AppInitializeControlViewModel = Moder.Core.ViewsModel.Menus.AppInitializeControlViewModel;
 
-namespace Moder.Core.Views;
+namespace Moder.Core.Views.Menus;
 
 public partial class AppInitializeControlView : UserControl
 {
+    private IDisposable? _selectFolderInteractionDisposable;
+
     public AppInitializeControlView()
     {
-        //TODO: 释放
         InitializeComponent();
 
-        var viewModel = DesignData.AppInitializeControlViewModel;
+        var viewModel = App.Services.GetRequiredService<AppInitializeControlViewModel>();
         DataContext = viewModel;
-        viewModel.SelectFolderInteraction.RegisterHandler(Handler);
+    }
+
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        _selectFolderInteractionDisposable?.Dispose();
+
+        if (DataContext is AppInitializeControlViewModel viewModel)
+        {
+            _selectFolderInteractionDisposable = viewModel.SelectFolderInteraction.RegisterHandler(Handler);
+        }
+
+        base.OnDataContextChanged(e);
     }
 
     private async Task<string> Handler(string title)

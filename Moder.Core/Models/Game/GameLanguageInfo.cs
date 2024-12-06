@@ -1,4 +1,4 @@
-﻿namespace Moder.Core.Models;
+﻿namespace Moder.Core.Models.Game;
 
 public sealed class GameLanguageInfo(string displayName, GameLanguage type)
 {

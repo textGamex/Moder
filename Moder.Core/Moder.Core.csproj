@@ -9,6 +9,7 @@
         <WarningsAsErrors>nullable</WarningsAsErrors>
         <LangVersion>preview</LangVersion>
         <ApplicationIcon>logo.ico</ApplicationIcon>
+        <MvvmToolkitEnableINotifyPropertyChangingSupport>false</MvvmToolkitEnableINotifyPropertyChangingSupport>
     </PropertyGroup>
 
     <ItemGroup>
@@ -64,6 +65,18 @@
       <Compile Remove="ViewsModel.cs" />
       <Compile Update="Views\MainWindow.axaml.cs">
         <DependentUpon>MainWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Menus\SideBarControlView.axaml.cs">
+        <DependentUpon>SideBarControlView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Menus\AppInitializeControlView.axaml.cs">
+        <DependentUpon>AppInitializeControlView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Menus\MainControlView.axaml.cs">
+        <DependentUpon>MainControlView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
     </ItemGroup>

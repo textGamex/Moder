@@ -1,4 +1,4 @@
-namespace Moder.Core.Models;
+namespace Moder.Core.Models.Game;
 
 public enum GameValueType : byte
 {

@@ -1,5 +1,6 @@
 using MemoryPack;
 using Moder.Core.Models;
+using Moder.Core.Models.Game;
 using NLog;
 
 namespace Moder.Core.Services.Config;

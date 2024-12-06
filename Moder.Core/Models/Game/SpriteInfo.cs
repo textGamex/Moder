@@ -1,4 +1,4 @@
-﻿namespace Moder.Core.Models;
+﻿namespace Moder.Core.Models.Game;
 
 public sealed class SpriteInfo(string name, string path)
 {
