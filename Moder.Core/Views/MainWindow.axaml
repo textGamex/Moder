@@ -1,16 +1,22 @@
 <Window
-    Design.DataContext="{x:Static vms:DesignData.MainWindowViewModel}"
+    x:Class="Moder.Core.Views.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vms="clr-namespace:Moder.Core.ViewsModel"
     Title="Moder.Core"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    mc:Ignorable="d"
-    x:Class="Moder.Core.Views.MainWindow"
-    xmlns="https://github.com/avaloniaui"
-    xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vms="clr-namespace:Moder.Core.ViewsModel"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    Design.DataContext="{x:Static vms:DesignData.MainWindowViewModel}"
+    mc:Ignorable="d">
 
-    <ContentControl x:Name="MainContentControl" />
+    <Grid RowDefinitions="Auto,Auto">
+        <Menu Grid.Row="0">
+            <MenuItem Header="{x:Static lang:Resource.Menu_CharacterEditor}" />
+            <MenuItem Header="{x:Static lang:Resource.Menu_Settings}" />
+        </Menu>
+        <ContentControl x:Name="MainContentControl" Grid.Row="1" />
+    </Grid>
 </Window>
