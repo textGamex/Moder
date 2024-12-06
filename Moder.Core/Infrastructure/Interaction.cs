@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace Moder.Core.Core;
+namespace Moder.Core.Infrastructure;
 
 /// <summary>
 /// Simple implementation of Interaction pattern from ReactiveUI framework.

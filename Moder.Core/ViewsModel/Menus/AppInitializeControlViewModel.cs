@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Moder.Core.Core;
+using Moder.Core.Infrastructure;
 using Moder.Core.Messages;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
