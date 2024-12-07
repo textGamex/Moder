@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFrameworks>net9.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -10,6 +10,8 @@
         <LangVersion>preview</LangVersion>
         <ApplicationIcon>logo.ico</ApplicationIcon>
         <MvvmToolkitEnableINotifyPropertyChangingSupport>false</MvvmToolkitEnableINotifyPropertyChangingSupport>
+        <Configurations>Debug;Release;Debug-Linux</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <ItemGroup>
@@ -43,8 +45,7 @@
         <PackageReference Include="Pidgin" Version="3.3.0" />
     </ItemGroup>
 
-    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-        <!-- If you're a .vbproj user, replace ';' with ',' -->
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Debug-Linux'" >
         <DefineConstants>$(DefineConstants);ENABLE_XAML_HOT_RELOAD</DefineConstants>
     </PropertyGroup>
 
@@ -53,7 +54,16 @@
         <PackageReference Condition="$(DefineConstants.Contains(ENABLE_XAML_HOT_RELOAD))" Include="HotAvalonia" Version="2.0.1" />
         <PackageReference Include="HotAvalonia.Extensions" Version="2.0.1" PrivateAssets="All" />
     </ItemGroup>
-    
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug-Linux' ">
+      <DefineConstants>$(DefineConstants);LINUX;DEBUG</DefineConstants>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Condition="$(DefineConstants.Contains(WINDOWS))" Include="Vanara.Windows.Shell" Version="4.0.4" />
+    </ItemGroup>
+
     <ItemGroup>
       <None Update="appsettings.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -90,5 +100,6 @@
         <DependentUpon>MainControlView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Remove="Infrastructure\FileSort\FileSort.cs" />
     </ItemGroup>
 </Project>
