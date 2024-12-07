@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Moder.Core.Infrastructure;
+using Moder.Core.Infrastructure.FileSort;
 using Moder.Core.Models;
 using Moder.Core.Services.Config;
 using NLog;
@@ -11,10 +12,13 @@ public sealed class SideBarControlViewModel : ObservableObject
     public IReadOnlyList<SystemFileItem> Items => _root.Children;
     private readonly SystemFileItem _root;
     private readonly FileSystemSafeWatcher _fileWatcher;
+    private readonly IFileSortComparer _fileSortComparer;
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
-    public SideBarControlViewModel(AppSettingService settingService)
+    public SideBarControlViewModel(AppSettingService settingService, IFileSortComparer fileSortComparer)
     {
+        _fileSortComparer = fileSortComparer;
+
         _fileWatcher = new FileSystemSafeWatcher(settingService.ModRootFolderPath, "*.*");
         _fileWatcher.Deleted += ContentOnDeleted;
         _fileWatcher.Created += ContentOnCreated;
@@ -126,7 +130,7 @@ public sealed class SideBarControlViewModel : ObservableObject
     /// <param name="newItem">新增的项目</param>
     /// <returns>新项目的插入位置</returns>
     /// <exception cref="ArgumentException">如果 <paramref name="newItem"/> 的父节点为<c>null</c></exception>
-    private static int FindInsertIndex(SystemFileItem newItem)
+    private int FindInsertIndex(SystemFileItem newItem)
     {
         var parentChildren = newItem.Parent?.Children;
         if (parentChildren is null)
@@ -158,19 +162,16 @@ public sealed class SideBarControlViewModel : ObservableObject
             index = lastFolderIndex == 0 ? 0 : lastFolderIndex + 1;
         }
 
-        // TODO: Sort
-        // while (index < maxIndex)
-        // {
-        //     if (
-        //         WindowsStringComparer.Instance.Compare(newItem.FullPath, parentChildren[index].FullPath) == -1
-        //     )
-        //     {
-        //         insertIndex = index;
-        //         break;
-        //     }
-        //
-        //     index++;
-        // }
+        while (index < maxIndex)
+        {
+            if (_fileSortComparer.Compare(newItem.FullPath, parentChildren[index].FullPath) == -1)
+            {
+                insertIndex = index;
+                break;
+            }
+
+            index++;
+        }
 
         return insertIndex;
     }
@@ -186,14 +187,13 @@ public sealed class SideBarControlViewModel : ObservableObject
         return i == 0 ? 0 : i - 1;
     }
 
-    private static void LoadFileSystem(string path, SystemFileItem parent)
+    private void LoadFileSystem(string path, SystemFileItem parent)
     {
         var directories = Directory.GetDirectories(path);
         var files = Directory.GetFiles(path);
 
-        // TODO: Sort
-        // Array.Sort(directories, WindowsStringComparer.Instance);
-        // Array.Sort(files, WindowsStringComparer.Instance);
+        Array.Sort(directories, _fileSortComparer);
+        Array.Sort(files, _fileSortComparer);
 
         foreach (var directoryPath in directories)
         {

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFrameworks>net9.0</TargetFrameworks>
+        <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -100,6 +100,5 @@
         <DependentUpon>MainControlView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Remove="Infrastructure\FileSort\FileSort.cs" />
     </ItemGroup>
 </Project>

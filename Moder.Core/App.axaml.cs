@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Runtime.Versioning;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Moder.Core.Extensions;
+using Moder.Core.Infrastructure.FileSort;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Core.Views;
@@ -120,8 +123,34 @@ public class App : Application
         builder.Services.AddSingleton(_ => AppSettingService.Load());
         builder.Services.AddSingleton<MessageBoxService>();
 
+        AddPlatformNativeServices(builder.Services);
+
         return builder;
     }
+
+    private static void AddPlatformNativeServices(IServiceCollection builder)
+    {
+#if WINDOWS
+        Debug.Assert(OperatingSystem.IsWindows());
+        AddWindowsServices(builder);
+#elif LINUX
+        AddLinuxServices(builder);
+#endif
+    }
+
+#if WINDOWS
+    [SupportedOSPlatform("windows")]
+    private static void AddWindowsServices(IServiceCollection builder)
+    {
+        builder.AddSingleton<IFileSortComparer, WindowsFileSortComparer>();
+    }
+#elif LINUX
+    [SupportedOSPlatform("linux")]
+    private static void AddLinuxServices(IServiceCollection builder)
+    {
+        builder.AddSingleton<IFileSortComparer, LinuxFileSortComparer>();
+    }
+#endif
 
     private static void DisableAvaloniaDataAnnotationValidation()
     {
