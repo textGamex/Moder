@@ -43,6 +43,17 @@
         <PackageReference Include="Pidgin" Version="3.3.0" />
     </ItemGroup>
 
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+        <!-- If you're a .vbproj user, replace ';' with ',' -->
+        <DefineConstants>$(DefineConstants);ENABLE_XAML_HOT_RELOAD</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Condition="$(DefineConstants.Contains(ENABLE_XAML_HOT_RELOAD))" Include="Avalonia.Markup.Xaml.Loader" Version="11.2.2" />
+        <PackageReference Condition="$(DefineConstants.Contains(ENABLE_XAML_HOT_RELOAD))" Include="HotAvalonia" Version="2.0.1" />
+        <PackageReference Include="HotAvalonia.Extensions" Version="2.0.1" PrivateAssets="All" />
+    </ItemGroup>
+    
     <ItemGroup>
       <None Update="appsettings.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
