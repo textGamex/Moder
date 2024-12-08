@@ -12,7 +12,7 @@
     Design.DataContext="{x:Static vms:DesignData.MainWindowViewModel}"
     mc:Ignorable="d">
 
-    <Grid RowDefinitions="Auto,Auto">
+    <Grid RowDefinitions="Auto,*">
         <Menu Grid.Row="0">
             <MenuItem Header="{x:Static lang:Resource.Menu_CharacterEditor}" />
             <MenuItem Header="{x:Static lang:Resource.Menu_Settings}" />
