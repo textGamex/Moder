@@ -375,6 +375,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 未找到本地化的值.
+        /// </summary>
+        public static string LocalizeValueNotFind {
+            get {
+                return ResourceManager.GetString("LocalizeValueNotFind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 人物编辑器.
         /// </summary>
         public static string Menu_CharacterEditor {
@@ -578,6 +587,15 @@ namespace Moder.Language.Strings {
         public static string ThemeMode_Dark {
             get {
                 return ResourceManager.GetString("ThemeMode.Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 青色.
+        /// </summary>
+        public static string ThemeMode_DarkSlateGray {
+            get {
+                return ResourceManager.GetString("ThemeMode.DarkSlateGray", resourceCulture);
             }
         }
         
