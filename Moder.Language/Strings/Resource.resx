@@ -281,4 +281,10 @@
 	<data name="UIErrorMessage.Required" xml:space="preserve">
 		<value>此项为必填项</value>
 	</data>
+	<data name="LocalizeValueNotFind" xml:space="preserve">
+		<value>未找到本地化的值</value>
+	</data>
+	<data name="ThemeMode.DarkSlateGray" xml:space="preserve">
+		<value>青色</value>
+	</data>
 </root>

@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Moder.Core.Infrastructure;
 using Moder.Core.Messages;
+using Moder.Core.Resources;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Language.Strings;
@@ -73,4 +74,6 @@ public sealed partial class AppInitializeControlViewModel(
 
         WeakReferenceMessenger.Default.Send(new CompleteAppInitializeMessage());
     }
+
+    public Type AppThemes { get; } = typeof(ThemeMode);
 }
