@@ -1,4 +1,4 @@
-using Moder.Core.ViewsModels.Menus;
+using Moder.Core.Models;
 
 namespace Moder.Core.Messages;
 
