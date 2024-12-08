@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
+using EnumsNET;
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Converters;
 using Moder.Core.Extensions;
@@ -26,8 +27,15 @@ public partial class AppInitializeControlView : UserControl
 
     private void ThemeSelectorOnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        var obj = EnumExtensions.ToEnumItem(ThemeSelector.SelectedIndex, typeof(ThemeMode));
-        if (obj is not ThemeMode type)
+        var type = typeof(ThemeMode);
+        var names = Enums.GetNames(type);
+        var index = ThemeSelector.SelectedIndex;
+        if (index >= names.Count || index < 0)
+        {
+            return;
+        }
+        var obj = names[index].ToEnum(type);
+        if (obj is not ThemeMode theme)
         {
             return;
         }
@@ -36,7 +44,7 @@ public partial class AppInitializeControlView : UserControl
         {
             return;
         }
-        app.RequestedThemeVariant = AppTheme.GetThemeVariant(type);
+        app.RequestedThemeVariant = AppTheme.GetThemeVariant(theme);
     }
 
     protected override void OnDataContextChanged(EventArgs e)

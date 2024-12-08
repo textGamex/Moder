@@ -16,15 +16,4 @@ public static class EnumExtensions
         catch { }
         return null;
     }
-
-    public static object? ToEnumItem(int index, Type enumType)
-    {
-        var names = Enums.GetNames(enumType);
-        if (index >= names.Count || index < 0)
-        {
-            return null;
-        }
-        var obj = names[index].ToEnum(enumType);
-        return obj;
-    }
 }

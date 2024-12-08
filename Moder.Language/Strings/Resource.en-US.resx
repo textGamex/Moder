@@ -276,7 +276,7 @@
 	  <value>Required</value>
   </data>
   <data name="LocalizeValueNotFind" xml:space="preserve">
-	  <value>LOCALIZE_VALUE_NOT_FIND</value>
+	  <value>Cannot find the value of localization</value>
   </data>
   <data name="ThemeMode.DarkSlateGray" xml:space="preserve">
 	  <value>Dark Slate Gray</value>

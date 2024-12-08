@@ -75,6 +75,5 @@ public sealed partial class AppInitializeControlViewModel(
         WeakReferenceMessenger.Default.Send(new CompleteAppInitializeMessage());
     }
 
-    [ObservableProperty]
-    private Type _appThemes = typeof(ThemeMode);
+    public Type AppThemes { get; } = typeof(ThemeMode);
 }
