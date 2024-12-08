@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Moder.Core.Extensions;
 using Moder.Core.Infrastructure.FileSort;
+using Moder.Core.Resources;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Core.Views;
@@ -70,6 +71,7 @@ public class App : Application
         var host = builder.Build();
         _host = host;
         _serviceProvider = host.Services;
+        RequestedThemeVariant = ThemeVariants.DarkSlateGray;
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
