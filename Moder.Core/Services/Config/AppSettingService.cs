@@ -1,6 +1,7 @@
 using MemoryPack;
 using Moder.Core.Models;
 using Moder.Core.Models.Game;
+using Moder.Core.Resources;
 using NLog;
 
 namespace Moder.Core.Services.Config;
@@ -35,6 +36,13 @@ public sealed partial class AppSettingService
         get;
         set => SetProperty(ref field, value);
     } = AppLanguageInfo.Default;
+    
+    [MemoryPackOrder(4)]
+    public ThemeMode AppTheme
+    {
+        get;
+        set => SetProperty(ref field, value);
+    } = ThemeMode.Light;
 
     [MemoryPackIgnore]
     public bool IsChanged { get; private set; }

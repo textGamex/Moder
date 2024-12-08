@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System.Resources;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Converters;
 using Moder.Core.Extensions;
 using Moder.Core.Resources;
+using Moder.Core.Services.Config;
 using Moder.Core.ViewsModel;
 using AppInitializeControlViewModel = Moder.Core.ViewsModel.Menus.AppInitializeControlViewModel;
 
@@ -23,6 +25,18 @@ public partial class AppInitializeControlView : UserControl
         var viewModel = App.Services.GetRequiredService<AppInitializeControlViewModel>();
         DataContext = viewModel;
         ThemeSelector.SelectionChanged += ThemeSelectorOnSelectionChanged;
+    }
+    
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        var settings = App.Services.GetRequiredService<AppSettingService>();
+        var themeType = settings.AppTheme;
+        var names = Enums.GetNames(typeof(ThemeMode));
+        var name = $"{nameof(ThemeMode)}.{themeType}";
+        var resourceManager = new ResourceManager(typeof(Language.Strings.Resource));
+        ThemeSelector.SelectedItem = resourceManager.GetString(name, Language.Strings.Resource.Culture)
+                                     ?? Language.Strings.Resource.LocalizeValueNotFind;
     }
 
     private void ThemeSelectorOnSelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -45,6 +59,8 @@ public partial class AppInitializeControlView : UserControl
             return;
         }
         app.RequestedThemeVariant = AppTheme.GetThemeVariant(theme);
+        var settingService = App.Services.GetRequiredService<AppSettingService>();
+        settingService.AppTheme = theme;
     }
 
     protected override void OnDataContextChanged(EventArgs e)
