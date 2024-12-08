@@ -71,7 +71,6 @@ public class App : Application
         var host = builder.Build();
         _host = host;
         _serviceProvider = host.Services;
-        RequestedThemeVariant = ThemeVariants.DarkSlateGray;
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {

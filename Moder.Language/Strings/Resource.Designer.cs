@@ -375,6 +375,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 未找到本地化的值.
+        /// </summary>
+        public static string LocalizeValueNotFind {
+            get {
+                return ResourceManager.GetString("LocalizeValueNotFind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 人物编辑器.
         /// </summary>
         public static string Menu_CharacterEditor {
@@ -587,6 +596,33 @@ namespace Moder.Language.Strings {
         public static string ThemeMode_Light {
             get {
                 return ResourceManager.GetString("ThemeMode.Light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 黑暗.
+        /// </summary>
+        public static string ThemeVariantTypes_Dark {
+            get {
+                return ResourceManager.GetString("ThemeVariantTypes_Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 黑暗（青色）.
+        /// </summary>
+        public static string ThemeVariantTypes_DarkSlateGray {
+            get {
+                return ResourceManager.GetString("ThemeVariantTypes_DarkSlateGray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 明亮.
+        /// </summary>
+        public static string ThemeVariantTypes_Light {
+            get {
+                return ResourceManager.GetString("ThemeVariantTypes_Light", resourceCulture);
             }
         }
         

@@ -2,10 +2,20 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:res="using:Moder.Core.Resources"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
     <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="{x:Static res:ThemeVariants.Light}">
+            <SolidColorBrush x:Key="BackgroundBrush">#fafafa</SolidColorBrush>
+            <SolidColorBrush x:Key="ForegroundBrush">#1e1e1e</SolidColorBrush>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="{x:Static res:ThemeVariants.Dark}">
+            <SolidColorBrush x:Key="BackgroundBrush">#252526</SolidColorBrush>
+            <SolidColorBrush x:Key="ForegroundBrush">#f5f5f5</SolidColorBrush>
+        </ResourceDictionary>
         <ResourceDictionary x:Key="{x:Static res:ThemeVariants.DarkSlateGray}">
             <SolidColorBrush x:Key="BackgroundBrush">DarkSlateGray</SolidColorBrush>
             <SolidColorBrush x:Key="ForegroundBrush">Azure</SolidColorBrush>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
+
 </ResourceDictionary>

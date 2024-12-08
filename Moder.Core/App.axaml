@@ -2,6 +2,7 @@
     RequestedThemeVariant="Default"
     x:Class="Moder.Core.App"
     xmlns="https://github.com/avaloniaui"
+    xmlns:cv="using:Moder.Core.Converters"
     xmlns:styling="clr-namespace:FluentAvalonia.Styling;assembly=FluentAvalonia"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--  "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options.  -->
@@ -14,6 +15,7 @@
 
     <Application.Resources>
         <ResourceDictionary>
+            <cv:EnumTypeToStringListConverter x:Key="EnumTypeToStringListConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="avares://Moder.Core/Resources/AppThemes.axaml" />
             </ResourceDictionary.MergedDictionaries>

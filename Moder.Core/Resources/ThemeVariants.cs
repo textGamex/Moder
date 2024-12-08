@@ -4,9 +4,9 @@ namespace Moder.Core.Resources;
 
 public static class ThemeVariants
 {
-    public static ThemeVariant DarkSlateGray { get; } = new(nameof(DarkSlateGray), ThemeVariant.Dark);
 
-    public static ThemeVariant Dark { get; } = new(nameof(Dark), ThemeVariant.Dark);
+    public static ThemeVariant Light { get; } = ThemeVariantTypes.Light.GetThemeVariant();
 
-    public static ThemeVariant Light { get; } = new(nameof(Light), ThemeVariant.Light);
+    public static ThemeVariant Dark { get; } = ThemeVariantTypes.Dark.GetThemeVariant();
+    public static ThemeVariant DarkSlateGray { get; } = ThemeVariantTypes.DarkSlateGray.GetThemeVariant();
 }
