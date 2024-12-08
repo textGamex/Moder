@@ -591,38 +591,20 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 青色.
+        /// </summary>
+        public static string ThemeMode_DarkSlateGray {
+            get {
+                return ResourceManager.GetString("ThemeMode.DarkSlateGray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 明亮.
         /// </summary>
         public static string ThemeMode_Light {
             get {
                 return ResourceManager.GetString("ThemeMode.Light", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 黑暗.
-        /// </summary>
-        public static string ThemeVariantTypes_Dark {
-            get {
-                return ResourceManager.GetString("ThemeVariantTypes_Dark", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 黑暗（青色）.
-        /// </summary>
-        public static string ThemeVariantTypes_DarkSlateGray {
-            get {
-                return ResourceManager.GetString("ThemeVariantTypes_DarkSlateGray", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 明亮.
-        /// </summary>
-        public static string ThemeVariantTypes_Light {
-            get {
-                return ResourceManager.GetString("ThemeVariantTypes_Light", resourceCulture);
             }
         }
         

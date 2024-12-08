@@ -1,25 +1,26 @@
-namespace Moder.Core.Converters;
+using EnumsNET;
 
-public static class EnumConvert
+namespace Moder.Core.Extensions;
+
+public static class EnumExtensions
 {
     public static object? ToEnum(this string str, Type enumType)
     {
         try
         {
-            if (Enum.TryParse(enumType, str, true, out var result))
+            if (Enums.TryParse(enumType, str, true, out var result))
             {
                 return result;
-                
             }
         }
         catch { }
         return null;
     }
-    
-    public static object? ToEnumItem(this int index, Type enumType)
+
+    public static object? ToEnumItem(int index, Type enumType)
     {
-        var names = Enum.GetNames(enumType);
-        if (index >= names.Length || index < 0)
+        var names = Enums.GetNames(enumType);
+        if (index >= names.Count || index < 0)
         {
             return null;
         }

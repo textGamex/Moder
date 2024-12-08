@@ -1,6 +1,6 @@
 namespace Moder.Core.Resources;
 
-public enum ThemeVariantTypes
+public enum ThemeMode : byte
 {
     Light,
     Dark,

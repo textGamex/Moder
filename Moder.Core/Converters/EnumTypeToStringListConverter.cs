@@ -1,10 +1,11 @@
 using System.Globalization;
 using System.Resources;
 using Avalonia.Data.Converters;
+using EnumsNET;
 
 namespace Moder.Core.Converters;
 
-public class EnumTypeToStringListConverter: IValueConverter
+public class EnumTypeToStringListConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -12,13 +13,16 @@ public class EnumTypeToStringListConverter: IValueConverter
         {
             return null;
         }
-        var names = Enum.GetNames(type);
-        var localiza = new List<string>();
+        var names = Enums.GetNames(type);
+        var localiza = new List<string>(names.Count);
         var resourceManager = new ResourceManager(typeof(Language.Strings.Resource));
         foreach (var n in names)
         {
-            var name = $"{type.Name}_{n}";
-            localiza.Add(resourceManager.GetString(name, Language.Strings.Resource.Culture) ?? Language.Strings.Resource.LocalizeValueNotFind);
+            var name = $"{type.Name}.{n}";
+            localiza.Add(
+                resourceManager.GetString(name, Language.Strings.Resource.Culture)
+                    ?? Language.Strings.Resource.LocalizeValueNotFind
+            );
         }
         return localiza;
     }
