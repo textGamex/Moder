@@ -26,8 +26,7 @@
                 Width="280"
                 MaxHeight="55"
                 HorizontalAlignment="Stretch"
-                ItemsSource="{Binding AppThemes, Converter={StaticResource EnumTypeToStringListConverter}}"
-                SelectedIndex="{}" />
+                ItemsSource="{Binding AppThemes, Converter={StaticResource EnumTypeToStringListConverter}}" />
         </StackPanel>
         <StackPanel
             Grid.Row="1"
