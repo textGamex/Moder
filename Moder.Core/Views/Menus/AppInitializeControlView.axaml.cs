@@ -26,17 +26,19 @@ public partial class AppInitializeControlView : UserControl
         DataContext = viewModel;
         ThemeSelector.SelectionChanged += ThemeSelectorOnSelectionChanged;
     }
-    
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
+
         var settings = App.Services.GetRequiredService<AppSettingService>();
         var themeType = settings.AppTheme;
         var names = Enums.GetNames(typeof(ThemeMode));
         var name = $"{nameof(ThemeMode)}.{themeType}";
         var resourceManager = new ResourceManager(typeof(Language.Strings.Resource));
-        ThemeSelector.SelectedItem = resourceManager.GetString(name, Language.Strings.Resource.Culture)
-                                     ?? Language.Strings.Resource.LocalizeValueNotFind;
+        ThemeSelector.SelectedItem =
+            resourceManager.GetString(name, Language.Strings.Resource.Culture)
+            ?? Language.Strings.Resource.LocalizeValueNotFind;
     }
 
     private void ThemeSelectorOnSelectionChanged(object? sender, SelectionChangedEventArgs e)
