@@ -9,3 +9,7 @@ CSharp:
 UI:
 - changed-files:
   - any-glob-to-any-file: '**/*.xaml'
+
+Localization:
+- changed-files:
+  - any-glob-to-any-file: '**/*.resx'
