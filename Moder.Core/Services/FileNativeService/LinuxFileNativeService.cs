@@ -13,9 +13,6 @@ public sealed class LinuxFileNativeService : IFileNativeService
     private const string FilesDir = "files";
     private const string InfoDir = "info";
 
-    // TODO: 全局配置
-    private static readonly UTF8Encoding Utf8NotBom = new(false);
-
     public bool TryMoveToRecycleBin(string fileOrDirectoryPath, out string? errorMessage, out int errorCode)
     {
         try
@@ -96,11 +93,11 @@ public sealed class LinuxFileNativeService : IFileNativeService
 
     private static void CreateTrashInfoFile(string infoFilePath, string originalPath)
     {
-        var path = HttpUtility.UrlEncode(originalPath, Utf8NotBom);
+        var path = HttpUtility.UrlEncode(originalPath, Encodings.Utf8NotBom);
         // 不转也能正常工作, Ubuntu 是转了的
         path = path.Replace("%2f", "/");
 
-        using StreamWriter writer = new(infoFilePath, false, Utf8NotBom);
+        using StreamWriter writer = new(infoFilePath, false, Encodings.Utf8NotBom);
         writer.WriteLine("[Trash Info]");
         writer.WriteLine($"Path={path}");
         writer.WriteLine($"DeletionDate={DateTime.Now:s}");
