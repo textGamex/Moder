@@ -281,4 +281,7 @@
   <data name="ThemeMode.DarkSlateGray" xml:space="preserve">
 	  <value>Dark Slate Gray</value>
   </data>
+  <data name="Common.Cancel" xml:space="preserve">
+	  <value>Cancel</value>
+  </data>
 </root>
