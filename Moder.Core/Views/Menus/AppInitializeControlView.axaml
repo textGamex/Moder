@@ -1,56 +1,64 @@
 ﻿<UserControl
-    Design.DataContext="{x:Static vms:DesignData.AppInitializeControlViewModel}"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d"
     x:Class="Moder.Core.Views.Menus.AppInitializeControlView"
-    x:DataType="menus:AppInitializeControlViewModel"
     xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:menus="clr-namespace:Moder.Core.ViewsModel.Menus"
     xmlns:vms="clr-namespace:Moder.Core.ViewsModel"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="menus:AppInitializeControlViewModel"
+    Design.DataContext="{x:Static vms:DesignData.AppInitializeControlViewModel}"
+    mc:Ignorable="d">
 
-    <Grid RowDefinitions="*,*,Auto *">
+    <Grid RowDefinitions="*,*,*,Auto">
         <StackPanel
             Grid.Row="0"
             HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Orientation="Horizontal"
-            Spacing="4"
-            VerticalAlignment="Center">
-            <TextBox
-                IsReadOnly="True"
+            Spacing="4">
+            <Label HorizontalAlignment="Center" Content="主题" />
+            <ComboBox
+                x:Name="ThemeSelector"
+                Width="280"
                 MaxHeight="55"
-                Text="{Binding GameRootFolderPath, Mode=OneWay}"
-                Width="280" />
-            <Button Command="{Binding SelectGameRootFolderCommand}" Content="{x:Static lang:Resource.InitializePage_SelectGameRootPath}" />
+                HorizontalAlignment="Stretch"
+                ItemsSource="{Binding AppThemes, Converter={StaticResource EnumTypeToStringListConverter}}" />
         </StackPanel>
         <StackPanel
             Grid.Row="1"
             HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Orientation="Horizontal"
             Spacing="4">
             <TextBox
-                IsReadOnly="True"
+                Width="280"
                 MaxHeight="55"
-                Text="{Binding ModRootFolderPath, Mode=OneWay}"
-                Width="280" />
+                IsReadOnly="True"
+                Text="{Binding GameRootFolderPath, Mode=OneWay}" />
+            <Button Command="{Binding SelectGameRootFolderCommand}" Content="{x:Static lang:Resource.InitializePage_SelectGameRootPath}" />
+        </StackPanel>
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal"
+            Spacing="4">
+            <TextBox
+                Width="280"
+                MaxHeight="55"
+                IsReadOnly="True"
+                Text="{Binding ModRootFolderPath, Mode=OneWay}" />
             <Button Command="{Binding SelectModRootFolderCommand}" Content="{x:Static lang:Resource.InitializePage_SelectModRootPath}" />
         </StackPanel>
         <Button
-            Command="{Binding SubmitCommand}"
-            Content="完成"
-            Grid.Row="2"
-            HorizontalAlignment="Center"
+            Grid.Row="3"
             Margin="0,0,0,32"
-            VerticalAlignment="Center" />
-        <Border Grid.Row="3" HorizontalAlignment="Center">
-            <StackPanel>
-                <Label Content="主题" />
-                <ComboBox ItemsSource="{Binding AppThemes, Converter={StaticResource EnumTypeToStringListConverter}}" x:Name="ThemeSelector" />
-            </StackPanel>
-        </Border>
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Command="{Binding SubmitCommand}"
+            Content="完成" />
     </Grid>
 </UserControl>

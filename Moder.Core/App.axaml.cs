@@ -72,6 +72,8 @@ public class App : Application
         var host = builder.Build();
         _host = host;
         _serviceProvider = host.Services;
+        var settingService = App.Services.GetRequiredService<AppSettingService>();
+        RequestedThemeVariant = AppTheme.GetThemeVariant(settingService.AppTheme);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
