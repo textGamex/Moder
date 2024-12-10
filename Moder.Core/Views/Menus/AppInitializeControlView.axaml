@@ -2,7 +2,6 @@
     x:Class="Moder.Core.Views.Menus.AppInitializeControlView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:components="clr-namespace:Moder.Core.Views.Components"
     xmlns:controls="clr-namespace:Moder.Core.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language"
