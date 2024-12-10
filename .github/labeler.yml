@@ -1,6 +1,6 @@
 documentation:
 - changed-files:
-  - any-glob-to-any-file: 'Docs/**'
+  - any-glob-to-any-file: '**/*.md'
 
 CSharp:
 - changed-files:
