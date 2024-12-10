@@ -11,7 +11,7 @@ using AppInitializeControlViewModel = Moder.Core.ViewsModel.Menus.AppInitializeC
 
 namespace Moder.Core.Views.Menus;
 
-public partial class AppInitializeControlView : UserControl
+public sealed partial class AppInitializeControlView : UserControl
 {
     private IDisposable? _selectFolderInteractionDisposable;
 

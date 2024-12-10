@@ -7,7 +7,7 @@ using Moder.Core.Messages;
 
 namespace Moder.Core.Views.Menus;
 
-public partial class WorkSpaceControlView : UserControl
+public sealed partial class WorkSpaceControlView : UserControl
 {
     private readonly ObservableCollection<object> _openedTabFileItems;
 

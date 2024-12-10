@@ -4,7 +4,7 @@ using Moder.Core.ViewsModel.Menus;
 
 namespace Moder.Core.Views.Menus;
 
-public partial class MainControlView : UserControl
+public sealed partial class MainControlView : UserControl
 {
     public MainControlView()
     {

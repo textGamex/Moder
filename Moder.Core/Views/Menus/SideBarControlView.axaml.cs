@@ -13,7 +13,7 @@ using Moder.Core.ViewsModel.Menus;
 
 namespace Moder.Core.Views.Menus;
 
-public partial class SideBarControlView : UserControl
+public sealed partial class SideBarControlView : UserControl
 {
     // BUG: 第一次右键选择菜单项时文件树有可能会滚动到顶部
     // BUG: 右键选中效果会和滚动条重合, 在实现拉伸文件树时尝试修复

@@ -21,7 +21,7 @@
             VerticalAlignment="Center"
             Orientation="Horizontal"
             Spacing="4">
-            <Label HorizontalAlignment="Center" Content="主题" />
+            <Label HorizontalAlignment="Center" Content="{x:Static lang:Resource.SettingsPage_AppTheme}" />
             <ComboBox
                 x:Name="ThemeSelector"
                 Width="280"

@@ -5,7 +5,7 @@ using Moder.Core.ViewsModel.Menus;
 
 namespace Moder.Core.Views.Menus;
 
-public partial class RenameFileControlView : UserControl
+public sealed partial class RenameFileControlView : UserControl
 {
     public string NewName => ViewModel.NewName;
     public bool IsInvalid => !ViewModel.IsValid;

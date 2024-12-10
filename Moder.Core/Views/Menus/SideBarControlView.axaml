@@ -47,26 +47,3 @@
         </TreeView.ItemTemplate>
     </TreeView>
 </UserControl>
-<!-- <TreeViewItem.ContextFlyout> -->
-<!--     <MenuFlyout> -->
-<!--  <MenuFlyoutItem  -->
-<!--  Command="{x:Bind DeleteFileCommand}"  -->
-<!--  Icon="Delete"  -->
-<!--  Text="{x:Bind lang:Resource.Common_Delete}">  -->
-<!--             <MenuFlyoutItem.KeyboardAccelerators> -->
-<!--                 <KeyboardAccelerator Key="Delete" /> -->
-<!--             </MenuFlyoutItem.KeyboardAccelerators> -->
-<!--         </MenuFlyoutItem> -->
-<!--    -->
-<!--  <MenuFlyoutItem  -->
-<!--  Command="{x:Bind ShowInExplorerCommand}"  -->
-<!--  Icon="{ui:FontIcon Glyph=&#xE838;}"  -->
-<!--  Text="{x:Bind lang:Resource.SettingsPage_OpenInExplorer}" />  -->
-<!--    -->
-<!--         <MenuFlyoutItem Command="{x:Bind RenameCommand}" Text="{x:Bind lang:Resource.Common_Rename}"> -->
-<!--             <MenuFlyoutItem.KeyboardAccelerators> -->
-<!--                 <KeyboardAccelerator Key="F2" /> -->
-<!--             </MenuFlyoutItem.KeyboardAccelerators> -->
-<!--         </MenuFlyoutItem> -->
-<!--     </MenuFlyout> -->
-<!-- </TreeViewItem.ContextFlyout> -->
