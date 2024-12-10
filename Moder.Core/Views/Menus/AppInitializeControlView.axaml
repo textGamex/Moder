@@ -2,7 +2,8 @@
     x:Class="Moder.Core.Views.Menus.AppInitializeControlView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:compo="clr-namespace:Moder.Core.Views.Components"
+    xmlns:components="clr-namespace:Moder.Core.Views.Components"
+    xmlns:controls="clr-namespace:Moder.Core.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -29,13 +30,13 @@
                 HorizontalAlignment="Stretch"
                 ItemsSource="{Binding AppThemes, Converter={StaticResource EnumTypeToStringListConverter}}" />
         </StackPanel>
-        <compo:DirectorySelector
+        <controls:DirectorySelector
             Grid.Row="1"
             DirectoryPath="{Binding GameRootFolderPath}"
             SelectDirectoryCommand="{Binding SelectGameRootFolderCommand}"
             SelectorCaption="{x:Static lang:Resource.InitializePage_SelectGameRootPath}" />
 
-        <compo:DirectorySelector
+        <controls:DirectorySelector
             Grid.Row="2"
             DirectoryPath="{Binding ModRootFolderPath}"
             SelectDirectoryCommand="{Binding SelectModRootFolderCommand}"

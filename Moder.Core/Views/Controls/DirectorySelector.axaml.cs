@@ -1,14 +1,12 @@
-using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using Moder.Language.Strings;
 
-namespace Moder.Core.Views.Components;
+namespace Moder.Core.Views.Controls;
 
-public class DirectorySelector : TemplatedControl
+public sealed class DirectorySelector : TemplatedControl
 {
     public string SelectorCaption
     {

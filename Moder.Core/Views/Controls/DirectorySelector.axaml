@@ -1,13 +1,11 @@
 <Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:Moder.Core.Views.Components"
+    xmlns:controls="using:Moder.Core.Views.Controls"
     xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language">
     <Design.PreviewWith>
         <controls:DirectorySelector />
     </Design.PreviewWith>
-
-
 
     <Style Selector="controls|DirectorySelector">
         <!--  Set Defaults  -->
