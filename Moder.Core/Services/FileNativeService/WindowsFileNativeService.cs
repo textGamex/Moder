@@ -34,7 +34,8 @@ public sealed class WindowsFileNativeService : IFileNativeService
         operation.Options =
             ShellFileOperations.OperationFlags.RecycleOnDelete
             | ShellFileOperations.OperationFlags.NoConfirmation;
-        operation.QueueDeleteOperation(new ShellItem(fileOrDirectoryPath));
+        using var item = new ShellItem(fileOrDirectoryPath);
+        operation.QueueDeleteOperation(item);
 
         var result = default(HRESULT);
         operation.PostDeleteItem += (_, args) => result = args.Result;
