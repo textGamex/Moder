@@ -1,5 +1,5 @@
 ﻿#if LINUX
-using System.Text;
+using System.Diagnostics;
 using System.Web;
 
 namespace Moder.Core.Services.FileNativeService;
@@ -33,6 +33,22 @@ public sealed class LinuxFileNativeService : IFileNativeService
         }
 
         return false;
+    }
+
+    public bool TryShowInExplorer(string fileOrDirectoryPath, bool isFile, out string? errorMessage)
+    {
+        if (isFile)
+        {
+            // 不打开文件, 只打开文件所属文件夹
+            // TODO: 可以使用 Dolphin 或 Nautilus 直接打开文件夹并选中对应文件
+            fileOrDirectoryPath = Path.GetDirectoryName(fileOrDirectoryPath) ?? fileOrDirectoryPath;
+        }
+        var startInfo = new ProcessStartInfo("xdg-open") { Arguments = fileOrDirectoryPath };
+
+        using var process = Process.Start(startInfo);
+
+        errorMessage = null;
+        return true;
     }
 
     private static bool TryMoveToRecycleBinCore(

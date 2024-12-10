@@ -13,19 +13,12 @@ namespace Moder.Core.Views.Menus;
 
 public partial class SideBarControlView : UserControl
 {
-    // private FAMenuFlyout _menuFlyout = new();
-    private FAMenuFlyout _menuFlyout;
+    private readonly FAMenuFlyout _contextMenu;
 
     public SideBarControlView()
     {
         InitializeComponent();
-        _menuFlyout = Resources["Flyout"] as FAMenuFlyout ?? throw new InvalidOperationException();
-        // _menuFlyout.Items.Add();
-        // var a = new MenuFlyoutItem
-        // {
-        //     Text = "Open"
-        //     // IconSource = new SymbolIcon(Symbol.OpenFile)
-        // };
+        _contextMenu = Resources["ContextMenu"] as FAMenuFlyout ?? throw new InvalidOperationException();
 
         DataContext = App.Services.GetRequiredService<SideBarControlViewModel>();
 
@@ -46,7 +39,7 @@ public partial class SideBarControlView : UserControl
             var item = ((Control?)e.Source)?.GetVisualAncestors().OfType<TreeViewItem>().FirstOrDefault();
             if (item is not null)
             {
-                _menuFlyout.ShowAt(item);
+                _contextMenu.ShowAt(item);
             }
             e.Handled = true;
         }

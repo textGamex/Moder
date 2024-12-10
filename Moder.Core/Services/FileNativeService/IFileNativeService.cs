@@ -10,4 +10,6 @@ public interface IFileNativeService
     /// <param name="errorCode">错误代码</param>
     /// <returns>成功返回 <c>true</c>, 失败返回 <c>false</c></returns>
     public bool TryMoveToRecycleBin(string fileOrDirectoryPath, out string? errorMessage, out int errorCode);
+
+    public bool TryShowInExplorer(string fileOrDirectoryPath, bool isFile, out string? errorMessage);
 }

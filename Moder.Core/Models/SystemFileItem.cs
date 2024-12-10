@@ -82,33 +82,11 @@ public sealed partial class SystemFileItem
         return $"{nameof(Name)}: {Name}, {nameof(FullPath)}: {FullPath}, {nameof(IsFile)}: {IsFile}, {nameof(Children)}: {Children}";
     }
 
-    // [RelayCommand]
-    // private async Task ShowInExplorerAsync()
-    // {
-    //     string? folder;
-    //     IStorageItem selectedItem;
-    //     if (IsFile)
-    //     {
-    //         selectedItem = await StorageFile.GetFileFromPathAsync(FullPath);
-    //         folder = Path.GetDirectoryName(FullPath);
-    //     }
-    //     else
-    //     {
-    //         selectedItem = await StorageFolder.GetFolderFromPathAsync(FullPath);
-    //         folder = Directory.GetParent(FullPath)?.FullName;
-    //     }
-    //
-    //     if (folder is null)
-    //     {
-    //         Log.Warn("在资源管理器中打开失败，无法获取路径：{FullPath}", FullPath);
-    //         return;
-    //     }
-    //
-    //     await Launcher.LaunchFolderPathAsync(
-    //         folder,
-    //         new FolderLauncherOptions { ItemsToSelect = { selectedItem } }
-    //     );
-    // }
+    [RelayCommand]
+    private void ShowInExplorer()
+    {
+        _ = FileNativeService.TryShowInExplorer(FullPath, IsFile, out _);
+    }
 
     [RelayCommand]
     private async Task RenameAsync()

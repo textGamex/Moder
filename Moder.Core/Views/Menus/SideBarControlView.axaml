@@ -14,15 +14,22 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <winui:FAMenuFlyout x:Key="Flyout" x:DataType="models:SystemFileItem">
+        <winui:FAMenuFlyout x:Key="ContextMenu" x:DataType="models:SystemFileItem">
             <winui:MenuFlyoutItem Command="{Binding DeleteFileCommand}" Text="{x:Static lang:Resource.Common_Delete}">
                 <winui:MenuFlyoutItem.IconSource>
                     <winui:SymbolIconSource Symbol="Delete" />
                 </winui:MenuFlyoutItem.IconSource>
             </winui:MenuFlyoutItem>
+
             <winui:MenuFlyoutItem Command="{Binding RenameCommand}" Text="{x:Static lang:Resource.Common_Rename}">
                 <winui:MenuFlyoutItem.IconSource>
                     <winui:SymbolIconSource Symbol="Rename" />
+                </winui:MenuFlyoutItem.IconSource>
+            </winui:MenuFlyoutItem>
+
+            <winui:MenuFlyoutItem Command="{Binding ShowInExplorerCommand}" Text="{x:Static lang:Resource.SettingsPage_OpenInExplorer}">
+                <winui:MenuFlyoutItem.IconSource>
+                    <winui:SymbolIconSource Symbol="OpenLocal" />
                 </winui:MenuFlyoutItem.IconSource>
             </winui:MenuFlyoutItem>
         </winui:FAMenuFlyout>
