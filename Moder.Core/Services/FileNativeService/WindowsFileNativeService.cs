@@ -46,6 +46,7 @@ public sealed class WindowsFileNativeService : IFileNativeService
         return result.Succeeded;
     }
 
+    ///<inheritdoc/>
     public bool TryShowInExplorer(
         string fileOrDirectoryPath,
         bool isFile,

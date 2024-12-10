@@ -39,7 +39,7 @@ public partial class SideBarControlView : UserControl
             var item = ((Control?)e.Source)?.GetVisualAncestors().OfType<TreeViewItem>().FirstOrDefault();
             if (item is not null)
             {
-                _contextMenu.ShowAt(item);
+                _contextMenu.ShowAt(item, true);
             }
             e.Handled = true;
         }

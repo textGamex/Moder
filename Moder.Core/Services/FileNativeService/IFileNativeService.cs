@@ -11,5 +11,12 @@ public interface IFileNativeService
     /// <returns>成功返回 <c>true</c>, 失败返回 <c>false</c></returns>
     public bool TryMoveToRecycleBin(string fileOrDirectoryPath, out string? errorMessage, out int errorCode);
 
+    /// <summary>
+    /// 尝试在资源管理器中显示文件或文件夹
+    /// </summary>
+    /// <param name="fileOrDirectoryPath">文件或文件夹路径</param>
+    /// <param name="isFile">当<c>fileOrDirectoryPath</c>是文件路径时, 为<c>true</c>, 否则为<c>false</c></param>
+    /// <param name="errorMessage">错误信息</param>
+    /// <returns>成功返回 <c>true</c>, 失败返回 <c>false</c></returns>
     public bool TryShowInExplorer(string fileOrDirectoryPath, bool isFile, out string? errorMessage);
 }

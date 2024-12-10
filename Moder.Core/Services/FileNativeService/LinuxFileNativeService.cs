@@ -35,6 +35,7 @@ public sealed class LinuxFileNativeService : IFileNativeService
         return false;
     }
 
+    ///<inheritdoc/>
     public bool TryShowInExplorer(string fileOrDirectoryPath, bool isFile, out string? errorMessage)
     {
         if (isFile)
