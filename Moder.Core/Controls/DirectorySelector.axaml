@@ -1,8 +1,7 @@
 <Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:Moder.Core.Views.Controls"
-    xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language">
+    xmlns:controls="clr-namespace:Moder.Core.Controls">
     <Design.PreviewWith>
         <controls:DirectorySelector />
     </Design.PreviewWith>

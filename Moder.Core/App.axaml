@@ -11,7 +11,7 @@
         <FluentTheme />
         <styling:FluentAvaloniaTheme />
         <StyleInclude Source="avares://Moder.Core/Resources/AppThemeStyleSetter.axaml" />
-        <StyleInclude Source="/Views/Controls/DirectorySelector.axaml" />
+        <StyleInclude Source="/Controls/DirectorySelector.axaml" />
     </Application.Styles>
 
     <Application.Resources>

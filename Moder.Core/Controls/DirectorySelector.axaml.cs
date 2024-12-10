@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 
-namespace Moder.Core.Views.Controls;
+namespace Moder.Core.Controls;
 
 public sealed class DirectorySelector : TemplatedControl
 {
