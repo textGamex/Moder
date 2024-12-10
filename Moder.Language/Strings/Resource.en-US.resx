@@ -284,4 +284,7 @@
   <data name="Common.Cancel" xml:space="preserve">
 	  <value>Cancel</value>
   </data>
+  <data name="Common.Complete" xml:space="preserve">
+	  <value>Complete</value>
+  </data>
 </root>

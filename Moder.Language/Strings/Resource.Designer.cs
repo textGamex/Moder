@@ -231,6 +231,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 完成.
+        /// </summary>
+        public static string Common_Complete {
+            get {
+                return ResourceManager.GetString("Common.Complete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 默认.
         /// </summary>
         public static string Common_Default {

@@ -5,7 +5,7 @@ using EnumsNET;
 
 namespace Moder.Core.Converters;
 
-public class EnumTypeToStringListConverter : IValueConverter
+public sealed class EnumTypeToStringListConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
