@@ -8,7 +8,7 @@ CSharp:
 
 UI:
 - changed-files:
-  - any-glob-to-any-file: '**/*.xaml'
+  - any-glob-to-any-file: '**/*.axaml'
 
 Localization:
 - changed-files:
