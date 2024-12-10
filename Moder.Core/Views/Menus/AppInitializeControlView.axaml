@@ -2,6 +2,7 @@
     x:Class="Moder.Core.Views.Menus.AppInitializeControlView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Moder.Core.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -28,31 +29,17 @@
                 HorizontalAlignment="Stretch"
                 ItemsSource="{Binding AppThemes, Converter={StaticResource EnumTypeToStringListConverter}}" />
         </StackPanel>
-        <StackPanel
+        <controls:DirectorySelector
             Grid.Row="1"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Orientation="Horizontal"
-            Spacing="4">
-            <TextBox
-                Width="280"
-                MaxHeight="55"
-                IsReadOnly="True"
-                Text="{Binding GameRootFolderPath, Mode=OneWay}" />
-            <Button Command="{Binding SelectGameRootFolderCommand}" Content="{x:Static lang:Resource.InitializePage_SelectGameRootPath}" />
-        </StackPanel>
-        <StackPanel
+            DirectoryPath="{Binding GameRootFolderPath}"
+            SelectDirectoryCommand="{Binding SelectGameRootFolderCommand}"
+            SelectorCaption="{x:Static lang:Resource.InitializePage_SelectGameRootPath}" />
+
+        <controls:DirectorySelector
             Grid.Row="2"
-            HorizontalAlignment="Center"
-            Orientation="Horizontal"
-            Spacing="4">
-            <TextBox
-                Width="280"
-                MaxHeight="55"
-                IsReadOnly="True"
-                Text="{Binding ModRootFolderPath, Mode=OneWay}" />
-            <Button Command="{Binding SelectModRootFolderCommand}" Content="{x:Static lang:Resource.InitializePage_SelectModRootPath}" />
-        </StackPanel>
+            DirectoryPath="{Binding ModRootFolderPath}"
+            SelectDirectoryCommand="{Binding SelectModRootFolderCommand}"
+            SelectorCaption="{x:Static lang:Resource.InitializePage_SelectModRootPath}" />
         <Button
             Grid.Row="3"
             Margin="0,0,0,32"
