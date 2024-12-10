@@ -1,15 +1,12 @@
 ﻿using System.Resources;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using EnumsNET;
 using Microsoft.Extensions.DependencyInjection;
-using Moder.Core.Converters;
 using Moder.Core.Extensions;
 using Moder.Core.Resources;
 using Moder.Core.Services.Config;
-using Moder.Core.ViewsModel;
 using AppInitializeControlViewModel = Moder.Core.ViewsModel.Menus.AppInitializeControlViewModel;
 
 namespace Moder.Core.Views.Menus;

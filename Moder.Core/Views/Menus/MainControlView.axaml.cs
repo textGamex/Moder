@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
-using Moder.Core.ViewsModel;
 using Moder.Core.ViewsModel.Menus;
 
 namespace Moder.Core.Views.Menus;

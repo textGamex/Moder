@@ -3,42 +3,70 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Moder.Core.Models"
     xmlns:vms="clr-namespace:Moder.Core.ViewsModel.Menus;assembly=Moder.Core"
+    xmlns:winui="using:FluentAvalonia.UI.Controls"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="vms:SideBarControlViewModel"
     mc:Ignorable="d">
 
-    <TreeView ItemsSource="{Binding Items}" SelectionChanged="TreeView_OnSelectionChanged">
+    <UserControl.Resources>
+        <winui:FAMenuFlyout x:Key="ContextMenu" x:DataType="models:SystemFileItem">
+            <winui:MenuFlyoutItem Command="{Binding DeleteFileCommand}" Text="{x:Static lang:Resource.Common_Delete}">
+                <winui:MenuFlyoutItem.IconSource>
+                    <winui:SymbolIconSource Symbol="Delete" />
+                </winui:MenuFlyoutItem.IconSource>
+            </winui:MenuFlyoutItem>
+
+            <winui:MenuFlyoutItem Command="{Binding RenameCommand}" Text="{x:Static lang:Resource.Common_Rename}">
+                <winui:MenuFlyoutItem.IconSource>
+                    <winui:SymbolIconSource Symbol="Rename" />
+                </winui:MenuFlyoutItem.IconSource>
+            </winui:MenuFlyoutItem>
+
+            <winui:MenuFlyoutItem Command="{Binding ShowInExplorerCommand}" Text="{x:Static lang:Resource.SettingsPage_OpenInExplorer}">
+                <winui:MenuFlyoutItem.IconSource>
+                    <winui:SymbolIconSource Symbol="OpenLocal" />
+                </winui:MenuFlyoutItem.IconSource>
+            </winui:MenuFlyoutItem>
+        </winui:FAMenuFlyout>
+    </UserControl.Resources>
+
+    <TreeView
+        x:Name="FileTreeView"
+        ItemsSource="{Binding Items}"
+        SelectionChanged="TreeView_OnSelectionChanged"
+        SelectionMode="Single">
         <TreeView.ItemTemplate>
             <TreeDataTemplate x:DataType="models:SystemFileItem" ItemsSource="{Binding Children}">
                 <TextBlock Text="{Binding Name}" />
-                <!-- <TreeViewItem.ContextFlyout> -->
-                <!--     <MenuFlyout> -->
-                <!--  <MenuFlyoutItem  -->
-                <!--  Command="{x:Bind DeleteFileCommand}"  -->
-                <!--  Icon="Delete"  -->
-                <!--  Text="{x:Bind lang:Resource.Common_Delete}">  -->
-                <!--             <MenuFlyoutItem.KeyboardAccelerators> -->
-                <!--                 <KeyboardAccelerator Key="Delete" /> -->
-                <!--             </MenuFlyoutItem.KeyboardAccelerators> -->
-                <!--         </MenuFlyoutItem> -->
-                <!--    -->
-                <!--  <MenuFlyoutItem  -->
-                <!--  Command="{x:Bind ShowInExplorerCommand}"  -->
-                <!--  Icon="{ui:FontIcon Glyph=&#xE838;}"  -->
-                <!--  Text="{x:Bind lang:Resource.SettingsPage_OpenInExplorer}" />  -->
-                <!--    -->
-                <!--         <MenuFlyoutItem Command="{x:Bind RenameCommand}" Text="{x:Bind lang:Resource.Common_Rename}"> -->
-                <!--             <MenuFlyoutItem.KeyboardAccelerators> -->
-                <!--                 <KeyboardAccelerator Key="F2" /> -->
-                <!--             </MenuFlyoutItem.KeyboardAccelerators> -->
-                <!--         </MenuFlyoutItem> -->
-                <!--     </MenuFlyout> -->
-                <!-- </TreeViewItem.ContextFlyout> -->
             </TreeDataTemplate>
         </TreeView.ItemTemplate>
     </TreeView>
 </UserControl>
+<!-- <TreeViewItem.ContextFlyout> -->
+<!--     <MenuFlyout> -->
+<!--  <MenuFlyoutItem  -->
+<!--  Command="{x:Bind DeleteFileCommand}"  -->
+<!--  Icon="Delete"  -->
+<!--  Text="{x:Bind lang:Resource.Common_Delete}">  -->
+<!--             <MenuFlyoutItem.KeyboardAccelerators> -->
+<!--                 <KeyboardAccelerator Key="Delete" /> -->
+<!--             </MenuFlyoutItem.KeyboardAccelerators> -->
+<!--         </MenuFlyoutItem> -->
+<!--    -->
+<!--  <MenuFlyoutItem  -->
+<!--  Command="{x:Bind ShowInExplorerCommand}"  -->
+<!--  Icon="{ui:FontIcon Glyph=&#xE838;}"  -->
+<!--  Text="{x:Bind lang:Resource.SettingsPage_OpenInExplorer}" />  -->
+<!--    -->
+<!--         <MenuFlyoutItem Command="{x:Bind RenameCommand}" Text="{x:Bind lang:Resource.Common_Rename}"> -->
+<!--             <MenuFlyoutItem.KeyboardAccelerators> -->
+<!--                 <KeyboardAccelerator Key="F2" /> -->
+<!--             </MenuFlyoutItem.KeyboardAccelerators> -->
+<!--         </MenuFlyoutItem> -->
+<!--     </MenuFlyout> -->
+<!-- </TreeViewItem.ContextFlyout> -->

@@ -13,6 +13,7 @@ using Moder.Core.Infrastructure.FileSort;
 using Moder.Core.Resources;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
+using Moder.Core.Services.FileNativeService;
 using Moder.Core.Views;
 using Moder.Core.Views.Menus;
 using Moder.Core.ViewsModel;
@@ -146,12 +147,14 @@ public class App : Application
     private static void AddWindowsServices(IServiceCollection builder)
     {
         builder.AddSingleton<IFileSortComparer, WindowsFileSortComparer>();
+        builder.AddSingleton<IFileNativeService, WindowsFileNativeService>();
     }
 #elif LINUX
     [SupportedOSPlatform("linux")]
     private static void AddLinuxServices(IServiceCollection builder)
     {
         builder.AddSingleton<IFileSortComparer, LinuxFileSortComparer>();
+        builder.AddSingleton<IFileNativeService, LinuxFileNativeService>();
     }
 #endif
 
