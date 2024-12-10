@@ -1,0 +1,11 @@
+documentation:
+- changed-files:
+  - any-glob-to-any-file: 'Docs/**'
+
+CSharp:
+- changed-files:
+  - any-glob-to-any-file: '**/*.cs'
+
+UI:
+- changed-files:
+  - any-glob-to-any-file: '**/*.xaml'
