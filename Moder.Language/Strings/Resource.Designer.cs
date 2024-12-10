@@ -177,15 +177,6 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 请填写必须的字段.
-        /// </summary>
-        public static string CharacterEditor_MissingRequiredInfoTip {
-            get {
-                return ResourceManager.GetString("CharacterEditor.MissingRequiredInfoTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 无.
         /// </summary>
         public static string CharacterEditor_None {
@@ -213,6 +204,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 取消.
+        /// </summary>
+        public static string Common_Cancel {
+            get {
+                return ResourceManager.GetString("Common.Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 清空.
         /// </summary>
         public static string Common_Clear {
@@ -227,6 +227,15 @@ namespace Moder.Language.Strings {
         public static string Common_Close {
             get {
                 return ResourceManager.GetString("Common.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 完成.
+        /// </summary>
+        public static string Common_Complete {
+            get {
+                return ResourceManager.GetString("Common.Complete", resourceCulture);
             }
         }
         
@@ -362,6 +371,33 @@ namespace Moder.Language.Strings {
         public static string Common_WriteToFile {
             get {
                 return ResourceManager.GetString("Common.WriteToFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 选择游戏根目录.
+        /// </summary>
+        public static string InitializePage_SelectGameRootPath {
+            get {
+                return ResourceManager.GetString("InitializePage.SelectGameRootPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 选择Mod根目录.
+        /// </summary>
+        public static string InitializePage_SelectModRootPath {
+            get {
+                return ResourceManager.GetString("InitializePage.SelectModRootPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 未找到本地化的值.
+        /// </summary>
+        public static string LocalizeValueNotFind {
+            get {
+                return ResourceManager.GetString("LocalizeValueNotFind", resourceCulture);
             }
         }
         
@@ -573,11 +609,38 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 青色.
+        /// </summary>
+        public static string ThemeMode_DarkSlateGray {
+            get {
+                return ResourceManager.GetString("ThemeMode.DarkSlateGray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 明亮.
         /// </summary>
         public static string ThemeMode_Light {
             get {
                 return ResourceManager.GetString("ThemeMode.Light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 请填写必须的字段.
+        /// </summary>
+        public static string UIErrorMessage_MissingRequiredInfoTip {
+            get {
+                return ResourceManager.GetString("UIErrorMessage.MissingRequiredInfoTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 此项为必填项.
+        /// </summary>
+        public static string UIErrorMessage_Required {
+            get {
+                return ResourceManager.GetString("UIErrorMessage.Required", resourceCulture);
             }
         }
     }
