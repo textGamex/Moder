@@ -7,11 +7,13 @@ namespace Moder.Core.Services.FileNativeService;
 public sealed class LinuxFileNativeService : IFileNativeService
 {
     // XDG 规范
+    // 在 Ubuntu 下测试
     // https://cgit.freedesktop.org/xdg/xdg-specs/plain/trash/trash-spec.xml
     private const string TrashDir = ".local/share/Trash";
     private const string FilesDir = "files";
     private const string InfoDir = "info";
 
+    // TODO: 全局配置
     private static readonly UTF8Encoding Utf8NotBom = new(false);
 
     public bool TryMoveToRecycleBin(string fileOrDirectoryPath, out string? errorMessage, out int errorCode)

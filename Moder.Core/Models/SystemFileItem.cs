@@ -1,9 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
+using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Services;
 using Moder.Core.Services.FileNativeService;
+using Moder.Core.Views.Menus;
 using Moder.Language.Strings;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
@@ -108,48 +110,55 @@ public sealed partial class SystemFileItem
     //     );
     // }
 
-    // [RelayCommand]
-    // private async Task RenameAsync()
-    // {
-    //     var dialog = new ContentDialog
-    //     {
-    //         XamlRoot = App.Current.XamlRoot,
-    //         Title = "重命名",
-    //         PrimaryButtonText = "确定",
-    //         CloseButtonText = "取消"
-    //     };
-    //
-    //     var view = new RenameFileControlView(dialog, this);
-    //     dialog.Content = view;
-    //
-    //     var result = await dialog.ShowAsync();
-    //     if (result != ContentDialogResult.Primary)
-    //     {
-    //         Log.Debug("取消重命名");
-    //         return;
-    //     }
-    //
-    //     if (view.IsInvalid || view.NewName == Name)
-    //     {
-    //         return;
-    //     }
-    //
-    //     var parentDir = Path.GetDirectoryName(FullPath);
-    //     if (parentDir is null)
-    //     {
-    //         Log.Warn("重命名文件失败，无法获取路径：{FullPath}", FullPath);
-    //         return;
-    //     }
-    //
-    //     var newPath = Path.Combine(parentDir, view.NewName);
-    //     if (Path.Exists(newPath))
-    //     {
-    //         Log.Warn("重命名失败，目标文件或文件夹已存在：{FullPath}", FullPath);
-    //         return;
-    //     }
-    //
-    //     Rename(newPath);
-    // }
+    [RelayCommand]
+    private async Task RenameAsync()
+    {
+        var dialog = new ContentDialog
+        {
+            Title = Resource.Common_Rename,
+            PrimaryButtonText = Resource.Common_Ok,
+            CloseButtonText = Resource.Common_Cancel
+        };
+
+        var view = new RenameFileControlView(dialog, this);
+        dialog.Content = view;
+
+        var result = await dialog.ShowAsync();
+        if (result != ContentDialogResult.Primary)
+        {
+            Log.Debug("取消重命名");
+            return;
+        }
+
+        if (view.IsInvalid || view.NewName == Name)
+        {
+            return;
+        }
+
+        var parentDir = Path.GetDirectoryName(FullPath);
+        if (parentDir is null)
+        {
+            Log.Warn("重命名文件失败，无法获取路径：{FullPath}", FullPath);
+            return;
+        }
+
+        var newPath = Path.Combine(parentDir, view.NewName);
+        if (Path.Exists(newPath))
+        {
+            Log.Warn("重命名失败，目标文件或文件夹已存在：{FullPath}", FullPath);
+            return;
+        }
+
+        try
+        {
+            Rename(newPath);
+        }
+        catch (Exception e)
+        {
+            Log.Error(e, "重命名文件或文件夹时发生错误");
+            await MessageBoxService.ErrorAsync("重命名文件或文件夹时发生错误");
+        }
+    }
 
     private void Rename(string newPath)
     {

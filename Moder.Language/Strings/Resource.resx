@@ -287,4 +287,7 @@
 	<data name="ThemeMode.DarkSlateGray" xml:space="preserve">
 		<value>青色</value>
 	</data>
+	<data name="Common.Cancel" xml:space="preserve">
+		<value>取消</value>
+	</data>
 </root>

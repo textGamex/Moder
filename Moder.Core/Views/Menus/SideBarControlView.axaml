@@ -2,20 +2,30 @@
     x:Class="Moder.Core.Views.Menus.SideBarControlView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:FluentAvalonia.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Moder.Core.Models"
     xmlns:vms="clr-namespace:Moder.Core.ViewsModel.Menus;assembly=Moder.Core"
+    xmlns:winui="using:FluentAvalonia.UI.Controls"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="vms:SideBarControlViewModel"
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <MenuFlyout x:Key="Flyout" x:DataType="models:SystemFileItem">
-            <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" />
-        </MenuFlyout>
+        <winui:FAMenuFlyout x:Key="Flyout" x:DataType="models:SystemFileItem">
+            <winui:MenuFlyoutItem Command="{Binding DeleteFileCommand}" Text="{x:Static lang:Resource.Common_Delete}">
+                <winui:MenuFlyoutItem.IconSource>
+                    <winui:SymbolIconSource Symbol="Delete" />
+                </winui:MenuFlyoutItem.IconSource>
+            </winui:MenuFlyoutItem>
+            <winui:MenuFlyoutItem Command="{Binding RenameCommand}" Text="{x:Static lang:Resource.Common_Rename}">
+                <winui:MenuFlyoutItem.IconSource>
+                    <winui:SymbolIconSource Symbol="Rename" />
+                </winui:MenuFlyoutItem.IconSource>
+            </winui:MenuFlyoutItem>
+        </winui:FAMenuFlyout>
     </UserControl.Resources>
 
     <TreeView

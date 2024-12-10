@@ -13,22 +13,22 @@ namespace Moder.Core.Views.Menus;
 
 public partial class SideBarControlView : UserControl
 {
-    
     // private FAMenuFlyout _menuFlyout = new();
-    private MenuFlyout _menuFlyout;
+    private FAMenuFlyout _menuFlyout;
+
     public SideBarControlView()
     {
         InitializeComponent();
-        _menuFlyout = Resources["Flyout"] as MenuFlyout ?? throw new InvalidOperationException();
+        _menuFlyout = Resources["Flyout"] as FAMenuFlyout ?? throw new InvalidOperationException();
         // _menuFlyout.Items.Add();
         // var a = new MenuFlyoutItem
         // {
         //     Text = "Open"
         //     // IconSource = new SymbolIcon(Symbol.OpenFile)
         // };
-        
+
         DataContext = App.Services.GetRequiredService<SideBarControlViewModel>();
-        
+
         FileTreeView.AddHandler(PointerPressedEvent, FileTreeView_OnPointerPressed, RoutingStrategies.Tunnel);
     }
 
@@ -38,12 +38,12 @@ public partial class SideBarControlView : UserControl
         {
             return;
         }
-        
+
         var point = e.GetCurrentPoint(FileTreeView);
 
         if (point.Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed)
         {
-            var item = ((Control?)e.Source)?.GetVisualAncestors().OfType<TreeViewItem>().First();
+            var item = ((Control?)e.Source)?.GetVisualAncestors().OfType<TreeViewItem>().FirstOrDefault();
             if (item is not null)
             {
                 _menuFlyout.ShowAt(item);
