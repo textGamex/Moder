@@ -9,6 +9,7 @@ public interface ITabViewItem
     /// </summary>
     public string Id { get; }
     public string ToolTip { get; }
+
     public bool Equals(ITabViewItem? other)
     {
         return Id == other?.Id;

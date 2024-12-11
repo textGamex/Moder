@@ -10,7 +10,7 @@ public sealed partial class CharacterEditorControlView : UserControl, ITabViewIt
 {
     public string Header => Resource.Menu_CharacterEditor;
     public string Id => nameof(CharacterEditorControlView);
-    public string ToolTip => Id;
+    public string ToolTip => Header;
 
     public CharacterEditorControlView()
     {
