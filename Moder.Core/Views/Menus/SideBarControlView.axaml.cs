@@ -4,11 +4,10 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.VisualTree;
-using CommunityToolkit.Mvvm.Messaging;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
-using Moder.Core.Messages;
 using Moder.Core.Models;
+using Moder.Core.Services;
 using Moder.Core.ViewsModel.Menus;
 
 namespace Moder.Core.Views.Menus;
@@ -22,10 +21,12 @@ public sealed partial class SideBarControlView : UserControl
     private readonly SolidColorBrush _rightSelectedItemBorderBrush = new(Colors.CornflowerBlue);
     private readonly SolidColorBrush _transparentBorderBrush = new(Colors.Transparent);
     private readonly Thickness _rightSelectedItemThickness = new(0.65);
+    private readonly TabViewNavigationService _tabViewNavigation;
 
     public SideBarControlView()
     {
         InitializeComponent();
+        _tabViewNavigation = App.Services.GetRequiredService<TabViewNavigationService>();
         _contextMenu = Resources["ContextMenu"] as FAMenuFlyout ?? throw new InvalidOperationException();
 
         DataContext = App.Services.GetRequiredService<SideBarControlViewModel>();
@@ -91,6 +92,6 @@ public sealed partial class SideBarControlView : UserControl
             return;
         }
 
-        WeakReferenceMessenger.Default.Send(new OpenFileMessage(item));
+        _tabViewNavigation.AddTab(new NotSupportInfoControlView(item));
     }
 }
