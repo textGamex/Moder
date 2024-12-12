@@ -104,7 +104,7 @@ public sealed partial class SystemFileItem
         var result = await dialog.ShowAsync();
         if (result != ContentDialogResult.Primary)
         {
-            Log.Debug(Resource.RenameFile_CancelRename);
+            Log.Debug("取消重命名");
             return;
         }
 
@@ -116,14 +116,14 @@ public sealed partial class SystemFileItem
         var parentDir = Path.GetDirectoryName(FullPath);
         if (parentDir is null)
         {
-            Log.Warn($"{Resource.RenameFile_CannotAquirePath}{FullPath}");
+            Log.Warn("重命名文件失败，无法获取路径：{FullPath}", FullPath);
             return;
         }
 
         var newPath = Path.Combine(parentDir, view.NewName);
         if (Path.Exists(newPath))
         {
-            Log.Warn($"{Resource.RenameFile_TargetAlreadyExists}{FullPath}");
+            Log.Warn("重命名失败，目标文件或文件夹已存在：{FullPath}", FullPath);
             return;
         }
 
@@ -133,7 +133,7 @@ public sealed partial class SystemFileItem
         }
         catch (Exception e)
         {
-            Log.Error(e, Resource.RenameFile_ErrorOccurs);
+            Log.Error(e, "重命名文件或文件夹时发生错误");
             await MessageBoxService.ErrorAsync(Resource.RenameFile_ErrorOccurs);
         }
     }
@@ -169,7 +169,12 @@ public sealed partial class SystemFileItem
             else
             {
                 await MessageBoxService.ErrorAsync($"{Resource.DeleteFile_Failed}{errorMessage}");
-                Log.Warn(string.Format(Resource.DeleteFile_FailedLog, FullPath, errorMessage, errorCode));
+                Log.Warn(
+                    "删除文件或文件夹失败：{FullPath}, 错误信息: {ErrorMessage} 错误代码: {Code}",
+                    FullPath,
+                    errorMessage,
+                    errorCode
+                );
             }
         }
     }

@@ -70,7 +70,7 @@ public sealed partial class AppInitializeControlViewModel(
 
         settingService.GameRootFolderPath = GameRootFolderPath;
         settingService.ModRootFolderPath = ModRootFolderPath;
-        Log.Info(Resource.InitializePage_SetResourceDirectorySuccess);
+        Log.Info("资源目录设置成功");
 
         WeakReferenceMessenger.Default.Send(new CompleteAppInitializeMessage());
     }

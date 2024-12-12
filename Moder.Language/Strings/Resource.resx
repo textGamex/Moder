@@ -248,9 +248,6 @@
 	<data name="RenameFile.NameContainInvalidChar" xml:space="preserve">
 		<value>文件或文件夹名称包含非法字符</value>
 	</data>
-	<data name="RenameFile.NameAlreadyExists" xml:space="preserve">
-		<value>此位置已存在同名文件或文件夹 {0}, 请重新命名</value>
-	</data>
 	<data name="ModifierDisplay.Empty" xml:space="preserve">
 		<value>无修正效果</value>
 	</data>
@@ -293,14 +290,8 @@
 	<data name="Common.Complete" xml:space="preserve">
 		<value>完成</value>
 	</data>
-	<data name="RenameFile.CancelRename" xml:space="preserve">
-		<value>取消重命名</value>
-	</data>
 	<data name="RenameFile.CannotAquirePath" xml:space="preserve">
 		<value>重命名失败，无法获取路径：</value>
-	</data>
-	<data name="RenameFile.TargetAlreadyExists" xml:space="preserve">
-		<value>重命名失败，目标文件或文件夹已存在：</value>
 	</data>
 	<data name="RenameFile_ErrorOccurs" xml:space="preserve">
 		<value>重命名文件或文件夹时发生错误</value>
@@ -317,16 +308,10 @@
 	<data name="DeleteFile.Failed" xml:space="preserve">
 		<value>删除失败，原因：</value>
 	</data>
-	<data name="DeleteFile_FailedLog" xml:space="preserve">
-		<value>删除文件或文件夹失败：{0}, 错误信息: {1} 错误代码: {2}</value>
-	</data>
 	<data name="FileManager.NotExist" xml:space="preserve">
 		<value>文件或文件夹不存在</value>
 	</data>
-	<data name="FileManager.OpenFailed" xml:space="preserve">
-		<value>在文件资源管理器中打开失败：{0}</value>
-	</data>
-	<data name="InitializePage.SetResourceDirectorySuccess" xml:space="preserve">
-		<value>资源目录设置成功</value>
+	<data name="RenameFile.NameAlreadyExists" xml:space="preserve">
+		<value>此位置已存在同名文件或文件夹 {0}, 请重新命名</value>
 	</data>
 </root>

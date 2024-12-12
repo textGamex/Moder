@@ -70,7 +70,7 @@ public sealed class WindowsFileNativeService : IFileNativeService
         }
         catch (Exception e)
         {
-            Log.Error(e, $"{Resource.FileManager_OpenFailed}{fileOrDirectoryPath}");
+            Log.Error(e, "在文件资源管理器中打开失败, path:{Path}", fileOrDirectoryPath);
             errorMessage = e.Message;
             return false;
         }
