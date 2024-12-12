@@ -37,7 +37,7 @@ public sealed partial class AppInitializeControlViewModel(
     [RelayCommand]
     private async Task SelectGameRootFolder()
     {
-        var gameRootPath = await SelectFolderInteraction.HandleAsync("选择游戏根目录");
+        var gameRootPath = await SelectFolderInteraction.HandleAsync(Resource.InitializePage_SelectGameRootPath);
         if (string.IsNullOrEmpty(gameRootPath))
         {
             return;
@@ -49,7 +49,7 @@ public sealed partial class AppInitializeControlViewModel(
     [RelayCommand]
     private async Task SelectModRootFolder()
     {
-        var modRootPath = await SelectFolderInteraction.HandleAsync("选择Mod根目录");
+        var modRootPath = await SelectFolderInteraction.HandleAsync(Resource.InitializePage_SelectModRootPath);
         if (string.IsNullOrEmpty(modRootPath))
         {
             return;
