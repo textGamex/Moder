@@ -15,8 +15,10 @@ using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Core.Services.FileNativeService;
 using Moder.Core.Views;
+using Moder.Core.Views.Game;
 using Moder.Core.Views.Menus;
 using Moder.Core.ViewsModel;
+using Moder.Core.ViewsModel.Game;
 using Moder.Core.ViewsModel.Menus;
 using Moder.Hosting;
 using NLog;
@@ -72,7 +74,7 @@ public class App : Application
         var host = builder.Build();
         _host = host;
         _serviceProvider = host.Services;
-        var settingService = App.Services.GetRequiredService<AppSettingService>();
+        var settingService = Services.GetRequiredService<AppSettingService>();
         RequestedThemeVariant = AppTheme.GetThemeVariant(settingService.AppTheme);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -123,9 +125,11 @@ public class App : Application
         builder.Services.AddViewSingleton<MainControlView, MainControlViewModel>();
         builder.Services.AddViewSingleton<SideBarControlView, SideBarControlViewModel>();
         builder.Services.AddViewSingleton<WorkSpaceControlView, WorkSpaceControlViewModel>();
+        builder.Services.AddViewTransient<CharacterEditorControlView, CharacterEditorControlViewModel>();
 
         builder.Services.AddSingleton(_ => AppSettingService.Load());
         builder.Services.AddSingleton<MessageBoxService>();
+        builder.Services.AddSingleton<TabViewNavigationService>();
 
         AddPlatformNativeServices(builder.Services);
 

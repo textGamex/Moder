@@ -1,65 +1,26 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Avalonia.Controls;
-using CommunityToolkit.Mvvm.Messaging;
 using FluentAvalonia.UI.Controls;
-using Moder.Core.Messages;
+using Microsoft.Extensions.DependencyInjection;
+using Moder.Core.Services;
 
 namespace Moder.Core.Views.Menus;
 
 public sealed partial class WorkSpaceControlView : UserControl
 {
-    private readonly ObservableCollection<object> _openedTabFileItems;
+    private readonly TabViewNavigationService _tabService;
 
     public WorkSpaceControlView()
     {
         InitializeComponent();
-        _openedTabFileItems = [];
 
-        MainTabView.TabItems = _openedTabFileItems;
-        WeakReferenceMessenger.Default.Register<OpenFileMessage>(
-            this,
-            (_, message) => _openedTabFileItems.Add(new NotSupportInfoControlView())
-        );
+        _tabService = App.Services.GetRequiredService<TabViewNavigationService>();
+        _tabService.Initialize(MainTabView);
     }
-
-    // private void OnOpenFile(object sender, OpenFileMessage message)
-    // {
-    //     _selectedSideFileItemFullPath = message.FileItem.FullPath;
-    //
-    //     // 如果文件已经打开，则切换到已打开的标签页
-    //     // 如果文件未打开，则打开新的标签页
-    //     var openedTab = MainTabView.TabItems.FirstOrDefault(item =>
-    //     {
-    //         if (item is not TabViewItem tabViewItem)
-    //         {
-    //             return false;
-    //         }
-    //
-    //         var view = tabViewItem.Content as IFileView;
-    //         return view?.FullPath == message.FileItem.FullPath;
-    //     });
-    //
-    //     if (openedTab is null)
-    //     {
-    //         // 打开新的标签页
-    //         var content = GetContent(message.FileItem);
-    //         var newTab = new TabViewItem { Content = content, Header = message.FileItem.Name };
-    //         ToolTipService.SetToolTip(newTab, message.FileItem.FullPath);
-    //         NavigateToNewTab(newTab);
-    //
-    //         _openedTabFileItems.Add(message.FileItem);
-    //     }
-    //     else
-    //     {
-    //         // 切换到已打开的标签页
-    //         MainTabView.SelectedItem = openedTab;
-    //     }
-    // }
 
     private void MainTabView_OnTabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
     {
-        var isRemoved = _openedTabFileItems.Remove(args.Item);
+        var isRemoved = _tabService.RemoveTab(args.Tab);
         Debug.Assert(isRemoved);
     }
 }
