@@ -95,7 +95,7 @@ public sealed partial class SystemFileItem
         {
             Title = Resource.Common_Rename,
             PrimaryButtonText = Resource.Common_Ok,
-            CloseButtonText = Resource.Common_Cancel
+            CloseButtonText = Resource.Common_Cancel,
         };
 
         var view = new RenameFileControlView(dialog, this);
@@ -104,7 +104,7 @@ public sealed partial class SystemFileItem
         var result = await dialog.ShowAsync();
         if (result != ContentDialogResult.Primary)
         {
-            Log.Debug("取消重命名");
+            Log.Debug(Resource.RenameFile_CancelRename);
             return;
         }
 
@@ -116,14 +116,14 @@ public sealed partial class SystemFileItem
         var parentDir = Path.GetDirectoryName(FullPath);
         if (parentDir is null)
         {
-            Log.Warn("重命名文件失败，无法获取路径：{FullPath}", FullPath);
+            Log.Warn($"{Resource.RenameFile_CannotAquirePath}{FullPath}");
             return;
         }
 
         var newPath = Path.Combine(parentDir, view.NewName);
         if (Path.Exists(newPath))
         {
-            Log.Warn("重命名失败，目标文件或文件夹已存在：{FullPath}", FullPath);
+            Log.Warn($"{Resource.RenameFile_TargetAlreadyExists}{FullPath}");
             return;
         }
 
@@ -133,8 +133,8 @@ public sealed partial class SystemFileItem
         }
         catch (Exception e)
         {
-            Log.Error(e, "重命名文件或文件夹时发生错误");
-            await MessageBoxService.ErrorAsync("重命名文件或文件夹时发生错误");
+            Log.Error(e, Resource.RenameFile_ErrorOccurs);
+            await MessageBoxService.ErrorAsync(Resource.RenameFile_ErrorOccurs);
         }
     }
 
@@ -153,8 +153,10 @@ public sealed partial class SystemFileItem
     [RelayCommand]
     private async Task DeleteFile()
     {
-        var text = IsFile ? $"确认删除 '{Name}' 吗?" : $"确认删除 '{Name}' 及其内容吗?";
-        text += "\n\n您可以从回收站还原此文件";
+        var text = IsFile
+            ? string.Format(Resource.DeleteFile_EnsureFile, Name)
+            : string.Format(Resource.DeleteFile_EnsureFolder, Name);
+        text += $"\n\n{Resource.DeleteFile_CanFindBack}";
         var dialog = MessageBoxManager.GetMessageBoxStandard(Resource.Common_Delete, text, ButtonEnum.YesNo);
 
         var result = await dialog.ShowAsync();
@@ -166,13 +168,8 @@ public sealed partial class SystemFileItem
             }
             else
             {
-                await MessageBoxService.ErrorAsync($"删除失败, 原因: {errorMessage}");
-                Log.Warn(
-                    "删除文件或文件夹失败：{FullPath}, 错误信息: {ErrorMessage} 错误代码: {Code}",
-                    FullPath,
-                    errorMessage,
-                    errorCode
-                );
+                await MessageBoxService.ErrorAsync($"{Resource.DeleteFile_Failed}{errorMessage}");
+                Log.Warn(string.Format(Resource.DeleteFile_FailedLog, FullPath, errorMessage, errorCode));
             }
         }
     }

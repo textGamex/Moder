@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Versioning;
+using Moder.Language.Strings;
 using NLog;
 using Vanara.PInvoke;
 using Vanara.Windows.Shell;
@@ -25,7 +26,7 @@ public sealed class WindowsFileNativeService : IFileNativeService
 
         if (!Path.Exists(fileOrDirectoryPath))
         {
-            errorMessage = "文件或文件夹不存在";
+            errorMessage = Resource.FileManager_NotExist;
             errorCode = 0;
             return false;
         }
@@ -69,7 +70,7 @@ public sealed class WindowsFileNativeService : IFileNativeService
         }
         catch (Exception e)
         {
-            Log.Error(e, "在文件资源管理器中打开失败, path:{Path}", fileOrDirectoryPath);
+            Log.Error(e, $"{Resource.FileManager_OpenFailed}{fileOrDirectoryPath}");
             errorMessage = e.Message;
             return false;
         }

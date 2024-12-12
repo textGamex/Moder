@@ -287,4 +287,46 @@
   <data name="Common.Complete" xml:space="preserve">
 	  <value>Complete</value>
   </data>
+	<data name="InitializePage.SelectGameRootPath" xml:space="preserve">
+	  <value>Select Game Root Path</value>
+  </data>
+	<data name="InitializePage.SelectModRootPath" xml:space="preserve">
+	  <value>Select Mod Root Path</value>
+  </data>
+	<data name="RenameFile.CancelRename" xml:space="preserve">
+	  <value>Cencel Rename</value>
+  </data>
+	<data name="RenameFile.CannotAquirePath" xml:space="preserve">
+	  <value>Rename failed, cannot aquire path: </value>
+  </data>
+	<data name="RenameFile.TargetAlreadyExists" xml:space="preserve">
+	  <value>Rename failed, target file or folder already exists: </value>
+  </data>
+	<data name="RenameFile_ErrorOccurs" xml:space="preserve">
+	  <value>An error occurs within file or folder renaming</value>
+  </data>
+	<data name="DeleteFile_EnsureFile" xml:space="preserve">
+	  <value>Are you sure to delete '{0}'?</value>
+  </data>
+	<data name="DeleteFile_EnsureFolder" xml:space="preserve">
+	  <value>Are you sure to delete '{0}' and all of its content?</value>
+  </data>
+	<data name="DeleteFile_CanFindBack" xml:space="preserve">
+	  <value>You can restore from recycle bin</value>
+  </data>
+	<data name="DeleteFile.Failed" xml:space="preserve">
+	  <value>Delete failed because: </value>
+  </data>
+	<data name="DeleteFile_FailedLog" xml:space="preserve">
+	  <value>Delete file or folder failed: {0}. Error message: {1}. Error code: {2}</value>
+  </data>
+	<data name="FileManager.NotExist" xml:space="preserve">
+	  <value>File or folder doesn't exist</value>
+  </data>
+	<data name="FileManager.OpenFailed" xml:space="preserve">
+	  <value>Open failed in the file manager: {0}</value>
+  </data>
+	<data name="InitializePage.SetResourceDirectorySuccess" xml:space="preserve">
+	  <value>Resource directory sets successful</value>
+  </data>
 </root>
