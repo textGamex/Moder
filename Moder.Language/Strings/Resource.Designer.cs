@@ -375,6 +375,69 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 您可以从回收站还原此文件.
+        /// </summary>
+        public static string DeleteFile_CanFindBack {
+            get {
+                return ResourceManager.GetString("DeleteFile_CanFindBack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 确认删除 &apos;{0}&apos; 吗？.
+        /// </summary>
+        public static string DeleteFile_EnsureFile {
+            get {
+                return ResourceManager.GetString("DeleteFile_EnsureFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 确认删除 &apos;{0}&apos; 及其内容吗？.
+        /// </summary>
+        public static string DeleteFile_EnsureFolder {
+            get {
+                return ResourceManager.GetString("DeleteFile_EnsureFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 删除失败，原因：.
+        /// </summary>
+        public static string DeleteFile_Failed {
+            get {
+                return ResourceManager.GetString("DeleteFile.Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 删除文件或文件夹失败：{0}, 错误信息: {1} 错误代码: {2}.
+        /// </summary>
+        public static string DeleteFile_FailedLog {
+            get {
+                return ResourceManager.GetString("DeleteFile_FailedLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 文件或文件夹不存在.
+        /// </summary>
+        public static string FileManager_NotExist {
+            get {
+                return ResourceManager.GetString("FileManager.NotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 在文件资源管理器中打开失败：{0}.
+        /// </summary>
+        public static string FileManager_OpenFailed {
+            get {
+                return ResourceManager.GetString("FileManager.OpenFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 选择游戏根目录.
         /// </summary>
         public static string InitializePage_SelectGameRootPath {
@@ -389,6 +452,15 @@ namespace Moder.Language.Strings {
         public static string InitializePage_SelectModRootPath {
             get {
                 return ResourceManager.GetString("InitializePage.SelectModRootPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 资源目录设置成功.
+        /// </summary>
+        public static string InitializePage_SetResourceDirectorySuccess {
+            get {
+                return ResourceManager.GetString("InitializePage.SetResourceDirectorySuccess", resourceCulture);
             }
         }
         
@@ -456,6 +528,33 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 取消重命名.
+        /// </summary>
+        public static string RenameFile_CancelRename {
+            get {
+                return ResourceManager.GetString("RenameFile.CancelRename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 重命名失败，无法获取路径：.
+        /// </summary>
+        public static string RenameFile_CannotAquirePath {
+            get {
+                return ResourceManager.GetString("RenameFile.CannotAquirePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 重命名文件或文件夹时发生错误.
+        /// </summary>
+        public static string RenameFile_ErrorOccurs {
+            get {
+                return ResourceManager.GetString("RenameFile_ErrorOccurs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 无效的文件或文件夹名称.
         /// </summary>
         public static string RenameFile_InvalidFileOrFolderName {
@@ -479,6 +578,15 @@ namespace Moder.Language.Strings {
         public static string RenameFile_NameContainInvalidChar {
             get {
                 return ResourceManager.GetString("RenameFile.NameContainInvalidChar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 重命名失败，目标文件或文件夹已存在：.
+        /// </summary>
+        public static string RenameFile_TargetAlreadyExists {
+            get {
+                return ResourceManager.GetString("RenameFile.TargetAlreadyExists", resourceCulture);
             }
         }
         
