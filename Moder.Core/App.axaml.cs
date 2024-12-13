@@ -14,6 +14,10 @@ using Moder.Core.Resources;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Core.Services.FileNativeService;
+using Moder.Core.Services.GameResources;
+using Moder.Core.Services.GameResources.Base;
+using Moder.Core.Services.GameResources.Localization;
+using Moder.Core.Services.GameResources.Modifiers;
 using Moder.Core.Views;
 using Moder.Core.Views.Game;
 using Moder.Core.Views.Menus;
@@ -120,6 +124,7 @@ public class App : Application
         builder.Logging.AddNLog(builder.Configuration);
         LogManager.Configuration = new NLogLoggingConfiguration(builder.Configuration.GetSection("NLog"));
 
+        // View, ViewModel
         builder.Services.AddViewSingleton<MainWindow, MainWindowViewModel>();
         builder.Services.AddViewTransient<AppInitializeControlView, AppInitializeControlViewModel>();
         builder.Services.AddViewSingleton<MainControlView, MainControlViewModel>();
@@ -130,6 +135,22 @@ public class App : Application
         builder.Services.AddSingleton(_ => AppSettingService.Load());
         builder.Services.AddSingleton<MessageBoxService>();
         builder.Services.AddSingleton<TabViewNavigationService>();
+        builder.Services.AddSingleton<GameModDescriptorService>();
+        builder.Services.AddSingleton<GameResourcesPathService>();
+        builder.Services.AddSingleton<GameResourcesWatcherService>();
+
+        // 本地化文本相关服务
+        builder.Services.AddSingleton<LocalizationService>();
+        builder.Services.AddSingleton<LocalizationFormatService>();
+        builder.Services.AddSingleton<LocalizationTextColorsService>();
+        builder.Services.AddSingleton<LocalizationKeyMappingService>();
+
+        // 修饰符相关服务
+        builder.Services.AddSingleton<ModifierService>();
+        builder.Services.AddSingleton<ModifierDisplayService>();
+
+        builder.Services.AddSingleton<CharacterSkillService>();
+        builder.Services.AddSingleton<TerrainService>();
 
         AddPlatformNativeServices(builder.Services);
 

@@ -15,6 +15,16 @@ public sealed partial class CharacterEditorControlView : UserControl, ITabViewIt
     public CharacterEditorControlView()
     {
         InitializeComponent();
-        DataContext = App.Services.GetRequiredService<CharacterEditorControlViewModel>();
+        var viewModel = App.Services.GetRequiredService<CharacterEditorControlViewModel>();
+        DataContext = viewModel;
+
+        viewModel.LevelModifierDescription = LevelModifierDescriptionTextBlock.Inlines;
+        viewModel.AttackModifierDescription = AttackModifierDescriptionTextBlock.Inlines;
+        viewModel.DefenseModifierDescription = DefenseModifierDescriptionTextBlock.Inlines;
+        viewModel.PlanningModifierDescription = PlanningModifierDescriptionTextBlock.Inlines;
+        viewModel.LogisticsModifierDescription = LogisticsModifierDescriptionTextBlock.Inlines;
+        viewModel.ManeuveringModifierDescription = ManeuveringModifierDescriptionTextBlock.Inlines;
+        viewModel.CoordinationModifierDescription = CoordinationModifierDescriptionTextBlock.Inlines;
+        viewModel.InitializeSkillDefaultValue();
     }
 }

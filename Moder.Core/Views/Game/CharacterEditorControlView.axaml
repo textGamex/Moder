@@ -2,8 +2,150 @@
     x:Class="Moder.Core.Views.Game.CharacterEditorControlView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:Moder.Core.Models"
+    xmlns:vms="clr-namespace:Moder.Core.ViewsModel.Game"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    mc:Ignorable="d" />
+    x:DataType="vms:CharacterEditorControlViewModel"
+    mc:Ignorable="d">
+
+    <UserControl.Styles>
+        <Style Selector="NumericUpDown">
+            <Style.Setters>
+                <Setter Property="FormatString" Value="0" />
+                <Setter Property="Minimum" Value="1" />
+            </Style.Setters>
+        </Style>
+    </UserControl.Styles>
+
+
+    <Grid ColumnDefinitions="Auto,Auto,*">
+
+        <StackPanel
+            Grid.Column="0"
+            Margin="4,4,0,0"
+            Spacing="4">
+            <Label Content="{x:Static lang:Resource.Common_Name}" Target="NameTextBox" />
+            <TextBox
+                x:Name="NameTextBox"
+                HorizontalAlignment="Left"
+                Text="{Binding Name, Mode=TwoWay}" />
+            <Label Content="{x:Static lang:Resource.Common_LocalizedName}" Target="LocalizedName" />
+            <TextBox
+                x:Name="LocalizedName"
+                HorizontalAlignment="Left"
+                Text="{Binding LocalizedName, Mode=TwoWay}" />
+            <Label Content="{x:Static lang:Resource.CharacterEditor_Image}" Target="Image" />
+            <TextBox
+                x:Name="Image"
+                HorizontalAlignment="Left"
+                Text="{Binding ImageKey, Mode=TwoWay}" />
+            <ComboBox
+                x:Name="CharactersTypeComboBox"
+                ItemsSource="{Binding CharactersType}"
+                SelectedItem="{Binding SelectedCharacterType, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:CharacterTypeInfo">
+                        <TextBlock Text="{Binding DisplayName}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <TextBlock Margin="0,12,0,0" Text="{x:Static lang:Resource.Common_WriteToFile}" />
+            <Grid ColumnDefinitions="Auto,*">
+
+                <!--  路径前缀  -->
+                <TextBlock
+                    Grid.Column="0"
+                    Margin="4,0,0,0"
+                    VerticalAlignment="Center"
+                    Text="common\characters\" />
+                <ComboBox
+                    Grid.Column="1"
+                    MinWidth="100"
+                    ItemsSource="{Binding CharacterFiles}"
+                    SelectedItem="{Binding SelectedCharacterFile, Mode=TwoWay}" />
+            </Grid>
+
+            <Button
+                HorizontalAlignment="Center"
+                Command="{Binding SaveCommand}"
+                Content="{x:Static lang:Resource.Common_Save}" />
+        </StackPanel>
+
+        <StackPanel
+            Grid.Column="1"
+            Margin="16,4,16,0"
+            Orientation="Vertical"
+            Spacing="4">
+            <StackPanel>
+                <TextBlock Text="{x:Static lang:Resource.Character_Level}" />
+                <StackPanel Orientation="Horizontal">
+                    <NumericUpDown Maximum="{Binding LevelMaxValue, Mode=OneWay}" Value="{Binding Level, Mode=TwoWay}" />
+                    <TextBlock x:Name="LevelModifierDescriptionTextBlock" />
+                </StackPanel>
+            </StackPanel>
+
+            <TextBlock Text="{x:Static lang:Resource.Character_Attack}" />
+            <StackPanel Orientation="Horizontal">
+                <NumericUpDown Maximum="{Binding AttackMaxValue, Mode=OneWay}" Value="{Binding Attack, Mode=TwoWay}" />
+                <TextBlock x:Name="AttackModifierDescriptionTextBlock" />
+            </StackPanel>
+
+            <TextBlock Text="{x:Static lang:Resource.Character_Defense}" />
+            <StackPanel Orientation="Horizontal">
+                <NumericUpDown Maximum="{Binding DefenseMaxValue, Mode=OneWay}" Value="{Binding Defense, Mode=TwoWay}" />
+                <TextBlock x:Name="DefenseModifierDescriptionTextBlock" VerticalAlignment="Bottom" />
+            </StackPanel>
+
+            <!--  陆军指挥官属性  -->
+            <!--  当选中的是海军时, 显示海军特有的属性并隐藏陆军的属性  -->
+            <StackPanel IsVisible="{Binding !IsSelectedNavy, Mode=OneWay}">
+                <TextBlock Text="{x:Static lang:Resource.Character_Planning}" />
+                <StackPanel x:Name="PlanningStackPanel" Orientation="Horizontal">
+                    <NumericUpDown Maximum="{Binding PlanningMaxValue, Mode=OneWay}" Value="{Binding Planning, Mode=TwoWay}" />
+                    <TextBlock x:Name="PlanningModifierDescriptionTextBlock" />
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel IsVisible="{Binding !IsSelectedNavy, Mode=OneWay}">
+                <TextBlock Text="{x:Static lang:Resource.Character_Logistics}" />
+                <StackPanel Orientation="Horizontal">
+                    <NumericUpDown Maximum="{Binding LogisticsMaxValue, Mode=OneWay}" Value="{Binding Logistics, Mode=TwoWay}" />
+                    <TextBlock x:Name="LogisticsModifierDescriptionTextBlock" />
+                </StackPanel>
+            </StackPanel>
+
+            <!--  海军属性  -->
+            <StackPanel IsVisible="{Binding IsSelectedNavy, Mode=OneWay}">
+                <TextBlock Text="{x:Static lang:Resource.Character_Maneuvering}" />
+                <StackPanel Orientation="Horizontal">
+                    <NumericUpDown Maximum="{Binding ManeuveringMaxValue, Mode=OneWay}" Value="{Binding Maneuvering, Mode=TwoWay}" />
+                    <TextBlock x:Name="ManeuveringModifierDescriptionTextBlock" />
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel IsVisible="{Binding IsSelectedNavy, Mode=OneWay}">
+                <TextBlock Text="{x:Static lang:Resource.Character_Coordination}" />
+                <StackPanel Orientation="Horizontal">
+                    <NumericUpDown Maximum="{Binding CoordinationMaxValue, Mode=OneWay}" Value="{Binding Coordination, Mode=TwoWay}" />
+                    <TextBlock x:Name="CoordinationModifierDescriptionTextBlock" />
+                </StackPanel>
+            </StackPanel>
+
+            <Button Command="{Binding OpenTraitsSelectionWindowCommand}" Content="{x:Static lang:Resource.CharacterEditor_TraitManager}" />
+        </StackPanel>
+
+        <TextBox
+            Grid.Column="2"
+            MinWidth="400"
+            Margin="0,8,8,8"
+            IsReadOnly="True"
+            Text="{Binding GeneratedText, Mode=OneWay}"
+            TextWrapping="Wrap" />
+    </Grid>
+</UserControl>
