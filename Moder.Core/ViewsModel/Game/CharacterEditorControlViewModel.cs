@@ -3,7 +3,6 @@ using Avalonia.Controls.Documents;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Moder.Core.Infrastructure;
 using Moder.Core.Models;
 using Moder.Core.Models.Game.Character;
 using Moder.Core.Services.Config;
@@ -73,13 +72,19 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
     [ObservableProperty]
     public partial string SelectedCharacterFile { get; set; } = string.Empty;
 
-    public InlineCollection? LevelModifierDescription { get; set; }
-    public InlineCollection? AttackModifierDescription { get; set; }
-    public InlineCollection? DefenseModifierDescription { get; set; }
-    public InlineCollection? PlanningModifierDescription { get; set; }
-    public InlineCollection? LogisticsModifierDescription { get; set; }
-    public InlineCollection? ManeuveringModifierDescription { get; set; }
-    public InlineCollection? CoordinationModifierDescription { get; set; }
+    public InlineCollection LevelModifierDescription { get; } = [];
+
+    public InlineCollection AttackModifierDescription { get; } = [];
+
+    public InlineCollection DefenseModifierDescription { get; } = [];
+
+    public InlineCollection PlanningModifierDescription { get; } = [];
+
+    public InlineCollection LogisticsModifierDescription { get; } = [];
+
+    public InlineCollection ManeuveringModifierDescription { get; } = [];
+
+    public InlineCollection CoordinationModifierDescription { get; } = [];
 
     public IEnumerable<string> CharacterFiles =>
         Directory
@@ -129,6 +134,8 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         // TODO: 释放?
         _characterSkillService.OnResourceChanged += OnResourceChanged;
         SetSkillsMaxValue();
+        
+        InitializeSkillDefaultValue();
     }
 
     private void OnResourceChanged(object? sender, ResourceChangedEventArgs e)
@@ -172,7 +179,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         OnLogisticsChanged(Logistics);
         OnManeuveringChanged(Maneuvering);
     }
-    
+
     // BUG: 切换时描述会丢失
     partial void OnSelectedCharacterTypeChanged(CharacterTypeInfo value)
     {
@@ -183,26 +190,33 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
     partial void OnLevelChanged(ushort value)
     {
         AddModifierDescription(SkillType.Level, value, LevelModifierDescription);
+        OnPropertyChanged(nameof(LevelModifierDescription));
     }
 
     partial void OnAttackChanged(ushort value)
     {
         AddModifierDescription(SkillType.Attack, value, AttackModifierDescription);
+        OnPropertyChanged(nameof(AttackModifierDescription));
+        OnPropertyChanged(nameof(AttackModifierDescription));
     }
 
     partial void OnDefenseChanged(ushort value)
     {
         AddModifierDescription(SkillType.Defense, value, DefenseModifierDescription);
+        OnPropertyChanged(nameof(DefenseModifierDescription));
+        OnPropertyChanged(nameof(DefenseModifierDescription));
     }
 
     partial void OnPlanningChanged(ushort value)
     {
         AddModifierDescription(SkillType.Planning, value, PlanningModifierDescription);
+        OnPropertyChanged(nameof(PlanningModifierDescription));
     }
 
     partial void OnLogisticsChanged(ushort value)
     {
         AddModifierDescription(SkillType.Logistics, value, LogisticsModifierDescription);
+        OnPropertyChanged(nameof(LogisticsModifierDescription));
     }
 
     partial void OnManeuveringChanged(ushort value)
@@ -213,6 +227,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         }
 
         AddModifierDescription(SkillType.Maneuvering, value, ManeuveringModifierDescription);
+        OnPropertyChanged(nameof(ManeuveringModifierDescription));
     }
 
     partial void OnCoordinationChanged(ushort value)
@@ -221,8 +236,9 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         {
             return;
         }
-
+        
         AddModifierDescription(SkillType.Coordination, value, CoordinationModifierDescription);
+        OnPropertyChanged(nameof(CoordinationModifierDescription));
     }
 
     private void AddModifierDescription(SkillType skillType, ushort value, InlineCollection? collection)
@@ -246,7 +262,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         }
     }
 
-    public void InitializeSkillDefaultValue()
+    private void InitializeSkillDefaultValue()
     {
         Level = 1;
         Attack = 1;
@@ -258,9 +274,11 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
 
         _isInitialized = true;
 
-        Debug.Assert(LevelModifierDescription is not null);
-        Debug.Assert(AttackModifierDescription is not null);
-        Debug.Assert(CoordinationModifierDescription is not null);
+        Debug.Assert(
+            LevelModifierDescription is not null
+                && AttackModifierDescription is not null
+                && CoordinationModifierDescription is not null
+        );
     }
 
     [RelayCommand]
