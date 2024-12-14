@@ -20,6 +20,9 @@
                 <Setter Property="Minimum" Value="1" />
             </Style.Setters>
         </Style>
+        <Style Selector="TextBlock.ModifierTextStyle">
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+        </Style>
     </UserControl.Styles>
 
 
@@ -86,23 +89,20 @@
                 <TextBlock Text="{x:Static lang:Resource.Character_Level}" />
                 <StackPanel Orientation="Horizontal">
                     <NumericUpDown Maximum="{Binding LevelMaxValue, Mode=OneWay}" Value="{Binding Level, Mode=TwoWay}" />
-                    <TextBlock x:Name="LevelModifierDescriptionTextBlock" Inlines="{Binding LevelModifierDescription, Mode=OneWay}" />
+                    <TextBlock Classes="ModifierTextStyle" Inlines="{Binding LevelModifierDescription, Mode=OneWay}" />
                 </StackPanel>
             </StackPanel>
 
             <TextBlock Text="{x:Static lang:Resource.Character_Attack}" />
             <StackPanel Orientation="Horizontal">
                 <NumericUpDown Maximum="{Binding AttackMaxValue, Mode=OneWay}" Value="{Binding Attack, Mode=TwoWay}" />
-                <TextBlock x:Name="AttackModifierDescriptionTextBlock" Inlines="{Binding AttackModifierDescription, Mode=OneWay}" />
+                <TextBlock Classes="ModifierTextStyle" Inlines="{Binding AttackModifierDescription, Mode=OneWay}" />
             </StackPanel>
 
             <TextBlock Text="{x:Static lang:Resource.Character_Defense}" />
             <StackPanel Orientation="Horizontal">
                 <NumericUpDown Maximum="{Binding DefenseMaxValue, Mode=OneWay}" Value="{Binding Defense, Mode=TwoWay}" />
-                <TextBlock
-                    x:Name="DefenseModifierDescriptionTextBlock"
-                    VerticalAlignment="Bottom"
-                    Inlines="{Binding DefenseModifierDescription, Mode=OneWay}" />
+                <TextBlock Classes="ModifierTextStyle" Inlines="{Binding DefenseModifierDescription, Mode=OneWay}" />
             </StackPanel>
 
             <!--  陆军指挥官属性  -->
@@ -111,7 +111,7 @@
                 <TextBlock Text="{x:Static lang:Resource.Character_Planning}" />
                 <StackPanel x:Name="PlanningStackPanel" Orientation="Horizontal">
                     <NumericUpDown Maximum="{Binding PlanningMaxValue, Mode=OneWay}" Value="{Binding Planning, Mode=TwoWay}" />
-                    <TextBlock x:Name="PlanningModifierDescriptionTextBlock" Inlines="{Binding PlanningModifierDescription, Mode=OneWay}" />
+                    <TextBlock Classes="ModifierTextStyle" Inlines="{Binding PlanningModifierDescription, Mode=OneWay}" />
                 </StackPanel>
             </StackPanel>
 
@@ -119,7 +119,7 @@
                 <TextBlock Text="{x:Static lang:Resource.Character_Logistics}" />
                 <StackPanel Orientation="Horizontal">
                     <NumericUpDown Maximum="{Binding LogisticsMaxValue, Mode=OneWay}" Value="{Binding Logistics, Mode=TwoWay}" />
-                    <TextBlock x:Name="LogisticsModifierDescriptionTextBlock" Inlines="{Binding LogisticsModifierDescription, Mode=OneWay}" />
+                    <TextBlock Classes="ModifierTextStyle" Inlines="{Binding LogisticsModifierDescription, Mode=OneWay}" />
                 </StackPanel>
             </StackPanel>
 
@@ -128,7 +128,7 @@
                 <TextBlock Text="{x:Static lang:Resource.Character_Maneuvering}" />
                 <StackPanel Orientation="Horizontal">
                     <NumericUpDown Maximum="{Binding ManeuveringMaxValue, Mode=OneWay}" Value="{Binding Maneuvering, Mode=TwoWay}" />
-                    <TextBlock x:Name="ManeuveringModifierDescriptionTextBlock" Inlines="{Binding ManeuveringModifierDescription, Mode=OneWay}" />
+                    <TextBlock Classes="ModifierTextStyle" Inlines="{Binding ManeuveringModifierDescription, Mode=OneWay}" />
                 </StackPanel>
             </StackPanel>
 
@@ -136,7 +136,7 @@
                 <TextBlock Text="{x:Static lang:Resource.Character_Coordination}" />
                 <StackPanel Orientation="Horizontal">
                     <NumericUpDown Maximum="{Binding CoordinationMaxValue, Mode=OneWay}" Value="{Binding Coordination, Mode=TwoWay}" />
-                    <TextBlock Inlines="{Binding CoordinationModifierDescription, Mode=OneWay}" />
+                    <TextBlock Classes="ModifierTextStyle" Inlines="{Binding CoordinationModifierDescription, Mode=OneWay}" />
                 </StackPanel>
             </StackPanel>
 

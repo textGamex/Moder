@@ -17,7 +17,7 @@ public sealed class GameResourcesWatcherService : IDisposable
     private readonly FileSystemSafeWatcher _watcher;
 
     //TODO: 重构, 可以用这个类监测资源服务的变化并发出通知
-    // 监听者???, 消息总线?
+    //监听者???, 消息总线?
 
     /// <summary>
     /// 待监听文件夹列表, 其中的文件夹被创建或从其他名称重命名后, 会被自动监听, 然后被移除

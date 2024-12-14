@@ -190,33 +190,26 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
     partial void OnLevelChanged(ushort value)
     {
         AddModifierDescription(SkillType.Level, value, LevelModifierDescription);
-        OnPropertyChanged(nameof(LevelModifierDescription));
     }
 
     partial void OnAttackChanged(ushort value)
     {
         AddModifierDescription(SkillType.Attack, value, AttackModifierDescription);
-        OnPropertyChanged(nameof(AttackModifierDescription));
-        OnPropertyChanged(nameof(AttackModifierDescription));
     }
 
     partial void OnDefenseChanged(ushort value)
     {
         AddModifierDescription(SkillType.Defense, value, DefenseModifierDescription);
-        OnPropertyChanged(nameof(DefenseModifierDescription));
-        OnPropertyChanged(nameof(DefenseModifierDescription));
     }
 
     partial void OnPlanningChanged(ushort value)
     {
         AddModifierDescription(SkillType.Planning, value, PlanningModifierDescription);
-        OnPropertyChanged(nameof(PlanningModifierDescription));
     }
 
     partial void OnLogisticsChanged(ushort value)
     {
         AddModifierDescription(SkillType.Logistics, value, LogisticsModifierDescription);
-        OnPropertyChanged(nameof(LogisticsModifierDescription));
     }
 
     partial void OnManeuveringChanged(ushort value)
@@ -227,7 +220,6 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         }
 
         AddModifierDescription(SkillType.Maneuvering, value, ManeuveringModifierDescription);
-        OnPropertyChanged(nameof(ManeuveringModifierDescription));
     }
 
     partial void OnCoordinationChanged(ushort value)
@@ -238,7 +230,6 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         }
         
         AddModifierDescription(SkillType.Coordination, value, CoordinationModifierDescription);
-        OnPropertyChanged(nameof(CoordinationModifierDescription));
     }
 
     private void AddModifierDescription(SkillType skillType, ushort value, InlineCollection? collection)
@@ -256,10 +247,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         );
 
         collection.Clear();
-        foreach (var description in descriptions)
-        {
-            collection.Add(description);
-        }
+        collection.AddRange(descriptions);
     }
 
     private void InitializeSkillDefaultValue()
