@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Infrastructure;
+using NLog;
 
 namespace Moder.Core.Services;
 
@@ -12,6 +13,8 @@ public sealed class TabViewNavigationService
         _tabView ?? throw new InvalidOperationException("TabViewNavigationService 未初始化");
     private TabView? _tabView;
     private readonly ObservableCollection<TabViewItem> _openedTabFileItems = [];
+
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     public void Initialize(TabView tabView)
     {
@@ -54,6 +57,11 @@ public sealed class TabViewNavigationService
 
     public bool RemoveTab(TabViewItem content)
     {
+        if (content.Content is IClosed closed)
+        {
+            closed.Close();
+            Log.Debug("释放 {Content}", content.Content.GetType().Name);
+        }
         return _openedTabFileItems.Remove(content);
     }
 }

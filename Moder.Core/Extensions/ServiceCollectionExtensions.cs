@@ -17,6 +17,13 @@ public static class ServiceCollectionExtensions
         where TView : Control, new()
         where TViewModel : class
     {
+        if (
+            typeof(IDisposable).IsAssignableFrom(typeof(TView))
+            || typeof(IDisposable).IsAssignableFrom(typeof(TViewModel))
+        )
+        {
+            throw new InvalidOperationException("使用 Transient 注入时不能继承 IDisposable 接口");
+        }
         services.AddTransient<TView>();
         services.AddTransient<TViewModel>();
     }

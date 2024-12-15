@@ -5,6 +5,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Moder.Core.Extensions;
+using Moder.Core.Infrastructure;
 using Moder.Core.Infrastructure.Parser;
 using Moder.Core.Models;
 using Moder.Core.Models.Game.Character;
@@ -23,7 +24,7 @@ using ParadoxPower.Process;
 namespace Moder.Core.ViewsModel.Game;
 
 //TODO: 数据校验
-public sealed partial class CharacterEditorControlViewModel : ObservableObject
+public sealed partial class CharacterEditorControlViewModel : ObservableObject, IClosed
 {
     [ObservableProperty]
     public partial ushort Level { get; set; }
@@ -149,7 +150,6 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         _appResourcesService = appResourcesService;
         SelectedCharacterType = CharactersType[0];
 
-        // TODO: 释放?
         _characterSkillService.OnResourceChanged += OnResourceChanged;
         SetSkillsMaxValue();
 
@@ -416,5 +416,10 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         }
 
         return array;
+    }
+
+    public void Close()
+    {
+        _characterSkillService.OnResourceChanged -= OnResourceChanged;
     }
 }
