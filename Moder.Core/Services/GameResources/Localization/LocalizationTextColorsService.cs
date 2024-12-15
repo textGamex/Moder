@@ -8,14 +8,17 @@ using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources.Localization;
 
-[Time("加载本地化文本颜色")]
-public sealed class LocalizationTextColorsService()
-    : CommonResourcesService<LocalizationTextColorsService, FrozenDictionary<char, LocalizationTextColor>>(
-        Path.Combine("interface", WatcherFilter.InterfaceCoreGfxFile.Name),
-        WatcherFilter.InterfaceCoreGfxFile,
-        PathType.File
-    )
+public sealed class LocalizationTextColorsService
+    : CommonResourcesService<LocalizationTextColorsService, FrozenDictionary<char, LocalizationTextColor>>
 {
+    [Time("加载本地化文本颜色")]
+    public LocalizationTextColorsService()
+        : base(
+            Path.Combine("interface", WatcherFilter.InterfaceCoreGfxFile.Name),
+            WatcherFilter.InterfaceCoreGfxFile,
+            PathType.File
+        ) { }
+
     public bool TryGetColor(char key, [NotNullWhen(true)] out LocalizationTextColor? color)
     {
         foreach (var map in Resources.Values)

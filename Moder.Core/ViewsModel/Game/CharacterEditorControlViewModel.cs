@@ -1,15 +1,24 @@
 ﻿using System.Diagnostics;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Documents;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Moder.Core.Extensions;
+using Moder.Core.Infrastructure.Parser;
 using Moder.Core.Models;
 using Moder.Core.Models.Game.Character;
+using Moder.Core.Models.Vo;
+using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Core.Services.GameResources;
 using Moder.Core.Services.GameResources.Base;
 using Moder.Core.Services.GameResources.Modifiers;
+using Moder.Core.Views.Game;
+using Moder.Language.Strings;
 using NLog;
+using ParadoxPower.CSharpExtensions;
+using ParadoxPower.Process;
 
 namespace Moder.Core.ViewsModel.Game;
 
@@ -105,11 +114,14 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsSelectedNavy))]
     public partial CharacterTypeInfo SelectedCharacterType { get; set; }
 
-    public bool IsSelectedNavy => SelectedCharacterType.Key == "navy_leader";
+    public bool IsSelectedNavy => SelectedCharacterType.Keyword == "navy_leader";
 
+    private IEnumerable<TraitVo> _selectedTraits = [];
     private readonly AppSettingService _appSettingService;
     private readonly CharacterSkillService _characterSkillService;
     private readonly ModifierDisplayService _modifierDisplayService;
+    private readonly MessageBoxService _messageBoxService;
+    private readonly AppResourcesService _appResourcesService;
 
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
@@ -117,24 +129,29 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
     /// 是否已初始化, 防止在初始化期间多次调用生成人物方法
     /// </summary>
     private bool _isInitialized;
-    private CharacterSkillType SelectedCharacterSkillType =>
-        CharacterSkillType.FromCharacterType(SelectedCharacterType.Key);
+
+    private SkillCharacterType SelectedSkillCharacterType =>
+        SkillCharacterType.FromCharacterType(SelectedCharacterType.Keyword);
 
     public CharacterEditorControlViewModel(
         AppSettingService appSettingService,
         CharacterSkillService characterSkillService,
-        ModifierDisplayService modifierDisplayService
+        ModifierDisplayService modifierDisplayService,
+        MessageBoxService messageBoxService,
+        AppResourcesService appResourcesService
     )
     {
         _appSettingService = appSettingService;
         _characterSkillService = characterSkillService;
         _modifierDisplayService = modifierDisplayService;
+        _messageBoxService = messageBoxService;
+        _appResourcesService = appResourcesService;
         SelectedCharacterType = CharactersType[0];
 
         // TODO: 释放?
         _characterSkillService.OnResourceChanged += OnResourceChanged;
         SetSkillsMaxValue();
-        
+
         InitializeSkillDefaultValue();
     }
 
@@ -149,7 +166,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
 
     private void SetSkillsMaxValue()
     {
-        var type = SelectedCharacterSkillType;
+        var type = SelectedSkillCharacterType;
         LevelMaxValue = _characterSkillService.GetMaxSkillValue(SkillType.Level, type);
         AttackMaxValue = _characterSkillService.GetMaxSkillValue(SkillType.Attack, type);
         DefenseMaxValue = _characterSkillService.GetMaxSkillValue(SkillType.Defense, type);
@@ -180,9 +197,11 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         OnManeuveringChanged(Maneuvering);
     }
 
-    // BUG: 切换时描述会丢失
+    //BUG: 切换时描述会丢失
+    // 等框架修复或者换个解决方案
     partial void OnSelectedCharacterTypeChanged(CharacterTypeInfo value)
     {
+        _appResourcesService.CurrentSelectedCharacterType = SelectedSkillCharacterType;
         SetSkillsMaxValue();
         ResetSkillsModifierDescription();
     }
@@ -228,7 +247,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
         {
             return;
         }
-        
+
         AddModifierDescription(SkillType.Coordination, value, CoordinationModifierDescription);
     }
 
@@ -242,7 +261,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
 
         var descriptions = _modifierDisplayService.GetSkillModifierDescription(
             skillType,
-            SelectedCharacterSkillType,
+            SelectedSkillCharacterType,
             value
         );
 
@@ -270,8 +289,130 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void OpenTraitsSelectionWindow() { }
+    private async Task OpenTraitsSelectionWindow()
+    {
+        var window = new TraitSelectionWindowView(_selectedTraits);
+        var lifetime = (IClassicDesktopStyleApplicationLifetime?)App.Current.ApplicationLifetime;
+        Debug.Assert(lifetime?.MainWindow is not null);
+
+        await window.ShowDialog(lifetime.MainWindow);
+        _selectedTraits = window.SelectedTraits;
+    }
 
     [RelayCommand]
-    private void Save() { }
+    private async Task SaveAsync()
+    {
+        if (string.IsNullOrEmpty(SelectedCharacterFile))
+        {
+            await _messageBoxService.WarnAsync(Resource.CharacterEditor_MissingCharacterFileNameTip);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(Name))
+        {
+            await _messageBoxService.WarnAsync(Resource.UIErrorMessage_MissingRequiredInfoTip);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(LocalizedName))
+        {
+            LocalizedName = Name;
+        }
+
+        var filePath = Path.Combine(CharactersFolder, SelectedCharacterFile);
+        Node? charactersNode = null;
+        if (File.Exists(filePath))
+        {
+            if (TextParser.TryParse(filePath, out var node, out var error))
+            {
+                var child = Array.Find(
+                    node.AllArray,
+                    child =>
+                        child.IsNodeChild
+                        && StringComparer.OrdinalIgnoreCase.Equals(child.node.Key, "characters")
+                );
+                // 如果未找到的话, node 就是 null
+                charactersNode = child.node;
+            }
+            else
+            {
+                await _messageBoxService.ErrorAsync(
+                    string.Format(
+                        Resource.CharacterEditor_ParserErrorInfo,
+                        filePath,
+                        error.ErrorMessage,
+                        error.Line,
+                        error.Column
+                    )
+                );
+                return;
+            }
+        }
+
+        // 如果文件不存在或者在用户选择的文件下没有找到 characters 节点，则新建节点
+        charactersNode ??= new Node("characters");
+
+        charactersNode.AddChild(GetGeneratedCharacterNode());
+        await File.WriteAllTextAsync(filePath, charactersNode.PrintRaw());
+        Log.Info("保存成功");
+    }
+
+    private Node GetGeneratedCharacterNode()
+    {
+        var newCharacterNode = Node.Create(Name);
+        newCharacterNode.AddChild(ChildHelper.LeafString("name", LocalizedName));
+
+        AddCharacterImage(newCharacterNode);
+
+        var characterTypeNode = newCharacterNode.AddNodeChild(SelectedCharacterType.Keyword);
+        characterTypeNode.AllArray = GetCharacterSkills();
+
+        AddTraits(characterTypeNode);
+
+        return newCharacterNode;
+    }
+
+    private void AddTraits(Node characterTypeNode)
+    {
+        if (_selectedTraits.Any())
+        {
+            var traitsNode = characterTypeNode.AddNodeChild("traits");
+            traitsNode.AllArray = _selectedTraits
+                .Select(trait => ChildHelper.LeafValue(trait.Name))
+                .ToArray();
+        }
+    }
+
+    private void AddCharacterImage(Node newCharacterNode)
+    {
+        if (string.IsNullOrEmpty(ImageKey))
+        {
+            return;
+        }
+
+        var portraitsNode = newCharacterNode.AddNodeChild("portraits");
+        var node = portraitsNode.AddNodeChild(IsSelectedNavy ? "navy" : "army");
+        node.AddLeafString("large", ImageKey);
+    }
+
+    private Child[] GetCharacterSkills()
+    {
+        var array = new Child[5];
+        array[0] = ChildHelper.Leaf("level", Level);
+        array[1] = ChildHelper.Leaf("attack_skill", Attack);
+        array[2] = ChildHelper.Leaf("defense_skill", Defense);
+
+        if (IsSelectedNavy)
+        {
+            array[3] = ChildHelper.Leaf("maneuvering_skill", Maneuvering);
+            array[4] = ChildHelper.Leaf("coordination_skill", Coordination);
+        }
+        else
+        {
+            array[3] = ChildHelper.Leaf("planning_skill", Planning);
+            array[4] = ChildHelper.Leaf("logistics_skill", Logistics);
+        }
+
+        return array;
+    }
 }

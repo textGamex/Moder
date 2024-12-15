@@ -18,14 +18,14 @@ public sealed class SkillInfo
         _skills.Add(skill);
     }
 
-    public ushort? GetMaxValue(CharacterSkillType skillType)
+    public ushort? GetMaxValue(SkillCharacterType type)
     {
-        return _skills.Find(skill => skill.Type == skillType)?.MaxValue;
+        return _skills.Find(skill => skill.Type == type)?.MaxValue;
     }
 
-    public SkillModifier GetModifierDescription(CharacterSkillType skillType, ushort level)
+    public SkillModifier GetModifierDescription(SkillCharacterType type, ushort level)
     {
-        return _skills.Find(skill => skill.Type == skillType)?.GetModifier(level)
+        return _skills.Find(skill => skill.Type == type)?.GetModifier(level)
             ?? new SkillModifier(level, []);
     }
 }

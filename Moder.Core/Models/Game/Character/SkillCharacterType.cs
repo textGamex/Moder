@@ -5,13 +5,13 @@ namespace Moder.Core.Models.Game.Character;
 /// <summary>
 /// 技能信息中的人物职业类型, 例如 Navy, CorpsCommander, FieldMarshal, Name 为 type 中可以使用的值
 /// </summary>
-public sealed class CharacterSkillType : SmartEnum<CharacterSkillType, byte>
+public sealed class SkillCharacterType : SmartEnum<SkillCharacterType, byte>
 {
-    public static readonly CharacterSkillType Navy = new("navy", 0);
-    public static readonly CharacterSkillType CorpsCommander = new("corps_commander", 1);
-    public static readonly CharacterSkillType FieldMarshal = new("field_marshal", 2);
+    public static readonly SkillCharacterType Navy = new("navy", 0);
+    public static readonly SkillCharacterType CorpsCommander = new("corps_commander", 1);
+    public static readonly SkillCharacterType FieldMarshal = new("field_marshal", 2);
 
-    public static CharacterSkillType FromCharacterType(string? characterType)
+    public static SkillCharacterType FromCharacterType(string? characterType)
     {
         return characterType switch
         {
@@ -22,6 +22,6 @@ public sealed class CharacterSkillType : SmartEnum<CharacterSkillType, byte>
         };
     }
 
-    private CharacterSkillType(string name, byte value)
+    private SkillCharacterType(string name, byte value)
         : base(name, value) { }
 }

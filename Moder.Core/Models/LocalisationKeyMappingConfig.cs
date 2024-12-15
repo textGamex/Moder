@@ -13,6 +13,6 @@ public sealed class LocalisationKeyMappingConfig(string localisationKey, string 
     /// 大小写敏感
     /// </remarks>
     public string ValuePlaceholderKey { get; } = valuePlaceholderKey;
-    // TODO: 移除占位符
+    // TODO: 移除占位符, 直接尝试解析并无视占位符, 以此简化代码.
     public bool ExistsValuePlaceholder => ValuePlaceholderKey != string.Empty;
 }

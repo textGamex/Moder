@@ -131,10 +131,12 @@ public class App : Application
         builder.Services.AddViewSingleton<SideBarControlView, SideBarControlViewModel>();
         builder.Services.AddViewSingleton<WorkSpaceControlView, WorkSpaceControlViewModel>();
         builder.Services.AddViewTransient<CharacterEditorControlView, CharacterEditorControlViewModel>();
+        builder.Services.AddTransient<TraitSelectionWindowViewModel>();
 
         builder.Services.AddSingleton(_ => AppSettingService.Load());
         builder.Services.AddSingleton<MessageBoxService>();
         builder.Services.AddSingleton<TabViewNavigationService>();
+        builder.Services.AddSingleton<AppResourcesService>();
         builder.Services.AddSingleton<GameModDescriptorService>();
         builder.Services.AddSingleton<GameResourcesPathService>();
         builder.Services.AddSingleton<GameResourcesWatcherService>();
@@ -150,6 +152,7 @@ public class App : Application
         builder.Services.AddSingleton<ModifierDisplayService>();
 
         builder.Services.AddSingleton<CharacterSkillService>();
+        builder.Services.AddSingleton<CharacterTraitsService>();
         builder.Services.AddSingleton<TerrainService>();
 
         AddPlatformNativeServices(builder.Services);

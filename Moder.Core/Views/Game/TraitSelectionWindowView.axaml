@@ -1,0 +1,68 @@
+﻿<Window
+    x:Class="Moder.Core.Views.Game.TraitSelectionWindowView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vms="clr-namespace:Moder.Core.ViewsModel.Game;assembly=Moder.Core"
+    xmlns:vo="clr-namespace:Moder.Core.Models.Vo"
+    Title="TraitSelectionWindowView"
+    d:DesignHeight="470"
+    d:DesignWidth="700"
+    x:DataType="vms:TraitSelectionWindowViewModel"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <Flyout x:Key="ModifierToolTip" />
+    </Window.Resources>
+
+    <Grid RowDefinitions="*,Auto">
+
+        <Grid Grid.Row="0" ColumnDefinitions="*,*">
+
+            <Grid Grid.Column="0">
+                <Grid Margin="4,4,0,0" RowDefinitions="Auto,*">
+                    <TextBox
+                        Grid.Row="0"
+                        Margin="0,0,8,0"
+                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Watermark="{x:Static lang:Resource.Common_Search}" />
+                    <ScrollViewer Grid.Row="1">
+                        <ItemsControl Margin="0,4,8,0" ItemsSource="{Binding Traits, Mode=OneWay}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vo:TraitVo">
+                                    <Border
+                                        Background="Transparent"
+                                        CornerRadius="4"
+                                        PointerEntered="Border_OnPointerEntered"
+                                        PointerExited="Border_OnPointerExited"
+                                        PointerPressed="Border_OnPointerPressed"
+                                        Tag="{Binding}">
+                                        <StackPanel Margin="8,8,0,8" Orientation="Horizontal">
+                                            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                            <TextBlock VerticalAlignment="Center" Text="{Binding LocalisationName, Mode=OneTime}" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <ScrollViewer>
+                    <TextBlock MinWidth="400" Inlines="{Binding TraitsModifierDescription}" />
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+
+        <Button
+            Grid.Row="1"
+            Margin="0,8"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Command="{Binding ClearTraitsCommand}"
+            Content="{x:Static lang:Resource.Common_Clear}" />
+    </Grid>
+</Window>

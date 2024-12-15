@@ -19,9 +19,9 @@ public sealed class CharacterSkillService()
 
     private const ushort DefaultSkillMaxValue = 1;
 
-    public ushort GetMaxSkillValue(SkillType skillType, CharacterSkillType characterSkillType)
+    public ushort GetMaxSkillValue(SkillType skillType, SkillCharacterType skillCharacterType)
     {
-        return Skills.FirstOrDefault(skill => skill.SkillType == skillType)?.GetMaxValue(characterSkillType)
+        return Skills.FirstOrDefault(skill => skill.SkillType == skillType)?.GetMaxValue(skillCharacterType)
             ?? DefaultSkillMaxValue;
     }
 
@@ -73,8 +73,8 @@ public sealed class CharacterSkillService()
 
     private SkillInfo ParseSkills(Node node, SkillType skillType)
     {
-        var skillMap = new Dictionary<CharacterSkillType, ushort>(3);
-        var skillModifiers = new Dictionary<CharacterSkillType, List<SkillModifier>>(3);
+        var skillMap = new Dictionary<SkillCharacterType, ushort>(3);
+        var skillModifiers = new Dictionary<SkillCharacterType, List<SkillModifier>>(3);
 
         foreach (var skillInfoNode in node.Nodes)
         {
@@ -86,7 +86,7 @@ public sealed class CharacterSkillService()
                 continue;
             }
 
-            if (!CharacterSkillType.TryFromName(skillTypeLeaf.ValueText, true, out var type))
+            if (!SkillCharacterType.TryFromName(skillTypeLeaf.ValueText, true, out var type))
             {
                 continue;
             }

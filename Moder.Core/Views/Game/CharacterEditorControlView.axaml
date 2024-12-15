@@ -49,7 +49,7 @@
                 Text="{Binding ImageKey, Mode=TwoWay}" />
             <ComboBox
                 x:Name="CharactersTypeComboBox"
-                ItemsSource="{Binding CharactersType}"
+                ItemsSource="{Binding CharactersType, Mode=OneTime}"
                 SelectedItem="{Binding SelectedCharacterType, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate x:DataType="models:CharacterTypeInfo">

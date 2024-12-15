@@ -5,12 +5,12 @@
 /// </summary>
 public sealed class Skill
 {
-    public CharacterSkillType Type { get; }
+    public SkillCharacterType Type { get; }
     public ushort MaxValue { get; }
     
     private readonly SkillModifier[] _modifiers;
 
-    public Skill(CharacterSkillType type, ushort maxValue, IEnumerable<SkillModifier> modifiers)
+    public Skill(SkillCharacterType type, ushort maxValue, IEnumerable<SkillModifier> modifiers)
     {
         Type = type;
         MaxValue = maxValue;

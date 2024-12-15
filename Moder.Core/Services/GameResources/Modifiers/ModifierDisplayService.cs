@@ -40,13 +40,13 @@ public sealed class ModifierDisplayService
 
     public IEnumerable<Inline> GetSkillModifierDescription(
         SkillType skillType,
-        CharacterSkillType characterSkillType,
+        SkillCharacterType skillCharacterType,
         ushort level
     )
     {
         var skillModifier = _characterSkillService.Skills
             .FirstOrDefault(skill => skill.SkillType == skillType)
-            ?.GetModifierDescription(characterSkillType, level);
+            ?.GetModifierDescription(skillCharacterType, level);
 
         if (skillModifier is null || skillModifier.Modifiers.Count == 0)
         {
@@ -154,6 +154,7 @@ public sealed class ModifierDisplayService
 
     private List<Inline> GetModifierInlinesForNode(NodeModifier nodeModifier)
     {
+        // TODO: 移动到 TerrainService???
         // if (
         //     _terrainService.Contains(nodeModifier.Key)
         //     || Array.Exists(UnitTerrain, element => element == nodeModifier.Key)
