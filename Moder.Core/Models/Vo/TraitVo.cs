@@ -5,16 +5,13 @@ using Moder.Core.Models.Game.Character;
 
 namespace Moder.Core.Models.Vo;
 
-public sealed partial class TraitVo : ObservableObject,
-        IEquatable<TraitVo>
+public sealed partial class TraitVo : ObservableObject, IEquatable<TraitVo>
 {
     public string Name => Trait.Name;
     public Trait Trait { get; }
 
     public string LocalisationName { get; }
 
-    // public TextBlock Description => GetDescription();
-    //
     // private static readonly ModifierService ModifierService =
     //     App.Current.Services.GetRequiredService<ModifierService>();
     // private static readonly LocalisationService LocalisationService =
@@ -51,11 +48,6 @@ public sealed partial class TraitVo : ObservableObject,
     // public ImageSource? ImageSource => _imageSource.Value;
     // private readonly Lazy<ImageSource?> _imageSource;
 
-    // partial void OnIsSelectedChanged(bool value)
-    // {
-    //     WeakReferenceMessenger.Default.Send(new SelectedTraitChangedMessage(value, this));
-    // }
-
     // private ImageSource? GetImageSource()
     // {
     //     if (SpriteService.TryGetImageSource($"GFX_trait_{Name}", out var source))
@@ -65,60 +57,6 @@ public sealed partial class TraitVo : ObservableObject,
     //
     //     return UnknownImage;
     // }
-
-    // private TextBlock GetDescription()
-    // {
-    //     var textBox = new TextBlock();
-    //     foreach (var inline in ModifierService.GetModifierInlines(Trait.AllModifiers))
-    //     {
-    //         textBox.Inlines.Add(inline);
-    //     }
-    //
-    //     if (textBox.Inlines.Count == 0)
-    //     {
-    //         textBox.Inlines.Add(new Run { Text = Resource.ModifierDisplay_Empty });
-    //     }
-    //
-    //     textBox.Inlines.Add(new LineBreak());
-    //     textBox.Inlines.Add(new Run { Text = Separator });
-    //     textBox.Inlines.Add(new LineBreak());
-    //
-    //     var traitDesc = LocalisationService.GetValue($"{Trait.Name}_desc");
-    //
-    //     foreach (var chars in GetCleanText(traitDesc).Chunk(15))
-    //     {
-    //         textBox.Inlines.Add(new Run { Text = new string(chars) });
-    //         textBox.Inlines.Add(new LineBreak());
-    //     }
-    //
-    //     if (textBox.Inlines[^1] is LineBreak)
-    //     {
-    //         textBox.Inlines.RemoveAt(textBox.Inlines.Count - 1);
-    //     }
-    //     return textBox;
-    // }
-
-    private static string GetCleanText(string rawText)
-    {
-        string text;
-        if (LocalizationFormatParser.TryParse(rawText, out var formats))
-        {
-            var sb = new StringBuilder();
-            foreach (var format in formats)
-            {
-                sb.Append(
-                    format.Type == LocalizationFormatType.TextWithColor ? format.Text[1..] : format.Text
-                );
-            }
-            text = sb.ToString();
-        }
-        else
-        {
-            text = rawText;
-        }
-
-        return text;
-    }
 
     public bool Equals(TraitVo? other)
     {

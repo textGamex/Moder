@@ -22,6 +22,7 @@ using ParadoxPower.Process;
 
 namespace Moder.Core.ViewsModel.Game;
 
+//TODO: 数据校验
 public sealed partial class CharacterEditorControlViewModel : ObservableObject
 {
     [ObservableProperty]
@@ -291,7 +292,8 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject
     [RelayCommand]
     private async Task OpenTraitsSelectionWindow()
     {
-        var window = new TraitSelectionWindowView(_selectedTraits);
+        var window = new TraitSelectionWindowView();
+        window.SyncSelectedTraits(_selectedTraits);
         var lifetime = (IClassicDesktopStyleApplicationLifetime?)App.Current.ApplicationLifetime;
         Debug.Assert(lifetime?.MainWindow is not null);
 

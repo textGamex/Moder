@@ -117,7 +117,7 @@ public sealed partial class TraitSelectionWindowViewModel : ObservableObject
     private void UpdateModifiersDescriptionCore()
     {
         var mergedModifiers = _modifierMergeManager.GetMergedModifiers();
-        var addedModifiers = _modifierDisplayService.GetModifierInlines(mergedModifiers);
+        var addedModifiers = _modifierDisplayService.GetModifierDescription(mergedModifiers);
 
         TraitsModifierDescription.Clear();
         TraitsModifierDescription.AddRange(addedModifiers);

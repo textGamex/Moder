@@ -44,8 +44,8 @@ public sealed class ModifierDisplayService
         ushort level
     )
     {
-        var skillModifier = _characterSkillService.Skills
-            .FirstOrDefault(skill => skill.SkillType == skillType)
+        var skillModifier = _characterSkillService
+            .Skills.FirstOrDefault(skill => skill.SkillType == skillType)
             ?.GetModifierDescription(skillCharacterType, level);
 
         if (skillModifier is null || skillModifier.Modifiers.Count == 0)
@@ -53,10 +53,10 @@ public sealed class ModifierDisplayService
             return [new Run { Text = Resource.CharacterEditor_None }];
         }
 
-        return GetModifierInlines(skillModifier.Modifiers);
+        return GetModifierDescription(skillModifier.Modifiers);
     }
 
-    public IReadOnlyCollection<Inline> GetModifierInlines(IEnumerable<IModifier> modifiers)
+    public IReadOnlyCollection<Inline> GetModifierDescription(IEnumerable<IModifier> modifiers)
     {
         var inlines = new List<Inline>(8);
 
