@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Documents;
 using Avalonia.Threading;
@@ -203,8 +204,12 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject, 
     partial void OnSelectedCharacterTypeChanged(CharacterTypeInfo value)
     {
         _appResourcesService.CurrentSelectedCharacterType = SelectedSkillCharacterType;
-        SetSkillsMaxValue();
-        ResetSkillsModifierDescription();
+        // 这样描述可以正常显示
+        Dispatcher.UIThread.Post(() =>
+        {
+            SetSkillsMaxValue();
+            ResetSkillsModifierDescription();
+        });
     }
 
     partial void OnLevelChanged(ushort value)

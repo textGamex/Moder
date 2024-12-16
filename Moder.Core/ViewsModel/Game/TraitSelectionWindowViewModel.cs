@@ -1,13 +1,11 @@
-﻿using System.Diagnostics;
-using Avalonia.Collections;
+﻿using Avalonia.Collections;
 using Avalonia.Controls.Documents;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
 using EnumsNET;
 using Moder.Core.Infrastructure;
 using Moder.Core.Models.Game.Character;
-using Moder.Core.Models.Game.Modifiers;
 using Moder.Core.Models.Vo;
 using Moder.Core.Services;
 using Moder.Core.Services.GameResources;
@@ -119,8 +117,11 @@ public sealed partial class TraitSelectionWindowViewModel : ObservableObject
         var mergedModifiers = _modifierMergeManager.GetMergedModifiers();
         var addedModifiers = _modifierDisplayService.GetModifierDescription(mergedModifiers);
 
-        TraitsModifierDescription.Clear();
-        TraitsModifierDescription.AddRange(addedModifiers);
+        Dispatcher.UIThread.Post(() =>
+        {
+            TraitsModifierDescription.Clear();
+            TraitsModifierDescription.AddRange(addedModifiers);
+        });
     }
 
     public void SyncSelectedTraits(IEnumerable<TraitVo> selectedTraits)
