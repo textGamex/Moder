@@ -1,6 +1,7 @@
 ﻿using System.Collections.Frozen;
 using MethodTimer;
 using Moder.Core.Services.GameResources.Base;
+using Moder.Core.Services.GameResources.Localization;
 using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources;
@@ -12,12 +13,29 @@ public sealed class TerrainService : CommonResourcesService<TerrainService, Froz
 {
     private Dictionary<string, FrozenSet<string>>.ValueCollection Terrains => Resources.Values;
 
+    /// <summary>
+    /// 未在文件中定义的地形
+    /// </summary>
+    private readonly FrozenSet<string> _unitTerrain;
+    private readonly LocalizationService _localizationService;
+
     [Time("加载地形资源")]
-    public TerrainService()
-        : base(Path.Combine(Keywords.Common, "terrain"), WatcherFilter.Text) { }
+    public TerrainService(LocalizationService localizationService)
+        : base(Path.Combine(Keywords.Common, "terrain"), WatcherFilter.Text)
+    {
+        _localizationService = localizationService;
+        _unitTerrain = ["fort", "river"];
+    }
+
+    public string GetLocalizationName(string terrainName) => _localizationService.GetValue(terrainName);
 
     public bool Contains(string terrainName)
     {
+        if (_unitTerrain.Contains(terrainName))
+        {
+            return true;
+        }
+
         foreach (var terrain in Terrains)
         {
             if (terrain.Contains(terrainName))

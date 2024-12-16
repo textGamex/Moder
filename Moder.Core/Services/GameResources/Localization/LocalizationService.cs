@@ -73,9 +73,9 @@ public sealed class LocalizationService
     /// <returns></returns>
     public bool TryGetValueInAll(string key, [NotNullWhen(true)] out string? value)
     {
-        if (_localizationKeyMapping.TryGetValue(key, out var config))
+        if (_localizationKeyMapping.TryGetValue(key, out var mappingKey))
         {
-            key = config.LocalisationKey;
+            key = mappingKey;
         }
 
         return TryGetValue(key, out value);

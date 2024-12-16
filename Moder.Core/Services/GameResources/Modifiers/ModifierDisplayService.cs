@@ -18,7 +18,6 @@ public sealed class ModifierDisplayService
     private readonly LocalizationKeyMappingService _localisationKeyMappingService;
     private readonly CharacterSkillService _characterSkillService;
 
-    private static readonly string[] UnitTerrain = ["fort", "river"];
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     public ModifierDisplayService(
@@ -53,42 +52,46 @@ public sealed class ModifierDisplayService
             return [new Run { Text = Resource.CharacterEditor_None }];
         }
 
-        return GetModifierDescription(skillModifier.Modifiers);
+        return GetDescription(skillModifier.Modifiers);
     }
 
-    public IReadOnlyCollection<Inline> GetModifierDescription(IEnumerable<IModifier> modifiers)
+    public IReadOnlyCollection<Inline> GetDescription(IEnumerable<IModifier> modifiers)
     {
         var inlines = new List<Inline>(8);
 
         foreach (var modifier in modifiers)
         {
             IEnumerable<Inline> addedInlines;
-            if (modifier.Type == ModifierType.Leaf)
+            switch (modifier.Type)
             {
-                var leafModifier = (LeafModifier)modifier;
-                if (IsCustomToolTip(leafModifier.Key))
+                case ModifierType.Leaf:
                 {
-                    var name = _localizationService.GetValue(leafModifier.Value);
-                    addedInlines = _localisationFormatService
-                        .GetColorText(name)
-                        .Select(colorTextInfo => new Run(colorTextInfo.DisplayText)
-                        {
-                            Foreground = colorTextInfo.Brush
-                        });
+                    var leafModifier = (LeafModifier)modifier;
+                    if (IsCustomToolTip(leafModifier.Key))
+                    {
+                        var name = _localizationService.GetValue(leafModifier.Value);
+                        addedInlines = _localisationFormatService
+                            .GetColorText(name)
+                            .Select(colorTextInfo => new Run(colorTextInfo.DisplayText)
+                            {
+                                Foreground = colorTextInfo.Brush
+                            });
+                    }
+                    else
+                    {
+                        addedInlines = GetDescriptionForLeaf(leafModifier);
+                    }
+
+                    break;
                 }
-                else
+                case ModifierType.Node:
                 {
-                    addedInlines = GetModifierInlinesForLeaf(leafModifier);
+                    var nodeModifier = (NodeModifier)modifier;
+                    addedInlines = GetModifierDescriptionForNode(nodeModifier);
+                    break;
                 }
-            }
-            else if (modifier.Type == ModifierType.Node)
-            {
-                var nodeModifier = (NodeModifier)modifier;
-                addedInlines = GetModifierInlinesForNode(nodeModifier);
-            }
-            else
-            {
-                continue;
+                default:
+                    continue;
             }
 
             inlines.AddRange(addedInlines);
@@ -105,36 +108,20 @@ public sealed class ModifierDisplayService
             || StringComparer.OrdinalIgnoreCase.Equals(modifierKey, LeafModifier.CustomModifierTooltipKey);
     }
 
-    private List<Inline> GetModifierInlinesForLeaf(LeafModifier modifier)
+    private List<Run> GetDescriptionForLeaf(LeafModifier modifier)
     {
-        // if (_localisationKeyMappingService.TryGetValue(modifier.Key, out var config))
-        // {
-        //     return GetModifierDisplayMessageForMapping(modifier, config);
-        // }
-
-        return GetModifierDisplayMessageUniversal(modifier);
-    }
-
-    private List<Inline> GetModifierDisplayMessageUniversal(LeafModifier modifier)
-    {
-        var inlines = new List<Inline>(4);
-        GetModifierColorTextFromText(modifier.Key, inlines);
+        var modifierKey = _localisationKeyMappingService.TryGetValue(modifier.Key, out var mappingKey)
+            ? mappingKey
+            : modifier.Key;
+        var inlines = new List<Run>(4);
+        GetModifierColorTextFromText(modifierKey, inlines);
 
         if (modifier.ValueType is GameValueType.Int or GameValueType.Float)
         {
-            var modifierFormat = _modifierService.TryGetLocalizationTt(modifier.Key, out var result)
+            var modifierFormat = _modifierService.TryGetLocalizationTt(modifierKey, out var result)
                 ? result
                 : string.Empty;
-            var value = _modifierService.GetModifierDisplayValue(modifier, modifierFormat);
-            inlines.Add(
-                new Run
-                {
-                    Text = value,
-                    Foreground = new SolidColorBrush(
-                        _modifierService.GetModifierColor(modifier, modifierFormat)
-                    )
-                }
-            );
+            inlines.Add(GetRun(modifier, modifierFormat));
         }
         else
         {
@@ -143,7 +130,7 @@ public sealed class ModifierDisplayService
         return inlines;
     }
 
-    private void GetModifierColorTextFromText(string modifierKey, List<Inline> inlines)
+    private void GetModifierColorTextFromText(string modifierKey, List<Run> inlines)
     {
         var modifierName = _modifierService.GetLocalizationName(modifierKey);
         foreach (var colorTextInfo in _localisationFormatService.GetColorText(modifierName))
@@ -152,23 +139,79 @@ public sealed class ModifierDisplayService
         }
     }
 
-    private List<Inline> GetModifierInlinesForNode(NodeModifier nodeModifier)
+    private List<Inline> GetModifierDescriptionForNode(NodeModifier nodeModifier)
     {
-        // TODO: 移动到 TerrainService???
-        // if (
-        //     _terrainService.Contains(nodeModifier.Key)
-        //     || Array.Exists(UnitTerrain, element => element == nodeModifier.Key)
-        // )
-        // {
-        //     return GetTerrainModifierInlines(nodeModifier);
-        // }
+        if (_terrainService.Contains(nodeModifier.Key))
+        {
+            return GetTerrainModifierDescription(nodeModifier);
+        }
 
+        return GetDescriptionForUnknownNode(nodeModifier);
+    }
+
+    /// <summary>
+    /// 获取地形修饰符的描述
+    /// </summary>
+    /// <param name="nodeModifier"></param>
+    /// <returns></returns>
+    private List<Inline> GetTerrainModifierDescription(NodeModifier nodeModifier)
+    {
+        return GetDescriptionForNode(
+            nodeModifier,
+            leafModifier =>
+            {
+                var modifierName = _localizationService.GetValue($"STAT_ADJUSTER_{leafModifier.Key}");
+                var modifierFormat = _localizationService.GetValue($"STAT_ADJUSTER_{leafModifier.Key}_DIFF");
+                return [new Run { Text = $"  {modifierName}" }, GetRun(leafModifier, modifierFormat)];
+            }
+        );
+    }
+
+    private Run GetRun(LeafModifier modifier, string modifierFormat)
+    {
+        return new Run
+        {
+            Text = _modifierService.GetDisplayValue(modifier, modifierFormat),
+            Foreground = new SolidColorBrush(_modifierService.GetModifierColor(modifier, modifierFormat))
+        };
+    }
+
+    private List<Inline> GetDescriptionForUnknownNode(NodeModifier nodeModifier)
+    {
         Log.Warn("未知的节点修饰符: {Name}", nodeModifier.Key);
-        var inlines = new List<Inline>(nodeModifier.Modifiers.Count * 3);
+        return GetDescriptionForNode(
+            nodeModifier,
+            leafModifier =>
+            {
+                var runs = GetDescriptionForLeaf(leafModifier);
+                foreach (var run in runs)
+                {
+                    run.Text = $"  {run.Text}";
+                }
+
+                return runs;
+            }
+        );
+    }
+
+    private List<Inline> GetDescriptionForNode(
+        NodeModifier nodeModifier,
+        Func<LeafModifier, IEnumerable<Inline>> func
+    )
+    {
+        var inlines = new List<Inline>(nodeModifier.Modifiers.Count * 3)
+        {
+            new Run { Text = $"{_localizationService.GetValue(nodeModifier.Key)}:" },
+            new LineBreak()
+        };
+
         foreach (var leafModifier in nodeModifier.Modifiers)
         {
-            inlines.AddRange(GetModifierInlinesForLeaf(leafModifier));
+            inlines.AddRange(func(leafModifier));
+            inlines.Add(new LineBreak());
         }
+
+        RemoveLastLineBreak(inlines);
         return inlines;
     }
 

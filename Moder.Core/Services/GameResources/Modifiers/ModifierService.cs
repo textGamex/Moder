@@ -124,14 +124,14 @@ public sealed class ModifierService
     /// <param name="leafModifier"></param>
     /// <param name="modifierDisplayFormat"></param>
     /// <returns></returns>
-    public string GetModifierDisplayValue(LeafModifier leafModifier, string modifierDisplayFormat)
+    public string GetDisplayValue(LeafModifier leafModifier, string modifierDisplayFormat)
     {
         if (leafModifier.ValueType is GameValueType.Int or GameValueType.Float)
         {
             var value = double.Parse(leafModifier.Value);
             var sign = leafModifier.Value.StartsWith('-') ? string.Empty : "+";
 
-            var displayDigits = GetModifierDisplayDigits(modifierDisplayFormat);
+            var displayDigits = GetDisplayDigits(modifierDisplayFormat);
             var isPercentage =
                 string.IsNullOrEmpty(modifierDisplayFormat) || modifierDisplayFormat.Contains('%');
             var format = isPercentage ? 'P' : 'F';
@@ -142,7 +142,7 @@ public sealed class ModifierService
         return leafModifier.Value;
     }
 
-    private static char GetModifierDisplayDigits(string modifierDescription)
+    private static char GetDisplayDigits(string modifierDescription)
     {
         var displayDigits = '1';
         for (var i = modifierDescription.Length - 1; i >= 0; i--)

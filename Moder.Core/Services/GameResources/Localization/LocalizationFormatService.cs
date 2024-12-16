@@ -7,7 +7,7 @@ namespace Moder.Core.Services.GameResources.Localization;
 
 public sealed class LocalizationFormatService(LocalizationTextColorsService localizationTextColorsService)
 {
-    public IEnumerable<ColorTextInfo> GetColorText(string text)
+    public IReadOnlyCollection<ColorTextInfo> GetColorText(string text)
     {
         var result = new List<ColorTextInfo>(4);
 

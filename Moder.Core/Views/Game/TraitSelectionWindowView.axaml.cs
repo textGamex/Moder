@@ -78,7 +78,7 @@ public sealed partial class TraitSelectionWindowView : Window
         }
 
         var toolTip = new TextBlock { Inlines = [], FontSize = 15 };
-        var inlines = _modifierDisplayService.GetModifierDescription(traitVo.Trait.AllModifiers);
+        var inlines = _modifierDisplayService.GetDescription(traitVo.Trait.AllModifiers);
         if (inlines.Count == 0)
         {
             toolTip.Inlines.Add(new Run { Text = Resource.CharacterEditor_None });
