@@ -5,7 +5,7 @@ using Avalonia.Platform.Storage;
 using EnumsNET;
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Extensions;
-using Moder.Core.Resources;
+using Moder.Core.Models;
 using Moder.Core.Services.Config;
 using AppInitializeControlViewModel = Moder.Core.ViewsModel.Menus.AppInitializeControlViewModel;
 
@@ -57,7 +57,7 @@ public sealed partial class AppInitializeControlView : UserControl
         {
             return;
         }
-        app.RequestedThemeVariant = AppTheme.GetThemeVariant(theme);
+        app.RequestedThemeVariant = theme.ToThemeVariant();
         var settingService = App.Services.GetRequiredService<AppSettingService>();
         settingService.AppTheme = theme;
     }

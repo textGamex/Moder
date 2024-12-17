@@ -9,12 +9,13 @@
     Title="Moder.Core"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    x:DataType="vms:MainWindowViewModel"
     Design.DataContext="{x:Static vms:DesignData.MainWindowViewModel}"
     mc:Ignorable="d">
 
     <Grid RowDefinitions="Auto,*">
         <Menu Grid.Row="0">
-            <MenuItem Header="{x:Static lang:Resource.Menu_CharacterEditor}" />
+            <MenuItem Command="{Binding OpenCharacterEditorCommand}" Header="{x:Static lang:Resource.Menu_CharacterEditor}" />
             <MenuItem Header="{x:Static lang:Resource.Menu_Settings}" />
         </Menu>
         <ContentControl x:Name="MainContentControl" Grid.Row="1" />

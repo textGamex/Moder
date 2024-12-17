@@ -10,13 +10,18 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Moder.Core.Extensions;
 using Moder.Core.Infrastructure.FileSort;
-using Moder.Core.Resources;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Core.Services.FileNativeService;
+using Moder.Core.Services.GameResources;
+using Moder.Core.Services.GameResources.Base;
+using Moder.Core.Services.GameResources.Localization;
+using Moder.Core.Services.GameResources.Modifiers;
 using Moder.Core.Views;
+using Moder.Core.Views.Game;
 using Moder.Core.Views.Menus;
 using Moder.Core.ViewsModel;
+using Moder.Core.ViewsModel.Game;
 using Moder.Core.ViewsModel.Menus;
 using Moder.Hosting;
 using NLog;
@@ -72,8 +77,8 @@ public class App : Application
         var host = builder.Build();
         _host = host;
         _serviceProvider = host.Services;
-        var settingService = App.Services.GetRequiredService<AppSettingService>();
-        RequestedThemeVariant = AppTheme.GetThemeVariant(settingService.AppTheme);
+        var settingService = Services.GetRequiredService<AppSettingService>();
+        RequestedThemeVariant = settingService.AppTheme.ToThemeVariant();
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -118,14 +123,36 @@ public class App : Application
         builder.Logging.AddNLog(builder.Configuration);
         LogManager.Configuration = new NLogLoggingConfiguration(builder.Configuration.GetSection("NLog"));
 
+        // View, ViewModel
         builder.Services.AddViewSingleton<MainWindow, MainWindowViewModel>();
         builder.Services.AddViewTransient<AppInitializeControlView, AppInitializeControlViewModel>();
         builder.Services.AddViewSingleton<MainControlView, MainControlViewModel>();
         builder.Services.AddViewSingleton<SideBarControlView, SideBarControlViewModel>();
         builder.Services.AddViewSingleton<WorkSpaceControlView, WorkSpaceControlViewModel>();
+        builder.Services.AddViewTransient<CharacterEditorControlView, CharacterEditorControlViewModel>();
+        builder.Services.AddTransient<TraitSelectionWindowViewModel>();
 
         builder.Services.AddSingleton(_ => AppSettingService.Load());
         builder.Services.AddSingleton<MessageBoxService>();
+        builder.Services.AddSingleton<TabViewNavigationService>();
+        builder.Services.AddSingleton<AppResourcesService>();
+        builder.Services.AddSingleton<GameModDescriptorService>();
+        builder.Services.AddSingleton<GameResourcesPathService>();
+        builder.Services.AddSingleton<GameResourcesWatcherService>();
+
+        // 本地化文本相关服务
+        builder.Services.AddSingleton<LocalizationService>();
+        builder.Services.AddSingleton<LocalizationFormatService>();
+        builder.Services.AddSingleton<LocalizationTextColorsService>();
+        builder.Services.AddSingleton<LocalizationKeyMappingService>();
+
+        // 修饰符相关服务
+        builder.Services.AddSingleton<ModifierService>();
+        builder.Services.AddSingleton<ModifierDisplayService>();
+
+        builder.Services.AddSingleton<CharacterSkillService>();
+        builder.Services.AddSingleton<CharacterTraitsService>();
+        builder.Services.AddSingleton<TerrainService>();
 
         AddPlatformNativeServices(builder.Services);
 
