@@ -1,5 +1,4 @@
 ﻿using Avalonia.Controls.Documents;
-using Avalonia.Media;
 using Moder.Core.Models.Game;
 using Moder.Core.Models.Game.Character;
 using Moder.Core.Models.Game.Modifiers;

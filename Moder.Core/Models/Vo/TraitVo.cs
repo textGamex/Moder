@@ -1,6 +1,4 @@
-﻿using System.Text;
-using CommunityToolkit.Mvvm.ComponentModel;
-using Moder.Core.Infrastructure.Parser;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Moder.Core.Models.Game.Character;
 
 namespace Moder.Core.Models.Vo;

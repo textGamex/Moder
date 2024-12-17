@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
-using Moder.Core.Infrastructure.Parser;
 using Moder.Core.Models.Game;
 using Moder.Core.Models.Game.Modifiers;
 using Moder.Core.Services.GameResources.Localization;
