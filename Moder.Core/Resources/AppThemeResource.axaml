@@ -1,7 +1,7 @@
 <ResourceDictionary
     xmlns="https://github.com/avaloniaui"
-    xmlns:res="using:Moder.Core.Resources"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:res="clr-namespace:Moder.Core.Models">
 
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="{x:Static res:ThemeVariants.Light}">

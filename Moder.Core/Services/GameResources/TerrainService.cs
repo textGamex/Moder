@@ -24,10 +24,9 @@ public sealed class TerrainService : CommonResourcesService<TerrainService, Froz
         : base(Path.Combine(Keywords.Common, "terrain"), WatcherFilter.Text)
     {
         _localizationService = localizationService;
+        //TODO: 从数据库读取
         _unitTerrain = ["fort", "river"];
     }
-
-    public string GetLocalizationName(string terrainName) => _localizationService.GetValue(terrainName);
 
     public bool Contains(string terrainName)
     {

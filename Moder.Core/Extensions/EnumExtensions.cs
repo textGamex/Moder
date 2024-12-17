@@ -1,5 +1,7 @@
 using System.Globalization;
+using Avalonia.Styling;
 using EnumsNET;
+using Moder.Core.Models;
 using Moder.Core.Models.Game;
 
 namespace Moder.Core.Extensions;
@@ -85,5 +87,16 @@ public static class EnumExtensions
         }
 
         return GameLanguage.English;
+    }
+    
+    public static ThemeVariant ToThemeVariant(this ThemeMode type)
+    {
+        return type switch
+        {
+            ThemeMode.Light => new ThemeVariant(nameof(ThemeMode.Light), ThemeVariant.Light),
+            ThemeMode.Dark => new ThemeVariant(nameof(ThemeMode.Dark), ThemeVariant.Dark),
+            ThemeMode.DarkSlateGray => new ThemeVariant(nameof(ThemeMode.DarkSlateGray), ThemeVariant.Dark),
+            _ => ThemeVariant.Default,
+        };
     }
 }

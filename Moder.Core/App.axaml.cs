@@ -9,8 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Moder.Core.Extensions;
+using Moder.Core.Helpers;
 using Moder.Core.Infrastructure.FileSort;
-using Moder.Core.Resources;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Core.Services.FileNativeService;
@@ -79,7 +79,7 @@ public class App : Application
         _host = host;
         _serviceProvider = host.Services;
         var settingService = Services.GetRequiredService<AppSettingService>();
-        RequestedThemeVariant = AppTheme.GetThemeVariant(settingService.AppTheme);
+        RequestedThemeVariant = settingService.AppTheme.ToThemeVariant();
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
