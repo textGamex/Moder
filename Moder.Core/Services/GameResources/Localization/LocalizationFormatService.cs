@@ -7,13 +7,24 @@ namespace Moder.Core.Services.GameResources.Localization;
 
 public sealed class LocalizationFormatService(LocalizationTextColorsService localizationTextColorsService)
 {
+    /// <summary>
+    /// 从文本中获取颜色信息, 返回的集合中不包含 <see cref="LocalizationFormatType.Placeholder"/> 类型的文本, 如果解析失败, 则统一使用黑色
+    /// </summary>
+    /// <param name="text">文本</param>
+    /// <returns>一个集合, 包含非占位符的所有文本颜色信息</returns>
     public IReadOnlyCollection<ColorTextInfo> GetColorText(string text)
     {
         var result = new List<ColorTextInfo>(4);
 
         if (LocalizationFormatParser.TryParse(text, out var formats))
         {
-            result.AddRange(formats.Select(GetColorText));
+            foreach (var format in formats)
+            {
+                if (format.Type != LocalizationFormatType.Placeholder)
+                {
+                    result.Add(GetColorText(format));
+                }
+            }
         }
         else
         {
@@ -24,7 +35,7 @@ public sealed class LocalizationFormatService(LocalizationTextColorsService loca
     }
 
     /// <summary>
-    /// 尝试将文本解析为<see cref="ColorTextInfo"/>, 并使用 <see cref="LocalizationFormatInfo"/> 中指定的颜色, 如果颜色不存在, 则使用默认颜色
+    /// 尝试将文本解析为 <see cref="ColorTextInfo"/>, 并使用 <see cref="LocalizationFormatInfo"/> 中指定的颜色, 如果颜色不存在, 则使用默认颜色
     /// </summary>
     /// <param name="format">文本格式信息</param>
     /// <returns></returns>

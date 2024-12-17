@@ -30,10 +30,10 @@ public static class LocalizationFormatParser
         .Or(TextWithColorParser)
         .Many();
 
-    public static bool TryParse(string input, [NotNullWhen(true)] out IEnumerable<LocalizationFormatInfo>? result)
+    public static bool TryParse(string input, [NotNullWhen(true)] out IEnumerable<LocalizationFormatInfo>? formats)
     {
         var parseResult = LocalizationTextParser.Parse(input);
-        result = parseResult.Success ? parseResult.Value : null;
+        formats = parseResult.Success ? parseResult.Value : null;
 
         return parseResult.Success;
     }

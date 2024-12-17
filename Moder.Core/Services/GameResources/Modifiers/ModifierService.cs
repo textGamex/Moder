@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Media;
+using Moder.Core.Infrastructure.Parser;
 using Moder.Core.Models.Game;
 using Moder.Core.Models.Game.Modifiers;
 using Moder.Core.Services.GameResources.Localization;
@@ -91,9 +92,14 @@ public sealed class ModifierService
         return modifier;
     }
 
-    public bool TryGetLocalizationTt(string modifier, [NotNullWhen(true)] out string? result)
+    public bool TryGetLocalizationFormat(string modifier, [NotNullWhen(true)] out string? result)
     {
-        return _localizationService.TryGetValue($"{modifier}_tt", out result);
+        if (_localizationService.TryGetValue($"{modifier}_tt", out result))
+        {
+            return true;
+        }
+
+        return _localizationService.TryGetValue(modifier, out result);
     }
 
     private static ModifierEffectType GetModifierType(string modifierName, string modifierFormat)
@@ -122,9 +128,9 @@ public sealed class ModifierService
     /// <summary>
     /// 获取 Modifier 数值的显示值
     /// </summary>
-    /// <param name="leafModifier"></param>
-    /// <param name="modifierDisplayFormat"></param>
-    /// <returns></returns>
+    /// <param name="leafModifier">包含关键字和对应值的修饰符对象</param>
+    /// <param name="modifierDisplayFormat">修饰符对应的格式化设置文本, 为空时使用百分比格式</param>
+    /// <returns>应用<c>modifierDisplayFormat</c>格式的<c>LeafModifier.Value</c>的的显示值</returns>
     public string GetDisplayValue(LeafModifier leafModifier, string modifierDisplayFormat)
     {
         if (leafModifier.ValueType is GameValueType.Int or GameValueType.Float)
@@ -141,6 +147,11 @@ public sealed class ModifierService
         }
 
         return leafModifier.Value;
+    }
+
+    private static bool IsAllUppercase(string value)
+    {
+        return value.All(char.IsUpper);
     }
 
     private static char GetDisplayDigits(string modifierDescription)

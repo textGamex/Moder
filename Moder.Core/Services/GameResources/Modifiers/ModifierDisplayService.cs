@@ -119,7 +119,7 @@ public sealed class ModifierDisplayService
 
         if (modifier.ValueType is GameValueType.Int or GameValueType.Float)
         {
-            var modifierFormat = _modifierService.TryGetLocalizationTt(modifierKey, out var result)
+            var modifierFormat = _modifierService.TryGetLocalizationFormat(modifierKey, out var result)
                 ? result
                 : string.Empty;
             inlines.Add(GetRun(modifier, modifierFormat));
@@ -172,6 +172,12 @@ public sealed class ModifierDisplayService
         );
     }
 
+    /// <summary>
+    /// 从 <see cref="LeafModifier"/> 中获取<c>LeafModifier.Value</c>的 <see cref="Run"/>, 并使用<c>modifierFormat</c>设置值的格式
+    /// </summary>
+    /// <param name="modifier"></param>
+    /// <param name="modifierFormat"></param>
+    /// <returns></returns>
     private Run GetRun(LeafModifier modifier, string modifierFormat)
     {
         return new Run
@@ -220,6 +226,10 @@ public sealed class ModifierDisplayService
         return inlines;
     }
 
+    /// <summary>
+    /// 移除末尾多余的换行
+    /// </summary>
+    /// <param name="inlines">一段文本的 <see cref="Inline"/> 集合</param>
     private static void RemoveLastLineBreak(List<Inline> inlines)
     {
         if (inlines.Count != 0 && inlines[^1] is LineBreak)

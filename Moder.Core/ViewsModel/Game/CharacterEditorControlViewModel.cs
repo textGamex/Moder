@@ -24,7 +24,6 @@ using ParadoxPower.Process;
 
 namespace Moder.Core.ViewsModel.Game;
 
-//TODO: 数据校验
 public sealed partial class CharacterEditorControlViewModel : ObservableValidator, IClosed
 {
     [ObservableProperty]

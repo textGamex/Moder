@@ -3,7 +3,7 @@ using Avalonia.Xaml.Interactivity;
 
 namespace Moder.Core.Behaviors;
 
-public class AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour : Behavior<AutoCompleteBox>
+public sealed class AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour : Behavior<AutoCompleteBox>
 {
     protected override void OnAttached()
     {
