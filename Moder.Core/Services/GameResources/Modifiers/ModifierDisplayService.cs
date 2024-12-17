@@ -183,7 +183,7 @@ public sealed class ModifierDisplayService
         return new Run
         {
             Text = _modifierService.GetDisplayValue(modifier, modifierFormat),
-            Foreground = new SolidColorBrush(_modifierService.GetModifierColor(modifier, modifierFormat))
+            Foreground = _modifierService.GetModifierBrush(modifier, modifierFormat)
         };
     }
 

@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Media;
+using Avalonia.Media.Immutable;
 using Moder.Core.Infrastructure.Parser;
 using Moder.Core.Models.Game;
 using Moder.Core.Models.Game.Modifiers;
@@ -18,9 +19,9 @@ public sealed class ModifierService
     }
 
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
-    private static readonly Color Yellow = Color.FromRgb(255, 189, 0);
+    private static readonly ImmutableSolidColorBrush Yellow = new(Color.FromRgb(255, 189, 0));
 
-    public Color GetModifierColor(LeafModifier leafModifier, string modifierFormat)
+    public IBrush GetModifierBrush(LeafModifier leafModifier, string modifierFormat)
     {
         var value = double.Parse(leafModifier.Value);
         if (value == 0.0)
@@ -31,35 +32,35 @@ public sealed class ModifierService
         var modifierType = GetModifierType(leafModifier.Key, modifierFormat);
         if (modifierType == ModifierEffectType.Unknown)
         {
-            return Colors.Black;
+            return Brushes.Black;
         }
 
         if (value > 0.0)
         {
             if (modifierType == ModifierEffectType.Positive)
             {
-                return Colors.Green;
+                return Brushes.Green;
             }
 
             if (modifierType == ModifierEffectType.Negative)
             {
-                return Colors.Red;
+                return Brushes.Red;
             }
         }
         else
         {
             if (modifierType == ModifierEffectType.Positive)
             {
-                return Colors.Red;
+                return Brushes.Red;
             }
 
             if (modifierType == ModifierEffectType.Negative)
             {
-                return Colors.Green;
+                return Brushes.Green;
             }
         }
 
-        return Colors.Black;
+        return Brushes.Black;
     }
 
     public string GetLocalizationName(string modifier)
