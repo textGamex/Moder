@@ -2,8 +2,9 @@
     x:Class="Moder.Core.Views.Game.CharacterEditorControlView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+    xmlns:behaviors="clr-namespace:Moder.Core.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
     xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Moder.Core.Models"
@@ -58,7 +59,10 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <TextBlock Margin="0,12,0,0" Text="{x:Static lang:Resource.Common_WriteToFile}" />
+            <TextBlock
+                Margin="0,12,0,0"
+                HorizontalAlignment="Center"
+                Text="{x:Static lang:Resource.Common_WriteToFile}" />
             <Grid ColumnDefinitions="Auto,*">
 
                 <!--  路径前缀  -->
@@ -67,11 +71,16 @@
                     Margin="4,0,0,0"
                     VerticalAlignment="Center"
                     Text="common\characters\" />
-                <ComboBox
+                <AutoCompleteBox
                     Grid.Column="1"
                     MinWidth="100"
+                    IsDropDownOpen="True"
                     ItemsSource="{Binding CharacterFiles}"
-                    SelectedItem="{Binding SelectedCharacterFile, Mode=TwoWay}" />
+                    SelectedItem="{Binding SelectedCharacterFile, Mode=TwoWay}">
+                    <i:Interaction.Behaviors>
+                        <behaviors:AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour />
+                    </i:Interaction.Behaviors>
+                </AutoCompleteBox>
             </Grid>
 
             <Button

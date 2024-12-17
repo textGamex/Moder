@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using System.Threading;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Documents;
 using Avalonia.Threading;
@@ -25,7 +25,7 @@ using ParadoxPower.Process;
 namespace Moder.Core.ViewsModel.Game;
 
 //TODO: 数据校验
-public sealed partial class CharacterEditorControlViewModel : ObservableObject, IClosed
+public sealed partial class CharacterEditorControlViewModel : ObservableValidator, IClosed
 {
     [ObservableProperty]
     public partial ushort Level { get; set; }
@@ -72,8 +72,15 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject, 
     [ObservableProperty]
     public partial string GeneratedText { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial string Name { get; set; } = string.Empty;
+    [Required(
+        ErrorMessageResourceType = typeof(Resource),
+        ErrorMessageResourceName = "UIErrorMessage_Required"
+    )]
+    public string Name
+    {
+        get;
+        set => SetProperty(ref field, value, true);
+    } = string.Empty;
 
     [ObservableProperty]
     public partial string LocalizedName { get; set; } = string.Empty;
@@ -309,6 +316,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableObject, 
     [RelayCommand]
     private async Task SaveAsync()
     {
+        ValidateAllProperties();
         if (string.IsNullOrEmpty(SelectedCharacterFile))
         {
             await _messageBoxService.WarnAsync(Resource.CharacterEditor_MissingCharacterFileNameTip);

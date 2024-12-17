@@ -5,7 +5,6 @@ using Avalonia.Platform.Storage;
 using EnumsNET;
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Extensions;
-using Moder.Core.Helpers;
 using Moder.Core.Models;
 using Moder.Core.Services.Config;
 using AppInitializeControlViewModel = Moder.Core.ViewsModel.Menus.AppInitializeControlViewModel;

@@ -18,6 +18,7 @@ public sealed class ModifierDisplayService
     private readonly LocalizationKeyMappingService _localisationKeyMappingService;
     private readonly CharacterSkillService _characterSkillService;
 
+    private const string NodeModifierChildrenPrefix = "  ";
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     public ModifierDisplayService(
@@ -162,7 +163,11 @@ public sealed class ModifierDisplayService
             {
                 var modifierName = _localizationService.GetValue($"STAT_ADJUSTER_{leafModifier.Key}");
                 var modifierFormat = _localizationService.GetValue($"STAT_ADJUSTER_{leafModifier.Key}_DIFF");
-                return [new Run { Text = $"  {modifierName}" }, GetRun(leafModifier, modifierFormat)];
+                return
+                [
+                    new Run { Text = $"{NodeModifierChildrenPrefix}{modifierName}" },
+                    GetRun(leafModifier, modifierFormat)
+                ];
             }
         );
     }
@@ -186,7 +191,7 @@ public sealed class ModifierDisplayService
                 var runs = GetDescriptionForLeaf(leafModifier);
                 foreach (var run in runs)
                 {
-                    run.Text = $"  {run.Text}";
+                    run.Text = $"{NodeModifierChildrenPrefix}{run.Text}";
                 }
 
                 return runs;

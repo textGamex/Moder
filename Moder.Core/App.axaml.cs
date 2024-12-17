@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Moder.Core.Extensions;
-using Moder.Core.Helpers;
 using Moder.Core.Infrastructure.FileSort;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
