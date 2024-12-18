@@ -29,14 +29,16 @@
         <controls:DirectorySelector
             DirectoryPath="{Binding GameRootFolderPath}"
             Grid.Row="1"
-            SelectDirectoryCommand="{Binding SelectGameRootFolderCommand}"
-            SelectorCaption="{x:Static lang:Resource.InitializePage_SelectGameRootPath}" />
+            SelectDirectoryCommand="{Binding SelectGameRootFolderCommand, Mode=TwoWay}"
+            SelectorCaption="{x:Static lang:Resource.InitializePage_SelectGameRootPath}"
+            x:Name="GameRootSelector" />
 
         <controls:DirectorySelector
             DirectoryPath="{Binding ModRootFolderPath}"
             Grid.Row="2"
-            SelectDirectoryCommand="{Binding SelectModRootFolderCommand}"
-            SelectorCaption="{x:Static lang:Resource.InitializePage_SelectModRootPath}" />
+            SelectDirectoryCommand="{Binding SelectModRootFolderCommand, Mode=TwoWay}"
+            SelectorCaption="{x:Static lang:Resource.InitializePage_SelectModRootPath}"
+            x:Name="ModRootSelector" />
         <Button
             Command="{Binding SubmitCommand}"
             Content="{x:Static lang:Resource.Common_Complete}"

@@ -24,7 +24,7 @@ public sealed class DirectorySelector : TemplatedControl
     public static readonly StyledProperty<string> DirectoryPathProperty = AvaloniaProperty.Register<
         DirectorySelector,
         string
-    >(nameof(DirectoryPath), enableDataValidation:true);
+    >(nameof(DirectoryPath), enableDataValidation:true, defaultBindingMode:BindingMode.TwoWay);
 
     public ICommand SelectDirectoryCommand
     {

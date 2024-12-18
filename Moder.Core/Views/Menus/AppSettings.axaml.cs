@@ -42,6 +42,8 @@ public partial class AppSettings : UserControl, ITabViewItem
         ThemeSelector.SelectedItem =
             resourceManager.GetString(name, Language.Strings.Resource.Culture)
             ?? Language.Strings.Resource.LocalizeValueNotFind;
+        GameRootSelector.DirectoryPath = settings.GameRootFolderPath;
+        ModRootSelector.DirectoryPath = settings.ModRootFolderPath;
     }
 
     private void ThemeSelectorOnSelectionChanged(object? sender, SelectionChangedEventArgs e)
