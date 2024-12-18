@@ -71,7 +71,7 @@ public partial class AppSettingsViewModel : ObservableValidator
         settings.ModRootFolderPath = ModRootFolderPath;
         Log.Info("资源目录设置成功");
 
-        WeakReferenceMessenger.Default.Send(new CompleteAppInitializeMessage());
+        WeakReferenceMessenger.Default.Send(new CompleteAppSettingsMessage());
     }
 
     public Type AppThemes { get; } = typeof(ThemeMode);
