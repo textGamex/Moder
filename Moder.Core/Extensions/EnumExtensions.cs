@@ -1,10 +1,30 @@
 using System.Globalization;
+using Avalonia.Styling;
+using EnumsNET;
 using Moder.Core.Models;
+using Moder.Core.Models.Game;
 
 namespace Moder.Core.Extensions;
 
 public static class EnumExtensions
 {
+    public static object? ToEnum(this string str, Type enumType)
+    {
+        try
+        {
+            if (Enums.TryParse(enumType, str, true, out var result))
+            {
+                return result;
+            }
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
+
+        return null;
+    }
+    
     public static string ToGameLocalizationLanguage(this GameLanguage language)
     {
         if (language == GameLanguage.Default)
@@ -27,7 +47,7 @@ public static class EnumExtensions
             _ => throw new ArgumentOutOfRangeException(nameof(language), language, null)
         };
     }
-
+    
     private static GameLanguage GetSystemLanguage()
     {
         var cultureInfo = CultureInfo.CurrentUICulture;
@@ -67,5 +87,16 @@ public static class EnumExtensions
         }
 
         return GameLanguage.English;
+    }
+    
+    public static ThemeVariant ToThemeVariant(this ThemeMode type)
+    {
+        return type switch
+        {
+            ThemeMode.Light => new ThemeVariant(nameof(ThemeMode.Light), ThemeVariant.Light),
+            ThemeMode.Dark => new ThemeVariant(nameof(ThemeMode.Dark), ThemeVariant.Dark),
+            ThemeMode.DarkSlateGray => new ThemeVariant(nameof(ThemeMode.DarkSlateGray), ThemeVariant.Dark),
+            _ => ThemeVariant.Default,
+        };
     }
 }
