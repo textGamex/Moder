@@ -1,0 +1,48 @@
+<UserControl
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    x:Class="Moder.Core.Views.Menus.AppSettings"
+    x:DataType="vms:AppSettingsViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:controls="clr-namespace:Moder.Core.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vms="clr-namespace:Moder.Core.ViewsModel.Menus"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid RowDefinitions="*,*,*,Auto">
+        <StackPanel
+            Grid.Row="0"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal"
+            Spacing="4"
+            VerticalAlignment="Center">
+            <Label Content="{x:Static lang:Resource.SettingsPage_AppTheme}" HorizontalAlignment="Center" />
+            <ComboBox
+                HorizontalAlignment="Stretch"
+                ItemsSource="{Binding AppThemes, Converter={StaticResource EnumTypeToStringListConverter}}"
+                MaxHeight="55"
+                Width="280"
+                x:Name="ThemeSelector" />
+        </StackPanel>
+        <controls:DirectorySelector
+            DirectoryPath="{Binding GameRootFolderPath}"
+            Grid.Row="1"
+            SelectDirectoryCommand="{Binding SelectGameRootFolderCommand}"
+            SelectorCaption="{x:Static lang:Resource.InitializePage_SelectGameRootPath}" />
+
+        <controls:DirectorySelector
+            DirectoryPath="{Binding ModRootFolderPath}"
+            Grid.Row="2"
+            SelectDirectoryCommand="{Binding SelectModRootFolderCommand}"
+            SelectorCaption="{x:Static lang:Resource.InitializePage_SelectModRootPath}" />
+        <Button
+            Command="{Binding SubmitCommand}"
+            Content="{x:Static lang:Resource.Common_Complete}"
+            Grid.Row="3"
+            HorizontalAlignment="Center"
+            Margin="0,0,0,32"
+            VerticalAlignment="Center" />
+    </Grid>
+</UserControl>

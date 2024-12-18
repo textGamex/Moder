@@ -1,23 +1,23 @@
 <Window
+    Design.DataContext="{x:Static vms:DesignData.MainWindowViewModel}"
+    Title="Moder.Core"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
     x:Class="Moder.Core.Views.MainWindow"
+    x:DataType="vms:MainWindowViewModel"
     xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vms="clr-namespace:Moder.Core.ViewsModel"
-    Title="Moder.Core"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    x:DataType="vms:MainWindowViewModel"
-    Design.DataContext="{x:Static vms:DesignData.MainWindowViewModel}"
-    mc:Ignorable="d">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Grid RowDefinitions="Auto,*">
         <Menu Grid.Row="0">
             <MenuItem Command="{Binding OpenCharacterEditorCommand}" Header="{x:Static lang:Resource.Menu_CharacterEditor}" />
-            <MenuItem Header="{x:Static lang:Resource.Menu_Settings}" />
+            <MenuItem Command="{Binding OpenSettingsCommand}" Header="{x:Static lang:Resource.Menu_Settings}" />
         </Menu>
-        <ContentControl x:Name="MainContentControl" Grid.Row="1" />
+        <ContentControl Grid.Row="1" x:Name="MainContentControl" />
     </Grid>
 </Window>

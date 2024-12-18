@@ -130,6 +130,7 @@ public class App : Application
         builder.Services.AddViewSingleton<SideBarControlView, SideBarControlViewModel>();
         builder.Services.AddViewSingleton<WorkSpaceControlView, WorkSpaceControlViewModel>();
         builder.Services.AddViewTransient<CharacterEditorControlView, CharacterEditorControlViewModel>();
+        builder.Services.AddViewTransient<AppSettings, AppSettingsViewModel>();
         builder.Services.AddTransient<TraitSelectionWindowViewModel>();
 
         builder.Services.AddSingleton(_ => AppSettingService.Load());
