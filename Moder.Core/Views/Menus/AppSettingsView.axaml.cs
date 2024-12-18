@@ -15,11 +15,11 @@ using Moder.Language.Strings;
 
 namespace Moder.Core.Views.Menus;
 
-public partial class AppSettings : UserControl, ITabViewItem
+public partial class AppSettingsView : UserControl, ITabViewItem
 {
     private IDisposable? _selectFolderInteractionDisposable;
     
-    public AppSettings()
+    public AppSettingsView()
     {
         InitializeComponent();
         ViewModel= App.Services.GetRequiredService<AppSettingsViewModel>();
@@ -28,7 +28,7 @@ public partial class AppSettings : UserControl, ITabViewItem
     }
 
     public string Header => Resource.Menu_Settings;
-    public string Id => nameof(AppSettings);
+    public string Id => nameof(AppSettingsView);
     public string ToolTip => Header;
     
     private AppSettingsViewModel ViewModel { get; }

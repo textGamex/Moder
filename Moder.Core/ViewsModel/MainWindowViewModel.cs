@@ -20,6 +20,6 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private void OpenSettings()
     {
         var tabview = App.Services.GetRequiredService<TabViewNavigationService>();
-        tabview.AddSingleTabFromIoc<AppSettings>();
+        tabview.AddSingleTabFromIoc<AppSettingsView>();
     }
 }
