@@ -1,6 +1,7 @@
-﻿using System.Resources;
+using System.Resources;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using EnumsNET;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,22 +9,41 @@ using Moder.Core.Extensions;
 using Moder.Core.Infrastructure;
 using Moder.Core.Models;
 using Moder.Core.Services.Config;
+using Moder.Core.ViewsModel.Game;
+using Moder.Core.ViewsModel.Menus;
 using Moder.Language.Strings;
-using AppInitializeControlViewModel = Moder.Core.ViewsModel.Menus.AppInitializeControlViewModel;
 
 namespace Moder.Core.Views.Menus;
 
-public sealed partial class AppInitializeControlView : UserControl
+public partial class AppSettingsView : UserControl, ITabViewItem
 {
     private IDisposable? _selectFolderInteractionDisposable;
-
-    public AppInitializeControlView()
+    
+    public AppSettingsView()
     {
         InitializeComponent();
-
-        var viewModel = App.Services.GetRequiredService<AppInitializeControlViewModel>();
-        DataContext = viewModel;
+        ViewModel= App.Services.GetRequiredService<AppSettingsViewModel>();
+        DataContext = ViewModel;
         ThemeSelector.SelectionChanged += ThemeSelectorOnSelectionChanged;
+    }
+
+    public string Header => Resource.Menu_Settings;
+    public string Id => nameof(AppSettingsView);
+    public string ToolTip => Header;
+    
+    private AppSettingsViewModel ViewModel { get; }
+    
+
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        _selectFolderInteractionDisposable?.Dispose();
+
+        if (DataContext is AppSettingsViewModel viewModel)
+        {
+            _selectFolderInteractionDisposable = viewModel.SelectFolderInteraction.RegisterHandler(Handler);
+        }
+
+        base.OnDataContextChanged(e);
     }
 
     protected override void OnInitialized()
@@ -38,6 +58,8 @@ public sealed partial class AppInitializeControlView : UserControl
         ThemeSelector.SelectedItem =
             resourceManager.GetString(name, Language.Strings.Resource.Culture)
             ?? Language.Strings.Resource.LocalizeValueNotFind;
+        GameRootSelector.DirectoryPath = settings.GameRootFolderPath;
+        ModRootSelector.DirectoryPath = settings.ModRootFolderPath;
     }
 
     private void ThemeSelectorOnSelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -62,18 +84,6 @@ public sealed partial class AppInitializeControlView : UserControl
         app.RequestedThemeVariant = theme.ToThemeVariant();
         var settingService = App.Services.GetRequiredService<AppSettingService>();
         settingService.AppTheme = theme;
-    }
-
-    protected override void OnDataContextChanged(EventArgs e)
-    {
-        _selectFolderInteractionDisposable?.Dispose();
-
-        if (DataContext is AppInitializeControlViewModel viewModel)
-        {
-            _selectFolderInteractionDisposable = viewModel.SelectFolderInteraction.RegisterHandler(Handler);
-        }
-
-        base.OnDataContextChanged(e);
     }
 
     private async Task<string> Handler(string title)
