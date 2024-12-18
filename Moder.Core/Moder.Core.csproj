@@ -104,4 +104,9 @@
     <ItemGroup>
       <AdditionalFiles Include="Controls\DirectorySelector.axaml" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Assets\CodeEditor\Grammars\" />
+      <Folder Include="Assets\CodeEditor\Themes\" />
+    </ItemGroup>
 </Project>
