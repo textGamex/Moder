@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Documents;
@@ -161,6 +162,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableValidato
         SetSkillsMaxValue();
 
         InitializeSkillDefaultValue();
+        _isInitialized = true;
     }
 
     private void OnResourceChanged(object? sender, ResourceChangedEventArgs e)
@@ -310,6 +312,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableValidato
 
         await window.ShowDialog(lifetime.MainWindow);
         _selectedTraits = window.SelectedTraits;
+        RefreshGeneratedText();
     }
 
     [RelayCommand]
@@ -371,6 +374,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableValidato
         Log.Info("保存成功");
     }
 
+    // TODO: 生成的代码应该加一些加成的注释和特质的本地化名称?  
     private Node GetGeneratedCharacterNode()
     {
         var newCharacterNode = Node.Create(Name);
@@ -433,5 +437,30 @@ public sealed partial class CharacterEditorControlViewModel : ObservableValidato
     public void Close()
     {
         _characterSkillService.OnResourceChanged -= OnResourceChanged;
+    }
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(GeneratedText) && _isInitialized)
+        {
+            RefreshGeneratedText();
+        }
+
+        base.OnPropertyChanged(e);
+    }
+
+    private void RefreshGeneratedText()
+    {
+        GeneratedText = GetGeneratedText();
+    }
+
+    private string GetGeneratedText()
+    {
+        if (string.IsNullOrEmpty(LocalizedName))
+        {
+            LocalizedName = Name;
+        }
+
+        return GetGeneratedCharacterNode().PrintRaw();
     }
 }

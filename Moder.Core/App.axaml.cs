@@ -40,8 +40,9 @@ public class App : Application
             "Moder",
             "Configs"
         );
-    public static string ParserRulesFolder { get; } =
-        Path.Combine(Environment.CurrentDirectory, "Assets", "ParserRules");
+
+    public static string AssetsFolder { get; } = Path.Combine(Environment.CurrentDirectory, "Assets");
+    public static string ParserRulesFolder { get; } = Path.Combine(AssetsFolder, "ParserRules");
 
     private IHost? _host;
 
