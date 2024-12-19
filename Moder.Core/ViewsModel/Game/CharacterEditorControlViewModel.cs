@@ -374,6 +374,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableValidato
         Log.Info("保存成功");
     }
 
+    // TODO: 生成的代码应该加一些加成的注释和特质的本地化名称?  
     private Node GetGeneratedCharacterNode()
     {
         var newCharacterNode = Node.Create(Name);

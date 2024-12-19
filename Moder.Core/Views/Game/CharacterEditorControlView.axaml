@@ -158,7 +158,7 @@
             Grid.Column="2"
             MinWidth="400"
             FontFamily="Consolas"
-            FontSize="15"
+            FontSize="16"
             ShowLineNumbers="True" />
     </Grid>
 </UserControl>
