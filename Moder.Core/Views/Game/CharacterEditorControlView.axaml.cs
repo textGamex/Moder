@@ -74,7 +74,6 @@ public sealed partial class CharacterEditorControlView : UserControl, ITabViewIt
                 brush =>
                 {
                     Editor.TextArea.TextView.CurrentLineBackground = brush;
-                    // Todo: VS Code didn't seem to have a border but it might be nice to have that option. For now just make it the same..
                     Editor.TextArea.TextView.CurrentLineBorder = new Pen(brush);
                 }
             )
@@ -83,7 +82,6 @@ public sealed partial class CharacterEditorControlView : UserControl, ITabViewIt
             Editor.TextArea.TextView.SetDefaultHighlightLineColors();
         }
 
-        //Todo: looks like the margin doesn't have a active line highlight, would be a nice addition
         if (
             !ApplyBrushAction(
                 installation,
