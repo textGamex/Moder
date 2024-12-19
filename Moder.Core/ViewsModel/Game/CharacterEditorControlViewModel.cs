@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Documents;
@@ -161,6 +162,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableValidato
         SetSkillsMaxValue();
 
         InitializeSkillDefaultValue();
+        _isInitialized = true;
     }
 
     private void OnResourceChanged(object? sender, ResourceChangedEventArgs e)
@@ -433,5 +435,25 @@ public sealed partial class CharacterEditorControlViewModel : ObservableValidato
     public void Close()
     {
         _characterSkillService.OnResourceChanged -= OnResourceChanged;
+    }
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(GeneratedText) && _isInitialized)
+        {
+            GeneratedText = GetGeneratedText();
+        }
+
+        base.OnPropertyChanged(e);
+    }
+
+    private string GetGeneratedText()
+    {
+        if (string.IsNullOrEmpty(LocalizedName))
+        {
+            LocalizedName = Name;
+        }
+
+        return GetGeneratedCharacterNode().PrintRaw();
     }
 }

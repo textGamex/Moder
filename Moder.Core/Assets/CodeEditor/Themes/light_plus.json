@@ -5,6 +5,57 @@
 	"$schema": "vscode://schemas/color-theme",
 	"type": "light",
 	"include": "./light_vs.json",
+	"colors": {
+		"activityBar.background": "#ededf5",
+		"activityBar.foreground": "#705697",
+		"activityBarBadge.background": "#705697",
+		"badge.background": "#705697aa",
+		"button.background": "#705697",
+		"dropdown.background": "#f5f5f5",
+		"editor.background": "#f5f5f5",
+		"editor.findMatchBackground": "#bf9cac",
+		"editor.findMatchHighlightBackground": "#edc9d8",
+		"editor.lineHighlightBackground": "#e4f6d4",
+		"editor.selectionBackground": "#c9d0d9",
+		"editorCursor.foreground": "#54494b",
+		"editorGroup.dropBackground": "#c9d0d988",
+		"editorLineNumber.activeForeground": "#9769dc",
+		"editorLineNumber.foreground": "#6d705b",
+		"editorWhitespace.foreground": "#aaaaaa",
+		"errorForeground": "#f1897f",
+		"focusBorder": "#a6b39b",
+		"inputOption.activeBorder": "#adafb7",
+		"inputValidation.errorBackground": "#ffeaea",
+		"inputValidation.errorBorder": "#f1897f",
+		"inputValidation.infoBackground": "#f2fcff",
+		"inputValidation.infoBorder": "#4ec1e5",
+		"inputValidation.warningBackground": "#fffee2",
+		"inputValidation.warningBorder": "#ffe055",
+		"list.activeSelectionBackground": "#c4d9b1",
+		"list.activeSelectionForeground": "#6c6c6c",
+		"list.focusBackground": "#cadeb9",
+		"list.highlightForeground": "#9769dc",
+		"list.hoverBackground": "#e0e0e0",
+		"list.inactiveSelectionBackground": "#d3dbcd",
+		"panel.background": "#f5f5f5",
+		"peekView.border": "#705697",
+		"peekViewEditor.background": "#f2f8fc",
+		"peekViewEditor.matchHighlightBackground": "#c2dfe3",
+		"peekViewResult.background": "#f2f8fc",
+		"peekViewResult.matchHighlightBackground": "#93c6d6",
+		"peekViewTitle.background": "#f2f8fc",
+		"pickerGroup.border": "#749351",
+		"pickerGroup.foreground": "#a6b39b",
+		"progressBar.background": "#705697",
+		"selection.background": "#c9d0d9",
+		"sideBar.background": "#f2f2f2",
+		"sideBarSectionHeader.background": "#ede8ef",
+		"statusBar.background": "#705697",
+		"statusBar.debuggingBackground": "#705697",
+		"statusBar.noFolderBackground": "#705697",
+		"titleBar.activeBackground": "#c4b7d7",
+		"walkThrough.embeddedEditorBackground": "#00000014"
+	},
 	"tokenColors": [
 		{
 			"scope": [
@@ -190,16 +241,6 @@
 			"scope": "punctuation",
 			"settings": {
 				"foreground": "#777777"
-			}
-		},
-		{
-			"name": "Embedded Source",
-			"scope": [
-				"string source",
-				"text source"
-			],
-			"settings": {
-				"background": "#EAEBE6"
 			}
 		},
 		{

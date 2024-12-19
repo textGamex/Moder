@@ -2,6 +2,7 @@
     x:Class="Moder.Core.Views.Game.CharacterEditorControlView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avaloniaEdit="https://github.com/avaloniaui/avaloniaedit"
     xmlns:behaviors="clr-namespace:Moder.Core.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
@@ -152,12 +153,12 @@
             <Button Command="{Binding OpenTraitsSelectionWindowCommand}" Content="{x:Static lang:Resource.CharacterEditor_TraitManager}" />
         </StackPanel>
 
-        <TextBox
+        <avaloniaEdit:TextEditor
+            x:Name="Editor"
             Grid.Column="2"
             MinWidth="400"
-            Margin="0,8,8,8"
-            IsReadOnly="True"
-            Text="{Binding GeneratedText, Mode=OneWay}"
-            TextWrapping="Wrap" />
+            FontFamily="Consolas"
+            FontSize="15"
+            ShowLineNumbers="True" />
     </Grid>
 </UserControl>
