@@ -312,6 +312,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableValidato
 
         await window.ShowDialog(lifetime.MainWindow);
         _selectedTraits = window.SelectedTraits;
+        FlushGeneratedText();
     }
 
     [RelayCommand]
@@ -441,10 +442,15 @@ public sealed partial class CharacterEditorControlViewModel : ObservableValidato
     {
         if (e.PropertyName != nameof(GeneratedText) && _isInitialized)
         {
-            GeneratedText = GetGeneratedText();
+            FlushGeneratedText();
         }
 
         base.OnPropertyChanged(e);
+    }
+
+    private void FlushGeneratedText()
+    {
+        GeneratedText = GetGeneratedText();
     }
 
     private string GetGeneratedText()
