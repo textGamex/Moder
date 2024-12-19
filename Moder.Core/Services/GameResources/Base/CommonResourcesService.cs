@@ -1,5 +1,5 @@
 ﻿using Moder.Core.Extensions;
-using Moder.Core.Parser;
+using Moder.Core.Infrastructure.Parser;
 using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources.Base;

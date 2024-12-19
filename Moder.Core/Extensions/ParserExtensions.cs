@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.FSharp.Collections;
-using Moder.Core.Models;
+using Moder.Core.Models.Game;
 using ParadoxPower.Parser;
 using ParadoxPower.Process;
 using ParadoxPower.Utilities;
@@ -42,17 +42,6 @@ public static class ParserExtensions
         //     return GameValueType.Clause;
         // }
         throw new InvalidEnumArgumentException(nameof(value));
-    }
-
-    public static string GetKey(this Child child)
-    {
-        var key = child.GetKeyOrNull();
-        if (key is null)
-        {
-            throw new InvalidOperationException("这个 child 不存在 key");
-        }
-
-        return key;
     }
 
     public static string? GetKeyOrNull(this Child child)
