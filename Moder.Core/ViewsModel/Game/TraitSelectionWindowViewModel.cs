@@ -44,6 +44,7 @@ public sealed partial class TraitSelectionWindowViewModel : ObservableObject
 
         Traits.Filter += o =>
         {
+            // TODO: 搜索支持修饰符搜索
             var traitVo = (TraitVo)o;
             if (string.IsNullOrEmpty(SearchText))
             {

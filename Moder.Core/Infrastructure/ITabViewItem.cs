@@ -2,6 +2,7 @@
 
 public interface ITabViewItem
 {
+    // TODO: 添加Icon
     public string Header { get; }
 
     /// <summary>
