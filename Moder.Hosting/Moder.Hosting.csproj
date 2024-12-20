@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Avalonia" Version="11.2.3" />
+      <PackageReference Include="Avalonia" Version="11.2.2" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
     </ItemGroup>
 
