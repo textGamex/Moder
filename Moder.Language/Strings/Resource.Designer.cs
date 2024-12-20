@@ -379,7 +379,7 @@ namespace Moder.Language.Strings {
         /// </summary>
         public static string DeleteFile_CanFindBack {
             get {
-                return ResourceManager.GetString("DeleteFile_CanFindBack", resourceCulture);
+                return ResourceManager.GetString("DeleteFile.CanFindBack", resourceCulture);
             }
         }
         
@@ -388,7 +388,7 @@ namespace Moder.Language.Strings {
         /// </summary>
         public static string DeleteFile_EnsureFile {
             get {
-                return ResourceManager.GetString("DeleteFile_EnsureFile", resourceCulture);
+                return ResourceManager.GetString("DeleteFile.EnsureFile", resourceCulture);
             }
         }
         
@@ -397,7 +397,7 @@ namespace Moder.Language.Strings {
         /// </summary>
         public static string DeleteFile_EnsureFolder {
             get {
-                return ResourceManager.GetString("DeleteFile_EnsureFolder", resourceCulture);
+                return ResourceManager.GetString("DeleteFile.EnsureFolder", resourceCulture);
             }
         }
         
@@ -452,6 +452,24 @@ namespace Moder.Language.Strings {
         public static string Menu_CharacterEditor {
             get {
                 return ResourceManager.GetString("Menu.CharacterEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 复制路径.
+        /// </summary>
+        public static string Menu_CopyFullPath {
+            get {
+                return ResourceManager.GetString("Menu.CopyFullPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 复制相对路径.
+        /// </summary>
+        public static string Menu_CopyRelativePath {
+            get {
+                return ResourceManager.GetString("Menu.CopyRelativePath", resourceCulture);
             }
         }
         
@@ -514,7 +532,7 @@ namespace Moder.Language.Strings {
         /// </summary>
         public static string RenameFile_ErrorOccurs {
             get {
-                return ResourceManager.GetString("RenameFile_ErrorOccurs", resourceCulture);
+                return ResourceManager.GetString("RenameFile.ErrorOccurs", resourceCulture);
             }
         }
         
