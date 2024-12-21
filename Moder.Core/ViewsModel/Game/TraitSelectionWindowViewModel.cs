@@ -58,20 +58,21 @@ public sealed partial class TraitSelectionWindowViewModel : ObservableObject
 
     private bool FilterTraitsBySearchText(object obj)
     {
-        var traitVo = (TraitVo)obj;
         if (string.IsNullOrEmpty(SearchText))
         {
             return true;
         }
 
-        if (traitVo.Trait.AllModifiers.Any(modifier => modifier.Key.Contains(SearchText)))
-        {
-            return true;
-        }
+        var traitVo = (TraitVo)obj;
 
         if (
             traitVo.Trait.AllModifiers.Any(modifier =>
             {
+                if (modifier.Key.Contains(SearchText))
+                {
+                    return true;
+                }
+
                 if (IsContainsSearchTextInLocalizationModifierName(modifier))
                 {
                     return true;
