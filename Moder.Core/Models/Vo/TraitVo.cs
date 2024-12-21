@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Moder.Core.Models.Game.Character;
 
 namespace Moder.Core.Models.Vo;
@@ -79,5 +80,35 @@ public sealed partial class TraitVo : ObservableObject, IEquatable<TraitVo>
     public override int GetHashCode()
     {
         return Name.GetHashCode();
+    }
+
+    public sealed class Comparer : IComparer<TraitVo>, IComparer
+    {
+        public static readonly IComparer Default = new Comparer();
+
+        public int Compare(TraitVo? x, TraitVo? y)
+        {
+            if (ReferenceEquals(x, y))
+            {
+                return 0;
+            }
+
+            if (y is null)
+            {
+                return 1;
+            }
+
+            if (x is null)
+            {
+                return -1;
+            }
+
+            return string.Compare(x.LocalisationName, y.LocalisationName, StringComparison.CurrentCulture);
+        }
+
+        public int Compare(object? x, object? y)
+        {
+            return Compare(x as TraitVo, y as TraitVo);
+        }
     }
 }
