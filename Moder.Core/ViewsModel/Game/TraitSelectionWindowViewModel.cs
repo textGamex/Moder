@@ -1,4 +1,5 @@
-﻿using Avalonia.Collections;
+﻿using System.ComponentModel;
+using Avalonia.Collections;
 using Avalonia.Controls.Documents;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -6,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using EnumsNET;
 using Moder.Core.Infrastructure;
 using Moder.Core.Models.Game.Character;
+using Moder.Core.Models.Game.Modifiers;
 using Moder.Core.Models.Vo;
 using Moder.Core.Services;
 using Moder.Core.Services.GameResources;
@@ -16,23 +18,28 @@ namespace Moder.Core.ViewsModel.Game;
 
 public sealed partial class TraitSelectionWindowViewModel : ObservableObject
 {
+    [ObservableProperty]
+    public partial string SearchText { get; set; } = string.Empty;
     public DataGridCollectionView Traits { get; }
     public InlineCollection TraitsModifierDescription { get; } = [];
 
     private readonly AppResourcesService _appResourcesService;
     private readonly ModifierDisplayService _modifierDisplayService;
     private readonly ModifierMergeManager _modifierMergeManager = new();
+    private readonly ModifierService _modifierService;
 
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     public TraitSelectionWindowViewModel(
         CharacterTraitsService characterTraitsService,
         AppResourcesService appResourcesService,
-        ModifierDisplayService modifierDisplayService
+        ModifierDisplayService modifierDisplayService,
+        ModifierService modifierService
     )
     {
         _appResourcesService = appResourcesService;
         _modifierDisplayService = modifierDisplayService;
+        _modifierService = modifierService;
 
         Traits = new DataGridCollectionView(
             characterTraitsService
@@ -42,18 +49,54 @@ public sealed partial class TraitSelectionWindowViewModel : ObservableObject
                 .ToArray()
         );
 
-        Traits.Filter += o =>
-        {
-            // TODO: 搜索支持修饰符搜索
-            var traitVo = (TraitVo)o;
-            if (string.IsNullOrEmpty(SearchText))
-            {
-                return true;
-            }
+        Traits.Filter += FilterTraitsBySearchText;
 
-            return traitVo.LocalisationName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
-                || traitVo.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
-        };
+        Traits.SortDescriptions.Add(
+            new DataGridComparerSortDescription(TraitVo.Comparer.Default, ListSortDirection.Ascending)
+        );
+    }
+
+    private bool FilterTraitsBySearchText(object obj)
+    {
+        var traitVo = (TraitVo)obj;
+        if (string.IsNullOrEmpty(SearchText))
+        {
+            return true;
+        }
+
+        if (traitVo.Trait.AllModifiers.Any(modifier => modifier.Key.Contains(SearchText)))
+        {
+            return true;
+        }
+
+        if (
+            traitVo.Trait.AllModifiers.Any(modifier =>
+            {
+                if (IsContainsSearchTextInLocalizationModifierName(modifier))
+                {
+                    return true;
+                }
+
+                if (modifier is NodeModifier nodeModifier)
+                {
+                    return nodeModifier.Modifiers.Any(IsContainsSearchTextInLocalizationModifierName);
+                }
+
+                return false;
+            })
+        )
+        {
+            return true;
+        }
+
+        return traitVo.LocalisationName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
+            || traitVo.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private bool IsContainsSearchTextInLocalizationModifierName(IModifier modifier)
+    {
+        return _modifierService.TryGetLocalizationName(modifier.Key, out var modifierName)
+            && modifierName.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
     }
 
     private bool FilterTraitsByCharacterType(Trait trait)
@@ -81,9 +124,6 @@ public sealed partial class TraitSelectionWindowViewModel : ObservableObject
 
         return true;
     }
-
-    [ObservableProperty]
-    public partial string SearchText { get; set; } = string.Empty;
 
     [RelayCommand]
     private void ClearTraits()

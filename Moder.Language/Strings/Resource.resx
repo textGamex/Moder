@@ -320,4 +320,7 @@
 	<data name="Menu.CopyRelativePath" xml:space="preserve">
 		<value>复制相对路径</value>
 	</data>
+	<data name="TraitSelection.SearchPlaceholder" xml:space="preserve">
+		<value>搜索 (特质名称 | 特质修饰符名称)</value>
+	</data>
 </root>

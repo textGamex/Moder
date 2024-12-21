@@ -320,4 +320,7 @@
   <data name="Menu.CopyRelativePath" xml:space="preserve">
 	  <value>Copy Relative Path</value>
   </data>
+  <data name="TraitSelection.SearchPlaceholder" xml:space="preserve">
+	  <value>Search (Trait Name | Trait Modifier Name)</value>
+  </data>
 </root>

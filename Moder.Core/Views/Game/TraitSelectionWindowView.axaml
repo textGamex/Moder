@@ -27,7 +27,7 @@
                         Grid.Row="0"
                         Margin="0,0,8,0"
                         Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        Watermark="{x:Static lang:Resource.Common_Search}">
+                        Watermark="{x:Static lang:Resource.TraitSelection_SearchPlaceholder}">
                         <TextBox.InnerLeftContent>
                             <PathIcon
                                 Width="16"

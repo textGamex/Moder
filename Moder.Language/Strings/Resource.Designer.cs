@@ -708,6 +708,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 搜索 (特质名称 | 特质修饰符名称).
+        /// </summary>
+        public static string TraitSelection_SearchPlaceholder {
+            get {
+                return ResourceManager.GetString("TraitSelection.SearchPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 请填写必须的字段.
         /// </summary>
         public static string UIErrorMessage_MissingRequiredInfoTip {

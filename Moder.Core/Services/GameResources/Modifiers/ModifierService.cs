@@ -62,34 +62,44 @@ public sealed class ModifierService
         return Brushes.Black;
     }
 
-    public string GetLocalizationName(string modifier)
+    public bool TryGetLocalizationName(string modifierKey, [NotNullWhen(true)] out string? value)
     {
-        if (_localizationService.TryGetValueInAll(modifier, out var value))
+        if (_localizationService.TryGetValueInAll(modifierKey, out value))
+        {
+            return true;
+        }
+
+        if (_localizationService.TryGetValue($"MODIFIER_{modifierKey}", out value))
+        {
+            return true;
+        }
+
+        if (_localizationService.TryGetValue($"MODIFIER_NAVAL_{modifierKey}", out value))
+        {
+            return true;
+        }
+
+        if (_localizationService.TryGetValue($"MODIFIER_UNIT_LEADER_{modifierKey}", out value))
+        {
+            return true;
+        }
+
+        if (_localizationService.TryGetValue($"MODIFIER_ARMY_LEADER_{modifierKey}", out value))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public string GetLocalizationName(string modifierKey)
+    {
+        if (TryGetLocalizationName(modifierKey, out var value))
         {
             return value;
         }
 
-        if (_localizationService.TryGetValue($"MODIFIER_{modifier}", out value))
-        {
-            return value;
-        }
-
-        if (_localizationService.TryGetValue($"MODIFIER_NAVAL_{modifier}", out value))
-        {
-            return value;
-        }
-
-        if (_localizationService.TryGetValue($"MODIFIER_UNIT_LEADER_{modifier}", out value))
-        {
-            return value;
-        }
-
-        if (_localizationService.TryGetValue($"MODIFIER_ARMY_LEADER_{modifier}", out value))
-        {
-            return value;
-        }
-
-        return modifier;
+        return modifierKey;
     }
 
     public bool TryGetLocalizationFormat(string modifier, [NotNullWhen(true)] out string? result)
