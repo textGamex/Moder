@@ -10,8 +10,10 @@ public sealed partial class MainControlView : UserControl
     {
         InitializeComponent();
         DataContext = App.Services.GetRequiredService<MainControlViewModel>();
-        
+
         SideBarControl.Content = App.Services.GetRequiredService<SideBarControlView>();
         WorkSpaceControl.Content = App.Services.GetRequiredService<WorkSpaceControlView>();
+
+        StatusBarControl.Content = App.Services.GetRequiredService<StatusBarControlView>();
     }
 }
