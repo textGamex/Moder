@@ -9,8 +9,12 @@
     d:DesignWidth="800"
     x:DataType="menus:MainControlViewModel"
     mc:Ignorable="d">
-    <Grid ColumnDefinitions="Auto,*">
-        <ContentControl x:Name="SideBarControl" Grid.Column="0" />
-        <ContentControl x:Name="WorkSpaceControl" Grid.Column="1" />
+    <Grid RowDefinitions="*,Auto">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*">
+            <ContentControl x:Name="SideBarControl" Grid.Column="0" />
+            <ContentControl x:Name="WorkSpaceControl" Grid.Column="1" />
+        </Grid>
+
+        <ContentControl x:Name="StatusBarControl" Grid.Row="1" />
     </Grid>
 </UserControl>

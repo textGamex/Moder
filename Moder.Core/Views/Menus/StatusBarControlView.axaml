@@ -1,0 +1,41 @@
+﻿<UserControl
+    x:Class="Moder.Core.Views.Menus.StatusBarControlView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vms="clr-namespace:Moder.Core.ViewsModel.Menus"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vms:StatusBarControlViewModel"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="BottomStatusBarBorderBrush" Color="DarkGray" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="BottomStatusBarBorderBrush" Color="Black" />
+                </ResourceDictionary>
+
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Border BorderBrush="{DynamicResource BottomStatusBarBorderBrush}" BorderThickness="0,1.5,0,0">
+        <StackPanel
+            Margin="8,4"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal"
+            Spacing="4">
+            <TextBlock Text="{Binding ProgressPromptMessage, Mode=OneWay}" />
+            <ProgressBar
+                Width="150"
+                IsIndeterminate="{Binding IsLoading, Mode=OneWay}"
+                IsVisible="{Binding IsLoading, Mode=OneWay}" />
+        </StackPanel>
+    </Border>
+</UserControl>
