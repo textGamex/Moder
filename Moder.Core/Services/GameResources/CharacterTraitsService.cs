@@ -3,10 +3,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using MethodTimer;
 using Moder.Core.Extensions;
-using Moder.Core.Helper;
-using Moder.Core.Models.Character;
-using Moder.Core.Models.Modifiers;
+using Moder.Core.Models.Game.Character;
+using Moder.Core.Models.Game.Modifiers;
 using Moder.Core.Services.GameResources.Base;
+using Moder.Core.Services.GameResources.Localization;
 using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources;
@@ -14,6 +14,7 @@ namespace Moder.Core.Services.GameResources;
 public sealed class CharacterTraitsService
     : CommonResourcesService<CharacterTraitsService, FrozenDictionary<string, Trait>>
 {
+    private readonly LocalizationService _localizationService;
     private Dictionary<string, FrozenDictionary<string, Trait>>.ValueCollection Traits => Resources.Values;
 
     /// <summary>
@@ -29,8 +30,11 @@ public sealed class CharacterTraitsService
     ];
 
     [Time("加载人物特质")]
-    public CharacterTraitsService()
-        : base(Path.Combine(Keywords.Common, "unit_leader"), WatcherFilter.Text) { }
+    public CharacterTraitsService(LocalizationService localizationService)
+        : base(Path.Combine(Keywords.Common, "unit_leader"), WatcherFilter.Text)
+    {
+        _localizationService = localizationService;
+    }
 
     public bool TryGetTrait(string name, [NotNullWhen(true)] out Trait? trait)
     {
@@ -44,6 +48,11 @@ public sealed class CharacterTraitsService
 
         trait = null;
         return false;
+    }
+
+    public string GetLocalizationName(Trait trait)
+    {
+        return _localizationService.GetValue(trait.Name);
     }
 
     public IEnumerable<Trait> GetAllTraits() => Traits.SelectMany(trait => trait.Values);
@@ -131,7 +140,7 @@ public sealed class CharacterTraitsService
                     && Array.Exists(ModifierNodeKeys, s => StringComparer.OrdinalIgnoreCase.Equals(s, key))
                 )
                 {
-                    modifiers.Add(ModifierHelper.ParseModifier(traitAttribute.node));
+                    modifiers.Add(ParseModifier(traitAttribute.node));
                 }
                 else if (
                     traitAttribute.IsLeafChild
@@ -244,5 +253,26 @@ public sealed class CharacterTraitsService
                     s => StringComparer.OrdinalIgnoreCase.Equals(s, traitAttribute.leaf.Key)
                 )
             );
+    }
+
+    private static ModifierCollection ParseModifier(Node modifierNode)
+    {
+        var list = new List<IModifier>(modifierNode.AllArray.Length);
+        foreach (var child in modifierNode.AllArray)
+        {
+            if (child.IsLeafChild)
+            {
+                var modifier = LeafModifier.FromLeaf(child.leaf);
+                list.Add(modifier);
+            }
+            else if (child.IsNodeChild)
+            {
+                var node = child.node;
+                var modifier = new NodeModifier(node.Key, node.Leaves.Select(LeafModifier.FromLeaf));
+                list.Add(modifier);
+            }
+        }
+
+        return new ModifierCollection(modifierNode.Key, list);
     }
 }
