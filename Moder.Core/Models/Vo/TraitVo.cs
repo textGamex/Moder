@@ -86,6 +86,8 @@ public sealed partial class TraitVo : ObservableObject, IEquatable<TraitVo>
     {
         public static readonly IComparer Default = new Comparer();
 
+        private Comparer() { }
+
         public int Compare(TraitVo? x, TraitVo? y)
         {
             if (ReferenceEquals(x, y))
