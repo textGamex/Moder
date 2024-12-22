@@ -1,9 +1,11 @@
-﻿using System.ComponentModel;
-using Avalonia.Collections;
+﻿using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using Avalonia.Controls.Documents;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData;
+using DynamicData.Binding;
 using EnumsNET;
 using Moder.Core.Infrastructure;
 using Moder.Core.Models.Game.Character;
@@ -16,17 +18,20 @@ using NLog;
 
 namespace Moder.Core.ViewsModel.Game;
 
-public sealed partial class TraitSelectionWindowViewModel : ObservableObject
+public sealed partial class TraitSelectionWindowViewModel : ObservableObject, IDisposable
 {
     [ObservableProperty]
     public partial string SearchText { get; set; } = string.Empty;
-    public DataGridCollectionView Traits { get; }
+    public ReadOnlyObservableCollection<TraitVo> Traits { get; }
+    public IEnumerable<TraitVo> SelectedTraits => _traits.Items.Where(x => x.IsSelected);
+    private readonly SourceList<TraitVo> _traits = new();
     public InlineCollection TraitsModifierDescription { get; } = [];
 
     private readonly AppResourcesService _appResourcesService;
     private readonly ModifierDisplayService _modifierDisplayService;
     private readonly ModifierMergeManager _modifierMergeManager = new();
     private readonly ModifierService _modifierService;
+    private readonly IDisposable _cleanUp;
 
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
@@ -41,29 +46,31 @@ public sealed partial class TraitSelectionWindowViewModel : ObservableObject
         _modifierDisplayService = modifierDisplayService;
         _modifierService = modifierService;
 
-        Traits = new DataGridCollectionView(
+        _traits.AddRange(
             characterTraitsService
                 .GetAllTraits()
                 .Where(FilterTraitsByCharacterType)
                 .Select(trait => new TraitVo(trait, characterTraitsService.GetLocalizationName(trait)))
-                .ToArray()
         );
 
-        Traits.Filter += FilterTraitsBySearchText;
-
-        Traits.SortDescriptions.Add(
-            new DataGridComparerSortDescription(TraitVo.Comparer.Default, ListSortDirection.Ascending)
-        );
+        _cleanUp = _traits
+            .Connect()
+            .AutoRefreshOnObservable(_ =>
+                this.WhenValueChanged(vm => vm.SearchText).Throttle(TimeSpan.FromMilliseconds(160))
+            )
+            .Sort(TraitVo.Comparer.Default)
+            .Filter(FilterTraitsBySearchText)
+            .Bind(out var traits)
+            .Subscribe();
+        Traits = traits;
     }
 
-    private bool FilterTraitsBySearchText(object obj)
+    private bool FilterTraitsBySearchText(TraitVo traitVo)
     {
         if (string.IsNullOrEmpty(SearchText))
         {
             return true;
         }
-
-        var traitVo = (TraitVo)obj;
 
         if (
             traitVo.Trait.AllModifiers.Any(modifier =>
@@ -129,17 +136,12 @@ public sealed partial class TraitSelectionWindowViewModel : ObservableObject
     [RelayCommand]
     private void ClearTraits()
     {
-        foreach (TraitVo trait in Traits.SourceCollection)
+        foreach (var trait in _traits.Items)
         {
             trait.IsSelected = false;
         }
         TraitsModifierDescription.Clear();
         _modifierMergeManager.Clear();
-    }
-
-    partial void OnSearchTextChanged(string value)
-    {
-        Traits.Refresh();
     }
 
     public void UpdateModifiersDescriptionOnAdd(TraitVo traitVo)
@@ -176,7 +178,7 @@ public sealed partial class TraitSelectionWindowViewModel : ObservableObject
         }
 
         var traitVos = new List<TraitVo>(8);
-        foreach (TraitVo trait in Traits.SourceCollection)
+        foreach (var trait in _traits.Items)
         {
             if (selectedTraitNames.Contains(trait.Name))
             {
@@ -191,5 +193,11 @@ public sealed partial class TraitSelectionWindowViewModel : ObservableObject
     {
         _modifierMergeManager.AddRange(traitVos.SelectMany(traitVo => traitVo.Trait.AllModifiers));
         UpdateModifiersDescriptionCore();
+    }
+
+    public void Dispose()
+    {
+        _traits.Dispose();
+        _cleanUp.Dispose();
     }
 }

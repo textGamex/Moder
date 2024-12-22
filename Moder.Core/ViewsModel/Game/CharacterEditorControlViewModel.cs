@@ -305,7 +305,7 @@ public sealed partial class CharacterEditorControlViewModel : ObservableValidato
     [RelayCommand]
     private async Task OpenTraitsSelectionWindow()
     {
-        var window = new TraitSelectionWindowView();
+        using var window = new TraitSelectionWindowView();
         window.SyncSelectedTraits(_selectedTraits);
         var lifetime = (IClassicDesktopStyleApplicationLifetime?)App.Current.ApplicationLifetime;
         Debug.Assert(lifetime?.MainWindow is not null);

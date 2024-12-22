@@ -84,7 +84,7 @@ public sealed partial class TraitVo : ObservableObject, IEquatable<TraitVo>
 
     public sealed class Comparer : IComparer<TraitVo>, IComparer
     {
-        public static readonly IComparer Default = new Comparer();
+        public static readonly IComparer<TraitVo> Default = new Comparer();
 
         private Comparer() { }
 
