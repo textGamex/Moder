@@ -32,6 +32,20 @@
                     <winui:SymbolIconSource Symbol="OpenLocal" />
                 </winui:MenuFlyoutItem.IconSource>
             </winui:MenuFlyoutItem>
+
+            <winui:MenuFlyoutSeparator />
+
+            <winui:MenuFlyoutItem Command="{Binding CopyPathCommand}" Text="{x:Static lang:Resource.Menu_CopyFullPath}">
+                <winui:MenuFlyoutItem.IconSource>
+                    <winui:SymbolIconSource Symbol="Copy" />
+                </winui:MenuFlyoutItem.IconSource>
+            </winui:MenuFlyoutItem>
+
+            <winui:MenuFlyoutItem Command="{Binding CopyAsRelativePathCommand}" Text="{x:Static lang:Resource.Menu_CopyRelativePath}">
+                <winui:MenuFlyoutItem.IconSource>
+                    <winui:SymbolIconSource Symbol="Copy" />
+                </winui:MenuFlyoutItem.IconSource>
+            </winui:MenuFlyoutItem>
         </winui:FAMenuFlyout>
     </UserControl.Resources>
 

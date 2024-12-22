@@ -54,12 +54,8 @@ public sealed partial class AppInitializeControlView : UserControl
         {
             return;
         }
-        var app = Application.Current;
-        if (app is null)
-        {
-            return;
-        }
-        app.RequestedThemeVariant = theme.ToThemeVariant();
+
+        App.Current.RequestedThemeVariant = theme.ToThemeVariant();
         var settingService = App.Services.GetRequiredService<AppSettingService>();
         settingService.AppTheme = theme;
     }

@@ -1,11 +1,15 @@
-﻿using Avalonia.Collections;
+﻿using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using Avalonia.Controls.Documents;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData;
+using DynamicData.Binding;
 using EnumsNET;
 using Moder.Core.Infrastructure;
 using Moder.Core.Models.Game.Character;
+using Moder.Core.Models.Game.Modifiers;
 using Moder.Core.Models.Vo;
 using Moder.Core.Services;
 using Moder.Core.Services.GameResources;
@@ -14,45 +18,93 @@ using NLog;
 
 namespace Moder.Core.ViewsModel.Game;
 
-public sealed partial class TraitSelectionWindowViewModel : ObservableObject
+public sealed partial class TraitSelectionWindowViewModel : ObservableObject, IDisposable
 {
-    public DataGridCollectionView Traits { get; }
+    [ObservableProperty]
+    public partial string SearchText { get; set; } = string.Empty;
+    public ReadOnlyObservableCollection<TraitVo> Traits { get; }
+    public IEnumerable<TraitVo> SelectedTraits => _traits.Items.Where(x => x.IsSelected);
+    private readonly SourceList<TraitVo> _traits = new();
     public InlineCollection TraitsModifierDescription { get; } = [];
 
     private readonly AppResourcesService _appResourcesService;
     private readonly ModifierDisplayService _modifierDisplayService;
     private readonly ModifierMergeManager _modifierMergeManager = new();
+    private readonly ModifierService _modifierService;
+    private readonly IDisposable _cleanUp;
 
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     public TraitSelectionWindowViewModel(
         CharacterTraitsService characterTraitsService,
         AppResourcesService appResourcesService,
-        ModifierDisplayService modifierDisplayService
+        ModifierDisplayService modifierDisplayService,
+        ModifierService modifierService
     )
     {
         _appResourcesService = appResourcesService;
         _modifierDisplayService = modifierDisplayService;
+        _modifierService = modifierService;
 
-        Traits = new DataGridCollectionView(
+        _traits.AddRange(
             characterTraitsService
                 .GetAllTraits()
                 .Where(FilterTraitsByCharacterType)
                 .Select(trait => new TraitVo(trait, characterTraitsService.GetLocalizationName(trait)))
-                .ToArray()
         );
 
-        Traits.Filter += o =>
-        {
-            var traitVo = (TraitVo)o;
-            if (string.IsNullOrEmpty(SearchText))
-            {
-                return true;
-            }
+        _cleanUp = _traits
+            .Connect()
+            .AutoRefreshOnObservable(_ =>
+                this.WhenValueChanged(vm => vm.SearchText).Throttle(TimeSpan.FromMilliseconds(160))
+            )
+            .Sort(TraitVo.Comparer.Default)
+            .Filter(FilterTraitsBySearchText)
+            .Bind(out var traits)
+            .Subscribe();
+        Traits = traits;
+    }
 
-            return traitVo.LocalisationName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
-                || traitVo.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
-        };
+    private bool FilterTraitsBySearchText(TraitVo traitVo)
+    {
+        if (string.IsNullOrEmpty(SearchText))
+        {
+            return true;
+        }
+
+        if (
+            traitVo.Trait.AllModifiers.Any(modifier =>
+            {
+                if (modifier.Key.Contains(SearchText))
+                {
+                    return true;
+                }
+
+                if (IsContainsSearchTextInLocalizationModifierName(modifier))
+                {
+                    return true;
+                }
+
+                if (modifier is NodeModifier nodeModifier)
+                {
+                    return nodeModifier.Modifiers.Any(IsContainsSearchTextInLocalizationModifierName);
+                }
+
+                return false;
+            })
+        )
+        {
+            return true;
+        }
+
+        return traitVo.LocalisationName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
+            || traitVo.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private bool IsContainsSearchTextInLocalizationModifierName(IModifier modifier)
+    {
+        return _modifierService.TryGetLocalizationName(modifier.Key, out var modifierName)
+            && modifierName.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
     }
 
     private bool FilterTraitsByCharacterType(Trait trait)
@@ -81,23 +133,15 @@ public sealed partial class TraitSelectionWindowViewModel : ObservableObject
         return true;
     }
 
-    [ObservableProperty]
-    public partial string SearchText { get; set; } = string.Empty;
-
     [RelayCommand]
     private void ClearTraits()
     {
-        foreach (TraitVo trait in Traits.SourceCollection)
+        foreach (var trait in _traits.Items)
         {
             trait.IsSelected = false;
         }
         TraitsModifierDescription.Clear();
         _modifierMergeManager.Clear();
-    }
-
-    partial void OnSearchTextChanged(string value)
-    {
-        Traits.Refresh();
     }
 
     public void UpdateModifiersDescriptionOnAdd(TraitVo traitVo)
@@ -134,7 +178,7 @@ public sealed partial class TraitSelectionWindowViewModel : ObservableObject
         }
 
         var traitVos = new List<TraitVo>(8);
-        foreach (TraitVo trait in Traits.SourceCollection)
+        foreach (var trait in _traits.Items)
         {
             if (selectedTraitNames.Contains(trait.Name))
             {
@@ -149,5 +193,11 @@ public sealed partial class TraitSelectionWindowViewModel : ObservableObject
     {
         _modifierMergeManager.AddRange(traitVos.SelectMany(traitVo => traitVo.Trait.AllModifiers));
         UpdateModifiersDescriptionCore();
+    }
+
+    public void Dispose()
+    {
+        _traits.Dispose();
+        _cleanUp.Dispose();
     }
 }

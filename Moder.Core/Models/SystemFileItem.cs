@@ -1,9 +1,11 @@
 ﻿using System.Collections.ObjectModel;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Services;
+using Moder.Core.Services.Config;
 using Moder.Core.Services.FileNativeService;
 using Moder.Core.Views.Menus;
 using Moder.Language.Strings;
@@ -33,6 +35,8 @@ public sealed partial class SystemFileItem
         App.Services.GetRequiredService<MessageBoxService>();
     private static readonly IFileNativeService FileNativeService =
         App.Services.GetRequiredService<IFileNativeService>();
+    private static readonly AppSettingService AppSettingService =
+        App.Services.GetRequiredService<AppSettingService>();
 
     public SystemFileItem(string fullPath, bool isFile, SystemFileItem? parent)
     {
@@ -148,6 +152,31 @@ public sealed partial class SystemFileItem
         {
             Directory.Move(FullPath, newPath);
         }
+    }
+
+    [RelayCommand]
+    private async Task CopyPath()
+    {
+        await CopyToClipboard(FullPath).ConfigureAwait(false);
+    }
+
+    [RelayCommand]
+    private async Task CopyAsRelativePath()
+    {
+        var relativePath = Path.GetRelativePath(AppSettingService.ModRootFolderPath, FullPath);
+        await CopyToClipboard(relativePath).ConfigureAwait(false);
+    }
+
+    private static async Task CopyToClipboard(string path)
+    {
+        var app = (ClassicDesktopStyleApplicationLifetime?)App.Current.ApplicationLifetime;
+        if (app?.MainWindow?.Clipboard is null)
+        {
+            Log.Warn("无法复制文件路径，剪切板不可用");
+            return;
+        }
+
+        await app.MainWindow.Clipboard.SetTextAsync(path);
     }
 
     [RelayCommand]

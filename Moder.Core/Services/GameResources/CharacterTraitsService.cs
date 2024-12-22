@@ -14,6 +14,9 @@ namespace Moder.Core.Services.GameResources;
 public sealed class CharacterTraitsService
     : CommonResourcesService<CharacterTraitsService, FrozenDictionary<string, Trait>>
 {
+    public IEnumerable<Trait> GetAllTraits() => _allTraitsLazy.Value;
+
+    private Lazy<IEnumerable<Trait>> _allTraitsLazy;
     private readonly LocalizationService _localizationService;
     private Dictionary<string, FrozenDictionary<string, Trait>>.ValueCollection Traits => Resources.Values;
 
@@ -29,12 +32,39 @@ public sealed class CharacterTraitsService
         "sub_unit_modifiers"
     ];
 
+    private static readonly string[] SkillModifierKeywords =
+    [
+        "attack_skill",
+        "defense_skill",
+        "planning_skill",
+        "logistics_skill",
+        "maneuvering_skill",
+        "coordination_skill"
+    ];
+
+    private static readonly string[] SkillFactorModifierKeywords =
+    [
+        "skill_factor",
+        "attack_skill_factor",
+        "defense_skill_factor",
+        "planning_skill_factor",
+        "logistics_skill_factor",
+        "maneuvering_skill_factor",
+        "coordination_skill_factor"
+    ];
+
     [Time("加载人物特质")]
     public CharacterTraitsService(LocalizationService localizationService)
         : base(Path.Combine(Keywords.Common, "unit_leader"), WatcherFilter.Text)
     {
         _localizationService = localizationService;
+
+        _allTraitsLazy = GetAllTraitsLazy();
+        OnResourceChanged += (_, _) => _allTraitsLazy = GetAllTraitsLazy();
     }
+
+    private Lazy<IEnumerable<Trait>> GetAllTraitsLazy() =>
+        new(() => Traits.SelectMany(trait => trait.Values).ToArray());
 
     public bool TryGetTrait(string name, [NotNullWhen(true)] out Trait? trait)
     {
@@ -54,8 +84,6 @@ public sealed class CharacterTraitsService
     {
         return _localizationService.GetValue(trait.Name);
     }
-
-    public IEnumerable<Trait> GetAllTraits() => Traits.SelectMany(trait => trait.Values);
 
     protected override FrozenDictionary<string, Trait>? ParseFileToContent(Node rootNode)
     {
@@ -82,27 +110,6 @@ public sealed class CharacterTraitsService
 
         return dictionary.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
     }
-
-    private static readonly string[] SkillModifierKeywords =
-    [
-        "attack_skill",
-        "defense_skill",
-        "planning_skill",
-        "logistics_skill",
-        "maneuvering_skill",
-        "coordination_skill"
-    ];
-
-    private static readonly string[] SkillFactorModifierKeywords =
-    [
-        "skill_factor",
-        "attack_skill_factor",
-        "defense_skill_factor",
-        "planning_skill_factor",
-        "logistics_skill_factor",
-        "maneuvering_skill_factor",
-        "coordination_skill_factor"
-    ];
 
     /// <summary>
     ///

@@ -11,13 +11,13 @@ using NLog;
 
 namespace Moder.Core.Views.Game;
 
-public sealed partial class TraitSelectionWindowView : Window
+public sealed partial class TraitSelectionWindowView : Window, IDisposable
 {
-    public IEnumerable<TraitVo> SelectedTraits =>
-        _viewModel.Traits.SourceCollection.Cast<TraitVo>().Where(traitVo => traitVo.IsSelected);
+    public IEnumerable<TraitVo> SelectedTraits => _viewModel.SelectedTraits;
 
     private readonly IBrush _pointerOverBrush;
     private readonly TraitSelectionWindowViewModel _viewModel;
+
     // private Flyout _modifierDescriptionFlyout;
 
     // private readonly Timer _showModifierToolTipTimer;
@@ -120,5 +120,10 @@ public sealed partial class TraitSelectionWindowView : Window
             traitVo.IsSelected = true;
             _viewModel.UpdateModifiersDescriptionOnAdd(traitVo);
         }
+    }
+
+    public void Dispose()
+    {
+        _viewModel.Dispose();
     }
 }
