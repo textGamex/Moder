@@ -323,4 +323,7 @@
   <data name="TraitSelection.SearchPlaceholder" xml:space="preserve">
 	  <value>Search (Trait Name | Trait Modifier Name)</value>
   </data>
+  <data name="Common.Tip" xml:space="preserve">
+	  <value>Tip</value>
+  </data>
 </root>

@@ -339,6 +339,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 提示.
+        /// </summary>
+        public static string Common_Tip {
+            get {
+                return ResourceManager.GetString("Common.Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 未知的.
         /// </summary>
         public static string Common_Unknown {

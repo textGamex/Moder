@@ -30,7 +30,7 @@ public sealed partial class AppSettingService
     } = GameLanguage.Default;
 
     [MemoryPackOrder(3)]
-    public string AppLanguage
+    public string AppLanguageCode
     {
         get;
         set => SetProperty(ref field, value);

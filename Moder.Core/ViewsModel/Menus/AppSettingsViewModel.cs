@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Infrastructure;
 using Moder.Core.Messages;
 using Moder.Core.Models;
+using Moder.Core.Models.Game;
 using Moder.Core.Services;
 using Moder.Core.Services.Config;
 using Moder.Language.Strings;
@@ -13,29 +15,127 @@ using NLog;
 
 namespace Moder.Core.ViewsModel.Menus;
 
-public partial class AppSettingsViewModel : ObservableValidator
+public sealed partial class AppSettingsViewModel : ObservableValidator
 {
-    [Required(
-        ErrorMessageResourceName = "UIErrorMessage_Required",
-        ErrorMessageResourceType = typeof(Resource)
-    )]
-    [ObservableProperty]
-    private string _gameRootFolderPath = string.Empty;
+    private readonly AppSettingService _settingService;
+    private readonly MessageBoxService _messageBox;
 
     [Required(
         ErrorMessageResourceName = "UIErrorMessage_Required",
         ErrorMessageResourceType = typeof(Resource)
     )]
     [ObservableProperty]
-    private string _modRootFolderPath = string.Empty;
+    public partial string GameRootFolderPath { get; set; } = string.Empty;
+
+    [Required(
+        ErrorMessageResourceName = "UIErrorMessage_Required",
+        ErrorMessageResourceType = typeof(Resource)
+    )]
+    [ObservableProperty]
+    public partial string ModRootFolderPath { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    private AppLanguageInfo _selectedAppLanguage;
+
+    [ObservableProperty]
+    private GameLanguageInfo _selectedGameLanguage;
 
     public Interaction<string, string> SelectFolderInteraction { get; } = new();
+
+    public AppLanguageInfo[] ApplicationLanguages { get; } =
+        [new("跟随系统设置", string.Empty), new("简体中文", "zh-CN"), new("English", "en-US")];
+
+    public GameLanguageInfo[] GameLanguages { get; } =
+        [
+            new("跟随系统设置", GameLanguage.Default),
+            new("简体中文", GameLanguage.Chinese),
+            new("英文", GameLanguage.English),
+            new("日语", GameLanguage.Japanese),
+            new("俄语", GameLanguage.Russian),
+            new("法语", GameLanguage.French),
+            new("波兰语", GameLanguage.Polish),
+            new("德语", GameLanguage.German),
+            new("西班牙语", GameLanguage.Spanish),
+            new("巴西葡萄牙语", GameLanguage.Portuguese)
+        ];
+
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
+    public AppSettingsViewModel(AppSettingService settingService, MessageBoxService messageBox)
+    {
+        _settingService = settingService;
+        _messageBox = messageBox;
+
+        InitAppLanguage();
+        InitGameLanguage();
+    }
+
+    [MemberNotNull(nameof(_selectedAppLanguage))]
+    [SuppressMessage(
+        "CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator",
+        "MVVMTK0034:Direct field reference to [ObservableProperty] backing field",
+        Justification = "需要跳过属性变化通知"
+    )]
+    private void InitAppLanguage()
+    {
+        var language = Array.Find(ApplicationLanguages, info => info.Code == _settingService.AppLanguageCode);
+        if (language is null)
+        {
+            Log.Warn(
+                "未找到匹配的语言代码, Code:{Code}, 存在: [{LanguageArray}]",
+                _settingService.AppLanguageCode,
+                string.Join(", ", ApplicationLanguages.Select(info => info.Code))
+            );
+            _selectedAppLanguage = ApplicationLanguages[0];
+        }
+        else
+        {
+            _selectedAppLanguage = language;
+        }
+    }
+
+    [MemberNotNull(nameof(_selectedGameLanguage))]
+    [SuppressMessage(
+        "CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator",
+        "MVVMTK0034:Direct field reference to [ObservableProperty] backing field",
+        Justification = "需要跳过属性变化通知"
+    )]
+    private void InitGameLanguage()
+    {
+        var language = Array.Find(GameLanguages, info => info.Type == _settingService.GameLanguage);
+        if (language is null)
+        {
+            Log.Warn(
+                "未找到匹配的游戏语言代码, Code:{Code}, 存在: [{LanguageArray}]",
+                _settingService.GameLanguage,
+                string.Join(", ", GameLanguages.Select(info => info.DisplayName))
+            );
+            _selectedGameLanguage = GameLanguages[0];
+        }
+        else
+        {
+            _selectedGameLanguage = language;
+        }
+    }
+
+    partial void OnSelectedAppLanguageChanged(AppLanguageInfo value)
+    {
+        _settingService.AppLanguageCode = value.Code;
+        _ = _messageBox.InfoAsync(Resource.SettingsPage_MustRestart);
+    }
+
+    partial void OnSelectedGameLanguageChanged(GameLanguageInfo value)
+    {
+        _settingService.GameLanguage = value.Type;
+        _ = _messageBox.InfoAsync(Resource.SettingsPage_MustRestart);
+    }
 
     [RelayCommand]
     private async Task SelectGameRootFolder()
     {
-        var gameRootPath = await SelectFolderInteraction.HandleAsync(Resource.InitializePage_SelectGameRootPath);
+        var gameRootPath = await SelectFolderInteraction.HandleAsync(
+            Resource.InitializePage_SelectGameRootPath
+        );
         if (string.IsNullOrEmpty(gameRootPath))
         {
             return;
@@ -47,7 +147,9 @@ public partial class AppSettingsViewModel : ObservableValidator
     [RelayCommand]
     private async Task SelectModRootFolder()
     {
-        var modRootPath = await SelectFolderInteraction.HandleAsync(Resource.InitializePage_SelectModRootPath);
+        var modRootPath = await SelectFolderInteraction.HandleAsync(
+            Resource.InitializePage_SelectModRootPath
+        );
         if (string.IsNullOrEmpty(modRootPath))
         {
             return;

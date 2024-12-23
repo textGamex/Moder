@@ -4,20 +4,27 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Moder.Core.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:gameModels="clr-namespace:Moder.Core.Models.Game"
     xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:Moder.Core.Models"
     xmlns:vms="clr-namespace:Moder.Core.ViewsModel.Menus"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="vms:AppSettingsViewModel"
     mc:Ignorable="d">
-    <Grid RowDefinitions="*,*,*,Auto">
-        <StackPanel
-            Grid.Row="0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Orientation="Horizontal"
-            Spacing="4">
+
+    <UserControl.Styles>
+        <Style Selector="StackPanel">
+            <Style.Setters>
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style.Setters>
+        </Style>
+    </UserControl.Styles>
+
+    <StackPanel Spacing="4">
+        <StackPanel Orientation="Horizontal" Spacing="4">
             <Label HorizontalAlignment="Center" Content="{x:Static lang:Resource.SettingsPage_AppTheme}" />
             <ComboBox
                 x:Name="ThemeSelector"
@@ -26,25 +33,46 @@
                 HorizontalAlignment="Stretch"
                 ItemsSource="{Binding AppThemes, Converter={StaticResource EnumTypeToStringListConverter}}" />
         </StackPanel>
+
         <controls:DirectorySelector
             x:Name="GameRootSelector"
-            Grid.Row="1"
             DirectoryPath="{Binding GameRootFolderPath}"
             SelectDirectoryCommand="{Binding SelectGameRootFolderCommand, Mode=TwoWay}"
             SelectorCaption="{x:Static lang:Resource.InitializePage_SelectGameRootPath}" />
 
         <controls:DirectorySelector
             x:Name="ModRootSelector"
-            Grid.Row="2"
             DirectoryPath="{Binding ModRootFolderPath}"
             SelectDirectoryCommand="{Binding SelectModRootFolderCommand, Mode=TwoWay}"
             SelectorCaption="{x:Static lang:Resource.InitializePage_SelectModRootPath}" />
+
+        <StackPanel Orientation="Horizontal">
+            <Label HorizontalAlignment="Center" Content="{x:Static lang:Resource.SettingsPage_AppLanguage}" />
+            <ComboBox ItemsSource="{Binding ApplicationLanguages}" SelectedItem="{Binding SelectedAppLanguage}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:AppLanguageInfo">
+                        <TextBlock Text="{Binding DisplayName}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <Label HorizontalAlignment="Center" Content="{x:Static lang:Resource.SettingsPage_GameLocalizationLanguage}" />
+            <ComboBox ItemsSource="{Binding GameLanguages}" SelectedItem="{Binding SelectedGameLanguage}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="gameModels:GameLanguageInfo">
+                        <TextBlock Text="{Binding DisplayName}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
         <Button
-            Grid.Row="3"
             Margin="0,0,0,32"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Command="{Binding SubmitCommand}"
             Content="{x:Static lang:Resource.Common_Complete}" />
-    </Grid>
+    </StackPanel>
 </UserControl>

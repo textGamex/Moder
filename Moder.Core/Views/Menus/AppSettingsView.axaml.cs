@@ -1,7 +1,6 @@
 using System.Resources;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using EnumsNET;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,20 +8,19 @@ using Moder.Core.Extensions;
 using Moder.Core.Infrastructure;
 using Moder.Core.Models;
 using Moder.Core.Services.Config;
-using Moder.Core.ViewsModel.Game;
 using Moder.Core.ViewsModel.Menus;
 using Moder.Language.Strings;
 
 namespace Moder.Core.Views.Menus;
 
-public partial class AppSettingsView : UserControl, ITabViewItem
+public sealed partial class AppSettingsView : UserControl, ITabViewItem
 {
     private IDisposable? _selectFolderInteractionDisposable;
-    
+
     public AppSettingsView()
     {
         InitializeComponent();
-        ViewModel= App.Services.GetRequiredService<AppSettingsViewModel>();
+        ViewModel = App.Services.GetRequiredService<AppSettingsViewModel>();
         DataContext = ViewModel;
         ThemeSelector.SelectionChanged += ThemeSelectorOnSelectionChanged;
     }
@@ -30,9 +28,8 @@ public partial class AppSettingsView : UserControl, ITabViewItem
     public string Header => Resource.Menu_Settings;
     public string Id => nameof(AppSettingsView);
     public string ToolTip => Header;
-    
+
     private AppSettingsViewModel ViewModel { get; }
-    
 
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -52,12 +49,10 @@ public partial class AppSettingsView : UserControl, ITabViewItem
 
         var settings = App.Services.GetRequiredService<AppSettingService>();
         var themeType = settings.AppTheme;
-        var names = Enums.GetNames(typeof(ThemeMode));
         var name = $"{nameof(ThemeMode)}.{themeType}";
-        var resourceManager = new ResourceManager(typeof(Language.Strings.Resource));
+        var resourceManager = new ResourceManager(typeof(Resource));
         ThemeSelector.SelectedItem =
-            resourceManager.GetString(name, Language.Strings.Resource.Culture)
-            ?? Language.Strings.Resource.LocalizeValueNotFind;
+            resourceManager.GetString(name, Resource.Culture) ?? Resource.LocalizeValueNotFind;
         GameRootSelector.DirectoryPath = settings.GameRootFolderPath;
         ModRootSelector.DirectoryPath = settings.ModRootFolderPath;
     }
@@ -76,12 +71,7 @@ public partial class AppSettingsView : UserControl, ITabViewItem
         {
             return;
         }
-        var app = Application.Current;
-        if (app is null)
-        {
-            return;
-        }
-        app.RequestedThemeVariant = theme.ToThemeVariant();
+        App.Current.RequestedThemeVariant = theme.ToThemeVariant();
         var settingService = App.Services.GetRequiredService<AppSettingService>();
         settingService.AppTheme = theme;
     }

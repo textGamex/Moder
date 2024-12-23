@@ -11,13 +11,12 @@ namespace Moder.Core.ViewsModel.Menus;
 
 public sealed partial class SideBarControlViewModel : ObservableObject
 {
-    private SystemFileItem _root;
     private readonly FileSystemSafeWatcher _fileWatcher;
     private readonly IFileSortComparer _fileSortComparer;
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
-    
+
     [ObservableProperty]
-    private IReadOnlyList<SystemFileItem> _items = [];
+    public partial IReadOnlyList<SystemFileItem> Items { get; set; } = [];
 
     public SideBarControlViewModel(AppSettingService settingService, IFileSortComparer fileSortComparer)
     {
@@ -31,18 +30,18 @@ public sealed partial class SideBarControlViewModel : ObservableObject
         _fileWatcher.IncludeSubdirectories = true;
         _fileWatcher.EnableRaisingEvents = true;
 
-        _root = new SystemFileItem(settingService.ModRootFolderPath, false, null);
-        LoadFileSystem(settingService.ModRootFolderPath, _root);
-        Items = _root.Children;
+        var root = new SystemFileItem(settingService.ModRootFolderPath, false, null);
+        LoadFileSystem(settingService.ModRootFolderPath, root);
+        Items = root.Children;
 
         WeakReferenceMessenger.Default.Register<CompleteAppSettingsMessage>(
             this,
             (_, _) =>
             {
                 _fileWatcher.Path = settingService.ModRootFolderPath;
-                _root = new SystemFileItem(settingService.ModRootFolderPath, false, null);
-                LoadFileSystem(settingService.ModRootFolderPath, _root);
-                Items = _root.Children;
+                root = new SystemFileItem(settingService.ModRootFolderPath, false, null);
+                LoadFileSystem(settingService.ModRootFolderPath, root);
+                Items = root.Children;
             }
         );
     }

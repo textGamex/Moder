@@ -27,4 +27,15 @@ public sealed class MessageBoxService
         );
         await dialog.ShowAsync();
     }
+    
+    public async Task InfoAsync(string message)
+    {
+        var dialog = MessageBoxManager.GetMessageBoxStandard(
+            Resource.Common_Tip,
+            message,
+            ButtonEnum.Ok,
+            Icon.Info
+        );
+        await dialog.ShowAsync();
+    }
 }
