@@ -32,7 +32,7 @@ public sealed partial class TraitVo : ObservableObject, IEquatable<TraitVo>
     // }
 
     /// <summary>
-    /// 是否已选择, 当值改变时, 发送 <see cref="SelectedTraitChangedMessage"/> 通知
+    /// 是否已选择
     /// </summary>
     [ObservableProperty]
     public partial bool IsSelected { get; set; }

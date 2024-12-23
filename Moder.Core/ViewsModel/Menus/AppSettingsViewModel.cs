@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
+using Moder.Core.Extensions;
 using Moder.Core.Infrastructure;
 using Moder.Core.Messages;
 using Moder.Core.Models;
@@ -40,10 +41,20 @@ public sealed partial class AppSettingsViewModel : ObservableValidator
     [ObservableProperty]
     private GameLanguageInfo _selectedGameLanguage;
 
+    [ObservableProperty]
+    private AppThemeInfo _selectedAppTheme;
+
     public Interaction<string, string> SelectFolderInteraction { get; } = new();
 
     public AppLanguageInfo[] ApplicationLanguages { get; } =
         [new("跟随系统设置", string.Empty), new("简体中文", "zh-CN"), new("English", "en-US")];
+
+    public AppThemeInfo[] AppThemes { get; } =
+        [
+            new(Resource.Common_UseSystemSetting, ThemeMode.Default),
+            new(Resource.ThemeMode_Light, ThemeMode.Light),
+            new(Resource.ThemeMode_Dark, ThemeMode.Dark)
+        ];
 
     public GameLanguageInfo[] GameLanguages { get; } =
         [
@@ -68,6 +79,19 @@ public sealed partial class AppSettingsViewModel : ObservableValidator
 
         InitAppLanguage();
         InitGameLanguage();
+        InitAppTheme();
+    }
+
+    [MemberNotNull(nameof(_selectedAppTheme))]
+    [SuppressMessage(
+        "CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator",
+        "MVVMTK0034:Direct field reference to [ObservableProperty] backing field",
+        Justification = "需要跳过属性变化通知"
+    )]
+    private void InitAppTheme()
+    {
+        var theme = Array.Find(AppThemes, info => info.Mode == _settingService.AppTheme) ?? AppThemes[0];
+        _selectedAppTheme = theme;
     }
 
     [MemberNotNull(nameof(_selectedAppLanguage))]
@@ -129,6 +153,12 @@ public sealed partial class AppSettingsViewModel : ObservableValidator
         _settingService.GameLanguage = value.Type;
         _ = _messageBox.InfoAsync(Resource.SettingsPage_MustRestart);
     }
+    
+    partial void OnSelectedAppThemeChanged(AppThemeInfo value)
+    {
+        App.Current.RequestedThemeVariant = value.Mode.ToThemeVariant();
+        _settingService.AppTheme = value.Mode;
+    }
 
     [RelayCommand]
     private async Task SelectGameRootFolder()
@@ -175,6 +205,4 @@ public sealed partial class AppSettingsViewModel : ObservableValidator
 
         WeakReferenceMessenger.Default.Send(new CompleteAppSettingsMessage());
     }
-
-    public Type AppThemes { get; } = typeof(ThemeMode);
 }

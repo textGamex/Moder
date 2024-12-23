@@ -1,14 +1,6 @@
-﻿using System.Resources;
-using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using EnumsNET;
 using Microsoft.Extensions.DependencyInjection;
-using Moder.Core.Extensions;
-using Moder.Core.Infrastructure;
-using Moder.Core.Models;
-using Moder.Core.Services.Config;
-using Moder.Language.Strings;
 using AppInitializeControlViewModel = Moder.Core.ViewsModel.Menus.AppInitializeControlViewModel;
 
 namespace Moder.Core.Views.Menus;
@@ -23,41 +15,6 @@ public sealed partial class AppInitializeControlView : UserControl
 
         var viewModel = App.Services.GetRequiredService<AppInitializeControlViewModel>();
         DataContext = viewModel;
-        ThemeSelector.SelectionChanged += ThemeSelectorOnSelectionChanged;
-    }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        var settings = App.Services.GetRequiredService<AppSettingService>();
-        var themeType = settings.AppTheme;
-        var names = Enums.GetNames(typeof(ThemeMode));
-        var name = $"{nameof(ThemeMode)}.{themeType}";
-        var resourceManager = new ResourceManager(typeof(Language.Strings.Resource));
-        ThemeSelector.SelectedItem =
-            resourceManager.GetString(name, Language.Strings.Resource.Culture)
-            ?? Language.Strings.Resource.LocalizeValueNotFind;
-    }
-
-    private void ThemeSelectorOnSelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        var type = typeof(ThemeMode);
-        var names = Enums.GetNames(type);
-        var index = ThemeSelector.SelectedIndex;
-        if (index >= names.Count || index < 0)
-        {
-            return;
-        }
-        var obj = names[index].ToEnum(type);
-        if (obj is not ThemeMode theme)
-        {
-            return;
-        }
-
-        App.Current.RequestedThemeVariant = theme.ToThemeVariant();
-        var settingService = App.Services.GetRequiredService<AppSettingService>();
-        settingService.AppTheme = theme;
     }
 
     protected override void OnDataContextChanged(EventArgs e)

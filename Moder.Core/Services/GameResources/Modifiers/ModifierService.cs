@@ -159,11 +159,6 @@ public sealed class ModifierService
         return leafModifier.Value;
     }
 
-    private static bool IsAllUppercase(string value)
-    {
-        return value.All(char.IsUpper);
-    }
-
     private static char GetDisplayDigits(string modifierDescription)
     {
         var displayDigits = '1';

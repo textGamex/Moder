@@ -27,11 +27,17 @@
         <StackPanel Orientation="Horizontal" Spacing="4">
             <Label HorizontalAlignment="Center" Content="{x:Static lang:Resource.SettingsPage_AppTheme}" />
             <ComboBox
-                x:Name="ThemeSelector"
                 Width="280"
                 MaxHeight="55"
                 HorizontalAlignment="Stretch"
-                ItemsSource="{Binding AppThemes, Converter={StaticResource EnumTypeToStringListConverter}}" />
+                ItemsSource="{Binding AppThemes}"
+                SelectedItem="{Binding SelectedAppTheme}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:AppThemeInfo">
+                        <TextBlock Text="{Binding DisplayName}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </StackPanel>
 
         <controls:DirectorySelector
