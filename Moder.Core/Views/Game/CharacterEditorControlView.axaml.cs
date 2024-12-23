@@ -36,7 +36,7 @@ public sealed partial class CharacterEditorControlView : UserControl, ITabViewIt
     // TODO: 状态栏
     private void InitializeTextEditor()
     {
-        var options = new ParadoxRegistryOptions(App.Current.RequestedThemeVariant);
+        var options = new ParadoxRegistryOptions(App.Current.ActualThemeVariant);
         Editor.Options.HighlightCurrentLine = true;
         var installation = Editor.InstallTextMate(options);
 
