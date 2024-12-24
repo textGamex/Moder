@@ -1,27 +1,35 @@
-﻿using Avalonia.Controls;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Microsoft.Extensions.DependencyInjection;
-using AppInitializeControlViewModel = Moder.Core.ViewsModel.Menus.AppInitializeControlViewModel;
+using Moder.Core.Infrastructure;
+using Moder.Core.ViewsModel.Menus;
+using Moder.Language.Strings;
 
 namespace Moder.Core.Views.Menus;
 
-public sealed partial class AppInitializeControlView : UserControl
+public sealed partial class AppSettingsView : UserControl, ITabViewItem
 {
     private IDisposable? _selectFolderInteractionDisposable;
 
-    public AppInitializeControlView()
+    public AppSettingsView()
     {
         InitializeComponent();
-
-        var viewModel = App.Services.GetRequiredService<AppInitializeControlViewModel>();
-        DataContext = viewModel;
+        ViewModel = App.Services.GetRequiredService<AppSettingsViewModel>();
+        DataContext = ViewModel;
     }
+
+    public string Header => Resource.Menu_Settings;
+    public string Id => nameof(AppSettingsView);
+    public string ToolTip => Header;
+
+    private AppSettingsViewModel ViewModel { get; }
 
     protected override void OnDataContextChanged(EventArgs e)
     {
         _selectFolderInteractionDisposable?.Dispose();
 
-        if (DataContext is AppInitializeControlViewModel viewModel)
+        if (DataContext is AppSettingsViewModel viewModel)
         {
             _selectFolderInteractionDisposable = viewModel.SelectFolderInteraction.RegisterHandler(Handler);
         }
@@ -43,5 +51,10 @@ public sealed partial class AppInitializeControlView : UserControl
         var result = folders.Count > 0 ? folders[0].TryGetLocalPath() ?? string.Empty : string.Empty;
 
         return result;
+    }
+
+    private void SettingsExpanderItem_OnClick(object? sender, RoutedEventArgs e)
+    {
+        _ = TopLevel.GetTopLevel(this)?.Launcher.LaunchUriAsync(new Uri(App.CodeRepositoryUrl));
     }
 }

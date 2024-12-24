@@ -112,5 +112,6 @@
     <ItemGroup>
       <Folder Include="Assets\CodeEditor\Grammars\" />
       <Folder Include="Assets\CodeEditor\Themes\" />
+      <Folder Include="Converters\" />
     </ItemGroup>
 </Project>

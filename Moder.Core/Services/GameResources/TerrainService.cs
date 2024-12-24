@@ -1,7 +1,6 @@
 ﻿using System.Collections.Frozen;
 using MethodTimer;
 using Moder.Core.Services.GameResources.Base;
-using Moder.Core.Services.GameResources.Localization;
 using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources;
@@ -17,13 +16,11 @@ public sealed class TerrainService : CommonResourcesService<TerrainService, Froz
     /// 未在文件中定义的地形
     /// </summary>
     private readonly FrozenSet<string> _unitTerrain;
-    private readonly LocalizationService _localizationService;
 
     [Time("加载地形资源")]
-    public TerrainService(LocalizationService localizationService)
+    public TerrainService()
         : base(Path.Combine(Keywords.Common, "terrain"), WatcherFilter.Text)
     {
-        _localizationService = localizationService;
         //TODO: 从数据库读取
         _unitTerrain = ["fort", "river"];
     }

@@ -1,19 +1,22 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using Moder.Core.Infrastructure;
 using Moder.Core.Infrastructure.FileSort;
+using Moder.Core.Messages;
 using Moder.Core.Models;
 using Moder.Core.Services.Config;
 using NLog;
 
 namespace Moder.Core.ViewsModel.Menus;
 
-public sealed class SideBarControlViewModel : ObservableObject
+public sealed partial class SideBarControlViewModel : ObservableObject
 {
-    public IReadOnlyList<SystemFileItem> Items => _root.Children;
-    private readonly SystemFileItem _root;
     private readonly FileSystemSafeWatcher _fileWatcher;
     private readonly IFileSortComparer _fileSortComparer;
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
+    [ObservableProperty]
+    public partial IReadOnlyList<SystemFileItem> Items { get; set; } = [];
 
     public SideBarControlViewModel(AppSettingService settingService, IFileSortComparer fileSortComparer)
     {
@@ -27,8 +30,20 @@ public sealed class SideBarControlViewModel : ObservableObject
         _fileWatcher.IncludeSubdirectories = true;
         _fileWatcher.EnableRaisingEvents = true;
 
-        _root = new SystemFileItem(settingService.ModRootFolderPath, false, null);
-        LoadFileSystem(settingService.ModRootFolderPath, _root);
+        var root = new SystemFileItem(settingService.ModRootFolderPath, false, null);
+        LoadFileSystem(settingService.ModRootFolderPath, root);
+        Items = root.Children;
+
+        WeakReferenceMessenger.Default.Register<CompleteAppSettingsMessage>(
+            this,
+            (_, _) =>
+            {
+                _fileWatcher.Path = settingService.ModRootFolderPath;
+                root = new SystemFileItem(settingService.ModRootFolderPath, false, null);
+                LoadFileSystem(settingService.ModRootFolderPath, root);
+                Items = root.Children;
+            }
+        );
     }
 
     private void ContentOnChanged(object sender, FileSystemEventArgs e)

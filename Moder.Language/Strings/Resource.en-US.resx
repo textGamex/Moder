@@ -275,9 +275,6 @@
   <data name="LocalizeValueNotFind" xml:space="preserve">
 	  <value>Cannot find the value of localization</value>
   </data>
-  <data name="ThemeMode.DarkSlateGray" xml:space="preserve">
-	  <value>Dark Slate Gray</value>
-  </data>
   <data name="Common.Cancel" xml:space="preserve">
 	  <value>Cancel</value>
   </data>
@@ -322,5 +319,8 @@
   </data>
   <data name="TraitSelection.SearchPlaceholder" xml:space="preserve">
 	  <value>Search (Trait Name | Trait Modifier Name)</value>
+  </data>
+  <data name="Common.Tip" xml:space="preserve">
+	  <value>Tip</value>
   </data>
 </root>

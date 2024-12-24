@@ -93,7 +93,7 @@ public sealed class AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour : Behav
                     ipc.SetValue(AssociatedObject, true);
                 }
 
-                AssociatedObject.SetCurrentValue<bool>(AutoCompleteBox.IsDropDownOpenProperty, true);
+                AssociatedObject.SetCurrentValue(AutoCompleteBox.IsDropDownOpenProperty, true);
             }
         }
     }

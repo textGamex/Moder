@@ -13,9 +13,11 @@ public sealed class DirectorySelector : TemplatedControl
         get => GetValue(SelectorCaptionProperty);
         set => SetValue(SelectorCaptionProperty, value);
     }
-    public static readonly StyledProperty<string> SelectorCaptionProperty
-    = AvaloniaProperty.Register<DirectorySelector, string>(nameof(SelectorCaption));
-    
+    public static readonly StyledProperty<string> SelectorCaptionProperty = AvaloniaProperty.Register<
+        DirectorySelector,
+        string
+    >(nameof(SelectorCaption));
+
     public string DirectoryPath
     {
         get => GetValue(DirectoryPathProperty);
@@ -24,7 +26,7 @@ public sealed class DirectorySelector : TemplatedControl
     public static readonly StyledProperty<string> DirectoryPathProperty = AvaloniaProperty.Register<
         DirectorySelector,
         string
-    >(nameof(DirectoryPath), enableDataValidation:true);
+    >(nameof(DirectoryPath), enableDataValidation: true, defaultBindingMode: BindingMode.TwoWay);
 
     public ICommand SelectDirectoryCommand
     {
@@ -33,8 +35,12 @@ public sealed class DirectorySelector : TemplatedControl
     }
     public static readonly StyledProperty<ICommand> SelectDirectoryCommandProperty =
         AvaloniaProperty.Register<DirectorySelector, ICommand>(nameof(SelectDirectoryCommand));
-    
-    protected override void UpdateDataValidation(AvaloniaProperty property, BindingValueType state, Exception? error)
+
+    protected override void UpdateDataValidation(
+        AvaloniaProperty property,
+        BindingValueType state,
+        Exception? error
+    )
     {
         if (property == DirectoryPathProperty)
         {

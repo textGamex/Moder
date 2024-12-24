@@ -281,9 +281,6 @@
 	<data name="LocalizeValueNotFind" xml:space="preserve">
 		<value>未找到本地化的值</value>
 	</data>
-	<data name="ThemeMode.DarkSlateGray" xml:space="preserve">
-		<value>青色</value>
-	</data>
 	<data name="Common.Cancel" xml:space="preserve">
 		<value>取消</value>
 	</data>
@@ -322,5 +319,8 @@
 	</data>
 	<data name="TraitSelection.SearchPlaceholder" xml:space="preserve">
 		<value>搜索 (特质名称 | 特质修饰符名称)</value>
+	</data>
+	<data name="Common.Tip" xml:space="preserve">
+		<value>提示</value>
 	</data>
 </root>
