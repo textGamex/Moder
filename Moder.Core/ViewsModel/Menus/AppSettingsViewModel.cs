@@ -2,11 +2,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Extensions;
 using Moder.Core.Infrastructure;
-using Moder.Core.Messages;
 using Moder.Core.Models;
 using Moder.Core.Models.Game;
 using Moder.Core.Services;
@@ -76,6 +73,9 @@ public sealed partial class AppSettingsViewModel : ObservableValidator
     {
         _settingService = settingService;
         _messageBox = messageBox;
+
+        GameRootFolderPath = _settingService.GameRootFolderPath;
+        ModRootFolderPath = _settingService.ModRootFolderPath;
 
         InitAppLanguage();
         InitGameLanguage();
@@ -153,7 +153,7 @@ public sealed partial class AppSettingsViewModel : ObservableValidator
         _settingService.GameLanguage = value.Type;
         _ = _messageBox.InfoAsync(Resource.SettingsPage_MustRestart);
     }
-    
+
     partial void OnSelectedAppThemeChanged(AppThemeInfo value)
     {
         App.Current.RequestedThemeVariant = value.Mode.ToThemeVariant();
@@ -172,6 +172,7 @@ public sealed partial class AppSettingsViewModel : ObservableValidator
         }
 
         GameRootFolderPath = gameRootPath;
+        _ = _messageBox.InfoAsync(Resource.SettingsPage_MustRestart);
     }
 
     [RelayCommand]
@@ -186,23 +187,7 @@ public sealed partial class AppSettingsViewModel : ObservableValidator
         }
 
         ModRootFolderPath = modRootPath;
-    }
-
-    [RelayCommand]
-    private async Task Submit()
-    {
-        ValidateAllProperties();
-        if (string.IsNullOrEmpty(GameRootFolderPath) || string.IsNullOrEmpty(ModRootFolderPath))
-        {
-            var messageBox = App.Services.GetRequiredService<MessageBoxService>();
-            await messageBox.WarnAsync(Resource.UIErrorMessage_MissingRequiredInfoTip);
-            return;
-        }
-        var settings = App.Services.GetRequiredService<AppSettingService>();
-        settings.GameRootFolderPath = GameRootFolderPath;
-        settings.ModRootFolderPath = ModRootFolderPath;
-        Log.Info("资源目录设置成功");
-
-        WeakReferenceMessenger.Default.Send(new CompleteAppSettingsMessage());
+        // TODO: 先暂时这么处理
+        _ = _messageBox.InfoAsync(Resource.SettingsPage_MustRestart);
     }
 }

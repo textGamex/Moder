@@ -32,6 +32,7 @@ namespace Moder.Core;
 public class App : Application
 {
     public const string AppVersion = "0.1.0-alpha";
+    public const string CodeRepositoryUrl = "https://github.com/ModerCore/Moder";
     public static new App Current => (App)Application.Current!;
     public static IServiceProvider Services => Current._serviceProvider;
     public static string AppConfigFolder { get; } =

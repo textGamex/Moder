@@ -1,8 +1,8 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Infrastructure;
-using Moder.Core.Services.Config;
 using Moder.Core.ViewsModel.Menus;
 using Moder.Language.Strings;
 
@@ -37,15 +37,6 @@ public sealed partial class AppSettingsView : UserControl, ITabViewItem
         base.OnDataContextChanged(e);
     }
 
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        var settings = App.Services.GetRequiredService<AppSettingService>();
-        GameRootSelector.DirectoryPath = settings.GameRootFolderPath;
-        ModRootSelector.DirectoryPath = settings.ModRootFolderPath;
-    }
-
     private async Task<string> Handler(string title)
     {
         var topLevel = TopLevel.GetTopLevel(this);
@@ -60,5 +51,10 @@ public sealed partial class AppSettingsView : UserControl, ITabViewItem
         var result = folders.Count > 0 ? folders[0].TryGetLocalPath() ?? string.Empty : string.Empty;
 
         return result;
+    }
+
+    private void SettingsExpanderItem_OnClick(object? sender, RoutedEventArgs e)
+    {
+        _ = TopLevel.GetTopLevel(this)?.Launcher.LaunchUriAsync(new Uri(App.CodeRepositoryUrl));
     }
 }
