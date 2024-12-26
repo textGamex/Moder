@@ -29,7 +29,7 @@ public sealed class RenameFileControlViewModel : ObservableValidator
     private readonly SystemFileItem _fileItem;
     private readonly char[] _invalidFileNameChars = Path.GetInvalidFileNameChars();
     private readonly char[] _invalidChars = Path.GetInvalidPathChars();
-    
+
     public RenameFileControlViewModel(ContentDialog dialog, SystemFileItem fileItem)
     {
         _dialog = dialog;

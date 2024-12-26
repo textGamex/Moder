@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vms="clr-namespace:Moder.Core.ViewsModel.Game;assembly=Moder.Core"
     xmlns:vo="clr-namespace:Moder.Core.Models.Vo"
-    Title="TraitSelectionWindowView"
+    Title="{x:Static lang:Resource.Menu_CharacterEditor}"
     d:DesignHeight="470"
     d:DesignWidth="700"
     x:DataType="vms:TraitSelectionWindowViewModel"
