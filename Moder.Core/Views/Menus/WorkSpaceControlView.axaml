@@ -9,8 +9,11 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
 
+    <!--  现版本拖动会崩溃, 等待修复  -->
     <controls:TabView
         x:Name="MainTabView"
+        CanDragTabs="False"
+        CanReorderTabs="False"
         IsAddTabButtonVisible="False"
         TabCloseRequested="MainTabView_OnTabCloseRequested" />
 </UserControl>
