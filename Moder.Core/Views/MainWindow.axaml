@@ -16,7 +16,7 @@
     SystemDecorations="Full"
     mc:Ignorable="d">
 
-    <Grid RowDefinitions="Auto,Auto,*">
+    <Grid RowDefinitions="Auto,*">
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Svg
                 Width="24"
@@ -31,6 +31,6 @@
             </Menu>
         </StackPanel>
 
-        <ContentControl x:Name="MainContentControl" Grid.Row="2" />
+        <ContentControl x:Name="MainContentControl" Grid.Row="1" />
     </Grid>
 </Window>
