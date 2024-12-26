@@ -1,6 +1,5 @@
 using MethodTimer;
-using Microsoft.UI.Xaml.Documents;
-using Moder.Core.Models.Character;
+using Moder.Core.Models.Game.Character;
 using Moder.Core.Services.GameResources.Base;
 using ParadoxPower.Process;
 
@@ -9,45 +8,24 @@ namespace Moder.Core.Services.GameResources;
 /// <summary>
 /// 用于提供人物技能的信息, 如最大值, 修正等
 /// </summary>
-public sealed class CharacterSkillService : CommonResourcesService<CharacterSkillService, List<SkillInfo>>
+[method: Time("加载人物技能信息")]
+public sealed class CharacterSkillService()
+    : CommonResourcesService<CharacterSkillService, SkillInfo[]>(
+        Path.Combine(Keywords.Common, "unit_leader"),
+        WatcherFilter.Text
+    )
 {
-    private readonly ModifierService _modifierService;
+    public IEnumerable<SkillInfo> Skills => Resources.Values.SelectMany(s => s);
+
     private const ushort DefaultSkillMaxValue = 1;
 
-    private IEnumerable<SkillInfo> Skills => Resources.Values.SelectMany(s => s);
-
-    [Time("加载人物技能信息")]
-    public CharacterSkillService(ModifierService modifierService)
-        : base(Path.Combine(Keywords.Common, "unit_leader"), WatcherFilter.Text)
+    public ushort GetMaxSkillValue(SkillType skillType, SkillCharacterType skillCharacterType)
     {
-        _modifierService = modifierService;
-    }
-
-    public ushort GetMaxSkillValue(SkillType skillType, CharacterSkillType characterSkillType)
-    {
-        return Skills.FirstOrDefault(skill => skill.SkillType == skillType)?.GetMaxValue(characterSkillType)
+        return Skills.FirstOrDefault(skill => skill.SkillType == skillType)?.GetMaxValue(skillCharacterType)
             ?? DefaultSkillMaxValue;
     }
 
-    public IEnumerable<Inline> GetSkillModifierDescription(
-        SkillType skillType,
-        CharacterSkillType characterSkillType,
-        ushort level
-    )
-    {
-        var skillModifier = Skills
-            .FirstOrDefault(skill => skill.SkillType == skillType)
-            ?.GetModifierDescription(characterSkillType, level);
-
-        if (skillModifier is null || skillModifier.Modifiers.Count == 0)
-        {
-            return [new Run { Text = "无" }];
-        }
-
-        return _modifierService.GetModifierInlines(skillModifier.Modifiers);
-    }
-
-    protected override List<SkillInfo>? ParseFileToContent(Node rootNode)
+    protected override SkillInfo[]? ParseFileToContent(Node rootNode)
     {
         var skills = new List<SkillInfo>();
 
@@ -90,13 +68,13 @@ public sealed class CharacterSkillService : CommonResourcesService<CharacterSkil
             skills.Add(ParseSkills(node, skillType));
         }
 
-        return skills;
+        return skills.ToArray();
     }
 
     private SkillInfo ParseSkills(Node node, SkillType skillType)
     {
-        var skillMap = new Dictionary<CharacterSkillType, ushort>(3);
-        var skillModifiers = new Dictionary<CharacterSkillType, List<SkillModifier>>(3);
+        var skillMap = new Dictionary<SkillCharacterType, ushort>(3);
+        var skillModifiers = new Dictionary<SkillCharacterType, List<SkillModifier>>(3);
 
         foreach (var skillInfoNode in node.Nodes)
         {
@@ -108,7 +86,7 @@ public sealed class CharacterSkillService : CommonResourcesService<CharacterSkil
                 continue;
             }
 
-            if (!CharacterSkillType.TryFromName(skillTypeLeaf.ValueText, true, out var type))
+            if (!SkillCharacterType.TryFromName(skillTypeLeaf.ValueText, true, out var type))
             {
                 continue;
             }

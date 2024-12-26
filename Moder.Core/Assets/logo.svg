@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+    <rect width="24" height="24" fill="none" />
+    <g fill="none">
+        <path fill="url(#tokenBrandedTut0)" fill-rule="evenodd" d="M11.993 21.993a9.993 9.993 0 1 0 0-19.986a9.993 9.993 0 0 0 0 19.986m3.747-9.992l-5.62-3.123v6.245z" clip-rule="evenodd" />
+        <path fill="url(#tokenBrandedTut1)" d="M16.296 2.976c1.412 2.136 2.985 6.427-.556 9.025l-5.62 3.123c0 1.667 1.124 5.058 5.62 5.308c.569.031 1.118.025 1.63-.006a9.986 9.986 0 0 0-1.074-17.45" />
+        <path fill="url(#tokenBrandedTut2)" d="M2 12.05c.7-1.623 2.292-3.796 4.996-3.796c.419 0 1.624.125 3.123.624l5.621 3.123c.83-.625 2.498-2.311 2.498-4.06c0-1.873-.687-3.51-1.86-4.921A9.993 9.993 0 0 0 2 12.05" />
+        <defs>
+            <linearGradient id="tokenBrandedTut0" x1="12" x2="12" y1="2.006" y2="21.993" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#036276" />
+                <stop offset=".36" stop-color="#066579" />
+                <stop offset=".7" stop-color="#039aab" />
+                <stop offset="1" stop-color="#11b7c5" />
+            </linearGradient>
+            <linearGradient id="tokenBrandedTut1" x1="11.988" x2="11.988" y1="2.007" y2="21.991" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#00b8c2" />
+                <stop offset="1" stop-color="#046179" />
+            </linearGradient>
+            <linearGradient id="tokenBrandedTut2" x1="18.55" x2="2.625" y1="8.254" y2="9.503" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#005f71" />
+                <stop offset="1" stop-color="#02bccd" />
+            </linearGradient>
+        </defs>
+    </g>
+</svg>

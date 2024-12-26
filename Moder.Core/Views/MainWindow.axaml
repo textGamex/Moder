@@ -1,0 +1,36 @@
+<Window
+    x:Class="Moder.Core.Views.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lang="clr-namespace:Moder.Language.Strings;assembly=Moder.Language"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vms="clr-namespace:Moder.Core.ViewsModel"
+    Title="Moder"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vms:MainWindowViewModel"
+    Design.DataContext="{x:Static vms:DesignData.MainWindowViewModel}"
+    ExtendClientAreaChromeHints="PreferSystemChrome"
+    ExtendClientAreaToDecorationsHint="True"
+    SystemDecorations="Full"
+    mc:Ignorable="d">
+
+    <Grid RowDefinitions="Auto,*">
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Svg
+                Width="24"
+                Height="24"
+                Margin="8,0,0,0"
+                IsHitTestVisible="False"
+                Path="../Assets/logo.svg" />
+
+            <Menu>
+                <MenuItem Command="{Binding OpenCharacterEditorCommand}" Header="{x:Static lang:Resource.Menu_CharacterEditor}" />
+                <MenuItem Command="{Binding OpenSettingsCommand}" Header="{x:Static lang:Resource.Menu_Settings}" />
+            </Menu>
+        </StackPanel>
+
+        <ContentControl x:Name="MainContentControl" Grid.Row="1" />
+    </Grid>
+</Window>

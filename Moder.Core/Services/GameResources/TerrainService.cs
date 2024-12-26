@@ -12,12 +12,26 @@ public sealed class TerrainService : CommonResourcesService<TerrainService, Froz
 {
     private Dictionary<string, FrozenSet<string>>.ValueCollection Terrains => Resources.Values;
 
+    /// <summary>
+    /// 未在文件中定义的地形
+    /// </summary>
+    private readonly FrozenSet<string> _unitTerrain;
+
     [Time("加载地形资源")]
     public TerrainService()
-        : base(Path.Combine(Keywords.Common, "terrain"), WatcherFilter.Text) { }
+        : base(Path.Combine(Keywords.Common, "terrain"), WatcherFilter.Text)
+    {
+        //TODO: 从数据库读取
+        _unitTerrain = ["fort", "river"];
+    }
 
     public bool Contains(string terrainName)
     {
+        if (_unitTerrain.Contains(terrainName))
+        {
+            return true;
+        }
+
         foreach (var terrain in Terrains)
         {
             if (terrain.Contains(terrainName))

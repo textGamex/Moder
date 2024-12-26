@@ -3,10 +3,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using MethodTimer;
 using Moder.Core.Extensions;
-using Moder.Core.Helper;
-using Moder.Core.Models.Character;
-using Moder.Core.Models.Modifiers;
+using Moder.Core.Models.Game.Character;
+using Moder.Core.Models.Game.Modifiers;
 using Moder.Core.Services.GameResources.Base;
+using Moder.Core.Services.GameResources.Localization;
 using ParadoxPower.Process;
 
 namespace Moder.Core.Services.GameResources;
@@ -14,6 +14,10 @@ namespace Moder.Core.Services.GameResources;
 public sealed class CharacterTraitsService
     : CommonResourcesService<CharacterTraitsService, FrozenDictionary<string, Trait>>
 {
+    public IEnumerable<Trait> GetAllTraits() => _allTraitsLazy.Value;
+
+    private Lazy<IEnumerable<Trait>> _allTraitsLazy;
+    private readonly LocalizationService _localizationService;
     private Dictionary<string, FrozenDictionary<string, Trait>>.ValueCollection Traits => Resources.Values;
 
     /// <summary>
@@ -28,9 +32,39 @@ public sealed class CharacterTraitsService
         "sub_unit_modifiers"
     ];
 
+    private static readonly string[] SkillModifierKeywords =
+    [
+        "attack_skill",
+        "defense_skill",
+        "planning_skill",
+        "logistics_skill",
+        "maneuvering_skill",
+        "coordination_skill"
+    ];
+
+    private static readonly string[] SkillFactorModifierKeywords =
+    [
+        "skill_factor",
+        "attack_skill_factor",
+        "defense_skill_factor",
+        "planning_skill_factor",
+        "logistics_skill_factor",
+        "maneuvering_skill_factor",
+        "coordination_skill_factor"
+    ];
+
     [Time("加载人物特质")]
-    public CharacterTraitsService()
-        : base(Path.Combine(Keywords.Common, "unit_leader"), WatcherFilter.Text) { }
+    public CharacterTraitsService(LocalizationService localizationService)
+        : base(Path.Combine(Keywords.Common, "unit_leader"), WatcherFilter.Text)
+    {
+        _localizationService = localizationService;
+
+        _allTraitsLazy = GetAllTraitsLazy();
+        OnResourceChanged += (_, _) => _allTraitsLazy = GetAllTraitsLazy();
+    }
+
+    private Lazy<IEnumerable<Trait>> GetAllTraitsLazy() =>
+        new(() => Traits.SelectMany(trait => trait.Values).ToArray());
 
     public bool TryGetTrait(string name, [NotNullWhen(true)] out Trait? trait)
     {
@@ -46,7 +80,10 @@ public sealed class CharacterTraitsService
         return false;
     }
 
-    public IEnumerable<Trait> GetAllTraits() => Traits.SelectMany(trait => trait.Values);
+    public string GetLocalizationName(Trait trait)
+    {
+        return _localizationService.GetValue(trait.Name);
+    }
 
     protected override FrozenDictionary<string, Trait>? ParseFileToContent(Node rootNode)
     {
@@ -73,27 +110,6 @@ public sealed class CharacterTraitsService
 
         return dictionary.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
     }
-
-    private static readonly string[] SkillModifierKeywords =
-    [
-        "attack_skill",
-        "defense_skill",
-        "planning_skill",
-        "logistics_skill",
-        "maneuvering_skill",
-        "coordination_skill"
-    ];
-
-    private static readonly string[] SkillFactorModifierKeywords =
-    [
-        "skill_factor",
-        "attack_skill_factor",
-        "defense_skill_factor",
-        "planning_skill_factor",
-        "logistics_skill_factor",
-        "maneuvering_skill_factor",
-        "coordination_skill_factor"
-    ];
 
     /// <summary>
     ///
@@ -131,7 +147,7 @@ public sealed class CharacterTraitsService
                     && Array.Exists(ModifierNodeKeys, s => StringComparer.OrdinalIgnoreCase.Equals(s, key))
                 )
                 {
-                    modifiers.Add(ModifierHelper.ParseModifier(traitAttribute.node));
+                    modifiers.Add(ParseModifier(traitAttribute.node));
                 }
                 else if (
                     traitAttribute.IsLeafChild
@@ -244,5 +260,26 @@ public sealed class CharacterTraitsService
                     s => StringComparer.OrdinalIgnoreCase.Equals(s, traitAttribute.leaf.Key)
                 )
             );
+    }
+
+    private static ModifierCollection ParseModifier(Node modifierNode)
+    {
+        var list = new List<IModifier>(modifierNode.AllArray.Length);
+        foreach (var child in modifierNode.AllArray)
+        {
+            if (child.IsLeafChild)
+            {
+                var modifier = LeafModifier.FromLeaf(child.leaf);
+                list.Add(modifier);
+            }
+            else if (child.IsNodeChild)
+            {
+                var node = child.node;
+                var modifier = new NodeModifier(node.Key, node.Leaves.Select(LeafModifier.FromLeaf));
+                list.Add(modifier);
+            }
+        }
+
+        return new ModifierCollection(modifierNode.Key, list);
     }
 }

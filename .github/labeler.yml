@@ -1,0 +1,15 @@
+documentation:
+- changed-files:
+  - any-glob-to-any-file: '**/*.md'
+
+CSharp:
+- changed-files:
+  - any-glob-to-any-file: '**/*.cs'
+
+UI:
+- changed-files:
+  - any-glob-to-any-file: '**/*.axaml'
+
+Localization:
+- changed-files:
+  - any-glob-to-any-file: '**/*.resx'

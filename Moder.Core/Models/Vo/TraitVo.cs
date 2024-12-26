@@ -1,98 +1,61 @@
-using System.Text;
+﻿using System.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Documents;
-using Moder.Core.Messages;
-using Moder.Core.Models.Character;
-using Moder.Core.Parser;
-using Moder.Core.Services;
-using Moder.Core.Services.GameResources;
-using Moder.Language.Strings;
+using Moder.Core.Models.Game.Character;
 
 namespace Moder.Core.Models.Vo;
 
-public sealed partial class TraitVo(Trait trait, string localisationName)
-    : ObservableObject,
-        IEquatable<TraitVo>
+public sealed partial class TraitVo : ObservableObject, IEquatable<TraitVo>
 {
-    public string Name => trait.Name;
-    public Trait Trait => trait;
-    public string LocalisationName => localisationName;
-    public TextBlock Description => GetDescription();
+    public string Name => Trait.Name;
+    public Trait Trait { get; }
 
-    private static readonly ModifierService ModifierService =
-        App.Current.Services.GetRequiredService<ModifierService>();
-    private static readonly LocalisationService LocalisationService =
-        App.Current.Services.GetRequiredService<LocalisationService>();
+    public string LocalisationName { get; }
 
-    private static readonly string Separator = new('-', 25);
+    // private static readonly ModifierService ModifierService =
+    //     App.Current.Services.GetRequiredService<ModifierService>();
+    // private static readonly LocalisationService LocalisationService =
+    //     App.Current.Services.GetRequiredService<LocalisationService>();
+    // private static readonly SpriteService SpriteService =
+    //     App.Current.Services.GetRequiredService<SpriteService>();
+    //
+    // private static readonly string Separator = new('-', 25);
+    // private static readonly ImageSource? UnknownImage = GetUnknownImageSource();
+
+    // private static ImageSource? GetUnknownImageSource()
+    // {
+    //     if (SpriteService.TryGetImageSource("GFX_trait_unknown", out var source))
+    //     {
+    //         return source;
+    //     }
+    //
+    //     return null;
+    // }
 
     /// <summary>
-    /// 是否已选择, 当值改变时, 发送 <see cref="SelectedTraitChangedMessage"/> 通知
+    /// 是否已选择
     /// </summary>
     [ObservableProperty]
-    private bool _isSelected;
+    public partial bool IsSelected { get; set; }
 
-    partial void OnIsSelectedChanged(bool value)
+    public TraitVo(Trait trait, string localisationName)
     {
-        WeakReferenceMessenger.Default.Send(new SelectedTraitChangedMessage(value, this));
+        Trait = trait;
+        LocalisationName = localisationName;
+        // _imageSource = new Lazy<ImageSource?>(GetImageSource);
     }
 
-    private TextBlock GetDescription()
-    {
-        var textBox = new TextBlock();
-        foreach (var inline in ModifierService.GetModifierInlines(trait.AllModifiers))
-        {
-            textBox.Inlines.Add(inline);
-        }
+    // public ImageSource? ImageSource => _imageSource.Value;
+    // private readonly Lazy<ImageSource?> _imageSource;
 
-        if (textBox.Inlines.Count == 0)
-        {
-            textBox.Inlines.Add(new Run { Text = Resource.ModifierDisplay_Empty });
-        }
-
-        textBox.Inlines.Add(new LineBreak());
-        textBox.Inlines.Add(new Run { Text = Separator });
-        textBox.Inlines.Add(new LineBreak());
-
-        var traitDesc = LocalisationService.GetValue($"{trait.Name}_desc");
-
-        foreach (var chars in GetCleanText(traitDesc).Chunk(15))
-        {
-            textBox.Inlines.Add(new Run { Text = new string(chars) });
-            textBox.Inlines.Add(new LineBreak());
-        }
-
-        if (textBox.Inlines[^1] is LineBreak)
-        {
-            textBox.Inlines.RemoveAt(textBox.Inlines.Count - 1);
-        }
-        return textBox;
-    }
-
-    private static string GetCleanText(string rawText)
-    {
-        string text;
-        if (LocalizationFormatParser.TryParse(rawText, out var formats))
-        {
-            var sb = new StringBuilder();
-            foreach (var format in formats)
-            {
-                sb.Append(
-                    format.Type == LocalizationFormatType.TextWithColor ? format.Text[1..] : format.Text
-                );
-            }
-            text = sb.ToString();
-        }
-        else
-        {
-            text = rawText;
-        }
-
-        return text;
-    }
+    // private ImageSource? GetImageSource()
+    // {
+    //     if (SpriteService.TryGetImageSource($"GFX_trait_{Name}", out var source))
+    //     {
+    //         return source;
+    //     }
+    //
+    //     return UnknownImage;
+    // }
 
     public bool Equals(TraitVo? other)
     {
@@ -117,5 +80,37 @@ public sealed partial class TraitVo(Trait trait, string localisationName)
     public override int GetHashCode()
     {
         return Name.GetHashCode();
+    }
+
+    public sealed class Comparer : IComparer<TraitVo>, IComparer
+    {
+        public static readonly IComparer<TraitVo> Default = new Comparer();
+
+        private Comparer() { }
+
+        public int Compare(TraitVo? x, TraitVo? y)
+        {
+            if (ReferenceEquals(x, y))
+            {
+                return 0;
+            }
+
+            if (y is null)
+            {
+                return 1;
+            }
+
+            if (x is null)
+            {
+                return -1;
+            }
+
+            return string.Compare(x.LocalisationName, y.LocalisationName, StringComparison.CurrentCulture);
+        }
+
+        public int Compare(object? x, object? y)
+        {
+            return Compare(x as TraitVo, y as TraitVo);
+        }
     }
 }

@@ -1,0 +1,34 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:controls="clr-namespace:Moder.Core.Controls"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <controls:DirectorySelector />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|DirectorySelector">
+        <!--  Set Defaults  -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <DataValidationErrors
+                    Errors="{TemplateBinding DataValidationErrors.Errors}"
+                    HorizontalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    VerticalAlignment="Center">
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="4">
+                        <TextBox
+                            IsReadOnly="True"
+                            MaxHeight="55"
+                            Text="{TemplateBinding DirectoryPath,
+                                                   Mode=TwoWay}"
+                            Width="280" />
+                        <Button Command="{TemplateBinding SelectDirectoryCommand}" Content="{TemplateBinding SelectorCaption}" />
+                    </StackPanel>
+                </DataValidationErrors>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

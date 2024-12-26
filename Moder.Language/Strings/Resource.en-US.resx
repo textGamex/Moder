@@ -230,7 +230,7 @@
   <data name="CharacterEditor.MissingCharacterFileNameTip" xml:space="preserve">
 		<value>Please write the filename</value>
 	</data>
-  <data name="CharacterEditor.MissingRequiredInfoTip" xml:space="preserve">
+  <data name="UIErrorMessage.MissingRequiredInfoTip" xml:space="preserve">
 		<value>Please fill in required fields</value>
 	</data>
   <data name="Common.Error" xml:space="preserve">
@@ -247,9 +247,6 @@
 	</data>
   <data name="RenameFile.NameContainInvalidChar" xml:space="preserve">
 		<value>The file or folder name contains invalid characters</value>
-	</data>
-  <data name="RenameFile.NameAlreadyExists" xml:space="preserve">
-		<value>A file or folder with the same name already exists at this location: {0}. Please rename it</value>
 	</data>
   <data name="ModifierDisplay.Empty" xml:space="preserve">
 		<value>No modifier effect</value>
@@ -268,5 +265,62 @@
 	</data>
   <data name="Common.MaxLevel" xml:space="preserve">
 	  <value>Max level</value>
+  </data>
+  <data name="CharacterEditor.None" xml:space="preserve">
+	  <value>None</value>
+  </data>
+  <data name="UIErrorMessage.Required" xml:space="preserve">
+	  <value>Required</value>
+  </data>
+  <data name="LocalizeValueNotFind" xml:space="preserve">
+	  <value>Cannot find the value of localization</value>
+  </data>
+  <data name="Common.Cancel" xml:space="preserve">
+	  <value>Cancel</value>
+  </data>
+  <data name="Common.Complete" xml:space="preserve">
+	  <value>Complete</value>
+  </data>
+	<data name="InitializePage.SelectGameRootPath" xml:space="preserve">
+	  <value>Select Game Root Path</value>
+  </data>
+	<data name="InitializePage.SelectModRootPath" xml:space="preserve">
+	  <value>Select Mod Root Path</value>
+  </data>
+  <data name="RenameFile.CannotAquirePath" xml:space="preserve">
+	  <value>Rename failed, cannot aquire path: </value>
+  </data>
+  <data name="RenameFile.ErrorOccurs" xml:space="preserve">
+	  <value>An error occurs within file or folder renaming</value>
+  </data>
+	<data name="DeleteFile.EnsureFile" xml:space="preserve">
+	  <value>Are you sure to delete '{0}'?</value>
+  </data>
+	<data name="DeleteFile.EnsureFolder" xml:space="preserve">
+	  <value>Are you sure to delete '{0}' and all of its content?</value>
+  </data>
+	<data name="DeleteFile.CanFindBack" xml:space="preserve">
+	  <value>You can restore from recycle bin</value>
+  </data>
+	<data name="DeleteFile.Failed" xml:space="preserve">
+	  <value>Delete failed because: </value>
+  </data>
+  <data name="FileManager.NotExist" xml:space="preserve">
+	  <value>File or folder doesn't exist</value>
+  </data>
+  <data name="RenameFile.NameAlreadyExists" xml:space="preserve">
+		<value>A file or folder with the same name already exists at this location: {0}. Please rename it</value>
+	</data>
+  <data name="Menu.CopyFullPath" xml:space="preserve">
+	  <value>Copy Path</value>
+  </data>
+  <data name="Menu.CopyRelativePath" xml:space="preserve">
+	  <value>Copy Relative Path</value>
+  </data>
+  <data name="TraitSelection.SearchPlaceholder" xml:space="preserve">
+	  <value>Search (Trait Name | Trait Modifier Name)</value>
+  </data>
+  <data name="Common.Tip" xml:space="preserve">
+	  <value>Tip</value>
   </data>
 </root>

@@ -230,7 +230,7 @@
 	<data name="CharacterEditor.MissingCharacterFileNameTip" xml:space="preserve">
 		<value>请填写写入文件名</value>
 	</data>
-	<data name="CharacterEditor.MissingRequiredInfoTip" xml:space="preserve">
+	<data name="UIErrorMessage.MissingRequiredInfoTip" xml:space="preserve">
 		<value>请填写必须的字段</value>
 	</data>
 	<data name="Common.Error" xml:space="preserve">
@@ -247,9 +247,6 @@
 	</data>
 	<data name="RenameFile.NameContainInvalidChar" xml:space="preserve">
 		<value>文件或文件夹名称包含非法字符</value>
-	</data>
-	<data name="RenameFile.NameAlreadyExists" xml:space="preserve">
-		<value>此位置已存在同名文件或文件夹 {0}, 请重新命名</value>
 	</data>
 	<data name="ModifierDisplay.Empty" xml:space="preserve">
 		<value>无修正效果</value>
@@ -268,5 +265,62 @@
 	</data>
 	<data name="Common.MaxLevel" xml:space="preserve">
 		<value>最大等级</value>
+	</data>
+	<data name="CharacterEditor.None" xml:space="preserve">
+		<value>无</value>
+	</data>
+	<data name="InitializePage.SelectGameRootPath" xml:space="preserve">
+		<value>选择游戏根目录</value>
+	</data>
+	<data name="InitializePage.SelectModRootPath" xml:space="preserve">
+		<value>选择Mod根目录</value>
+	</data>
+	<data name="UIErrorMessage.Required" xml:space="preserve">
+		<value>此项为必填项</value>
+	</data>
+	<data name="LocalizeValueNotFind" xml:space="preserve">
+		<value>未找到本地化的值</value>
+	</data>
+	<data name="Common.Cancel" xml:space="preserve">
+		<value>取消</value>
+	</data>
+	<data name="Common.Complete" xml:space="preserve">
+		<value>完成</value>
+	</data>
+	<data name="RenameFile.CannotAquirePath" xml:space="preserve">
+		<value>重命名失败，无法获取路径：</value>
+	</data>
+	<data name="RenameFile.ErrorOccurs" xml:space="preserve">
+		<value>重命名文件或文件夹时发生错误</value>
+	</data>
+	<data name="DeleteFile.EnsureFile" xml:space="preserve">
+		<value>确认删除 '{0}' 吗？</value>
+	</data>
+	<data name="DeleteFile.EnsureFolder" xml:space="preserve">
+		<value>确认删除 '{0}' 及其内容吗？</value>
+	</data>
+	<data name="DeleteFile.CanFindBack" xml:space="preserve">
+		<value>您可以从回收站还原此文件</value>
+	</data>
+	<data name="DeleteFile.Failed" xml:space="preserve">
+		<value>删除失败，原因：</value>
+	</data>
+	<data name="FileManager.NotExist" xml:space="preserve">
+		<value>文件或文件夹不存在</value>
+	</data>
+	<data name="RenameFile.NameAlreadyExists" xml:space="preserve">
+		<value>此位置已存在同名文件或文件夹 {0}, 请重新命名</value>
+	</data>
+	<data name="Menu.CopyFullPath" xml:space="preserve">
+		<value>复制路径</value>
+	</data>
+	<data name="Menu.CopyRelativePath" xml:space="preserve">
+		<value>复制相对路径</value>
+	</data>
+	<data name="TraitSelection.SearchPlaceholder" xml:space="preserve">
+		<value>搜索 (特质名称 | 特质修饰符名称)</value>
+	</data>
+	<data name="Common.Tip" xml:space="preserve">
+		<value>提示</value>
 	</data>
 </root>

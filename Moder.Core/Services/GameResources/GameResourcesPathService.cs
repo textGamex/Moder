@@ -6,11 +6,12 @@ namespace Moder.Core.Services.GameResources;
 
 public sealed class GameResourcesPathService
 {
-    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
-    private readonly GlobalSettingService _settingService;
+    private readonly AppSettingService _settingService;
     private readonly GameModDescriptorService _descriptor;
 
-    public GameResourcesPathService(GlobalSettingService settingService, GameModDescriptorService descriptor)
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
+    public GameResourcesPathService(AppSettingService settingService, GameModDescriptorService descriptor)
     {
         _settingService = settingService;
         _descriptor = descriptor;
@@ -98,7 +99,7 @@ public sealed class GameResourcesPathService
     /// </remarks>
     /// <param name="fileRelativePath">根目录下的相对路径</param>
     /// <exception cref="FileNotFoundException">游戏和mod中均不存在</exception>
-    /// <returns>文件路径</returns>
+    /// <returns>文件绝对路径</returns>
     public string GetFilePathPriorModByRelativePath(string fileRelativePath)
     {
         var modFilePath = Path.Combine(_settingService.ModRootFolderPath, fileRelativePath);

@@ -16,7 +16,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
     protected readonly Dictionary<string, TContent> Resources;
     protected readonly Logger Log;
 
-    private readonly GlobalSettingService _settingService;
+    private readonly AppSettingService _settingService;
     private readonly string _serviceName = typeof(TType).Name;
     private readonly string _folderOrFileRelativePath;
 
@@ -30,10 +30,10 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
     {
         _folderOrFileRelativePath = folderOrFileRelativePath;
         Log = LogManager.GetLogger(typeof(TType).FullName);
-        _settingService = App.Current.Services.GetRequiredService<GlobalSettingService>();
+        _settingService = App.Services.GetRequiredService<AppSettingService>();
 
-        var gameResourcesPathService = App.Current.Services.GetRequiredService<GameResourcesPathService>();
-        var watcherService = App.Current.Services.GetRequiredService<GameResourcesWatcherService>();
+        var gameResourcesPathService = App.Services.GetRequiredService<GameResourcesPathService>();
+        var watcherService = App.Services.GetRequiredService<GameResourcesWatcherService>();
 
         var isFolderPath = pathType == PathType.Folder;
         var filePaths = isFolderPath
