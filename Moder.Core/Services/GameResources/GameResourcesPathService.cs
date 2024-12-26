@@ -6,11 +6,12 @@ namespace Moder.Core.Services.GameResources;
 
 public sealed class GameResourcesPathService
 {
-    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
-    private readonly GlobalSettingService _settingService;
+    private readonly AppSettingService _settingService;
     private readonly GameModDescriptorService _descriptor;
 
-    public GameResourcesPathService(GlobalSettingService settingService, GameModDescriptorService descriptor)
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
+    public GameResourcesPathService(AppSettingService settingService, GameModDescriptorService descriptor)
     {
         _settingService = settingService;
         _descriptor = descriptor;

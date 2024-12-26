@@ -1,0 +1,16 @@
+﻿<UserControl
+    x:Class="Moder.Core.Views.Menus.RenameFileControlView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vms="clr-namespace:Moder.Core.ViewsModel.Menus"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vms:RenameFileControlViewModel"
+    mc:Ignorable="d">
+    <TextBox
+        x:Name="NewNameTextBox"
+        SelectionEnd="{Binding SelectionEnd}"
+        Text="{Binding NewName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+</UserControl>

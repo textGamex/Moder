@@ -177,15 +177,6 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 请填写必须的字段.
-        /// </summary>
-        public static string CharacterEditor_MissingRequiredInfoTip {
-            get {
-                return ResourceManager.GetString("CharacterEditor.MissingRequiredInfoTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 无.
         /// </summary>
         public static string CharacterEditor_None {
@@ -213,6 +204,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 取消.
+        /// </summary>
+        public static string Common_Cancel {
+            get {
+                return ResourceManager.GetString("Common.Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 清空.
         /// </summary>
         public static string Common_Clear {
@@ -227,6 +227,15 @@ namespace Moder.Language.Strings {
         public static string Common_Close {
             get {
                 return ResourceManager.GetString("Common.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 完成.
+        /// </summary>
+        public static string Common_Complete {
+            get {
+                return ResourceManager.GetString("Common.Complete", resourceCulture);
             }
         }
         
@@ -330,6 +339,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 提示.
+        /// </summary>
+        public static string Common_Tip {
+            get {
+                return ResourceManager.GetString("Common.Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 未知的.
         /// </summary>
         public static string Common_Unknown {
@@ -366,11 +384,101 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 您可以从回收站还原此文件.
+        /// </summary>
+        public static string DeleteFile_CanFindBack {
+            get {
+                return ResourceManager.GetString("DeleteFile.CanFindBack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 确认删除 &apos;{0}&apos; 吗？.
+        /// </summary>
+        public static string DeleteFile_EnsureFile {
+            get {
+                return ResourceManager.GetString("DeleteFile.EnsureFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 确认删除 &apos;{0}&apos; 及其内容吗？.
+        /// </summary>
+        public static string DeleteFile_EnsureFolder {
+            get {
+                return ResourceManager.GetString("DeleteFile.EnsureFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 删除失败，原因：.
+        /// </summary>
+        public static string DeleteFile_Failed {
+            get {
+                return ResourceManager.GetString("DeleteFile.Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 文件或文件夹不存在.
+        /// </summary>
+        public static string FileManager_NotExist {
+            get {
+                return ResourceManager.GetString("FileManager.NotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 选择游戏根目录.
+        /// </summary>
+        public static string InitializePage_SelectGameRootPath {
+            get {
+                return ResourceManager.GetString("InitializePage.SelectGameRootPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 选择Mod根目录.
+        /// </summary>
+        public static string InitializePage_SelectModRootPath {
+            get {
+                return ResourceManager.GetString("InitializePage.SelectModRootPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 未找到本地化的值.
+        /// </summary>
+        public static string LocalizeValueNotFind {
+            get {
+                return ResourceManager.GetString("LocalizeValueNotFind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 人物编辑器.
         /// </summary>
         public static string Menu_CharacterEditor {
             get {
                 return ResourceManager.GetString("Menu.CharacterEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 复制路径.
+        /// </summary>
+        public static string Menu_CopyFullPath {
+            get {
+                return ResourceManager.GetString("Menu.CopyFullPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 复制相对路径.
+        /// </summary>
+        public static string Menu_CopyRelativePath {
+            get {
+                return ResourceManager.GetString("Menu.CopyRelativePath", resourceCulture);
             }
         }
         
@@ -416,6 +524,24 @@ namespace Moder.Language.Strings {
         public static string NotSupportFileTipInfo {
             get {
                 return ResourceManager.GetString("NotSupportFileTipInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 重命名失败，无法获取路径：.
+        /// </summary>
+        public static string RenameFile_CannotAquirePath {
+            get {
+                return ResourceManager.GetString("RenameFile.CannotAquirePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 重命名文件或文件夹时发生错误.
+        /// </summary>
+        public static string RenameFile_ErrorOccurs {
+            get {
+                return ResourceManager.GetString("RenameFile.ErrorOccurs", resourceCulture);
             }
         }
         
@@ -578,6 +704,33 @@ namespace Moder.Language.Strings {
         public static string ThemeMode_Light {
             get {
                 return ResourceManager.GetString("ThemeMode.Light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 搜索 (特质名称 | 特质修饰符名称).
+        /// </summary>
+        public static string TraitSelection_SearchPlaceholder {
+            get {
+                return ResourceManager.GetString("TraitSelection.SearchPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 请填写必须的字段.
+        /// </summary>
+        public static string UIErrorMessage_MissingRequiredInfoTip {
+            get {
+                return ResourceManager.GetString("UIErrorMessage.MissingRequiredInfoTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 此项为必填项.
+        /// </summary>
+        public static string UIErrorMessage_Required {
+            get {
+                return ResourceManager.GetString("UIErrorMessage.Required", resourceCulture);
             }
         }
     }
