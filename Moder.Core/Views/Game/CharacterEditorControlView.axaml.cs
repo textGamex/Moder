@@ -1,10 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Avalonia.Controls;
-using Avalonia.Media;
-using AvaloniaEdit.TextMate;
+﻿using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
-using Moder.Core.Editor;
 using Moder.Core.Infrastructure;
 using Moder.Core.ViewsModel.Game;
 using Moder.Language.Strings;

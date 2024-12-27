@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using AvaloniaEdit.TextMate;
 using Moder.Core.Editor;
-using Moder.Core.Models;
 
 namespace Moder.Core.Controls;
 
