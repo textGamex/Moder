@@ -46,7 +46,7 @@ public sealed class TabViewNavigationService
         if (tabViewItem is null)
         {
             var content = action();
-            tabViewItem = new TabViewItem { Header = content.Header, Content = content };
+            tabViewItem = new TabViewItem { Header = content.Header, Content = content, IconSource = content.Icon};
             ToolTip.SetTip(tabViewItem, content.ToolTip);
 
             _openedTabFileItems.Add(tabViewItem);

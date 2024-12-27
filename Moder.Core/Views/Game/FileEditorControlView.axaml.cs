@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Avalonia.Controls;
+using FluentAvalonia.UI.Controls;
 using Moder.Core.Infrastructure;
 using Moder.Core.Models;
 
@@ -10,6 +11,7 @@ public sealed partial class FileEditorControlView : UserControl, ITabViewItem
     public string Header => _fileItem.Name;
     public string Id => _fileItem.FullPath;
     public string ToolTip => _fileItem.FullPath;
+    public IconSource? Icon { get; } = new SymbolIconSource { Symbol = Symbol.Library };
 
     private readonly SystemFileItem _fileItem;
 

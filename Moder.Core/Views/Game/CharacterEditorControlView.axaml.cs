@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using AvaloniaEdit.TextMate;
+using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Editor;
 using Moder.Core.Infrastructure;
@@ -15,6 +16,7 @@ public sealed partial class CharacterEditorControlView : UserControl, ITabViewIt
     public string Header => Resource.Menu_CharacterEditor;
     public string Id => nameof(CharacterEditorControlView);
     public string ToolTip => Header;
+    public IconSource Icon { get; } = new SymbolIconSource { Symbol = Symbol.Edit };
 
     private CharacterEditorControlViewModel ViewModel { get; }
 
