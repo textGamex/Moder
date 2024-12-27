@@ -6,7 +6,7 @@ English | [简体中文](Docs/README.zh-CN.md)
     Moder
 </h1>
 
-Moder is a visual editor for HOI4 (Hearts of Iron IV)  that simplifies Mod development , Based on .NET Core and Avalonia, supports Windows and Linux platforms 
+Moder is a visual and Cross-platform editor for HOI4 (Hearts of Iron IV)  that simplifies Mod development , Based on .NET Core and Avalonia, supports Windows and Linux platforms 
 
 ## Runtime environment requirements
 
