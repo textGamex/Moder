@@ -22,6 +22,7 @@ public sealed partial class CharacterEditorControlView : UserControl, ITabViewIt
         ViewModel = App.Services.GetRequiredService<CharacterEditorControlViewModel>();
         DataContext = ViewModel;
 
+        Editor.SetGrammar(".txt");
         ViewModel.PropertyChanged += (_, args) =>
         {
             if (args.PropertyName == nameof(ViewModel.GeneratedText))

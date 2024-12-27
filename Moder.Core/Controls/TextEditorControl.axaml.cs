@@ -27,6 +27,18 @@ public sealed partial class TextEditorControl : UserControl
         };
     }
 
+    public void SetGrammar(string extensionName)
+    {
+        if (extensionName.Equals(".yml"))
+        {
+            _installation.SetGrammar(ScopeNameTypes.Yml);
+        }
+        else
+        {
+            _installation.SetGrammar(ScopeNameTypes.Hoi4);
+        }
+    }
+
     // TODO: 状态栏
     [MemberNotNull(nameof(_installation))]
     [MemberNotNull(nameof(_options))]
@@ -40,8 +52,6 @@ public sealed partial class TextEditorControl : UserControl
         TextEditor.Options.AllowToggleOverstrikeMode = true;
         TextEditor.ShowLineNumbers = true;
         _installation = TextEditor.InstallTextMate(_options);
-
-        _installation.SetGrammar("source.hoi4");
         _installation.AppliedTheme += ChangeThemeOnAppliedTheme;
 
         ApplyThemeColorsToEditor(_installation);

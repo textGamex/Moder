@@ -21,6 +21,7 @@ public sealed partial class FileEditorControlView : UserControl, ITabViewItem
         _fileItem = fileItem;
         InitializeComponent();
 
+        Editor.SetGrammar(Path.GetExtension(fileItem.FullPath));
         Editor.Text = File.ReadAllText(fileItem.FullPath, Encodings.Utf8NotBom);
     }
 }
