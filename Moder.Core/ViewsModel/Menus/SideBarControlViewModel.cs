@@ -53,7 +53,7 @@ public sealed partial class SideBarControlViewModel : ObservableObject
 
     private void ContentOnRenamed(object sender, RenamedEventArgs e)
     {
-        // 如果在标签页内已经打开了, 不做处理
+        // 如果在标签页内已经打开了, 先不做处理, 以后可以改成跟 vs code 一样, 加个删除线
         var target = FindFileItemByPath(e.OldFullPath, Items);
         if (target is null)
         {
@@ -177,6 +177,7 @@ public sealed partial class SideBarControlViewModel : ObservableObject
             index = lastFolderIndex == 0 ? 0 : lastFolderIndex + 1;
         }
 
+        // 用while不用for是因为用for有奇怪的bug, index 会莫名其妙变成 1
         while (index < maxIndex)
         {
             if (_fileSortComparer.Compare(newItem.FullPath, parentChildren[index].FullPath) == -1)

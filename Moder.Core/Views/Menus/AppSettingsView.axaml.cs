@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Infrastructure;
 using Moder.Core.ViewsModel.Menus;
@@ -22,6 +23,7 @@ public sealed partial class AppSettingsView : UserControl, ITabViewItem
     public string Header => Resource.Menu_Settings;
     public string Id => nameof(AppSettingsView);
     public string ToolTip => Header;
+    public IconSource Icon { get; } = new SymbolIconSource { Symbol = Symbol.Settings };
 
     private AppSettingsViewModel ViewModel { get; }
 

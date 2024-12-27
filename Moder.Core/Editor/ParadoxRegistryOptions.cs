@@ -30,9 +30,17 @@ public sealed class ParadoxRegistryOptions(ThemeVariant? _theme) : IRegistryOpti
 
     public IRawGrammar GetGrammar(string scopeName)
     {
-        return GrammarReader.ReadGrammarSync(
-            File.OpenText(Path.Combine(GrammarsFolderPath, "paradox.tmLanguage.json"))
-        );
+        // TODO: 补全语法格式文件
+        string path;
+        if (scopeName == ScopeNameTypes.Yml)
+        {
+            path = Path.Combine(GrammarsFolderPath, "yaml", "syntaxes", "yaml.tmLanguage.json");
+        }
+        else
+        {
+            path = Path.Combine(GrammarsFolderPath, "paradox.tmLanguage.json");
+        }
+        return GrammarReader.ReadGrammarSync(File.OpenText(path));
     }
 
     public ICollection<string>? GetInjections(string scopeName)
@@ -42,12 +50,17 @@ public sealed class ParadoxRegistryOptions(ThemeVariant? _theme) : IRegistryOpti
 
     public IRawTheme GetDefaultTheme()
     {
-        return ThemeReader.ReadThemeSync(File.OpenText(Path.Combine(ThemesFolderPath, GetThemeFileName(_theme))));
+        return ThemeReader.ReadThemeSync(
+            File.OpenText(Path.Combine(ThemesFolderPath, GetThemeFileName(_theme)))
+        );
     }
-    
+
     public IRawTheme LoadTheme(ThemeVariant theme)
     {
-        return ThemeReader.ReadThemeSync(File.OpenText(Path.Combine(ThemesFolderPath, GetThemeFileName(theme))));;
+        return ThemeReader.ReadThemeSync(
+            File.OpenText(Path.Combine(ThemesFolderPath, GetThemeFileName(theme)))
+        );
+        ;
     }
 
     private static string GetThemeFileName(ThemeVariant? theme)
