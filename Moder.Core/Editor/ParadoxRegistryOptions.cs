@@ -7,7 +7,7 @@ using TextMateSharp.Themes;
 
 namespace Moder.Core.Editor;
 
-public sealed class ParadoxRegistryOptions(ThemeVariant? theme) : IRegistryOptions
+public sealed class ParadoxRegistryOptions(ThemeVariant? _theme) : IRegistryOptions
 {
     private static string ThemesFolderPath => Path.Combine(App.AssetsFolder, "CodeEditor", "Themes");
     private static string GrammarsFolderPath => Path.Combine(App.AssetsFolder, "CodeEditor", "Grammars");
@@ -42,10 +42,15 @@ public sealed class ParadoxRegistryOptions(ThemeVariant? theme) : IRegistryOptio
 
     public IRawTheme GetDefaultTheme()
     {
-        return ThemeReader.ReadThemeSync(File.OpenText(Path.Combine(ThemesFolderPath, GetThemeFileName())));
+        return ThemeReader.ReadThemeSync(File.OpenText(Path.Combine(ThemesFolderPath, GetThemeFileName(_theme))));
+    }
+    
+    public IRawTheme LoadTheme(ThemeVariant theme)
+    {
+        return ThemeReader.ReadThemeSync(File.OpenText(Path.Combine(ThemesFolderPath, GetThemeFileName(theme))));;
     }
 
-    private string GetThemeFileName()
+    private static string GetThemeFileName(ThemeVariant? theme)
     {
         if (theme == ThemeVariant.Dark)
         {

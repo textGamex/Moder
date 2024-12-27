@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System.Diagnostics.CodeAnalysis;
+using Avalonia.Controls;
 using Avalonia.Media;
 using AvaloniaEdit.TextMate;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,8 @@ public sealed partial class CharacterEditorControlView : UserControl, ITabViewIt
     public string Id => nameof(CharacterEditorControlView);
     public string ToolTip => Header;
 
+    private TextMate.Installation _installation;
+    private ParadoxRegistryOptions _options;
     private CharacterEditorControlViewModel ViewModel { get; }
 
     public CharacterEditorControlView()
@@ -24,6 +27,10 @@ public sealed partial class CharacterEditorControlView : UserControl, ITabViewIt
         DataContext = ViewModel;
 
         InitializeTextEditor();
+        ActualThemeVariantChanged += (_, _) =>
+        {
+            _installation.SetTheme(_options.LoadTheme(ActualThemeVariant));
+        };
         ViewModel.PropertyChanged += (_, args) =>
         {
             if (args.PropertyName == nameof(ViewModel.GeneratedText))
@@ -34,15 +41,30 @@ public sealed partial class CharacterEditorControlView : UserControl, ITabViewIt
     }
 
     // TODO: 状态栏
+    [MemberNotNull(nameof(_installation))]
+    [MemberNotNull(nameof(_options))]
     private void InitializeTextEditor()
     {
-        var options = new ParadoxRegistryOptions(App.Current.ActualThemeVariant);
+        _options = new ParadoxRegistryOptions(App.Current.ActualThemeVariant);
         Editor.Options.HighlightCurrentLine = true;
-        var installation = Editor.InstallTextMate(options);
+        Editor.Options.EnableTextDragDrop = true;
+        Editor.TextArea.RightClickMovesCaret = true;
+        Editor.Options.ShowBoxForControlCharacters = true;
+        Editor.Options.AllowToggleOverstrikeMode = true;
+        _installation = Editor.InstallTextMate(_options);
 
-        installation.SetGrammar("source.hoi4");
+        _installation.SetGrammar("source.hoi4");
+        _installation.AppliedTheme += ChangeThemeOnAppliedTheme;
 
-        ApplyThemeColorsToEditor(installation);
+        ApplyThemeColorsToEditor(_installation);
+    }
+    
+    private void ChangeThemeOnAppliedTheme(
+        object? sender,
+        TextMate.Installation e
+    )
+    {
+        ApplyThemeColorsToEditor(e);
     }
 
     private void ApplyThemeColorsToEditor(TextMate.Installation installation)
@@ -113,11 +135,6 @@ public sealed partial class CharacterEditorControlView : UserControl, ITabViewIt
         var colorBrush = new SolidColorBrush(color);
         applyColorAction(colorBrush);
         return true;
-    }
-
-    private void TextMateInstallationOnAppliedTheme(object sender, TextMate.Installation e)
-    {
-        ApplyThemeColorsToEditor(e);
     }
 
     public void Close()
