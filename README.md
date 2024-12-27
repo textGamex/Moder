@@ -22,7 +22,7 @@ After extracting, click on Moder.Core.exe to run the program.
 
 - Character Editor 
 
-This project is in the early stages of development, please be sure to back up your files to avoid data loss.
+**This project is in the early stages of development, please be sure to back up your files to avoid data loss.**  
 It is recommended to use Git to manage files to minimize damage when errors occur in the program .
 
 ## Screenshot
