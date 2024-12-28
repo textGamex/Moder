@@ -8,6 +8,7 @@ using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Moder.Core.Models;
 using Moder.Core.Services;
+using Moder.Core.Views.Game;
 using Moder.Core.ViewsModel.Menus;
 
 namespace Moder.Core.Views.Menus;
@@ -90,6 +91,6 @@ public sealed partial class SideBarControlView : UserControl
             return;
         }
 
-        _tabViewNavigation.AddTab(new NotSupportInfoControlView(item));
+        _tabViewNavigation.AddTab(new FileEditorControlView(item));
     }
 }

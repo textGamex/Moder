@@ -1,8 +1,12 @@
-﻿namespace Moder.Core.Infrastructure;
+﻿using FluentAvalonia.UI.Controls;
+
+namespace Moder.Core.Infrastructure;
 
 public interface ITabViewItem
 {
-    // TODO: 添加Icon
+    /// <summary>
+    /// 选项卡显示的名称
+    /// </summary>
     public string Header { get; }
 
     /// <summary>
@@ -10,6 +14,11 @@ public interface ITabViewItem
     /// </summary>
     public string Id { get; }
     public string ToolTip { get; }
+
+    /// <summary>
+    /// 选项卡左侧显示的图标
+    /// </summary>
+    public IconSource? Icon => null;
 
     public bool Equals(ITabViewItem? other)
     {
