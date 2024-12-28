@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.Versioning;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -81,6 +82,7 @@ public class App : Application
         _serviceProvider = host.Services;
         var settingService = Services.GetRequiredService<AppSettingService>();
         RequestedThemeVariant = settingService.AppTheme.ToThemeVariant();
+        SetAppLanguage(settingService.AppLanguageCode);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -103,6 +105,13 @@ public class App : Application
         base.OnFrameworkInitializationCompleted();
 
         await _host.RunAsync();
+    }
+
+    private static void SetAppLanguage(string languageCode)
+    {
+        var cultureInfo = CultureInfo.GetCultureInfo(languageCode);
+        CultureInfo.CurrentUICulture = cultureInfo;
+        CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
     }
 
     private static HostApplicationBuilder CreateHostBuilder()
