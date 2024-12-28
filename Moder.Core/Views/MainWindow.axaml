@@ -23,7 +23,7 @@
                 Height="24"
                 Margin="8,0,0,0"
                 IsHitTestVisible="False"
-                Path="../Assets/logo.svg" />
+                Path="./Assets/logo.svg" />
 
             <Menu>
                 <MenuItem Command="{Binding OpenCharacterEditorCommand}" Header="{x:Static lang:Resource.Menu_CharacterEditor}" />
