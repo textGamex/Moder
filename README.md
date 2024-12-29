@@ -36,5 +36,5 @@ It is recommended to use Git to manage files to minimize damage when errors occu
 Character Editor
 ![screenshot1](Images/screenshot1.png)
 
-State File Edit
+Trait Manager
 ![screenshot2](Images/screenshot2.png)
