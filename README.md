@@ -23,7 +23,7 @@ After extracting, click on Moder.Core.exe to run the program.
 ### Character Editor 
 
 - Support for reading character traits from game and mod files
-- Dynamic refresh when trait files are modified, no need to restart modder
+- Dynamic refresh when trait files are modified, no need to restart Moder
 - Visualize trait modifier effects, just like in-game
 - Search traits by effect or name
 - Show overall trait modifier effects
