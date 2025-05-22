@@ -1,6 +1,5 @@
-**The current development focus has shifted to VModer, the successor of Moder. VModer is a VS Code extension. For more details, please refer to the [Repository](https://github.com/textGamex/VModer).**
-
----
+> [!NOTE]
+> The current development focus has shifted to VModer, the successor of Moder. VModer is a VS Code extension. For more details, please refer to the [Repository](https://github.com/textGamex/VModer).
 
 English | [简体中文](Docs/README.zh-CN.md)
 
