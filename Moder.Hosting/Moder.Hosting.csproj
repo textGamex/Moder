@@ -4,13 +4,13 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Configurations>Debug;Release;Debug-Linux</Configurations>
+        <Configurations>Debug;Release;Debug-Linux;Release-Linux</Configurations>
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Avalonia" Version="11.2.2" />
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
+      <PackageReference Include="Avalonia" Version="11.3.4" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.8" />
     </ItemGroup>
 
     <ItemGroup>

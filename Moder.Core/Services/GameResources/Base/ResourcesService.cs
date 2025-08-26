@@ -29,7 +29,7 @@ public abstract partial class ResourcesService<TType, TContent, TParseResult> : 
     protected ResourcesService(string folderOrFileRelativePath, WatcherFilter filter, PathType pathType)
     {
         _folderOrFileRelativePath = folderOrFileRelativePath;
-        Log = LogManager.GetLogger(typeof(TType).FullName);
+        Log = LogManager.GetLogger(typeof(TType).FullName ?? "NONE");
         _settingService = App.Services.GetRequiredService<AppSettingService>();
 
         var gameResourcesPathService = App.Services.GetRequiredService<GameResourcesPathService>();
