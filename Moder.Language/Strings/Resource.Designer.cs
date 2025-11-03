@@ -483,6 +483,15 @@ namespace Moder.Language.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 国策树.
+        /// </summary>
+        public static string Menu_FocusTree {
+            get {
+                return ResourceManager.GetString("Menu.FocusTree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 初始化完成, 耗时: {0:F3} s.
         /// </summary>
         public static string Menu_LoadingCompletedTip {

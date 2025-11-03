@@ -323,4 +323,7 @@
   <data name="Common.Tip" xml:space="preserve">
 	  <value>Tip</value>
   </data>
+  <data name="Menu.FocusTree" xml:space="preserve">
+	  <value>Focus Tree</value>
+  </data>
 </root>

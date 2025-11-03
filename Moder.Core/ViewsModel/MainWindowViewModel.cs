@@ -22,4 +22,11 @@ public sealed partial class MainWindowViewModel : ObservableObject
         var tabview = App.Services.GetRequiredService<TabViewNavigationService>();
         tabview.AddSingleTabFromIoc<AppSettingsView>();
     }
+    
+    [RelayCommand]
+    private void TestFocusTree()
+    {
+        var tabview = App.Services.GetRequiredService<TabViewNavigationService>();
+        tabview.AddSingleTabFromIoc<FocusTreeControlView>();
+    }
 }

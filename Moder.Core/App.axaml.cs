@@ -119,7 +119,7 @@ public class App : Application
         var settings = new HostApplicationBuilderSettings
         {
             Args = Environment.GetCommandLineArgs(),
-            ApplicationName = "Moder"
+            ApplicationName = "Moder",
         };
 
 #if DEBUG
@@ -141,6 +141,7 @@ public class App : Application
         builder.Services.AddViewSingleton<SideBarControlView, SideBarControlViewModel>();
         builder.Services.AddViewSingleton<WorkSpaceControlView, WorkSpaceControlViewModel>();
         builder.Services.AddViewTransient<CharacterEditorControlView, CharacterEditorControlViewModel>();
+        builder.Services.AddViewTransient<FocusTreeControlView, FoucsTreeControlViewModel>();
         builder.Services.AddViewTransient<AppSettingsView, AppSettingsViewModel>();
         builder.Services.AddViewSingleton<StatusBarControlView, StatusBarControlViewModel>();
         builder.Services.AddTransient<TraitSelectionWindowViewModel>();
