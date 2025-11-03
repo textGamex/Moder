@@ -24,9 +24,9 @@ public sealed partial class MainWindowViewModel : ObservableObject
     }
     
     [RelayCommand]
-    private void TestFocusTree()
+    private void OpenFocusTreeEditor()
     {
         var tabview = App.Services.GetRequiredService<TabViewNavigationService>();
-        tabview.AddSingleTabFromIoc<FocusTreeControlView>();
+        tabview.AddSingleTabFromIoc<FocusTreeEditorControlView>();
     }
 }

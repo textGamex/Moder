@@ -28,7 +28,7 @@
             <Menu>
                 <MenuItem Command="{Binding OpenCharacterEditorCommand}" Header="{x:Static lang:Resource.Menu_CharacterEditor}" />
                 <MenuItem Command="{Binding OpenSettingsCommand}" Header="{x:Static lang:Resource.Menu_Settings}" />
-                <MenuItem Command="{Binding TestFocusTreeCommand}" Header="{x:Static lang:Resource.Menu_FocusTree}" />
+                <MenuItem Command="{Binding OpenFocusTreeEditorCommand}" Header="{x:Static lang:Resource.Menu_FocusTree}" />
             </Menu>
         </StackPanel>
 

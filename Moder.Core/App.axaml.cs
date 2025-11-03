@@ -141,7 +141,7 @@ public class App : Application
         builder.Services.AddViewSingleton<SideBarControlView, SideBarControlViewModel>();
         builder.Services.AddViewSingleton<WorkSpaceControlView, WorkSpaceControlViewModel>();
         builder.Services.AddViewTransient<CharacterEditorControlView, CharacterEditorControlViewModel>();
-        builder.Services.AddViewTransient<FocusTreeControlView, FoucsTreeControlViewModel>();
+        builder.Services.AddViewTransient<FocusTreeEditorControlView, FoucsTreeEditorControlViewModel>();
         builder.Services.AddViewTransient<AppSettingsView, AppSettingsViewModel>();
         builder.Services.AddViewSingleton<StatusBarControlView, StatusBarControlViewModel>();
         builder.Services.AddTransient<TraitSelectionWindowViewModel>();
