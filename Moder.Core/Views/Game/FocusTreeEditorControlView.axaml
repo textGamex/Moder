@@ -1,0 +1,17 @@
+﻿<UserControl
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    x:Class="Moder.Core.Views.Game.FocusTreeEditorControlView"
+    x:DataType="vms:FoucsTreeEditorControlViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:controls="clr-namespace:Moder.Core.Graph.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:game="clr-namespace:Moder.Core.Views.Game"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vms="clr-namespace:Moder.Core.ViewsModel.Game"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <controls:FocusTreeImage x:Name="FocusTreeImage" />
+    </Grid>
+</UserControl>

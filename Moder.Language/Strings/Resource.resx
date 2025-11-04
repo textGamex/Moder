@@ -323,4 +323,7 @@
 	<data name="Common.Tip" xml:space="preserve">
 		<value>提示</value>
 	</data>
+	<data name="Menu.FocusTree" xml:space="preserve">
+		<value>国策树</value>
+	</data>
 </root>
